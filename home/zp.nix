@@ -9,7 +9,7 @@
   home.username = "zp";
   home.homeDirectory = "/home/zp";
 home.activation.setWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
-  ${pkgs.kdePackages.plasma-workspace}/bin/qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript '
+  ${pkgs.qdbus}/bin/qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript '
     var Desktops = desktops();
     for (i=0;i<Desktops.length;i++) {
       d = Desktops[i];
@@ -25,5 +25,6 @@ home.activation.setWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
 
   home.packages = with pkgs; [
     simple-scan
+    qdbus
   ];
 }
