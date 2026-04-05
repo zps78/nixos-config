@@ -45,7 +45,10 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = true;
+    powerManagement = {
+      enable = true;
+      finegrained = true;  # ⭐ THIS is the key fix
+    };
     open = false;
     nvidiaSettings = true;
     prime = {
