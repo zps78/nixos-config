@@ -5,6 +5,7 @@
     # Core CLI tools
 #    agenix
     btop
+    iperf3
     fio
     pciutils
     rclone
