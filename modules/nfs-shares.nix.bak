@@ -1,86 +1,62 @@
 { config, pkgs, ... }:
 
 {
-  fileSystems."/mnt/trading" = {
+    fileSystems."/mnt/trading" = {
     device = "192.168.1.5:/mnt/user/trading";
     fsType = "nfs";
     options = [
       "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
       "_netdev"
       "noatime"
-      "tcp"
-      "rsize=1048576"
-      "wsize=1048576"
-      "timeo=600"
-      "retrans=2"
-      "async"
     ];
   };
 
-  fileSystems."/mnt/media" = {
+    fileSystems."/mnt/media" = {
     device = "192.168.1.5:/mnt/user/media-server/media";
     fsType = "nfs";
     options = [
       "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
       "_netdev"
       "noatime"
-      "tcp"
-      "rsize=1048576"
-      "wsize=1048576"
-      "timeo=600"
-      "retrans=2"
-      "async"
     ];
   };
 
-  fileSystems."/mnt/home" = {
+    fileSystems."/mnt/home" = {
     device = "192.168.1.5:/mnt/user/home";
     fsType = "nfs";
     options = [
       "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
       "_netdev"
       "noatime"
-      "tcp"
-      "rsize=1048576"
-      "wsize=1048576"
-      "timeo=600"
-      "retrans=2"
-      "async"
     ];
   };
 
-  fileSystems."/mnt/paperless" = {
+    fileSystems."/mnt/paperless" = {
     device = "192.168.1.5:/mnt/user/paperless";
     fsType = "nfs";
     options = [
       "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
       "_netdev"
       "noatime"
-      "tcp"
-      "rsize=1048576"
-      "wsize=1048576"
-      "timeo=600"
-      "retrans=2"
-      "async"
     ];
   };
 
-  fileSystems."/mnt/backup" = {
+    fileSystems."/mnt/backup" = {
     device = "192.168.1.5:/mnt/user/backup";
     fsType = "nfs";
     options = [
       "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
       "_netdev"
       "noatime"
-      "tcp"
-      "rsize=1048576"
-      "wsize=1048576"
-      "timeo=600"
-      "retrans=2"
-      "async"
     ];
   };
-#  fileSystems."/mnt/setup" = {
+
+#    fileSystems."/mnt/setup" = {
 #    device = "192.168.1.5:/mnt/user/setup";
 #    fsType = "nfs";
 #    options = [
