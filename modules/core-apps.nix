@@ -5,6 +5,7 @@
     # Core CLI tools
 #    agenix
     btop
+    fio
     pciutils
     rclone
 #    rsync
