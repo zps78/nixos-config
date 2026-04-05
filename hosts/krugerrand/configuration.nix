@@ -47,12 +47,12 @@
     modesetting.enable = true;
     powerManagement = {
       enable = true;
-      finegrained = true;  # ⭐ THIS is the key fix
     };
     open = false;
     nvidiaSettings = true;
     prime = {
       offload.enable = true;
+      finegrained = true;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
