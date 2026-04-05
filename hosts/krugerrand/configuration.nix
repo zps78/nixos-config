@@ -42,17 +42,17 @@
   };
 
   # Graphics
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "modesetting" ]; #[ "nvidia" ];
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement = {
       enable = true;
+      finegrained = true;
     };
     open = false;
     nvidiaSettings = true;
     prime = {
       offload.enable = true;
-      finegrained = true;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
