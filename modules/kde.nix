@@ -9,7 +9,7 @@
   # KDE apps
   environment.systemPackages = with pkgs.kdePackages; [
     kate
-    kdeconnect
+    kdeconnect-kde
     kompare
   ];
 
