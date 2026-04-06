@@ -20,7 +20,6 @@
   # Packages needed for activation scripts
   # ----------------------
   home.packages = with pkgs; [
-    simple-scan
     qt6.qttools   # Provides qdbus for KDE activation scripts
   ];
 

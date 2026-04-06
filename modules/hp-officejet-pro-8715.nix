@@ -4,7 +4,7 @@
   # Printing (driverless)
   services.printing.enable = true;
 
-  # Enable IPP-over-USB (for USB connection at parents)
+  # Enable IPP-over-USB (for USB contingency connection)
   services.ipp-usb.enable = true;
 
   # Auto-configure network printer (home)

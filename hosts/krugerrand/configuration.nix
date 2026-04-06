@@ -10,9 +10,12 @@
   # Import modules
   imports = [
     ./hardware-configuration.nix
-    ../../modules/core-apps.nix
+    ../../modules/apps-core.nix
     ../../modules/nfs-shares.nix
     ../../modules/nfs-torrents.nix
+    ../../modules/gpu-hybrid.nix
+#    ../../modules/gpu-nvidia.nix
+#    ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
   ];
 
@@ -40,24 +43,6 @@
     sddm.fprintAuth = false;    # keep password for graphical login
     sudo.fprintAuth = true;     # allow fingerprint for sudo (password still works)
   };
-
-  # Graphics
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement = {
-      enable = true;
-      finegrained = true;
-    };
-    open = false;
-    nvidiaSettings = true;
-    prime = {
-      offload.enable = true;
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
-    };
-  };
-  hardware.graphics.enable = true;
 
   # Swap
   zramSwap = {
@@ -100,8 +85,8 @@
 
   # Libinput
   services.libinput.enable = true;
-  services.libinput.touchpad.naturalScrolling = true;
-  services.libinput.mouse.naturalScrolling = true;
+  services.libinput.touchpad.naturalScrolling = false;
+  services.libinput.mouse.naturalScrolling = false;
 
   # Users
   users.users.zp = {
@@ -122,12 +107,8 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
-#    ragenix
 #    tailscale
   ];
-
-  # Printing
-  services.printing.enable = true;
 
   # System state version
   system.stateVersion = "25.11";

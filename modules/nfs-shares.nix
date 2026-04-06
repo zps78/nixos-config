@@ -80,6 +80,7 @@
       "async"
     ];
   };
+
 #  fileSystems."/mnt/setup" = {
 #    device = "192.168.1.5:/mnt/user/setup";
 #    fsType = "nfs";

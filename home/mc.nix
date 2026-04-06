@@ -26,6 +26,5 @@
 
   home.packages = with pkgs; [
     simple-scan
-    qt6.qttools
   ];
 }
