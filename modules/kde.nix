@@ -32,4 +32,4 @@
   [UiSettings]
   ColorScheme=BreezeDark
   '';
-};
+}
