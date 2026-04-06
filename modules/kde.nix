@@ -7,10 +7,14 @@
   services.desktopManager.plasma6.enable = true;
 
   # KDE apps
-  environment.systemPackages = lib.filter (p: p != pkgs.kdeApplications.kwrite) [
-    pkgs.kdeApplications.kate
-    pkgs.kdeApplications.kdeconnect
-    pkgs.kdeApplications.kompare
+  environment.systemPackages = with pkgs.kdePackages; [
+    kate
+    kdeconnect
+    kompare
+  ];
+
+  services.desktopManager.plasma6.excludePackages = with pkgs.kdePackages; [
+    kwrite
   ];
 
   # Optional: KDE-specific programs
