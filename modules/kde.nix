@@ -13,10 +13,6 @@
     kompare
   ];
 
-  services.desktopManager.plasma6.excludePackages = with pkgs.kdePackages; [
-    kwrite
-  ];
-
   # Optional: KDE-specific programs
   programs.kdeconnect.enable = true;
 
