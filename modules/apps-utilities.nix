@@ -17,6 +17,21 @@
     arp-scan
 #    eddie
     nfs-utils
+    rclone
+
+    # Media
+    audacity
+    bambu-studio
+#    clipgrab
+    darktable
+    ffmpeg-full
+    gimp
+    handbrake
+    losslesscut-bin
+    mkvtoolnix
+    plex-desktop
+    spotify
+    vlc
 
     # Virtualization / Emulation
     libvirt
@@ -30,18 +45,23 @@
     brave
     filezilla
 #    googleearth-pro
-
+    kdePackages.kate
+    kdePackages.kompare
     thunderbird
+    remmina
 
     # Utilities
     ddrescue
     ddrescueview
     ddrutility
     scrcpy
+    teamviewer
     testdisk
 
     # Office
+    onlyoffice-desktopeditors
     thunderbird
+    xournalpp
 
     # Optional extras
 #    papirus-icon-theme

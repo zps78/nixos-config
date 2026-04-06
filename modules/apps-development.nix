@@ -2,8 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # Office
-    onlyoffice-desktopeditors
-    xournalpp
+    # Development
+    godot
   ];
 }

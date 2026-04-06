@@ -2,8 +2,9 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # Office
-    onlyoffice-desktopeditors
-    xournalpp
+    # Graphics
+    bambu-studio
+    darktable
+    gimp
   ];
 }

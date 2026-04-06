@@ -10,7 +10,17 @@
   # Import modules
   imports = [
     ./hardware-configuration.nix
+    ../../modules/kde.nix
+#    ../../modules/hyprland.nix
     ../../modules/apps-core.nix
+#    ../../modules/apps-development.nix
+    ../../modules/apps-gaming.nix
+    ../../modules/apps-graphics.nix
+    ../../modules/apps-internet.nix
+    ../../modules/apps-multimedia.nix
+    ../../modules/apps-office.nix
+    ../../modules/apps-remote-access.nix
+    ../../modules/apps-utilities.nix
     ../../modules/nfs-shares.nix
     ../../modules/nfs-torrents.nix
     ../../modules/gpu-hybrid.nix
@@ -39,7 +49,7 @@
   services.fprintd.enable = true;
   security.pam.services = {
     login.fprintAuth = false;   # keep password login
-    kde.fprintAuth = false;     # keep password for lock screen
+#    kde.fprintAuth = false;     # keep password for lock screen
     sddm.fprintAuth = false;    # keep password for graphical login
     sudo.fprintAuth = true;     # allow fingerprint for sudo (password still works)
   };
@@ -70,8 +80,8 @@
 
   # Desktop
   services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+#  services.displayManager.sddm.enable = true;
+#  services.desktopManager.plasma6.enable = true;
   services.xserver.xkb.layout = "pt";
   console.keyMap = "pt-latin1";
 
@@ -85,8 +95,8 @@
 
   # Libinput
   services.libinput.enable = true;
-  services.libinput.touchpad.naturalScrolling = false;
-  services.libinput.mouse.naturalScrolling = false;
+  services.libinput.touchpad.naturalScrolling = true;
+  services.libinput.mouse.naturalScrolling = true;
 
   # Users
   users.users.zp = {
@@ -97,7 +107,7 @@
 
   # Programs
   programs.firefox.enable = true;
-  programs.kdeconnect.enable = true;
+#  programs.kdeconnect.enable = true;
   programs.git.enable = true;
   programs.git.config.user.name = "zp";
   programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";

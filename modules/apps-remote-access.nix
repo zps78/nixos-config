@@ -2,8 +2,9 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # Office
-    onlyoffice-desktopeditors
-    xournalpp
+    # Remote access
+    moonlight-qt
+    remmina
+    teamviewer
   ];
 }

@@ -2,8 +2,8 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # Office
-    onlyoffice-desktopeditors
-    xournalpp
+    # Gaming
+    lutris
+    steam
   ];
 }
