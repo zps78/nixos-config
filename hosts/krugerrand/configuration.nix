@@ -10,12 +10,12 @@
   # Import modules
   imports = [
     ./hardware-configuration.nix
+    ../../modules/localization.nix
     ../../modules/kde.nix
 #    ../../modules/hyprland.nix
     ../../modules/apps-core.nix
-#    ../../modules/apps-development.nix
+    ../../modules/apps-development.nix
     ../../modules/apps-gaming.nix
-    ../../modules/apps-graphics.nix
     ../../modules/apps-internet.nix
     ../../modules/apps-multimedia.nix
     ../../modules/apps-office.nix
@@ -63,27 +63,8 @@
     { device = "/swapfile"; size = 4096; }
   ];
 
-  # Timezone & locales
-  time.timeZone = "Europe/Lisbon";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_IE.UTF-8";
-    LC_IDENTIFICATION = "en_IE.UTF-8";
-    LC_MEASUREMENT = "en_IE.UTF-8";
-    LC_MONETARY = "en_IE.UTF-8";
-    LC_NAME = "en_IE.UTF-8";
-    LC_NUMERIC = "en_IE.UTF-8";
-    LC_PAPER = "en_IE.UTF-8";
-    LC_TELEPHONE = "en_IE.UTF-8";
-    LC_TIME = "en_IE.UTF-8";
-  };
-
   # Desktop
   services.xserver.enable = true;
-#  services.displayManager.sddm.enable = true;
-#  services.desktopManager.plasma6.enable = true;
-  services.xserver.xkb.layout = "pt";
-  console.keyMap = "pt-latin1";
 
   # Audio
   services.pulseaudio.enable = false;

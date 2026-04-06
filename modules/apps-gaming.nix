@@ -5,5 +5,6 @@
     # Gaming
     lutris
     steam
+    sunshine
   ];
 }

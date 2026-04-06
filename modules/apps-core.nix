@@ -9,7 +9,7 @@
     fio
     pciutils
     rclone
-#    rsync
+    rsync
     usbutils
     wget
 

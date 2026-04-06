@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-    fileSystems."/mnt/torrents" = {
+  fileSystems."/mnt/torrents" = {
     device = "192.168.1.5:/mnt/user/media-server/torrents/complete";
     fsType = "nfs";
     options = [
