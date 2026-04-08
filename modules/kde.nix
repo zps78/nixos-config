@@ -34,8 +34,8 @@
   '';
 
   # home.nix
-  programs.plasma.configFile = {
-    "kcminputrc".Mouse.naturalScrolling = true;
-    "kcminputrc".Touchpad.naturalScrolling = true;
-  };
+#  programs.plasma.configFile = {
+#    "kcminputrc".Mouse.naturalScrolling = true;
+#    "kcminputrc".Touchpad.naturalScrolling = true;
+#  };
 }
