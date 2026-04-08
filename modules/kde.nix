@@ -8,9 +8,11 @@
 
   # KDE apps
   environment.systemPackages = with pkgs.kdePackages; [
+    isoimagewriter
     kate
     kdeconnect-kde
     kompare
+    partitionmanager
   ];
 
   # Optional: KDE-specific programs
