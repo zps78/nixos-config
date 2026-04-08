@@ -1,3 +1,4 @@
+# ../../modules/nfs-shares.nix
 { config, pkgs, ... }:
 
 {
@@ -86,9 +87,14 @@
 #    fsType = "nfs";
 #    options = [
 #      "x-systemd.automount"
-#      "x-systemd.idle-timeout=600"
 #      "_netdev"
 #      "noatime"
+#      "tcp"
+#      "rsize=1048576"
+#      "wsize=1048576"
+#      "timeo=600"
+#      "retrans=2"
+#      "async"
 #    ];
 #  };
 }

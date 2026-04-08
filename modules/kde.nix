@@ -1,4 +1,4 @@
-# modules/kde.nix
+# ../../modules/kde.nix
 { config, pkgs, lib, ... }:
 
 {
@@ -32,4 +32,10 @@
   [UiSettings]
   ColorScheme=BreezeDark
   '';
+
+  # home.nix
+  programs.plasma.configFile = {
+    "kcminputrc".Mouse.naturalScrolling = true;
+    "kcminputrc".Touchpad.naturalScrolling = true;
+  };
 }

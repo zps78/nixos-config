@@ -12,20 +12,16 @@
     ./hardware-configuration.nix
     ../../modules/localization.nix
     ../../modules/kde.nix
-#    ../../modules/hyprland.nix
+#   ../../modules/hyprland.nix
     ../../modules/apps-core.nix
-    ../../modules/apps-development.nix
-    ../../modules/apps-gaming.nix
-    ../../modules/apps-internet.nix
-    ../../modules/apps-multimedia.nix
-    ../../modules/apps-office.nix
-    ../../modules/apps-remote-access.nix
-    ../../modules/apps-utilities.nix
+#   ../../modules/apps-mc.nix
+#   ../../modules/apps-steam.nix
+    ../../modules/apps-zp.nix
     ../../modules/nfs-shares.nix
     ../../modules/nfs-torrents.nix
     ../../modules/gpu-hybrid.nix
-#    ../../modules/gpu-nvidia.nix
-#    ../../modules/gpu-amd.nix
+#   ../../modules/gpu-nvidia.nix
+#   ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
   ];
 
@@ -74,10 +70,10 @@
   services.pipewire.pulse.enable = true;
   security.rtkit.enable = true;
 
-  # Libinput
-  services.libinput.enable = true;
-  services.libinput.touchpad.naturalScrolling = true;
-  services.libinput.mouse.naturalScrolling = true;
+  # Libinput - disabled because kde overrides it
+#  services.libinput.enable = true;
+#  services.libinput.touchpad.naturalScrolling = true;
+#  services.libinput.mouse.naturalScrolling = true;
 
   # Users
   users.users.zp = {

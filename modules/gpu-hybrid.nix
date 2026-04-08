@@ -1,3 +1,4 @@
+# ../../modules/gpu-hybrid.nix
 { config, pkgs, lib, ... }:
 
 {

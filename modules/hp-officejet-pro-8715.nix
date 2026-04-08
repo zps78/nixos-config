@@ -40,6 +40,6 @@
   # Useful user tools
   environment.systemPackages = with pkgs; [
     system-config-printer
-    simple-scan
+#    simple-scan
   ];
 }

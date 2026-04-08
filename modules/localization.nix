@@ -1,3 +1,4 @@
+# ../../modules/localization.nix
 { config, lib, pkgs, ... }:
 
 {

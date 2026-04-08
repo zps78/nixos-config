@@ -1,10 +1,10 @@
+# ../../modules/apps-streaming.nix
 { config, pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
-    # Gaming
-    lutris
-    steam
+    # Streaming
+#    obs-studio
     sunshine
   ];
 }

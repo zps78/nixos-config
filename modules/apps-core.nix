@@ -1,3 +1,4 @@
+# ../../modules/apps-core.nix
 { config, pkgs, ... }:
 
 {
@@ -15,23 +16,40 @@
 
     # Networking
     arp-scan
-#    eddie
+    eddie
     nfs-utils
+
+        # Multimedia
+    audacity
+    bambu-studio
+#    clipgrab
+    darktable
+    ffmpeg-full
+    gimp
+    handbrake
+    krita
+    losslesscut-bin
+    mkvtoolnix
+    plex-desktop
+    spotify
+    vlc
 
     # Virtualization / Emulation
     libvirt
     moonlight-qt
     virt-manager
-    waydroid
+    # Wine
     winetricks
     wineWow64Packages.staging
+    #    waydroid
 
-    # GUI apps
+    # Internet
+#    eddie
     brave
     filezilla
 #    googleearth-pro
-
     thunderbird
+
 
     # Utilities
     ddrescue
@@ -39,10 +57,12 @@
     ddrutility
     scrcpy
     testdisk
+    moonlight-qt
+    remmina
 
     # Office
-    thunderbird
-
+    onlyoffice-desktopeditors
+    xournalpp
     # Optional extras
 #    papirus-icon-theme
   ];
