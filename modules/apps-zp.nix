@@ -6,35 +6,35 @@
   # Packages
   # ----------------------
   home.packages = with pkgs; [
-    # Development
+   ## Development
     # godot
     vscode
 
-    # Streaming
+   ## Streaming
     # obs-studio
     # sunshine
 
-    # Internet
+   ## Internet
     # brave
     # filezilla
     # thunderbird
 
-    # Gaming
+   ## Gaming
     # lutris
     # steam
     moonlight-qt
     teamviewer
 
-    # Wine
+   ## Wine
     winetricks
     wineWow64Packages.staging
 
-    # Virtualization / Emulation
+   ## Virtualization / Emulation
     # libvirt
     # virt-manager
     # waydroid
 
-    # Office
+   ## Office
     onlyoffice-desktopeditors
     xournalpp
   ];
