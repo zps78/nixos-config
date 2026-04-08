@@ -41,6 +41,5 @@
     scrcpy
     testdisk
     remmina
-
   ];
 }
