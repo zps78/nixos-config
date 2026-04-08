@@ -1,19 +1,32 @@
-# ../../modules/apps-streaming.nix
+# ../../modules/apps-steam.nix
 { config, pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
-    # Development
-    # godot
-    vscode
-    # Streaming
+  # Development
+#    godot
+#    vscode
+
+  # Streaming
 #    obs-studio
     sunshine
-    # Gaming
+
+  # Gaming
     lutris
     steam
-    moonlight-qt
+#    moonlight-qt
+#    teamviewer
+
+  # Wine
+    winetricks
+    wineWow64Packages.staging
+
+  # Virtualization / Emulation
+#    libvirt
+#    virt-manager
+#    waydroid
+
   ];
   # Steam-specific config
-  programs.steam.enable = true;
-  }
+    programs.steam.enable = true;
+}

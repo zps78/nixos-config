@@ -3,7 +3,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # Core CLI tools
+  # Core CLI tools
 #    agenix
     btop
     iperf3
@@ -14,12 +14,12 @@
     usbutils
     wget
 
-    # Networking
+  # Networking
     arp-scan
     eddie
     nfs-utils
 
-        # Multimedia
+  # Multimedia
     audacity
     bambu-studio
 #    clipgrab
@@ -34,36 +34,23 @@
     spotify
     vlc
 
-    # Virtualization / Emulation
-    libvirt
-    moonlight-qt
-    virt-manager
-    # Wine
-    winetricks
-    wineWow64Packages.staging
-    #    waydroid
-
-    # Internet
-#    eddie
+  # Internet
     brave
     filezilla
 #    googleearth-pro
     thunderbird
 
-
-    # Utilities
+  # Utilities
     ddrescue
     ddrescueview
     ddrutility
     scrcpy
     testdisk
-    moonlight-qt
     remmina
+    # Remote access
 
-    # Office
+  # Office
     onlyoffice-desktopeditors
     xournalpp
-    # Optional extras
-#    papirus-icon-theme
   ];
 }
