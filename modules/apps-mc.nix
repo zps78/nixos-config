@@ -2,7 +2,7 @@
 { config, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
+  home-manager.users.mc.home.packages = with pkgs; [
   # Development
     godot
     vscode
