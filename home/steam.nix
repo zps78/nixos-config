@@ -4,17 +4,17 @@
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    ../modules/apps-zp.nix
+    ../modules/apps-steam.nix
   ];
 
-  home.username = "zp";
-  home.homeDirectory = "/home/zp";
+  home.username = "steam";
+  home.homeDirectory = "/home/steam";
 
   # ----------------------
   # Wallpaper files
   # ----------------------
-  home.file.".wallpaper.jpg".source = ../wallpapers/wallpaper-zp.jpg;
-  home.file.".wallpaper-lock.jpg".source = ../wallpapers/wallpaper-lock-zp.jpg;
+  home.file.".wallpaper.jpg".source = ../wallpapers/wallpaper-steam.jpg;
+  home.file.".wallpaper-lock.jpg".source = ../wallpapers/wallpaper-lock-steam.jpg;
 
   # ----------------------
   # Packages needed for activation scripts

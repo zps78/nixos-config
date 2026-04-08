@@ -14,9 +14,6 @@
     ../../modules/kde.nix
 #   ../../modules/hyprland.nix
     ../../modules/apps-core.nix
-#   ../../modules/apps-mc.nix
-#   ../../modules/apps-steam.nix
-    ../../modules/apps-zp.nix
     ../../modules/nfs-shares.nix
     ../../modules/nfs-torrents.nix
     ../../modules/gpu-hybrid.nix
@@ -83,8 +80,8 @@
   };
 
   # Programs
-  programs.firefox.enable = true;
-#  programs.kdeconnect.enable = true;
+#  programs.firefox.enable = true; # in user.nix file
+  programs.kdeconnect.enable = true;
   programs.git.enable = true;
   programs.git.config.user.name = "zp";
   programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";

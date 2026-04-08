@@ -34,12 +34,6 @@
     spotify
     vlc
 
-  # Internet
-    brave
-    filezilla
-#    googleearth-pro
-    thunderbird
-
   # Utilities
     ddrescue
     ddrescueview
@@ -47,10 +41,6 @@
     scrcpy
     testdisk
     remmina
-    # Remote access
 
-  # Office
-    onlyoffice-desktopeditors
-    xournalpp
   ];
 }

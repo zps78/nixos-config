@@ -1,1 +1,6 @@
 result
+*.qcow2
+*.img
+*.iso
+*.log
+.env

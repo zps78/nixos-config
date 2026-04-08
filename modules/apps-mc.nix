@@ -11,6 +11,11 @@
 #    obs-studio
 #    sunshine
 
+  # Internet
+    brave
+#    filezilla
+#    thunderbird
+
   # Gaming
     lutris
     steam
@@ -26,7 +31,10 @@
 #    virt-manager
 #    waydroid
 
+  # Office
+    onlyoffice-desktopeditors
+    xournalpp
   ];
-  # Steam-specific config
+    programs.firefox.enable = true;
     programs.steam.enable = true;
 }
