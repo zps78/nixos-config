@@ -2,42 +2,46 @@
 { config, pkgs, ... }:
 
 {
-  home-manager.users.zp = {
-    home.packages = with pkgs; [
-#  home-manager.users.zp.home.packages = with pkgs; [
-  # Development
-#    godot
+  # ----------------------
+  # Packages
+  # ----------------------
+  home.packages = with pkgs; [
+    # Development
+    # godot
     vscode
 
-  # Streaming
-#    obs-studio
-#    sunshine
+    # Streaming
+    # obs-studio
+    # sunshine
 
-  # Internet
-#    brave
-#    filezilla
-#    thunderbird
+    # Internet
+    # brave
+    # filezilla
+    # thunderbird
 
-  # Gaming
-#    lutris
-#    steam
+    # Gaming
+    # lutris
+    # steam
     moonlight-qt
     teamviewer
 
-  # Wine
+    # Wine
     winetricks
     wineWow64Packages.staging
 
-  # Virtualization / Emulation
-#    libvirt
-#    virt-manager
-#    waydroid
+    # Virtualization / Emulation
+    # libvirt
+    # virt-manager
+    # waydroid
 
-  # Office
+    # Office
     onlyoffice-desktopeditors
     xournalpp
   ];
-    programs.firefox.enable = true;
-#    programs.steam.enable = true;
-  };
+
+  # ----------------------
+  # Programs
+  # ----------------------
+  programs.firefox.enable = true;
+  # programs.steam.enable = true;
 }
