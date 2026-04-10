@@ -51,6 +51,18 @@
         };
 
         # --------------------------
+        # Host: kepler
+        # --------------------------
+        kepler = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/kepler/configuration.nix
+            home-manager.nixosModules.home-manager
+            (makeUser "sc" ./home/sc.nix)
+          ];
+        };
+
+        # --------------------------
         # Host: krypton
         # --------------------------
         krypton = nixpkgs.lib.nixosSystem {
