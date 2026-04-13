@@ -30,9 +30,9 @@
     wineWow64Packages.staging
 
    ## Virtualization / Emulation
-    # libvirt
-    # virt-manager
-    # waydroid
+    libvirt
+    virt-manager
+    waydroid
 
   # Office
     onlyoffice-desktopeditors
@@ -42,6 +42,6 @@
   # ----------------------
   # Programs
   # ----------------------
-  programs.firefox.enable = true;
-  programs.steam.enable = true;
+#  programs.firefox.enable = true;
+#  programs.steam.enable = true;
 }

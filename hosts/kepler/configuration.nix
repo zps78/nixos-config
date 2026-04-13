@@ -14,9 +14,9 @@
     ../../modules/kde.nix
 #   ../../modules/hyprland.nix
     ../../modules/apps-core.nix
-    ../../modules/nfs-shares.nix
+#    ../../modules/nfs-shares.nix
     ../../modules/nfs-torrents.nix
-#    ../../modules/gpu-hybrid.nix
+#   ../../modules/gpu-hybrid.nix
 #   ../../modules/gpu-nvidia.nix
     ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
@@ -80,9 +80,12 @@
   };
 
   # Programs
-#  programs.firefox.enable = true; # in user.nix file
   programs.git.enable = true;
-#  programs.git.config.user.name = "zp";
+  programs.firefox.enable = true;
+  programs.steam.enable = true;
+
+
+  #  programs.git.config.user.name = "zp";
 #  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
 
   # Unfree packages
@@ -90,7 +93,10 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
-#    tailscale
+    firefox
+    git
+    steam
+    tailscale
   ];
 
   # System state version

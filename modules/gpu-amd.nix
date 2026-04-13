@@ -13,8 +13,8 @@
     enable32Bit = true; # needed for some apps (e.g. Steam, Wine)
 
     extraPackages = with pkgs; [
-      mesa
-      vaapiVdpau
+#      mesa
+#      vaapiVdpau
       libvdpau-va-gl
     ];
   };
