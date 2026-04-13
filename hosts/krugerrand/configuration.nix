@@ -59,6 +59,11 @@
   # Desktop
   services.xserver.enable = true;
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-kde ];
+  };
+
   # Audio
   services.pulseaudio.enable = false;
   services.pipewire.enable = true;
