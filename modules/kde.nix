@@ -13,21 +13,21 @@
     kdeconnect-kde
     kompare
     partitionmanager
-    xdg-desktop-portal-kde
+   # xdg-desktop-portal-kde
   ];
 
     # KDE portal (FIX for Plex + Electron apps)
-  xdg.portal = {
-    enable = true;
+xdg.portal = {
+  enable = true;
 
-    extraPortals = [
-      pkgs.kdePackages.xdg-desktop-portal-kde
-    ];
+  extraPortals = [
+    pkgs.xdg-desktop-portal-kde
+  ];
 
-    config = {
-      common.default = "kde";
-    };
+  config = {
+    common.default = "kde";
   };
+};
 
   # Optional: KDE-specific programs
   programs.kdeconnect.enable = true;
