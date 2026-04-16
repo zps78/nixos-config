@@ -33,7 +33,7 @@
    ## Virtualization / Emulation
     # libvirt
     # virt-manager
-    # waydroid
+    waydroid
 
    ## Office
     onlyoffice-desktopeditors
