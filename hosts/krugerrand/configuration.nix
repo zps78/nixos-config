@@ -20,6 +20,7 @@
 #   ../../modules/gpu-nvidia.nix
 #   ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
+    ../../modules/waydroid.nix
   ];
 
   # Bootloader
@@ -27,17 +28,15 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth.enable = true;
   boot.initrd.systemd.enable = true;
-  boot.kernelPackages = pkgs.linuxPackages;#_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Networking
   networking.networkmanager.enable = true;
   networking.hostName = "krugerrand";
   networking.nameservers = [ "100.100.100.100" "100.101.102.1" "9.9.9.9" "149.112.112.112" "8.8.8.8" "1.1.1.1" ];
   networking.search = [ "ojos-cloud.ts.net" ];
-networking.nftables.enable = true;
   # Tailscale
   services.tailscale.enable = true;
-  virtualisation.waydroid.enable = true;
 
   # Fingerprint (ONLY for sudo)
   services.fprintd.enable = true;

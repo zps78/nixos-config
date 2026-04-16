@@ -1,3 +1,4 @@
+#../../modules/hp-officejet-pro-8715.nix
 { config, pkgs, lib, ... }:
 
 {
