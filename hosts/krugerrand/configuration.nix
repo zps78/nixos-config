@@ -27,15 +27,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth.enable = true;
   boot.initrd.systemd.enable = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  boot.kernelModules = [
-    "ip_tables"
-    "iptable_filter"
-    "iptable_nat"
-    "nf_nat"
-    "nf_conntrack"
-  ];
+  boot.kernelPackages = pkgs.linuxPackages;#_latest;
 
   # Networking
   networking.networkmanager.enable = true;
