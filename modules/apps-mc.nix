@@ -1,4 +1,4 @@
-# ../../modules/apps-mc.nix
+# ../../modules/apps-sc.nix
 { config, pkgs, ... }:
 
 {
@@ -17,6 +17,7 @@
    ## Internet
     brave
     # filezilla
+    firefox
     # thunderbird
 
    ## Gaming
@@ -30,9 +31,9 @@
     wineWow64Packages.staging
 
    ## Virtualization / Emulation
-    # libvirt
-    # virt-manager
-    # waydroid
+    libvirt
+    virt-manager
+    waydroid
 
   # Office
     onlyoffice-desktopeditors
@@ -43,5 +44,4 @@
   # Programs
   # ----------------------
   programs.firefox.enable = true;
-  programs.steam.enable = true;
 }

@@ -56,9 +56,6 @@
     { device = "/swapfile"; size = 4096; }
   ];
 
-  # Desktop
-  services.xserver.enable = true;
-
   # Audio
   services.pulseaudio.enable = false;
   services.pipewire.enable = true;

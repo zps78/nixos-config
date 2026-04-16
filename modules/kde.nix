@@ -3,6 +3,7 @@
 
 {
   # Desktop & Display Manager
+  services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
@@ -13,27 +14,20 @@
     kdeconnect-kde
     kompare
     partitionmanager
-   # xdg-desktop-portal-kde
   ];
 
     # KDE portal (FIX for Plex + Electron apps)
-xdg.portal = {
-  enable = true;
-
-  extraPortals = [
-    pkgs.kdePackages.xdg-desktop-portal-kde
-  ];
-
-  config = {
-    common.default = "kde";
+  xdg.portal = {
+    enable = true;
+    xdgOpenUsePortal = true;
+    extraPortals = [
+      pkgs.kdePackages.xdg-desktop-portal-kde
+    ];
+    config.common.default = "kde";
   };
-};
 
   # Optional: KDE-specific programs
   programs.kdeconnect.enable = true;
-
-  # Fingerprint GUI settings for KDE: false still allows fingerprint for sudo
-  security.pam.services.kde.fprintAuth = false;
 
   environment.etc."xdg/kdeglobals".text = ''
   [General]

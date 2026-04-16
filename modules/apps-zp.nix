@@ -17,6 +17,7 @@
    ## Internet
     # brave
     # filezilla
+    firefox
     # thunderbird
 
    ## Gaming
@@ -43,5 +44,4 @@
   # Programs
   # ----------------------
   programs.firefox.enable = true;
-  # programs.steam.enable = true;
 }
