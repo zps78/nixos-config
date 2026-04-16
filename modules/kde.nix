@@ -10,7 +10,9 @@
   # KDE apps
   environment.systemPackages = with pkgs.kdePackages; [
     isoimagewriter
+    kalendar
     kate
+    kcalc
     kdeconnect-kde
     kompare
     partitionmanager
