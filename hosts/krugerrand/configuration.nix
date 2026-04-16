@@ -20,7 +20,6 @@
 #   ../../modules/gpu-nvidia.nix
 #   ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
-    ../../modules/waydroid.nix
   ];
 
   # Bootloader
@@ -39,7 +38,6 @@
   # Tailscale
   services.tailscale.enable = true;
   virtualisation.waydroid.enable = true;
-
 
   # Fingerprint (ONLY for sudo)
   services.fprintd.enable = true;
