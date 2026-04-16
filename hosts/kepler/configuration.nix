@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -20,6 +20,7 @@
 #   ../../modules/gpu-nvidia.nix
     ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
+    ../../modules/waydroid.nix
   ];
 
   # Bootloader.
@@ -34,10 +35,8 @@
   networking.hostName = "kepler";
   networking.nameservers = [ "100.100.100.100" "100.101.102.1" "9.9.9.9" "149.112.112.112" "8.8.8.8" "1.1.1.1" ];
   networking.search = [ "ojos-cloud.ts.net" ];
-
   # Tailscale
   services.tailscale.enable = true;
-  virtualisation.waydroid.enable = true;
 
   # Fingerprint (ONLY for sudo)
   services.fprintd.enable = true;
@@ -78,12 +77,10 @@
   };
 
   # Programs
-  programs.git.enable = true;
-  programs.firefox.enable = true;
+#  programs.firefox.enable = true; # in user.nix file
   programs.steam.enable = true;
-
-
-  #  programs.git.config.user.name = "zp";
+  programs.git.enable = true;
+#  programs.git.config.user.name = "zp";
 #  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
 
   # Unfree packages
@@ -91,10 +88,7 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
-    firefox
-    git
-    steam
-    tailscale
+#    tailscale
   ];
 
   # System state version

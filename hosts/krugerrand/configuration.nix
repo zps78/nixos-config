@@ -78,6 +78,7 @@
 
   # Programs
 #  programs.firefox.enable = true; # in user.nix file
+#  programs.steam.enable = true;
   programs.git.enable = true;
   programs.git.config.user.name = "zp";
   programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";

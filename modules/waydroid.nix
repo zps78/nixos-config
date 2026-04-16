@@ -1,5 +1,4 @@
 #../../modules/waydroid.nix
-
 { config, pkgs, lib, ... }:
 
 {

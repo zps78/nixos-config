@@ -1,4 +1,4 @@
-# ../../modules/apps-sc.nix
+# ../../modules/apps-mc.nix
 { config, pkgs, ... }:
 
 {
@@ -15,7 +15,7 @@
     # sunshine
 
    ## Internet
-    brave
+    # brave
     # filezilla
     firefox
     # thunderbird
@@ -33,7 +33,7 @@
    ## Virtualization / Emulation
     libvirt
     virt-manager
-    # waydroid - > activate on configuration.nix
+    # waydroid - > import waydroid.nix on configuration.nix
 
   # Office
     onlyoffice-desktopeditors
