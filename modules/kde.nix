@@ -10,7 +10,7 @@
   # KDE apps
   environment.systemPackages = with pkgs.kdePackages; [
     isoimagewriter
-    kalendar
+    merkuro
     kate
     kcalc
     kdeconnect-kde
