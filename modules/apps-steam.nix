@@ -33,7 +33,7 @@
    ## Virtualization / Emulation
     # libvirt
     # virt-manager
-    # waydroid
+    # waydroid - > activate on configuration.nix
 
    ## Office
     # onlyoffice-desktopeditors

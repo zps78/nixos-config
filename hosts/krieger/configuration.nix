@@ -16,10 +16,11 @@
     ../../modules/apps-core.nix
     ../../modules/nfs-shares.nix
     ../../modules/nfs-torrents.nix
-#    ../../modules/gpu-hybrid.nix
+#   ../../modules/gpu-hybrid.nix
 #   ../../modules/gpu-nvidia.nix
     ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
+    ../../modules/waydroid.nix
   ];
 
   # Bootloader.

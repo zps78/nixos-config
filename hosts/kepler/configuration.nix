@@ -20,6 +20,7 @@
 #   ../../modules/gpu-nvidia.nix
     ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
+    ../../modules/waydroid.nix
   ];
 
   # Bootloader.
