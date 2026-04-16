@@ -34,7 +34,7 @@
   networking.hostName = "krugerrand";
   networking.nameservers = [ "100.100.100.100" "100.101.102.1" "9.9.9.9" "149.112.112.112" "8.8.8.8" "1.1.1.1" ];
   networking.search = [ "ojos-cloud.ts.net" ];
-
+networking.nftables.enable = true;
   # Tailscale
   services.tailscale.enable = true;
   virtualisation.waydroid.enable = true;
