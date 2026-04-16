@@ -29,6 +29,14 @@
   boot.initrd.systemd.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  boot.kernelModules = [
+    "ip_tables"
+    "iptable_filter"
+    "iptable_nat"
+    "nf_nat"
+    "nf_conntrack"
+  ];
+
   # Networking
   networking.networkmanager.enable = true;
   networking.hostName = "krugerrand";
