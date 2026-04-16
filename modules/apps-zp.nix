@@ -44,5 +44,4 @@
   # Programs
   # ----------------------
   programs.firefox.enable = true;
-  virtualisation.waydroid.enable = true;
 }

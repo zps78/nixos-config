@@ -37,6 +37,8 @@
 
   # Tailscale
   services.tailscale.enable = true;
+  virtualisation.waydroid.enable = true;
+
 
   # Fingerprint (ONLY for sudo)
   services.fprintd.enable = true;
