@@ -14,17 +14,17 @@
     ../../modules/kde.nix
 #   ../../modules/hyprland.nix
     ../../modules/apps-core.nix
-    ../../modules/nfs-shares.nix
+#   ../../modules/nfs-shares.nix
     ../../modules/nfs-torrents.nix
-    ../../modules/gpu-hybrid.nix
+#   ../../modules/gpu-hybrid.nix
 #   ../../modules/gpu-nvidia.nix
 #   ../../modules/gpu-amd.nix
     ../../modules/hp-officejet-pro-8715.nix
     ../../modules/tailscale.nix
-    ../../modules/waydroid.nix
+#    ../../modules/waydroid.nix
   ];
 
-  # Bootloader
+  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth.enable = true;
@@ -33,7 +33,7 @@
 
   # Networking
   networking.networkmanager.enable = true;
-  networking.hostName = "krugerrand";
+  networking.hostName = "krieger";
 #  networking.nameservers = [ "100.100.100.100" "100.101.102.1" "9.9.9.9" "149.112.112.112" "8.8.8.8" "1.1.1.1" ];
 #  networking.search = [ "ojos-cloud.ts.net" ];
   # Tailscale
@@ -71,18 +71,18 @@
 #  services.libinput.mouse.naturalScrolling = true;
 
   # Users
-  users.users.zp = {
+  users.users.mc = {
     isNormalUser = true;
-    description = "zp";
+    description = "mc";
     extraGroups = [ "networkmanager" "wheel" ];
   };
 
   # Programs
 #  programs.firefox.enable = true; # in user.nix file
-#  programs.steam.enable = true;
+  programs.steam.enable = true;
   programs.git.enable = true;
-  programs.git.config.user.name = "zp";
-  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
+#  programs.git.config.user.name = "zp";
+#  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
 
   # Unfree packages
   nixpkgs.config.allowUnfree = true;
