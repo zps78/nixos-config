@@ -17,6 +17,7 @@
   # Networking
     arp-scan
     eddie
+    ethtool
     nfs-utils
 
   # Multimedia
