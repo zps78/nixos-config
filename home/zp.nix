@@ -1,17 +1,14 @@
-{ config, nix-prompt, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    nix-prompt.homeModules.nix-prompt
     ../modules/apps-zp.nix
   ];
 
   home.username = "zp";
   home.homeDirectory = "/home/zp";
-
-  rcouto.hm.nix-prompt.enable = true;
 
   # ----------------------
   # Wallpaper files

@@ -2,7 +2,6 @@
   description = "multi-host NixOS config with Home Manager";
 
   inputs = {
-    nix-prompt.url = "github:rcouto/nix-prompt";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -10,7 +9,7 @@
     };
   };
 
-  outputs = { self, nix-prompt, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
 
     let
       system = "x86_64-linux";
@@ -20,9 +19,6 @@
       makeUser = userName: userFile: {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = {
-          inherit nix-prompt;
-        };
         home-manager.backupFileExtension = "backup";
         home-manager.users.${userName} = import userFile;
       };
