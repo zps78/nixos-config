@@ -10,26 +10,30 @@
   # Import modules
   imports = [
     ./hardware-configuration.nix
-    ../../modules/localization.nix
-    ../../modules/kde.nix
-#   ../../modules/hyprland.nix
-    ../../modules/apps-core.nix
-    ../../modules/nfs-shares.nix
-    ../../modules/nfs-torrents.nix
+
+    ../../modules/boot.nix
+    ../../modules/memory.nix
+    ../../modules/audio.nix
+
     ../../modules/gpu-hybrid.nix
 #   ../../modules/gpu-nvidia.nix
 #   ../../modules/gpu-amd.nix
-    ../../modules/hp-officejet-pro-8715.nix
+
+    ../../modules/localization.nix
+    ../../modules/fonts.nix
+
+    ../../modules/kde.nix
+#   ../../modules/hyprland.nix
+
+    ../../modules/nfs-shares.nix
+    ../../modules/nfs-torrents.nix
+
+    ../../modules/apps-core.nix
     ../../modules/tailscale.nix
     ../../modules/waydroid.nix
-  ];
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.plymouth.enable = true;
-  boot.initrd.systemd.enable = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+    ../../modules/hp-officejet-pro-8715.nix
+  ];
 
   # Networking
   networking.networkmanager.enable = true;
@@ -44,22 +48,8 @@
     sudo.fprintAuth = true;     # allow fingerprint for sudo (password still works)
   };
 
-  # Swap
-  zramSwap = {
-    enable = true;
-    memoryPercent = 25; # ~16GB max on your 64GB system
-  };
-  swapDevices = [
-    { device = "/swapfile"; size = 4096; }
-  ];
-
-  # Audio
-  services.pulseaudio.enable = false;
-  services.pipewire.enable = true;
-  services.pipewire.alsa.enable = true;
-  services.pipewire.alsa.support32Bit = true;
-  services.pipewire.pulse.enable = true;
-  security.rtkit.enable = true;
+  # Memory
+  boot.kernel.sysctl."vm.swappiness" = 60;
 
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;
@@ -82,10 +72,6 @@
 
   # Unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  fonts.packages = with pkgs; [
-  jetbrains-mono
-];
 
   # System packages
   environment.systemPackages = with pkgs; [
