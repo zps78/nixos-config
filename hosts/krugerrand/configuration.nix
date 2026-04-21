@@ -22,7 +22,6 @@
     ../../modules/hp-officejet-pro-8715.nix
     ../../modules/tailscale.nix
     ../../modules/waydroid.nix
-    ../../modules/wireguard.nix
   ];
 
   # Bootloader
