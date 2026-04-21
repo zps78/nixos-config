@@ -2,7 +2,7 @@
   description = "multi-host NixOS config with Home Manager";
 
   inputs = {
-    nix-prompt.url = "github:rcouto/nix-prompt.nix";
+    nix-prompt.url = "github:rcouto/nix-prompt";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
