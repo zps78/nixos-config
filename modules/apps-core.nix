@@ -16,7 +16,7 @@
 
   # Networking
     arp-scan
-    eddie
+#    eddie
     ethtool
     nfs-utils
 
