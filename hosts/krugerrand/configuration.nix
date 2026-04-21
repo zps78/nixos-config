@@ -22,6 +22,7 @@
     ../../modules/hp-officejet-pro-8715.nix
     ../../modules/tailscale.nix
     ../../modules/waydroid.nix
+    ../../modules/wireguard.nix
   ];
 
   # Bootloader
@@ -34,10 +35,6 @@
   # Networking
   networking.networkmanager.enable = true;
   networking.hostName = "krugerrand";
-#  networking.nameservers = [ "100.100.100.100" "100.101.102.1" "9.9.9.9" "149.112.112.112" "8.8.8.8" "1.1.1.1" ];
-#  networking.search = [ "ojos-cloud.ts.net" ];
-  # Tailscale
-#  services.tailscale.enable = true;
 
   # Fingerprint (ONLY for sudo)
   services.fprintd.enable = true;
