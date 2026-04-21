@@ -83,6 +83,10 @@
   # Unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  fonts.packages = with pkgs; [
+  jetbrains-mono
+];
+
   # System packages
   environment.systemPackages = with pkgs; [
 #    tailscale
