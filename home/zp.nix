@@ -4,7 +4,7 @@
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    ../modules/apps-zp.nix
+    ../modules/apps/zp.nix
   ];
 
   home.username = "zp";
