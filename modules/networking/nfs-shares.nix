@@ -1,4 +1,4 @@
-# ../../modules/nfs-shares.nix
+# ../../modules/networking/nfs-shares.nix
 { config, pkgs, ... }:
 
 {

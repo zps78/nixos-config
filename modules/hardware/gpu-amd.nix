@@ -1,4 +1,4 @@
-# ../../modules/gpu-amd.nix
+# ../../modules/hardware/gpu-amd.nix
 { config, pkgs, lib, ... }:
 
 {

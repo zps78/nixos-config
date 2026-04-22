@@ -7,81 +7,57 @@
   # Import modules
   imports = [
     ./hardware-configuration.nix
-    ../../modules/localization.nix
-    ../../modules/kde.nix
-#   ../../modules/hyprland.nix
-    ../../modules/apps-core.nix
-    ../../modules/nfs-shares.nix
-    ../../modules/nfs-torrents.nix
-#   ../../modules/gpu-hybrid.nix
-#   ../../modules/gpu-nvidia.nix
-    ../../modules/gpu-amd.nix
-    ../../modules/hp-officejet-pro-8715.nix
-    ../../modules/waydroid.nix
+
+    ../../modules/hardware/audio.nix
+    ../../modules/hardware/bluetooth.nix
+    ../../modules/hardware/gpu-hybrid.nix
+#   ../../modules/hardware/gpu-nvidia.nix
+#   ../../modules/hardware/gpu-amd.nix
+
+    ../../modules/system/boot.nix
+    ../../modules/system/common.nix
+    ../../modules/system/localization.nix
+    ../../modules/system/memory.nix
+
+    ../../modules/desktop/fonts.nix
+#   ../../modules/desktop/hyprland.nix
+    ../../modules/desktop/kde.nix
+
+    ../../modules/networking/nfs-shares.nix
+    ../../modules/networking/nfs-torrents.nix
+    ../../modules/networking/tailscale.nix
+
+    ../../modules/apps/core.nix
+
+    ../../modules/services/hp-officejet-pro-8715.nix
+    ../../modules/services/waydroid.nix
   ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.plymouth.enable = true;
-  boot.initrd.systemd.enable = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Memory
+  boot.kernel.sysctl."vm.swappiness" = 10;
 
   # Networking
-  networking.networkmanager.enable = true;
   networking.hostName = "krieger";
-  networking.nameservers = [ "100.100.100.100" "100.101.102.1" "9.9.9.9" "149.112.112.112" "8.8.8.8" "1.1.1.1" ];
-  networking.search = [ "ojos-cloud.ts.net" ];
-  # Tailscale
-  services.tailscale.enable = true;
 
-  # Fingerprint (ONLY for sudo)
-  services.fprintd.enable = true;
-  security.pam.services = {
-    login.fprintAuth = false;   # keep password login
-#    kde.fprintAuth = false;     # keep password for lock screen
-    sddm.fprintAuth = false;    # keep password for graphical login
-    sudo.fprintAuth = true;     # allow fingerprint for sudo (password still works)
+  # Users
+  users.users.steam = {
+    isNormalUser = true;
+    description = "steam";
+    extraGroups = [ "networkmanager" "wheel" ];
   };
-
-  # Swap
-  zramSwap = {
-    enable = true;
-    memoryPercent = 25; # ~16GB max on your 64GB system
-  };
-  swapDevices = [
-    { device = "/swapfile"; size = 4096; }
-  ];
-
-  # Audio
-  services.pulseaudio.enable = false;
-  services.pipewire.enable = true;
-  services.pipewire.alsa.enable = true;
-  services.pipewire.alsa.support32Bit = true;
-  services.pipewire.pulse.enable = true;
-  security.rtkit.enable = true;
 
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;
 #  services.libinput.touchpad.naturalScrolling = true;
 #  services.libinput.mouse.naturalScrolling = true;
 
-  # Users
-  users.users.mc = {
-    isNormalUser = true;
-    description = "mc";
-    extraGroups = [ "networkmanager" "wheel" ];
-  };
-
   # Programs
 #  programs.firefox.enable = true; # in user.nix file
   programs.steam.enable = true;
   programs.git.enable = true;
-#  programs.git.config.user.name = "zp";
-#  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
+  programs.git.config.user.name = "zp";
+  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
 
-  # Unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # System packages
   environment.systemPackages = with pkgs; [

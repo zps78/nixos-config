@@ -47,7 +47,7 @@
           modules = [
             ./hosts/krieger/configuration.nix
             home-manager.nixosModules.home-manager
-            (makeUser "mc" ./home/mc.nix)
+            (makeUser "steam" ./home/steam.nix)
           ];
         };
 
@@ -60,18 +60,6 @@
             ./hosts/kepler/configuration.nix
             home-manager.nixosModules.home-manager
             (makeUser "sc" ./home/sc.nix)
-          ];
-        };
-
-        # --------------------------
-        # Host: krypton
-        # --------------------------
-        krypton = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/krypton/configuration.nix
-            home-manager.nixosModules.home-manager
-            (makeUser "steam" ./home/steam.nix)
           ];
         };
       };

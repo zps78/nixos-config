@@ -1,4 +1,4 @@
-# ../../modules/localization.nix
+# ../../modules/system/localization.nix
 { config, lib, pkgs, ... }:
 
 {

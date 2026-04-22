@@ -1,4 +1,4 @@
-# ../../modules/bluetooth.nix
+# ../../modules/hardware/bluetooth.nix
 { config, pkgs, lib, ... }:
 
 {

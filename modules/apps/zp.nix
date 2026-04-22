@@ -1,4 +1,4 @@
-# ../../modules/apps-zp.nix
+# ../../modules/apps/zp.nix
 { config, pkgs, ... }:
 
 {

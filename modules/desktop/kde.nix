@@ -1,4 +1,4 @@
-# ../../modules/kde.nix
+# ../../modules/desktop/kde.nix
 { config, pkgs, lib, ... }:
 
 {

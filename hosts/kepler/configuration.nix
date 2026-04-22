@@ -8,33 +8,40 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../../modules/boot.nix
-    ../../modules/memory.nix
-    ../../modules/audio.nix
+    ../../modules/hardware/audio.nix
+    ../../modules/hardware/bluetooth.nix
+#   ../../modules/hardware/gpu-hybrid.nix
+#   ../../modules/hardware/gpu-nvidia.nix
+    ../../modules/hardware/gpu-amd.nix
 
-#   ../../modules/gpu-hybrid.nix
-#   ../../modules/gpu-nvidia.nix
-    ../../modules/gpu-amd.nix
+    ../../modules/system/boot.nix
+    ../../modules/system/common.nix
+    ../../modules/system/localization.nix
+    ../../modules/system/memory.nix
 
-    ../../modules/localization.nix
-    ../../modules/fonts.nix
+    ../../modules/desktop/fonts.nix
+#   ../../modules/desktop/hyprland.nix
+    ../../modules/desktop/kde.nix
 
-    ../../modules/kde.nix
-#   ../../modules/hyprland.nix
+#   ../../modules/networking/nfs-shares.nix
+    ../../modules/networking/nfs-torrents.nix
+    ../../modules/networking/tailscale.nix
 
-    ../../modules/nfs-shares.nix
-    ../../modules/nfs-torrents.nix
+    ../../modules/apps/core.nix
 
-    ../../modules/apps-core.nix
-    ../../modules/tailscale.nix
-    ../../modules/waydroid.nix
-
-    ../../modules/hp-officejet-pro-8715.nix
+    ../../modules/services/hp-officejet-pro-8715.nix
+    ../../modules/services/waydroid.nix
   ];
 
   # Networking
-  networking.networkmanager.enable = true;
   networking.hostName = "kepler";
+
+  # Users
+  users.users.sc = {
+    isNormalUser = true;
+    description = "sc";
+    extraGroups = [ "networkmanager" "wheel" ];
+  };
 
   # Fingerprint (ONLY for sudo)
   services.fprintd.enable = true;
@@ -45,30 +52,15 @@
     sudo.fprintAuth = true;     # allow fingerprint for sudo (password still works)
   };
 
-  # Memory
-  boot.kernel.sysctl."vm.swappiness" = 80;
 
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;
 #  services.libinput.touchpad.naturalScrolling = true;
 #  services.libinput.mouse.naturalScrolling = true;
 
-  # Users
-  users.users.sc = {
-    isNormalUser = true;
-    description = "sc";
-    extraGroups = [ "networkmanager" "wheel" ];
-  };
-
   # Programs
 #  programs.firefox.enable = true; # in user.nix file
-  programs.steam.enable = true;
-  programs.git.enable = true;
-#  programs.git.config.user.name = "zp";
-#  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
-
-  # Unfree packages
-  nixpkgs.config.allowUnfree = true;
+#  programs.steam.enable = true;
 
   # System packages
   environment.systemPackages = with pkgs; [

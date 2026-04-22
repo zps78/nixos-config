@@ -1,4 +1,4 @@
-# ../../modules/audio.nix
+# ../../modules/hardware/audio.nix
 { config, pkgs, lib, ... }:
 
 {

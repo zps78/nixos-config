@@ -1,4 +1,4 @@
-# ../../modules/memory.nix
+# ../../modules/system/memory.nix
 { config, lib, ... }:
 
 let

@@ -1,4 +1,4 @@
-# ../../modules/apps-mc.nix
+# ../../modules/apps/mc.nix
 { config, pkgs, ... }:
 
 {

@@ -1,4 +1,4 @@
-# ../../modules/apps-steam.nix
+# ../../modules/apps/steam.nix
 { config, pkgs, ... }:
 
 {
