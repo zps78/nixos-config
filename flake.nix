@@ -1,3 +1,4 @@
+
 {
   description = "multi-host NixOS config with Home Manager";
 

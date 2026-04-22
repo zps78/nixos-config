@@ -1,10 +1,11 @@
+# ../../home/mc.nix
 { config, pkgs, lib, ... }:
 
 {
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    ../modules/apps-mc.nix
+    ../modules/apps/mc.nix
   ];
 
   home.username = "mc";

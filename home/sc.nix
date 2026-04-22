@@ -1,10 +1,11 @@
+# ../../home/sc.nix
 { config, pkgs, lib, ... }:
 
 {
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    ../modules/apps-sc.nix
+    ../modules/apps/sc.nix
   ];
 
   home.username = "sc";

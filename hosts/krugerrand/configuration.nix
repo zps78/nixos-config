@@ -1,7 +1,4 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
+# ../../hosts/krugerrand/configuration.nix
 { config, pkgs, lib, ... }:
 
 {
@@ -37,9 +34,18 @@
     ../../modules/services/hp-officejet-pro-8715.nix
   ];
 
+  # Memory
+  boot.kernel.sysctl."vm.swappiness" = 60;
+
   # Networking
-  networking.networkmanager.enable = true;
   networking.hostName = "krugerrand";
+
+  # Users
+  users.users.zp = {
+    isNormalUser = true;
+    description = "zp";
+    extraGroups = [ "networkmanager" "wheel" ];
+  };
 
   # Fingerprint (ONLY for sudo)
   services.fprintd.enable = true;
@@ -50,30 +56,18 @@
     sudo.fprintAuth = true;     # allow fingerprint for sudo (password still works)
   };
 
-  # Memory
-  boot.kernel.sysctl."vm.swappiness" = 60;
 
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;
 #  services.libinput.touchpad.naturalScrolling = true;
 #  services.libinput.mouse.naturalScrolling = true;
 
-  # Users
-  users.users.zp = {
-    isNormalUser = true;
-    description = "zp";
-    extraGroups = [ "networkmanager" "wheel" ];
-  };
-
   # Programs
 #  programs.firefox.enable = true; # in user.nix file
 #  programs.steam.enable = true;
-  programs.git.enable = true;
   programs.git.config.user.name = "zp";
   programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
 
-  # Unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # System packages
   environment.systemPackages = with pkgs; [

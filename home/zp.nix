@@ -1,3 +1,4 @@
+# ../../home/zp.nix
 { config, pkgs, lib, ... }:
 
 {
