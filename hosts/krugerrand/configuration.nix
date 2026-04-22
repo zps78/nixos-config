@@ -14,6 +14,7 @@
     ../../modules/boot.nix
     ../../modules/memory.nix
     ../../modules/audio.nix
+    ../../modules/bluetooth.nix
 
     ../../modules/gpu-hybrid.nix
 #   ../../modules/gpu-nvidia.nix
