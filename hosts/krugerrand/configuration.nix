@@ -29,9 +29,8 @@
 
     ../../modules/apps/core.nix
 
-    ../../modules/waydroid.nix
-
     ../../modules/services/hp-officejet-pro-8715.nix
+    ../../modules/services/waydroid.nix
   ];
 
   # Memory

@@ -1,4 +1,4 @@
-#../../modules/services/waydroid.nix
+# ../../modules/services/waydroid.nix
 { config, pkgs, lib, ... }:
 
 {
