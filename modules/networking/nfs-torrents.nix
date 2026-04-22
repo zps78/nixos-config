@@ -1,4 +1,4 @@
-# ../../modules/nfs-torrents.nix
+# ../../modules/networking/nfs-torrents.nix
 { config, pkgs, ... }:
 
 {
