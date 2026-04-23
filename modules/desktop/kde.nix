@@ -15,6 +15,7 @@
     kcalc
     kdeconnect-kde
     kompare
+    krohnkite
     partitionmanager
   ];
 
