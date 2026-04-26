@@ -5,7 +5,7 @@
   # Import modules
   imports = [
     ../../modules/apps/firefox.nix
-  ]
+  ];
   # ----------------------
   # Packages
   # ----------------------
