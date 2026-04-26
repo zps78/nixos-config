@@ -5,7 +5,7 @@
   programs.firefox = {
   enable = true;
 
-  languagePacks = [ "en-US" ];
+  languagePacks = [ "en-US" "pt-PT" ];
 
   policies = {
     # Updates & Background Services
@@ -13,9 +13,9 @@
     BackgroundAppUpdate           = false;
 
     # Feature Disabling
-    DisableBuiltinPDFViewer       = true;
+#    DisableBuiltinPDFViewer       = true;
     DisableFirefoxStudies         = true;
-    DisableFirefoxAccounts        = true;
+    DisableFirefoxAccounts        = false;
     DisableFirefoxScreenshots     = true;
     DisableForgetButton           = true;
     DisableMasterPasswordCreation = true;
@@ -25,7 +25,7 @@
     DisablePocket                 = true;
     DisableTelemetry              = true;
     DisableFormHistory            = true;
-    DisablePasswordReveal         = true;
+    DisablePasswordReveal         = false;
 
     # Access Restrictions
     BlockAboutConfig              = false;
@@ -38,11 +38,12 @@
     HardwareAcceleration          = false;
     OfferToSaveLogins             = false;
     DefaultDownloadDirectory      = "${config.home.homeDirectory}/Downloads";
+    programs.firefox.configPath   = "${config.xdg.configHome}/mozilla/firefox";
     # Extensions
     ExtensionSettings = let
       moz = short: "https://addons.mozilla.org/firefox/downloads/latest/${short}/latest.xpi";
     in {
-      "*".installation_mode = "blocked";
+      "*".installation_mode = "allowed";
 
       "uBlock0@raymondhill.net" = {
         install_url       = moz "ublock-origin";
@@ -50,105 +51,42 @@
         updates_disabled  = true;
       };
 
-      "{f3b4b962-34b4-4935-9eee-45b0bce58279}" = {
-        install_url       = moz "animated-purple-moon-lake";
+      "sponsorBlocker@ajay.app" = {
+        install_url       = moz "sponsorblock";
         installation_mode = "force_installed";
         updates_disabled  = true;
       };
 
-#      "{73a6fe31-595d-460b-a920-fcc0f8843232}" = {
-#        install_url       = moz "noscript";
-#        installation_mode = "force_installed";
-#        updates_disabled  = true;
-#      };
+      "amptra@keepa.com" = {
+        install_url       = moz "keepa";
+        installation_mode = "force_installed";
+        updates_disabled  = true;
+      };
+
+      "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
+        install_url       = moz "bitwarden-password-manager";
+        installation_mode = "force_installed";
+        updates_disabled  = true;
+      };
+
+      "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}" = {
+        install_url       = moz "video-downloadhelper";
+        installation_mode = "force_installed";
+        updates_disabled  = true;
+      };
+
+      "gdpr@cavi.au.dk" = {
+        install_url       = moz "consent-o-matic";
+        installation_mode = "force_installed";
+        updates_disabled  = true;
+      };
+
+      "{e6e36c9a-8323-446c-b720-a176017e38ff}" = {
+        install_url       = moz "torrent-control";
+        installation_mode = "force_installed";
+        updates_disabled  = true;
+      };
     };
-
-    # Extension configuration
-#    "3rdparty".Extensions = {
-#      "uBlock0@raymondhill.net".adminSettings = {
- #       userSettings = rec {
-  #        uiTheme            = "dark";
-   #       uiAccentCustom     = true;
-    #      uiAccentCustom0    = "#8300ff";
-     #     cloudStorageEnabled = mkForce false;
-#
- #         importedLists = [
-  #          "https:#filters.adtidy.org/extension/ublock/filters/3.txt"
-   #         "https:#github.com/DandelionSprout/adfilt/raw/master/LegitimateURLShortener.txt"
-    #      ];
-#
- #         externalLists = lib.concatStringsSep "\n" importedLists;
-  #      };
-#
- #       selectedFilterLists = [
-  #        "CZE-0"
-   #       "adguard-generic"
-    #      "adguard-annoyance"
-     #     "adguard-social"
-      #    "adguard-spyware-url"
-       #   "easylist"
-        #  "easyprivacy"
-         # "https:#github.com/DandelionSprout/adfilt/raw/master/LegitimateURLShortener.txt"
-          #"plowe-0"
- #         "ublock-abuse"
-  #        "ublock-badware"
-   #       "ublock-filters"
-    #      "ublock-privacy"
-     #     "ublock-quick-fixes"
-      #    "ublock-unbreak"
-       #   "urlhaus-1"
-#        ];
- #     };
-#    };
-#  };
-#
-#  profiles.default.search = {
-#    force           = true;
-#    default         = "DuckDuckGo";
-#    privateDefault  = "DuckDuckGo";
-
-#    engines = {
-#      "Nix Packages" = {
-#        urls = [
-#          {
-#            template = "https://search.nixos.org/packages";
-#            params = [
-#              { name = "channel"; value = "unstable"; }
-#              { name = "query";   value = "{searchTerms}"; }
-#            ];
-#          }
-#        ];
-#        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-#        definedAliases = [ "@np" ];
-#      };
-#
-#      "Nix Options" = {
-#        urls = [
-#          {
-#            template = "https://search.nixos.org/options";
-#            params = [
-#              { name = "channel"; value = "unstable"; }
-#              { name = "query";   value = "{searchTerms}"; }
-#            ];
-#          }
-#        ];
-#        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-#        definedAliases = [ "@no" ];
-#      };
-
-#      "NixOS Wiki" = {
-#        urls = [
-#          {
-#            template = "https://wiki.nixos.org/w/index.php";
-#            params = [
-#              { name = "search"; value = "{searchTerms}"; }
-#            ];
-#          }
-#        ];
-#        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-#        definedAliases = [ "@nw" ];
- #     };
- #   };
   };
 };
 }
