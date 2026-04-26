@@ -1,5 +1,8 @@
 # ../../modules/apps/firefox.nix
-programs.firefox = {
+{ config, pkgs, lib, ... }:
+
+{
+  programs.firefox = {
   enable = true;
 
   languagePacks = [ "en-US" ];
@@ -34,8 +37,7 @@ programs.firefox = {
     DontCheckDefaultBrowser       = true;
     HardwareAcceleration          = false;
     OfferToSaveLogins             = false;
-    DefaultDownloadDirectory      = "${home}/Downloads";
-
+    DefaultDownloadDirectory      = "${config.home.homeDirectory}/Downloads";
     # Extensions
     ExtensionSettings = let
       moz = short: "https://addons.mozilla.org/firefox/downloads/latest/${short}/latest.xpi";
@@ -54,98 +56,99 @@ programs.firefox = {
         updates_disabled  = true;
       };
 
-      "{73a6fe31-595d-460b-a920-fcc0f8843232}" = {
-        install_url       = moz "noscript";
-        installation_mode = "force_installed";
-        updates_disabled  = true;
-      };
+#      "{73a6fe31-595d-460b-a920-fcc0f8843232}" = {
+#        install_url       = moz "noscript";
+#        installation_mode = "force_installed";
+#        updates_disabled  = true;
+#      };
     };
 
     # Extension configuration
-    "3rdparty".Extensions = {
-      "uBlock0@raymondhill.net".adminSettings = {
-        userSettings = rec {
-          uiTheme            = "dark";
-          uiAccentCustom     = true;
-          uiAccentCustom0    = "#8300ff";
-          cloudStorageEnabled = mkForce false;
+#    "3rdparty".Extensions = {
+#      "uBlock0@raymondhill.net".adminSettings = {
+ #       userSettings = rec {
+  #        uiTheme            = "dark";
+   #       uiAccentCustom     = true;
+    #      uiAccentCustom0    = "#8300ff";
+     #     cloudStorageEnabled = mkForce false;
+#
+ #         importedLists = [
+  #          "https:#filters.adtidy.org/extension/ublock/filters/3.txt"
+   #         "https:#github.com/DandelionSprout/adfilt/raw/master/LegitimateURLShortener.txt"
+    #      ];
+#
+ #         externalLists = lib.concatStringsSep "\n" importedLists;
+  #      };
+#
+ #       selectedFilterLists = [
+  #        "CZE-0"
+   #       "adguard-generic"
+    #      "adguard-annoyance"
+     #     "adguard-social"
+      #    "adguard-spyware-url"
+       #   "easylist"
+        #  "easyprivacy"
+         # "https:#github.com/DandelionSprout/adfilt/raw/master/LegitimateURLShortener.txt"
+          #"plowe-0"
+ #         "ublock-abuse"
+  #        "ublock-badware"
+   #       "ublock-filters"
+    #      "ublock-privacy"
+     #     "ublock-quick-fixes"
+      #    "ublock-unbreak"
+       #   "urlhaus-1"
+#        ];
+ #     };
+#    };
+#  };
+#
+#  profiles.default.search = {
+#    force           = true;
+#    default         = "DuckDuckGo";
+#    privateDefault  = "DuckDuckGo";
 
-          importedLists = [
-            "https:#filters.adtidy.org/extension/ublock/filters/3.txt"
-            "https:#github.com/DandelionSprout/adfilt/raw/master/LegitimateURLShortener.txt"
-          ];
+#    engines = {
+#      "Nix Packages" = {
+#        urls = [
+#          {
+#            template = "https://search.nixos.org/packages";
+#            params = [
+#              { name = "channel"; value = "unstable"; }
+#              { name = "query";   value = "{searchTerms}"; }
+#            ];
+#          }
+#        ];
+#        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+#        definedAliases = [ "@np" ];
+#      };
+#
+#      "Nix Options" = {
+#        urls = [
+#          {
+#            template = "https://search.nixos.org/options";
+#            params = [
+#              { name = "channel"; value = "unstable"; }
+#              { name = "query";   value = "{searchTerms}"; }
+#            ];
+#          }
+#        ];
+#        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+#        definedAliases = [ "@no" ];
+#      };
 
-          externalLists = lib.concatStringsSep "\n" importedLists;
-        };
-
-        selectedFilterLists = [
-          "CZE-0"
-          "adguard-generic"
-          "adguard-annoyance"
-          "adguard-social"
-          "adguard-spyware-url"
-          "easylist"
-          "easyprivacy"
-          "https:#github.com/DandelionSprout/adfilt/raw/master/LegitimateURLShortener.txt"
-          "plowe-0"
-          "ublock-abuse"
-          "ublock-badware"
-          "ublock-filters"
-          "ublock-privacy"
-          "ublock-quick-fixes"
-          "ublock-unbreak"
-          "urlhaus-1"
-        ];
-      };
-    };
-  };
-
-  profiles.default.search = {
-    force           = true;
-    default         = "DuckDuckGo";
-    privateDefault  = "DuckDuckGo";
-
-    engines = {
-      "Nix Packages" = {
-        urls = [
-          {
-            template = "https://search.nixos.org/packages";
-            params = [
-              { name = "channel"; value = "unstable"; }
-              { name = "query";   value = "{searchTerms}"; }
-            ];
-          }
-        ];
-        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = [ "@np" ];
-      };
-
-      "Nix Options" = {
-        urls = [
-          {
-            template = "https://search.nixos.org/options";
-            params = [
-              { name = "channel"; value = "unstable"; }
-              { name = "query";   value = "{searchTerms}"; }
-            ];
-          }
-        ];
-        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = [ "@no" ];
-      };
-
-      "NixOS Wiki" = {
-        urls = [
-          {
-            template = "https://wiki.nixos.org/w/index.php";
-            params = [
-              { name = "search"; value = "{searchTerms}"; }
-            ];
-          }
-        ];
-        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = [ "@nw" ];
-      };
-    };
+#      "NixOS Wiki" = {
+#        urls = [
+#          {
+#            template = "https://wiki.nixos.org/w/index.php";
+#            params = [
+#              { name = "search"; value = "{searchTerms}"; }
+#            ];
+#          }
+#        ];
+#        icon           = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+#        definedAliases = [ "@nw" ];
+ #     };
+ #   };
   };
 };
+}
