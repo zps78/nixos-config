@@ -2,6 +2,11 @@
 { config, pkgs, ... }:
 
 {
+  # Import modules
+  imports = [
+    ../../modules/apps/firefox.nix
+#    ../../modules/apps/plex.nix
+  ];
   # ----------------------
   # Packages
   # ----------------------
@@ -17,7 +22,6 @@
    ## Internet
     # brave
     # filezilla
-    firefox
     # thunderbird
 
    ## Gaming
@@ -39,9 +43,4 @@
     # onlyoffice-desktopeditors
     # xournalpp
   ];
-
-  # ----------------------
-  # Programs
-  # ----------------------
-  programs.firefox.enable = true;
 }

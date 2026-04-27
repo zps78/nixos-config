@@ -2,6 +2,10 @@
 { config, pkgs, ... }:
 
 {
+  # Import modules
+  imports = [
+    ../../modules/apps/firefox.nix
+  ];
   # ----------------------
   # Packages
   # ----------------------
@@ -17,7 +21,6 @@
    ## Internet
     # brave
     # filezilla
-    firefox
     # thunderbird
 
    ## Gaming
@@ -35,13 +38,8 @@
     virt-manager
     # waydroid - > import waydroid.nix on configuration.nix
 
-  # Office
+   ## Office
     onlyoffice-desktopeditors
     xournalpp
   ];
-
-  # ----------------------
-  # Programs
-  # ----------------------
-  programs.firefox.enable = true;
 }

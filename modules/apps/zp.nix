@@ -5,6 +5,7 @@
   # Import modules
   imports = [
     ../../modules/apps/firefox.nix
+    ../../modules/apps/plex.nix
   ];
   # ----------------------
   # Packages
