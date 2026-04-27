@@ -10,10 +10,12 @@
 
     ../../modules/hardware/audio.nix
     ../../modules/hardware/bluetooth.nix
+    ../../modules/hardware/fingerprint.nix
     ../../modules/hardware/gpu-hybrid.nix
 #   ../../modules/hardware/gpu-nvidia.nix
 #   ../../modules/hardware/gpu-amd.nix
 
+    ../../modules/system/auth.nix
     ../../modules/system/boot.nix
     ../../modules/system/common.nix
     ../../modules/system/localization.nix
@@ -45,16 +47,6 @@
     description = "zp";
     extraGroups = [ "networkmanager" "wheel" ];
   };
-
-  # Fingerprint (ONLY for sudo)
-  services.fprintd.enable = true;
-  security.pam.services = {
-    login.fprintAuth = false;   # keep password login
-#    kde.fprintAuth = false;     # keep password for lock screen
-    sddm.fprintAuth = false;    # keep password for graphical login
-    sudo.fprintAuth = true;     # allow fingerprint for sudo (password still works)
-  };
-
 
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;

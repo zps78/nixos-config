@@ -10,10 +10,12 @@
 
     ../../modules/hardware/audio.nix
     ../../modules/hardware/bluetooth.nix
+#   ../../modules/hardware/fingerprint.nix
     ../../modules/hardware/gpu-hybrid.nix
 #   ../../modules/hardware/gpu-nvidia.nix
 #   ../../modules/hardware/gpu-amd.nix
 
+    ../../modules/system/auth.nix
     ../../modules/system/boot.nix
     ../../modules/system/common.nix
     ../../modules/system/localization.nix
