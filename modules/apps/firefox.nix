@@ -29,8 +29,6 @@
     DisablePasswordReveal         = false;
     PasswordManagerEnabled        = false;
 
-    EnableTrackingProtection      = true;
-
     UserMessaging = {
       ExtensionRecommendations    = false;
       FeatureRecommendations      = false;
