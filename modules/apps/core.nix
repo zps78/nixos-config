@@ -8,6 +8,7 @@
     btop
     iperf3
     fio
+    git
     pciutils
     rclone
     rsync
@@ -38,6 +39,5 @@
     ddrutility
     scrcpy
     testdisk
-    remmina
   ];
 }

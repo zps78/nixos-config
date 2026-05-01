@@ -6,6 +6,7 @@
   imports = [
     ../../modules/apps/firefox.nix
 #   ../../modules/apps/plex.nix
+    ../../modules/apps/wine.nix
   ];
   # ----------------------
   # Packages
@@ -15,30 +16,30 @@
     # godot
     # vscode
 
-   ## Streaming
+   ## Media
     # obs-studio
+    # spotify
+    # sunshine        # -> import sunshine.nix in configuration.nix
 
    ## Internet
     # brave
     # filezilla
     # thunderbird
 
-    darktable
-
-
    ## Gaming
-    lutris
-    steam
-    # moonlight-qt
-    # teamviewer
+      lutris          # -> make sure to also import wine.nix at the top of this file
+    # steam           # -> import steam.nix in configuration.nix
+
+   ## Remote access
+      moonlight-qt
+      teamviewer
 
    ## Wine
-    winetricks
-    wineWow64Packages.staging
+    # wine            # -> import wine.nix at the top of this file
 
    ## Virtualization / Emulation
-
-    # waydroid - > import waydroid.nix on configuration.nix
+    # libvirt         # -> import libvirt.nix in configuration.nix
+    # waydroid        # -> import waydroid.nix in configuration.nix
 
    ## Office
     # onlyoffice-desktopeditors

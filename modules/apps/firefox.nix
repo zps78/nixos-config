@@ -4,7 +4,7 @@
 {
   programs.firefox = {
   enable = true;
-
+  configPath = ".mozilla/firefox";
   languagePacks = [ "en-US" "pt-PT" ];
 
   policies = {
@@ -38,7 +38,7 @@
     HardwareAcceleration          = false;
     OfferToSaveLogins             = false;
     DefaultDownloadDirectory      = "${config.home.homeDirectory}/Downloads";
-    programs.firefox.configPath   = "${config.xdg.configHome}/mozilla/firefox";
+
     # Extensions
     ExtensionSettings = let
       moz = short: "https://addons.mozilla.org/firefox/downloads/latest/${short}/latest.xpi";

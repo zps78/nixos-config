@@ -11,11 +11,22 @@
   home.username = "zp";
   home.homeDirectory = "/home/zp";
 
+  programs.git = {
+    enable = true;
+
+    userName = "zp";
+    userEmail = "o.email.do.ze.pedro@gmail.com";
+
+    extraConfig = {
+      init.defaultBranch = "main";
+    };
+  };
+
   # ----------------------
   # Packages needed for activation scripts
   # ----------------------
   home.packages = with pkgs; [
-#    qt6.qttools   # Provides qdbus for KDE activation scripts
+
   ];
 
   # ----------------------

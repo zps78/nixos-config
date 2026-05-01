@@ -5,22 +5,21 @@
   # Import modules
   imports = [
     ../../modules/apps/firefox.nix
-#   ../../modules/apps/lutris.nix
     ../../modules/apps/plex.nix
-#   ../../modules/apps/steam.nix
     ../../modules/apps/wine.nix
-    ];
+  ];
   # ----------------------
   # Packages
   # ----------------------
   home.packages = with pkgs; [
    ## Development
-    godot
-    vscode
+      godot
+      vscode
 
-   ## Streaming
+   ## Media
     # obs-studio
-    # sunshine
+      spotify
+    # sunshine        # -> import sunshine.nix in configuration.nix
 
    ## Internet
     # brave
@@ -28,22 +27,22 @@
     # thunderbird
 
    ## Gaming
-    lutris
-    steam
-    moonlight-qt
+      lutris          # -> make sure to also import wine.nix at the top of this file
+    # steam           # -> import steam.nix in configuration.nix
+
+   ## Remote access
+      moonlight-qt
     # teamviewer
 
    ## Wine
-    winetricks
-    wineWow64Packages.staging
+    # wine            # -> import wine.nix at the top of this file
 
    ## Virtualization / Emulation
-    libvirt
-    virt-manager
-    # waydroid - > import waydroid.nix on configuration.nix
+    # libvirt         # -> import libvirt.nix in configuration.nix
+    # waydroid        # -> import waydroid.nix in configuration.nix
 
    ## Office
-    onlyoffice-desktopeditors
-    xournalpp
+      onlyoffice-desktopeditors
+      xournalpp
   ];
 }

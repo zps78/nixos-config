@@ -63,14 +63,9 @@
 #  services.libinput.touchpad.naturalScrolling = true;
 #  services.libinput.mouse.naturalScrolling = true;
 
-  # Programs
-  programs.git.enable = true;
-  programs.git.config.user.name = "zp";
-  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
-
-
   # System packages
   environment.systemPackages = with pkgs; [
+
   ];
 
   # System state version
