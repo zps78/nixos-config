@@ -1,4 +1,4 @@
-# ../../modules/system/android.nix
+# ../../modules/apps/android.nix
 #
 # Android tooling module for NixOS
 #
@@ -28,13 +28,6 @@
 
     # Command-line tool for downloading APK files from various sources
     apkeep
-  ];
-
-  # -------------------------------------------------
-  # Udev rules (required for USB device detection)
-  # -------------------------------------------------
-  services.udev.packages = [
-    pkgs.android-udev-rules
   ];
 
   # -------------------------------------------------

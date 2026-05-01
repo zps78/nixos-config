@@ -11,11 +11,10 @@
     ../../modules/hardware/audio.nix
     ../../modules/hardware/bluetooth.nix
 #   ../../modules/hardware/fingerprint.nix
-    ../../modules/hardware/gpu-hybrid.nix
-#   ../../modules/hardware/gpu-nvidia.nix
+#   ../../modules/hardware/gpu-hybrid.nix
+    ../../modules/hardware/gpu-nvidia.nix
 #   ../../modules/hardware/gpu-amd.nix
 
-    ../../modules/system/android.nix
     ../../modules/system/auth.nix
     ../../modules/system/boot.nix
     ../../modules/system/common.nix
@@ -26,13 +25,13 @@
 #   ../../modules/desktop/hyprland.nix
     ../../modules/desktop/kde.nix
 
-    ../../modules/networking/nfs-shares.nix
+#   ../../modules/networking/nfs-shares.nix
     ../../modules/networking/nfs-torrents.nix
     ../../modules/networking/tailscale.nix
 
+    ../../modules/apps/android.nix
     ../../modules/apps/core.nix
     ../../modules/apps/steam.nix
-
 
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
@@ -65,14 +64,9 @@
 #  services.libinput.touchpad.naturalScrolling = true;
 #  services.libinput.mouse.naturalScrolling = true;
 
-  # Programs
-  programs.git.enable = true;
-  programs.git.config.user.name = "zp";
-  programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
-
-
   # System packages
   environment.systemPackages = with pkgs; [
+    #
   ];
 
   # System state version

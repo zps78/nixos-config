@@ -15,7 +15,6 @@
 #   ../../modules/hardware/gpu-nvidia.nix
     ../../modules/hardware/gpu-amd.nix
 
-    ../../modules/system/android.nix
     ../../modules/system/auth.nix
     ../../modules/system/boot.nix
     ../../modules/system/common.nix
@@ -30,13 +29,14 @@
     ../../modules/networking/nfs-torrents.nix
     ../../modules/networking/tailscale.nix
 
+    ../../modules/apps/android.nix
     ../../modules/apps/core.nix
     ../../modules/apps/steam.nix
 
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
 #   ../../modules/services/sunshine.nix
-    ../../modules/services/waydroid.nix
+#   ../../modules/services/waydroid.nix
   ];
 
   # Memory
@@ -66,6 +66,7 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
+    #
   ];
 
   # System state version
