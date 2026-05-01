@@ -7,7 +7,6 @@
     ../../modules/apps/firefox.nix
 #   ../../modules/apps/lutris.nix
     ../../modules/apps/plex.nix
-#   ../../modules/apps/steam.nix
     ../../modules/apps/wine.nix
     ];
   # ----------------------
@@ -18,8 +17,9 @@
     # godot
     vscode
 
-   ## Streaming
+   ## Media
     # obs-studio
+    spotify
     # sunshine       - > import sunshine.nix in configuration.nix
 
    ## Internet
@@ -28,7 +28,7 @@
 
    ## Gaming
     # lutris          -> import lutris.nix at the top of this file
-    # steam           -> import steam.nix at the top of this file
+    # steam           -> import steam.nix in configuration.nix
     moonlight-qt
     teamviewer
 

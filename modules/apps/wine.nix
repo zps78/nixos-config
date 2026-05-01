@@ -6,7 +6,7 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
+  home.packages = with pkgs; [
 
     # Wine Staging (WoW64)
     #
@@ -19,7 +19,7 @@
     # - gaming compatibility
     # - launcher compatibility
     # - DirectX behavior
-    wineWowPackages.staging
+    wineWow64Packages.staging
 
     # Wine helper utility
     #

@@ -30,8 +30,6 @@
     krita
     losslesscut-bin
     mkvtoolnix
-    plex-desktop
-    spotify
     vlc
 
   # Utilities
