@@ -14,7 +14,7 @@
   home.packages = with pkgs; [
    ## Development
     # godot
-      vscode
+    # vscode
       vscodium
 
    ## Media
