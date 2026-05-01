@@ -30,9 +30,13 @@
     ../../modules/networking/tailscale.nix
 
     ../../modules/apps/core.nix
+    ../../modules/apps/steam.nix
 
+
+#   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
-    ../../modules/services/waydroid.nix
+    ../../modules/services/sunshine.nix
+#   ../../modules/services/waydroid.nix
   ];
 
   # Memory
@@ -42,10 +46,17 @@
   networking.hostName = "krieger";
 
   # Users
-  users.users.steam = {
+  users.users.bb = {
     isNormalUser = true;
-    description = "steam";
-    extraGroups = [ "networkmanager" "wheel" ];
+    description = "bb";
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "audio"
+      "video"
+      "render"
+      "input"
+    ];
   };
 
   # Libinput - disabled because kde overrides it
@@ -54,8 +65,6 @@
 #  services.libinput.mouse.naturalScrolling = true;
 
   # Programs
-#  programs.firefox.enable = true; # in user.nix file
-  programs.steam.enable = true;
   programs.git.enable = true;
   programs.git.config.user.name = "zp";
   programs.git.config.user.email = "o.email.do.ze.pedro@gmail.com";
@@ -63,7 +72,6 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
-#    tailscale
   ];
 
   # System state version

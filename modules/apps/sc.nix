@@ -5,8 +5,11 @@
   # Import modules
   imports = [
     ../../modules/apps/firefox.nix
+#   ../../modules/apps/lutris.nix
     ../../modules/apps/plex.nix
-  ];
+#   ../../modules/apps/steam.nix
+    ../../modules/apps/wine.nix
+    ];
   # ----------------------
   # Packages
   # ----------------------

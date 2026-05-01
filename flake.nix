@@ -47,7 +47,7 @@
           modules = [
             ./hosts/krieger/configuration.nix
             home-manager.nixosModules.home-manager
-            (makeUser "steam" ./home/steam.nix)
+            (makeUser "bb" ./home/bb.nix)
           ];
         };
 

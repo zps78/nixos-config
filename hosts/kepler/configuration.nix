@@ -30,10 +30,16 @@
     ../../modules/networking/tailscale.nix
 
     ../../modules/apps/core.nix
+    ../../modules/apps/steam.nix
 
+#   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
+#   ../../modules/services/sunshine.nix
     ../../modules/services/waydroid.nix
   ];
+
+  # Memory
+  boot.kernel.sysctl."vm.swappiness" = 100;
 
   # Networking
   networking.hostName = "kepler";
@@ -42,7 +48,14 @@
   users.users.sc = {
     isNormalUser = true;
     description = "sc";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "audio"
+      "video"
+      "render"
+      "input"
+    ];
   };
 
   # Libinput - disabled because kde overrides it
@@ -50,13 +63,8 @@
 #  services.libinput.touchpad.naturalScrolling = true;
 #  services.libinput.mouse.naturalScrolling = true;
 
-  # Programs
-#  programs.firefox.enable = true; # in user.nix file
-#  programs.steam.enable = true;
-
   # System packages
   environment.systemPackages = with pkgs; [
-#    tailscale
   ];
 
   # System state version

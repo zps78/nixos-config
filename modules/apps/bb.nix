@@ -1,33 +1,35 @@
-# ../../modules/apps/mc.nix
+# ../../modules/apps/bb.nix
 { config, pkgs, ... }:
 
 {
   # Import modules
   imports = [
     ../../modules/apps/firefox.nix
-    ../../modules/apps/plex.nix
+#   ../../modules/apps/plex.nix
   ];
   # ----------------------
   # Packages
   # ----------------------
   home.packages = with pkgs; [
    ## Development
-    godot
-    vscode
+    # godot
+    # vscode
 
    ## Streaming
     # obs-studio
-    # sunshine
 
    ## Internet
     # brave
     # filezilla
     # thunderbird
 
+    darktable
+
+
    ## Gaming
     lutris
     steam
-    moonlight-qt
+    # moonlight-qt
     # teamviewer
 
    ## Wine
@@ -35,12 +37,11 @@
     wineWow64Packages.staging
 
    ## Virtualization / Emulation
-    libvirt
-    virt-manager
+
     # waydroid - > import waydroid.nix on configuration.nix
 
    ## Office
-    onlyoffice-desktopeditors
-    xournalpp
+    # onlyoffice-desktopeditors
+    # xournalpp
   ];
 }

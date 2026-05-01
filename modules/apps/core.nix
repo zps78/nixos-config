@@ -24,7 +24,6 @@
     audacity
     bambu-studio
 #    clipgrab
-    darktable
     ffmpeg-full
     gimp
     handbrake

@@ -5,17 +5,17 @@
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    ../modules/apps/steam.nix
+    ../modules/apps/bb.nix
   ];
 
-  home.username = "steam";
-  home.homeDirectory = "/home/steam";
+  home.username = "bb";
+  home.homeDirectory = "/home/bb";
 
   # ----------------------
   # Packages needed for activation scripts
   # ----------------------
   home.packages = with pkgs; [
-#    qt6.qttools   # Provides qdbus for KDE activation scripts
+
   ];
 
   # ----------------------
