@@ -14,6 +14,7 @@
 
     # Feature Disabling
     DisableBuiltinPDFViewer       = true;
+    DisableFeedbackCommands       = true;
     DisableFirefoxStudies         = true;
     DisableFirefoxAccounts        = true;
     DisableFirefoxScreenshots     = true;
@@ -26,7 +27,46 @@
     DisableTelemetry              = true;
     DisableFormHistory            = true;
     DisablePasswordReveal         = false;
+    PasswordManagerEnabled        = false;
 
+    EnableTrackingProtection      = true;
+
+    UserMessaging = {
+      ExtensionRecommendations    = false;
+      FeatureRecommendations      = false;
+      UrlbarInterventions         = false;
+      SkipOnboarding              = true;
+      MoreFromMozilla             = false;
+      FirefoxLabs                 = true;
+    };
+    FirefoxSuggest = {
+      WebSuggestions              = false;
+      SponsoredSuggestions        = false;
+      ImproveSuggest              = false;
+      Locked                      = true;
+    };
+    FirefoxHome = {
+      Search                      = true;
+      TopSites                    = true;
+      SponsoredTopSites           = false;
+      Highlights                  = false;
+      Pocket                      = false;
+      Stories                     = false;
+      SponsoredPocket             = false;
+      SponsoredStories            = false;
+      Snippets                    = false;
+      Locked                      = false;
+    };
+    EnableTrackingProtection = {
+      Value                       = true;
+      Locked                      = false;
+      Cryptomining                = true;
+      Fingerprinting              = true;
+      EmailTracking               = true;
+      SuspectedFingerprinting     = true;
+      BaselineExceptions          = true;
+      ConvenienceExceptions       = true;
+    };
     # Access Restrictions
     BlockAboutConfig              = false;
     BlockAboutProfiles            = true;
