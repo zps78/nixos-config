@@ -32,7 +32,7 @@
     # steam           # -> import steam.nix in the host's configuration.nix
 
    ## Remote access
-      moonlight-qt
+    # moonlight-qt
       remmina
       teamviewer
 
