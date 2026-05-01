@@ -37,7 +37,6 @@
     ddrescue
     ddrescueview
     ddrutility
-    scrcpy
     testdisk
   ];
 }

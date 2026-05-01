@@ -15,6 +15,7 @@
 #   ../../modules/hardware/gpu-nvidia.nix
 #   ../../modules/hardware/gpu-amd.nix
 
+    ../../modules/system/android.nix
     ../../modules/system/auth.nix
     ../../modules/system/boot.nix
     ../../modules/system/common.nix
