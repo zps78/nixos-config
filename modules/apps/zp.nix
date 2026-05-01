@@ -15,11 +15,12 @@
    ## Development
     # godot
       vscode
+      vscodium
 
    ## Media
     # obs-studio
       spotify
-    # sunshine        # -> import sunshine.nix in configuration.nix
+    # sunshine        # -> import sunshine.nix in the host's configuration.nix
 
    ## Internet
     # brave
@@ -28,7 +29,7 @@
 
    ## Gaming
     # lutris          # -> make sure to also import wine.nix at the top of this file
-    # steam           # -> import steam.nix in configuration.nix
+    # steam           # -> import steam.nix in the host's configuration.nix
 
    ## Remote access
       moonlight-qt
@@ -39,8 +40,8 @@
     # wine            # -> import wine.nix at the top of this file
 
    ## Virtualization / Emulation
-    # libvirt         # -> import libvirt.nix in configuration.nix
-    # waydroid        # -> import waydroid.nix in configuration.nix
+    # libvirt         # -> import libvirt.nix in the host's configuration.nix
+    # waydroid        # -> import waydroid.nix in the host's configuration.nix
 
    ## Office
       onlyoffice-desktopeditors
