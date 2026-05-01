@@ -17,7 +17,7 @@
     settings = {
       user = {
         name = "zp";
-        email = "o.email.do.ze.pedro@gmail.com";
+        email = "mostly@krugerrand";
       };
 
       init.defaultBranch = "main";

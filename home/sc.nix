@@ -11,11 +11,24 @@
   home.username = "sc";
   home.homeDirectory = "/home/sc";
 
+  programs.git = {
+    enable = true;
+
+    settings = {
+      user = {
+        name = "sc";
+        email = "mostly@kepler";
+      };
+
+      init.defaultBranch = "main";
+    };
+  };
+
   # ----------------------
   # Packages needed for activation scripts
   # ----------------------
   home.packages = with pkgs; [
-#    qt6.qttools   # Provides qdbus for KDE activation scripts
+
   ];
 
   # ----------------------

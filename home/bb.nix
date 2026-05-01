@@ -1,4 +1,4 @@
-# ../../home/steam.nix
+# ../../home/bb.nix
 { config, pkgs, lib, ... }:
 
 {
@@ -10,6 +10,19 @@
 
   home.username = "bb";
   home.homeDirectory = "/home/bb";
+
+  programs.git = {
+    enable = true;
+
+    settings = {
+      user = {
+        name = "bb";
+        email = "mostly@krieger";
+      };
+
+      init.defaultBranch = "main";
+    };
+  };
 
   # ----------------------
   # Packages needed for activation scripts
