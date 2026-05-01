@@ -14,10 +14,12 @@
   programs.git = {
     enable = true;
 
-    userName = "zp";
-    userEmail = "o.email.do.ze.pedro@gmail.com";
+    settings = {
+      user = {
+        name = "zp";
+        email = "o.email.do.ze.pedro@gmail.com";
+      };
 
-    extraConfig = {
       init.defaultBranch = "main";
     };
   };
