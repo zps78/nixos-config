@@ -33,6 +33,7 @@
     ../../modules/apps/core.nix
     ../../modules/apps/steam.nix
 
+#   ../../modules/services/docker.nix
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
 #   ../../modules/services/sunshine.nix
@@ -55,7 +56,9 @@
       "audio"
       "video"
       "render"
-      "input"
+#     "input"      # -> enable with sunshine
+#     "libvirtd"   # -> enable with libvirt
+#     "docker"     # -> enable with docker
     ];
   };
 
