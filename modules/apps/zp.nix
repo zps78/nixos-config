@@ -25,7 +25,7 @@
    ## Internet
     # brave
     # filezilla
-    # thunderbird
+    # thunderbird     # -> enabled in core.nix
 
    ## Gaming
     # lutris          # -> make sure to also import wine.nix at the top of this file

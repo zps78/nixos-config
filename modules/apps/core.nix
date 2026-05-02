@@ -2,6 +2,7 @@
 { config, pkgs, ... }:
 
 {
+  programs.thunderbird.enable = true;
   environment.systemPackages = with pkgs; [
   # Core CLI tools
 #    agenix
@@ -20,6 +21,8 @@
 #    eddie
     ethtool
     nfs-utils
+
+    thunderbird
 
   # Multimedia
     audacity
