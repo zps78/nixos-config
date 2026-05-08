@@ -36,7 +36,7 @@
     krita            # Free and open source painting application
     losslesscut-bin  # Swiss army knife of lossless video/audio editing
     meshlab          # System for processing and editing 3D triangular meshes
-    netgen           # Atomatic 3d tetrahedral mesh generator
+#   netgen           # Atomatic 3d tetrahedral mesh generator
     mkvtoolnix       # Cross-platform tools for Matroska
     openscad         # 3D parametric model compiler
     orca-slicer      # G-code generator for 3D printers (including Bambulabs)
