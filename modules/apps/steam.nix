@@ -2,6 +2,7 @@
 # Minimal Steam gaming module for NixOS
 #
 # Optional companion modules:
+# - wine.nix
 # - lutris.nix
 # - sunshine.nix
 # - gamescope.nix (future)
@@ -9,11 +10,6 @@
 { pkgs, ... }:
 
 {
-  # Import modules
-  imports = [
-   # ../../modules/apps/wine.nix
-  ];
-
   programs.steam = {
 
     # Enable Steam
