@@ -11,7 +11,7 @@
 {
   # Import modules
   imports = [
-    ../../modules/apps/wine.nix
+   # ../../modules/apps/wine.nix
   ];
 
   programs.steam = {
