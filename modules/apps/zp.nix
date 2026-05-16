@@ -28,7 +28,7 @@
     # thunderbird     # -> enabled in core.nix
 
    ## Gaming
-    # lutris          # -> make sure to also import wine.nix at the top of this file
+      lutris          # -> make sure to also import wine.nix at the top of this file
     # steam           # -> import steam.nix in the host's configuration.nix
 
    ## Remote access

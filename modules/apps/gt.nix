@@ -1,4 +1,4 @@
-# ../../modules/apps/sh.nix
+# ../../modules/apps/gt.nix
 { config, pkgs, ... }:
 
 {

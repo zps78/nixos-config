@@ -1,4 +1,4 @@
-# ../../hosts/krieger/configuration.nix
+# ../../hosts/kimi/configuration.nix
 { config, pkgs, lib, ... }:
 
 {
@@ -12,7 +12,7 @@
     ../../modules/hardware/bluetooth.nix
 #   ../../modules/hardware/fingerprint.nix
 #   ../../modules/hardware/gpu-hybrid.nix
-    ../../modules/hardware/gpu-nvidia.nix
+#   ../../modules/hardware/gpu-nvidia.nix
 #   ../../modules/hardware/gpu-amd.nix
 
     ../../modules/system/auth.nix
@@ -31,9 +31,10 @@
 
     ../../modules/apps/android.nix
     ../../modules/apps/core.nix
-    ../../modules/apps/steam.nix
+#   ../../modules/apps/steam.nix
+    ../../modules/apps/wine.nix              # -> included in steam.nix
 
-    ../../modules/services/docker.nix
+#   ../../modules/services/docker.nix
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
     ../../modules/services/sunshine.nix
@@ -41,15 +42,15 @@
   ];
 
   # Memory
-  boot.kernel.sysctl."vm.swappiness" = 10;
+  boot.kernel.sysctl."vm.swappiness" = 100;
 
   # Networking
-  networking.hostName = "krieger";
+  networking.hostName = "kimi";
 
   # Users
-  users.users.bb = {
+  users.users.gt = {
     isNormalUser = true;
-    description = "bb";
+    description = "gt";
     extraGroups = [
       "wheel"
       "networkmanager"
@@ -58,7 +59,7 @@
       "render"
       "input"      # -> enable with sunshine
 #     "libvirtd"   # -> enable with libvirt
-      "docker"     # -> enable with docker
+#     "docker"     # -> enable with docker
     ];
   };
 

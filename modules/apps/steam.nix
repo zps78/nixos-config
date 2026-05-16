@@ -2,10 +2,7 @@
 # Minimal Steam gaming module for NixOS
 #
 # Optional companion modules:
-# - wine.nix
-# - lutris.nix
 # - sunshine.nix
-# - gamescope.nix (future)
 
 { pkgs, ... }:
 
@@ -66,6 +63,19 @@
   };
 
   environment.systemPackages = with pkgs; [
+
+    # Game installer / launcher
+    lutris
+
+    # Wine
+    wineWow64Packages.staging
+
+    # Wine helpers
+    winetricks
+
+    # Vulkan translation layers
+    dxvk
+    vkd3d
 
     # Proton management utility
     protonup-qt

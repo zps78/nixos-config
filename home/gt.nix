@@ -1,22 +1,22 @@
-# ../../home/sh.nix
+# ../../home/gt.nix
 { config, pkgs, lib, ... }:
 
 {
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    ../modules/apps/sh.nix
+    ../modules/apps/gt.nix
   ];
 
-  home.username = "sh";
-  home.homeDirectory = "/home/sh";
+  home.username = "gt";
+  home.homeDirectory = "/home/gt";
 
   programs.git = {
     enable = true;
 
     settings = {
       user = {
-        name = "sh";
+        name = "gt";
         email = "mostly@kimi";
       };
 

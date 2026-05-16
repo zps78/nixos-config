@@ -32,6 +32,7 @@
     ../../modules/apps/android.nix
     ../../modules/apps/core.nix
     ../../modules/apps/steam.nix
+#   ../../modules/apps/wine.nix              # -> included in steam.nix
 
 #   ../../modules/services/docker.nix
 #   ../../modules/services/libvirt.nix

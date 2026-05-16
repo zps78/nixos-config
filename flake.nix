@@ -28,14 +28,26 @@
       nixosConfigurations = {
 
         # --------------------------
-        # Host: krugerrand
+        # Host: kepler
         # --------------------------
-        krugerrand = nixpkgs.lib.nixosSystem {
+        kepler = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            ./hosts/krugerrand/configuration.nix
+            ./hosts/kepler/configuration.nix
             home-manager.nixosModules.home-manager
-            (makeUser "zp" ./home/zp.nix)
+            (makeUser "sc" ./home/sc.nix)
+          ];
+        };
+
+        # --------------------------
+        # Host: kimi
+        # --------------------------
+        kimi = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/kimi/configuration.nix
+            home-manager.nixosModules.home-manager
+            (makeUser "gt" ./home/gt.nix)
           ];
         };
 
@@ -52,14 +64,14 @@
         };
 
         # --------------------------
-        # Host: kepler
+        # Host: krugerrand
         # --------------------------
-        kepler = nixpkgs.lib.nixosSystem {
+        krugerrand = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            ./hosts/kepler/configuration.nix
+            ./hosts/krugerrand/configuration.nix
             home-manager.nixosModules.home-manager
-            (makeUser "sc" ./home/sc.nix)
+            (makeUser "zp" ./home/zp.nix)
           ];
         };
       };

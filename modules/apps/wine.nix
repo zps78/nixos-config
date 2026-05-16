@@ -6,28 +6,35 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
+  hardware.graphics = {
 
-    # Wine Staging (WoW64)
-    #
+    # Required for:
+    # - OpenGL
+    # - Vulkan
+    # - GPU acceleration
+    enable = true;
+
+    # Required for:
+    # - Steam
+    # - Proton
+    # - Wine
+    # - many older Linux games
+    enable32Bit = true;
+  };
+
+  environment.systemPackages = with pkgs; [
+
+    # Wine
     # Includes:
     # - 64-bit Wine support
     # - 32-bit Wine support
-    #
-    # "Staging" contains newer experimental patches
-    # that often improve:
-    # - gaming compatibility
-    # - launcher compatibility
-    # - DirectX behavior
     wineWow64Packages.staging
 
-    # Wine helper utility
-    #
-    # Used for:
-    # - installing DLLs
-    # - configuring Wine prefixes
-    # - applying compatibility tweaks
-    # - installing fonts/components
+    # Wine helpers
     winetricks
+
+    # Vulkan translation layers
+    dxvk
+    vkd3d
   ];
 }
