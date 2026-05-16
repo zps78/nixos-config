@@ -47,6 +47,14 @@
   # Networking
   networking.hostName = "krieger";
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      openldap = prev.openldap.overrideAttrs (old: {
+        doCheck = false;
+      });
+    })
+  ];
+}
   # Users
   users.users.bb = {
     isNormalUser = true;
