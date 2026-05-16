@@ -5,8 +5,7 @@
   # Import modules
   imports = [
     ../../modules/apps/firefox.nix
-    ../../modules/apps/plex.nix
-    ../../modules/apps/wine.nix
+#   ../../modules/apps/plex.nix
   ];
   # ----------------------
   # Packages
@@ -28,7 +27,6 @@
     # thunderbird     # -> enabled in core.nix
 
    ## Gaming
-      lutris          # -> make sure to also import wine.nix at the top of this file
     # steam           # -> import steam.nix in the host's configuration.nix
 
    ## Remote access
@@ -37,7 +35,7 @@
     # teamviewer
 
    ## Wine
-    # wine            # -> import wine.nix at the top of this file
+    # wine            # -> import wine.nix in the host's configuration.nix
 
    ## Virtualization / Emulation
     # libvirt         # -> import libvirt.nix in the host's configuration.nix
