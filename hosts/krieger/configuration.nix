@@ -54,7 +54,7 @@
       });
     })
   ];
-}
+
   # Users
   users.users.bb = {
     isNormalUser = true;
