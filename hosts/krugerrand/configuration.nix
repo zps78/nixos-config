@@ -64,19 +64,15 @@
     ];
   };
 
-  # Prevent idle suspend (desktop / remote / gaming stability)
-#  services.logind.extraConfig = ''
-#    IdleAction=ignore
-#    IdleActionSec=0
-#  '';
 
-  # Lid switch behavior (laptops only)
+  # Prevent idle suspend (desktop / remote / gaming stability)
   services.logind.settings.Login = {
+#   IdleAction = "ignore";
+#   IdleActionSec = "0";
     HandleLidSwitch = "suspend";
     HandleLidSwitchExternalPower = "suspend";
 #   HandleLidSwitchDocked = "ignore";
   };
-
 
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;

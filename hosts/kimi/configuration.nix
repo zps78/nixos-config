@@ -65,15 +65,11 @@
   };
 
   # Prevent idle suspend (desktop / remote / gaming stability)
-  services.logind.extraConfig = ''
-    IdleAction=ignore
-    IdleActionSec=0
-  '';
-
-  # Lid switch behavior (laptops only)
   services.logind.settings.Login = {
-#    HandleLidSwitch = "suspend";
-#    HandleLidSwitchExternalPower = "suspend";
+    IdleAction = "ignore";
+    IdleActionSec = "0";
+#   HandleLidSwitch = "suspend";
+#   HandleLidSwitchExternalPower = "suspend";
 #   HandleLidSwitchDocked = "ignore";
   };
 
