@@ -46,6 +46,7 @@
 
   # Networking
   networking.hostName = "kepler";
+#  networking.interfaces.enp4s0.wakeOnLan.enable = true; # -> only for etheret wired hosts
 
   # Users
   users.users.sc = {

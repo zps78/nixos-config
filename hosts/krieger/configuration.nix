@@ -46,6 +46,8 @@
 
   # Networking
   networking.hostName = "krieger";
+  networking.interfaces.enp4s0.wakeOnLan.enable = true; # -> only for etheret wired hosts
+
 
   nixpkgs.overlays = [
     (final: prev: {
