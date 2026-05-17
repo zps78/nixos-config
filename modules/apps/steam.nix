@@ -65,7 +65,7 @@
   environment.systemPackages = with pkgs; [
 
     # Game installer / launcher
-    lutris
+    bottles
 
     # Wine
     wineWow64Packages.staging
