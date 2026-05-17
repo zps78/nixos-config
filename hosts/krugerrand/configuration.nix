@@ -71,10 +71,12 @@
 #  '';
 
   # Lid switch behavior (laptops only)
-  services.logind.lidSwitch = "suspend";
-  services.logind.lidSwitchExternalPower = "suspend";
-  # Optional: disable suspend when closing lid on docks
-#  services.logind.lidSwitchDocked = "ignore";
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchExternalPower = "suspend";
+#   HandleLidSwitchDocked = "ignore";
+  };
+
 
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;
