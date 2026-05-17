@@ -72,6 +72,18 @@
     ];
   };
 
+  # Prevent idle suspend (desktop / remote / gaming stability)
+  services.logind.extraConfig = ''
+    IdleAction=ignore
+    IdleActionSec=0
+  '';
+
+  # Lid switch behavior (laptops only)
+#  services.logind.lidSwitch = "suspend";
+#  services.logind.lidSwitchExternalPower = "suspend";
+  # Optional: disable suspend when closing lid on docks
+#  services.logind.lidSwitchDocked = "ignore";
+
   # Libinput - disabled because kde overrides it
 #  services.libinput.enable = true;
 #  services.libinput.touchpad.naturalScrolling = true;
