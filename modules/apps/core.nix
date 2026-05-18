@@ -5,15 +5,18 @@
   programs.thunderbird.enable = true;
   environment.systemPackages = with pkgs; [
   # Core CLI tools
-#    agenix
+#   agenix
     btop             # Monitor of resources
     iperf3           # Tool to measure IP bandwidth using UDP or TCP
     fio              # Flexible IO Tester - an IO benchmark tool
     git              # Distributed version control system
+    p7zip            # .7z, many formats, very important
     pciutils         # Collection of programs for inspecting and manipulating configuration of PCI devices
     rclone           # Command line program to sync files and directories to and from major cloud storage
     rsync            # Fast incremental file transfer utility
     usbutils         # Tools for working with USB devices, such as lsusb
+    unrar            # .rar files (optional but useful)
+    unzip            # .zip files
     wget             # Tool for retrieving files using HTTP, HTTPS, and FTP
 
   # Networking
@@ -46,6 +49,7 @@
     ddrescue         # GNU ddrescue, a data recovery tool
     ddrescueview     # Tool to graphically examine ddrescue mapfiles
     ddrutility       # Set of utilities for hard drive data rescue
+    rustdesk
     testdisk         # Data recovery utilities
   ];
 }
