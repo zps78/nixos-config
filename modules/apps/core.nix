@@ -30,7 +30,7 @@
   # Multimedia
     audacity         # Sound editor with graphical UI
     blender          # 3D Creation/Animation/Publishing System
-#   bambu-studio     # PC Software for BambuLab's 3D printers
+    bambu-studio     # PC Software for BambuLab's 3D printers
 #   clipgrab         #Video downloader for YouTube and other sites
     ffmpeg-full      # Complete solution to record, convert and stream audio and video
     freecad          # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
