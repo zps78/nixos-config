@@ -49,7 +49,7 @@
     ddrescue         # GNU ddrescue, a data recovery tool
     ddrescueview     # Tool to graphically examine ddrescue mapfiles
     ddrutility       # Set of utilities for hard drive data rescue
-    rustdesk
+    rustdesk-flutter # Virtual / remote desktop infrastructure for everyone! Open source TeamViewer / Citrix alternative
     testdisk         # Data recovery utilities
   ];
 }
