@@ -3,7 +3,7 @@
 
 {
   # Disable legacy PulseAudio
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   # Enable PipeWire (modern audio stack)
   services.pipewire = {
