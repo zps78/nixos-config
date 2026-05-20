@@ -22,8 +22,8 @@
     ../../modules/system/memory.nix
 
     ../../modules/desktop/fonts.nix
-    ../../modules/desktop/hyprland.nix
-#   ../../modules/desktop/kde.nix
+#   ../../modules/desktop/hyprland.nix
+    ../../modules/desktop/kde.nix
 
     ../../modules/networking/nfs-shares.nix
     ../../modules/networking/nfs-torrents.nix
