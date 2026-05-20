@@ -65,6 +65,12 @@
     ];
   };
 
+  # Display manager - auto login
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "gt";
+  };
+
   # Prevent idle suspend (desktop / remote / gaming stability)
   services.logind.settings.Login = {
     IdleAction = "ignore";

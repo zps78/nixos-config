@@ -73,6 +73,12 @@
     ];
   };
 
+  # Display manager - auto login
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "bb";
+  };
+
   # Prevent idle suspend (desktop / remote / gaming stability)
   services.logind.settings.Login = {
     IdleAction = "ignore";
