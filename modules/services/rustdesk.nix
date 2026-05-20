@@ -1,6 +1,4 @@
-# ../../modules/services/rustdesk.nix
-
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -21,18 +19,31 @@
     ];
   };
 
-  # -------------------------------------------------
-  # RustDesk user service
-  # -------------------------------------------------
-  systemd.user.services.rustdesk = {
-    description = "RustDesk Remote Desktop";
+  systemd.services.rustdesk = {
+    description = "RustDesk Remote Desktop Service";
+    requires = [ "network-online.target" ];
+    after = [ "network-online.target" "display-manager.service" ];
+    wantedBy = [ "graphical.target" ];
 
-    wantedBy = [ "graphical-session.target" ];
+    path = with pkgs; [
+      rustdesk
+      procps
+      gawk
+      gnugrep
+      findutils
+      bash
+      coreutils
+    ];
 
     serviceConfig = {
-      ExecStart = "${pkgs.rustdesk}/bin/rustdesk";
-      Restart = "on-failure";
+      Type = "simple";
+      ExecStart = "${pkgs.rustdesk}/bin/rustdesk --service";
+      Restart = "always";
       RestartSec = 5;
+      KillMode = "mixed";
+      TimeoutStopSec = 30;
+      User = "root";
+      LimitNOFILE = "100000";
     };
   };
 }

@@ -1,75 +1,59 @@
-# ../../modules/desktop/hyprland.nix
-#
-# Hyprland desktop module (ML4W-inspired, NixOS-native)
-#
-# Provides:
-# - Hyprland Wayland compositor
-# - SDDM login manager
-# - PipeWire audio stack
-# - Portal integration
-# - Modern Wayland UX stack (bar, launcher, notifications)
-# - Theming + color pipeline support
-#
-
-{ config, pkgs, ... }:
+# ../../modules/desktop/fonts.nix
+{ config, pkgs, lib, ... }:
 
 {
-  # -------------------------------------------------
-  # Hyprland (Wayland compositor)
-  # -------------------------------------------------
+  # Hyprland owns the Wayland compositor session.
+  # Keep this file mutually exclusive with modules/desktop/kde.nix.
   programs.hyprland = {
     enable = true;
-    xwayland.enable = true;
+    xwayland.enable = true; # Keep this on for legacy app compatibility.
   };
 
-  # -------------------------------------------------
-  # Display manager
-  # -------------------------------------------------
+  # SDDM is the login manager for the Hyprland host profile.
+  # Don't also enable Plasma in the same host configuration.
   services.displayManager.sddm = {
     enable = true;
-    wayland.enable = true;
+    wayland.enable = true; # Useful for a cleaner Wayland login path.
   };
 
-  # -------------------------------------------------
-  # XDG Portals (critical for Wayland)
-  # -------------------------------------------------
+  # Portal backend for Hyprland.
+  # This is where Wayland app integration happens, so keep it here and
+  # avoid also setting KDE portal defaults in the same host.
   xdg.portal = {
     enable = true;
+    xdgOpenUsePortal = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
     ];
+
+    # Default portal selection for Wayland apps.
+    # If you later add a second desktop profile, this is a key place to check.
+    config.common.default = lib.mkDefault [ "hyprland" "gtk" ];
   };
 
-  # -------------------------------------------------
-  # Essential desktop services
-  # -------------------------------------------------
-  services = {
-    gvfs.enable = true;                 # file manager / MTP / trash
-    power-profiles-daemon.enable = true;
-  };
+  # Helpful desktop services for a Hyprland session.
+  # These are fine here because they support file browsing, power profiles,
+  # and common desktop app behavior.
+  services.gvfs.enable = true;
+  services.power-profiles-daemon.enable = true;
 
+  # Desktop integration helpers.
   programs.dconf.enable = true;
-
-  # -------------------------------------------------
-  # Security / system UX
-  # -------------------------------------------------
   security.polkit.enable = true;
 
-  # -------------------------------------------------
-  # Wayland session environment
-  # -------------------------------------------------
+  # Wayland session environment variables.
+  # These are session-level, so keep them out of shared system modules unless
+  # you want them to apply to every desktop session.
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     SDL_VIDEODRIVER = "wayland,x11";
     _JAVA_AWT_WM_NONREPARENTING = "1";
   };
 
-  # -------------------------------------------------
-  # Core Wayland / Hyprland applications
-  # -------------------------------------------------
+  # Hyprland desktop package set.
+  # This is intentionally desktop-focused: bar, launcher, notifications,
+  # screenshots, clipboard, theming, media control, and Wayland support.
   environment.systemPackages = with pkgs; [
-
-    # Core ML4W-like stack
     waybar
     rofi-wayland
     swaynotificationcenter
@@ -78,70 +62,29 @@
     hypridle
     hyprsunset
 
-    # Wallpaper / theming / color pipeline
-    swww
-    matugen
-    pywal
-
-    # Notifications + UX
     libnotify
-
-    # File manager
     dolphin
     loupe
-
-    # Terminal
     alacritty
 
-    # Clipboard tools
     wl-clipboard
     cliphist
 
-    # Screenshots / screen tools
     grim
     slurp
-    grimblast
     swappy
 
-    # Audio control
     pavucontrol
     playerctl
 
-    # Network / bluetooth
     networkmanagerapplet
     blueman
 
-    # System utilities
     brightnessctl
     imagemagick
-
-    # Theming (GTK)
-    gnome-themes-extra
     nwg-look
 
-    # Qt Wayland support
     qt5.qtwayland
     qt6.qtwayland
-
-    # MTP / mobile devices
-    gvfs
   ];
-
-  # -------------------------------------------------
-  # Notes
-  # -------------------------------------------------
-  #
-  # Login flow:
-  # - select Hyprland in SDDM
-  # - login
-  #
-  # Required companion modules:
-  # - fonts.nix (nerd fonts, font-awesome)
-  # - networking/tailscale.nix (optional)
-  # - hardware/audio.nix
-  #
-  # Optional ML4W-style enhancements:
-  # - quickshell (experimental shell UI)
-  # - uwsm (session manager)
-  #
 }
