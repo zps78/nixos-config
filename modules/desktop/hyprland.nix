@@ -55,7 +55,7 @@
   # screenshots, clipboard, theming, media control, and Wayland support.
   environment.systemPackages = with pkgs; [
     waybar
-    rofi-wayland
+    rofi
     swaynotificationcenter
     hyprpaper
     hyprlock
