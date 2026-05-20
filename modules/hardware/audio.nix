@@ -3,7 +3,7 @@
 
 {
   # Disable legacy PulseAudio
-  services.pulseaudio.enable = false;
+  hardware.pulseaudio.enable = false;
 
   # Enable PipeWire (modern audio stack)
   services.pipewire = {
@@ -15,6 +15,7 @@
     };
 
     pulse.enable = true; # PulseAudio compatibility layer
+    jack.enable = true;
   };
 
   # Real-time scheduling (important for low-latency audio)

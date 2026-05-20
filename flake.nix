@@ -1,4 +1,4 @@
-
+# flake.nix
 {
   description = "multi-host NixOS config with Home Manager";
 
