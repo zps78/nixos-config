@@ -63,7 +63,7 @@
     hyprsunset
 
     libnotify
-    dolphin
+    kdePackages.dolphin
     loupe
     alacritty
 
