@@ -49,7 +49,7 @@
 
   # Networking
   networking.hostName = "kimi";
-#  networking.interfaces.enp4s0.wakeOnLan.enable = true; # -> only for etheret wired hosts
+  networking.interfaces.eno2.wakeOnLan.enable = true; # -> only for etheret wired hosts
 
   # Users
   users.users.gt = {
