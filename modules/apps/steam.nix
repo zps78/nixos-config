@@ -67,16 +67,6 @@
     # Game installer / launcher
     bottles
 
-    # Wine
-    wineWow64Packages.staging
-
-    # Wine helpers
-    winetricks
-
-    # Vulkan translation layers
-    dxvk
-    vkd3d
-
     # Proton management utility
     protonup-qt
 
