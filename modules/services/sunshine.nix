@@ -47,11 +47,6 @@
     #
     # Recommended unless you manage firewall rules manually.
     openFirewall = true;
-
-    package = pkgs.sunshine.override {
-      cudaSupport = true;
-      cudaPackages = pkgs.cudaPackages;
-    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -61,12 +56,12 @@
     # directly in the shell environment.
     sunshine
   ];
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 47984 47989 47990 48010 ];
-    allowedUDPPortRanges = [
-      { from = 47998; to = 48000; }
-      { from = 8000; to = 8010; }
-    ];
-  };
+#  networking.firewall = {
+#    enable = true;
+#    allowedTCPPorts = [ 47984 47989 47990 48010 ];
+#    allowedUDPPortRanges = [
+#      { from = 47998; to = 48000; }
+#      { from = 8000; to = 8010; }
+#    ];
+#  };
 }
