@@ -13,11 +13,6 @@
     enable32Bit = true;
   };
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
   # Use NVIDIA driver
   services.xserver.videoDrivers = [ "nvidia" ];
 
