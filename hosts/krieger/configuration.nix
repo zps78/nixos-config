@@ -70,7 +70,7 @@
       "audio"
       "video"
       "render"
-      "input"      # -> enable with sunshine
+      "uinput"     # -> enable with sunshine
 #     "libvirtd"   # -> enable with libvirt
       "docker"     # -> enable with docker
     ];
