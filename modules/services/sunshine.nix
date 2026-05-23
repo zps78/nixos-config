@@ -13,6 +13,8 @@
 { pkgs, ... }:
 
 {
+  hardware.uinput.enable = true;
+
   services.sunshine = {
 
     # Enable the Sunshine service
@@ -45,7 +47,11 @@
     #
     # Recommended unless you manage firewall rules manually.
     openFirewall = true;
-  };
+
+    package = pkgs.sunshine.override {
+      cudaSupport = true;
+      cudaPackages = pkgs.cudaPackages;
+    };
 
   environment.systemPackages = with pkgs; [
     # Optional but useful:
@@ -54,4 +60,12 @@
     # directly in the shell environment.
     sunshine
   ];
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 47984 47989 47990 48010 ];
+    allowedUDPPortRanges = [
+      { from = 47998; to = 48000; }
+      { from = 8000; to = 8010; }
+    ];
+  };
 }
