@@ -8,7 +8,10 @@
   ############################################################
 
   # Enable graphics stack
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
 
   # Use NVIDIA driver
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -25,6 +28,9 @@
 
     # Optional GUI tool
     nvidiaSettings = true;
+
+    # Adding an explicit driver package
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   # Wayland + NVIDIA fixes (cursor issues)
