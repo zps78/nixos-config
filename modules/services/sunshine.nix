@@ -52,6 +52,7 @@
       cudaSupport = true;
       cudaPackages = pkgs.cudaPackages;
     };
+  };
 
   environment.systemPackages = with pkgs; [
     # Optional but useful:
