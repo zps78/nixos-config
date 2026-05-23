@@ -49,6 +49,12 @@
     openFirewall = true;
   };
 
+  systemd.services.sunshine = {
+    serviceConfig.Environment = [
+      "LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib"
+    ];
+  };
+
   environment.systemPackages = with pkgs; [
     # Optional but useful:
     #
