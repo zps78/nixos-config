@@ -15,6 +15,10 @@
 {
   hardware.uinput.enable = true;
 
+  services.udev.extraRules = ''
+    KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
+  '';
+
   services.sunshine = {
 
     # Enable the Sunshine service
@@ -47,12 +51,6 @@
     #
     # Recommended unless you manage firewall rules manually.
     openFirewall = true;
-  };
-
-  systemd.services.sunshine = {
-    serviceConfig.Environment = [
-      "LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib"
-    ];
   };
 
   environment.systemPackages = with pkgs; [
