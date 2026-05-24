@@ -15,7 +15,7 @@
   # ----------------------------
     extraUpFlags = [
       "--accept-dns"
-#     "--accept-routes"
+      "--accept-routes"
       "--ssh"
     ];
   };
