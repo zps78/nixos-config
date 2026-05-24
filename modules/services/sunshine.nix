@@ -62,6 +62,11 @@ in
         package = sunshinePkg;
       };
 
+      systemd.user.services.sunshine = {
+        after = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+    };
       environment.systemPackages = [
         sunshinePkg
       ];
