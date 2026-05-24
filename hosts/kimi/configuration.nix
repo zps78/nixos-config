@@ -52,6 +52,11 @@
   networking.hostName = "kimi";
   networking.interfaces.eno2.wakeOnLan.enable = true; # -> only for etheret wired hosts
 
+  my.services.sunshine = {
+    enable = true;
+    gpuVendor = "intel"; # choose from: "none" "nvidia" "amd" "intel"
+  };
+
   # Users
   users.users.gt = {
     isNormalUser = true;

@@ -52,6 +52,11 @@
   networking.hostName = "kepler";
 #  networking.interfaces.enp4s0.wakeOnLan.enable = true; # -> only for etheret wired hosts
 
+  my.services.sunshine = {
+    enable = false;
+    gpuVendor = "amd"; # choose from: "none" "nvidia" "amd" "intel"
+  };
+
   # Users
   users.users.sc = {
     isNormalUser = true;

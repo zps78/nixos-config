@@ -62,7 +62,7 @@
 
   my.services.sunshine = {
     enable = true;
-    gpuVendor = "nvidia";
+    gpuVendor = "nvidia"; # choose from: "none" "nvidia" "amd" "intel"
   };
 
   # Users
