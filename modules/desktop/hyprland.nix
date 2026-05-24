@@ -62,6 +62,9 @@
     hypridle
     hyprsunset
 
+    pulseaudio
+    kitty
+
     libnotify
     kdePackages.dolphin
     loupe
