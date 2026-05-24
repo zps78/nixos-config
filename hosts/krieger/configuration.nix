@@ -60,6 +60,11 @@
     })
   ];
 
+  my.services.sunshine = {
+    enable = true;
+    gpuVendor = "nvidia";
+  };
+
   # Users
   users.users.bb = {
     isNormalUser = true;

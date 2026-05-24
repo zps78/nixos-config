@@ -8,69 +8,93 @@
 #   2. Open the web UI
 #   3. Create username/password
 #   4. Pair using Moonlight client
-#
 
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.my.services.sunshine;
+
+  sunshinePkg =
+    if cfg.gpuVendor == "nvidia" then
+      pkgs.sunshine.override {
+        cudaSupport = true;
+        cudaPackages = pkgs.cudaPackages;
+      }
+    else
+      pkgs.sunshine;
+in
 {
-  hardware.uinput.enable = true;
+  options.my.services.sunshine = {
+    enable = lib.mkEnableOption "Sunshine host";
 
-  services.udev.extraRules = ''
-    KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
-  '';
-
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 47984 47989 47990 48010 ];
-    allowedUDPPortRanges = [
-      { from = 47998; to = 48000; }
-      { from = 8000; to = 8010; }
-    ];
-  };
-
-  services.sunshine = {
-
-    # Enable the Sunshine service
-    enable = true;
-
-    # Automatically start Sunshine at boot
-    #
-    # Recommended for:
-    # - desktop gaming systems
-    # - always-on streaming hosts
-    #
-    # Disable if you prefer manual startup.
-    autoStart = true;
-
-    # Grants CAP_SYS_ADMIN capability
-    #
-    # Required for:
-    # - input device capture
-    # - virtual input devices
-    # - controller support
-    #
-    # Usually recommended unless troubleshooting.
-    capSysAdmin = true;
-
-    # Opens required firewall ports automatically
-    #
-    # Required for:
-    # - Moonlight discovery
-    # - streaming connections
-    #
-    # Recommended unless you manage firewall rules manually.
-    openFirewall = true;
-    package = pkgs.sunshine.override {
-      cudaSupport = true;
-      cudaPackages = pkgs.cudaPackages;
+    gpuVendor = lib.mkOption {
+      type = lib.types.enum [ "none" "nvidia" "amd" "intel" ];
+      default = "none";
+      description = "GPU vendor-specific Sunshine behavior to apply.";
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    # Optional but useful:
-    #
-    # Provides Sunshine CLI tools and binaries
-    # directly in the shell environment.
-    sunshine
-  ];
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      hardware.uinput.enable = true;
+
+      services.udev.extraRules = ''
+        KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
+      '';
+
+      services.sunshine = {
+        # Enable the Sunshine service
+        enable = true;
+        # Automatically start Sunshine at boot
+        autoStart = true;
+
+        # Grants CAP_SYS_ADMIN capability - required for:
+        # - input device capture
+        # - virtual input devices
+        # - controller support
+        capSysAdmin = true;
+
+        # Opens required firewall ports automatically - required for:
+        # - Moonlight discovery
+        # - streaming connections
+        openFirewall = true;
+
+        package = sunshinePkg;
+      };
+
+      environment.systemPackages = [
+        sunshinePkg
+      ];
+    }
+
+    (lib.mkIf (cfg.gpuVendor == "intel") {
+      hardware.graphics = {
+        enable = true;
+        extraPackages = with pkgs; [
+          vpl-gpu-rt
+          intel-media-driver
+        ];
+      };
+
+      environment.sessionVariables = {
+        LIBVA_DRIVER_NAME = "iHD";
+      };
+
+      services.sunshine.settings = {
+        # Intel-specific Sunshine settings
+      };
+    })
+
+    (lib.mkIf (cfg.gpuVendor == "amd") {
+      services.sunshine.settings = {
+        # AMD-specific Sunshine settings
+      };
+    })
+
+    (lib.mkIf (cfg.gpuVendor == "nvidia") {
+      services.sunshine.settings = {
+        # NVIDIA-specific Sunshine settings
+      };
+    })
+  ]);
 }

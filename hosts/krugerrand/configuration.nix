@@ -41,7 +41,7 @@
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
     ../../modules/services/rustdesk.nix
-#   ../../modules/services/sunshine.nix
+    ../../modules/services/sunshine.nix
     ../../modules/services/waydroid.nix
   ];
 
@@ -51,6 +51,11 @@
   # Networking
   networking.hostName = "krugerrand";
 #  networking.interfaces.enp4s0.wakeOnLan.enable = true; # -> only for etheret wired hosts
+
+  my.services.sunshine = {
+    enable = false;
+    gpuVendor = "none"; # choose from: "none" "nvidia" "amd" "intel"
+  };
 
   # Users
   users.users.zp = {
