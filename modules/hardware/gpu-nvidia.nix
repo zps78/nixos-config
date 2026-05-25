@@ -21,7 +21,7 @@
     modesetting.enable = true;
 
     # Desktop → no need for aggressive power saving
-    powerManagement.enable = true;
+    powerManagement.enable = false;
 
     # Proprietary driver (best performance)
     open = false;
