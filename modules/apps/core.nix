@@ -26,6 +26,7 @@
     netcat           # Utility which reads and writes data across network connections — LibreSSL implementation
     nfs-utils        # Linux user-space NFS utilities
     thunderbird      # Full-featured e-mail client
+    wakeonlan        # Perl script for waking up computers via Wake-On-LAN magic packets
 
   # Multimedia
     audacity         # Sound editor with graphical UI
