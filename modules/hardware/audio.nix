@@ -15,7 +15,10 @@
     };
 
     pulse.enable = true; # PulseAudio compatibility layer
-    jack.enable = true;
+
+    wireplumber.enable = true;
+
+    jack.enable = false;
   };
 
   # Real-time scheduling (important for low-latency audio)
