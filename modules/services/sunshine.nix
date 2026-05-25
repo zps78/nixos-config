@@ -99,7 +99,7 @@ in
     (lib.mkIf (cfg.gpuVendor == "nvidia") {
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
-        capture = "kms";
+        capture = "wayland";
       };
     })
   ]);
