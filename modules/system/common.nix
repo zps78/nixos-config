@@ -27,4 +27,5 @@
   # Base system tools
   # ----------------------------
   programs.git.enable = true;
+  services.fwupd.enable = true;
 }
