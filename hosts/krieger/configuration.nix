@@ -50,7 +50,10 @@
 
   # Networking
   networking.hostName = "krieger";
-  networking.interfaces.enp4s0.wakeOnLan.enable = true; # -> only for ethernet wired hosts
+  networking.interfaces.enp4s0 = {
+    mtu = 1492;                # default 1500. try 1492 or 1450 if still unstable
+    wakeOnLan.enable = true;   # -> only for ethernet wired hosts
+  };
 
   nixpkgs.overlays = [
     (final: prev: {
