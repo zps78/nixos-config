@@ -106,7 +106,7 @@ capture = "kms";
   av1_mode = 0;
 
   bitrate = 20000;
-  packetSize = 1024;        # ← Lower this (was already set, but confirm)
+  packetSize = 768;           # ← Lower this (was 1024)
   fecPercentage = 80;
   pingTimeout = 120000;
       };
