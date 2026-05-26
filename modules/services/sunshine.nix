@@ -99,16 +99,22 @@ in
     (lib.mkIf (cfg.gpuVendor == "nvidia") {
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
-capture = "x11";
-  encoder = "nvenc";
-  videoFormat = "h264";
-  hevc_mode = 2;
-  av1_mode = 0;
+capture = "kms";
+      encoder = "nvenc";
+      videoFormat = "h264";
 
-  bitrate = 15000;
-  packetSize = 512;           # ← Lower this (was 1024)
-  fecPercentage = 100;
-  pingTimeout = 120000;
+      hevc_mode = 2;
+      av1_mode = 0;
+
+      # Very conservative for your 2.5Gbps + Shield setup
+      bitrate = 12000;           # 12 Mbps
+      packetSize = 512;          # Very small packets
+      fecPercentage = 100;       # Maximum redundancy
+      pingTimeout = 120000;
+
+      # Extra
+      qp = 28;
+      minThreads = 4;
       };
     })
   ]);
