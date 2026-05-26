@@ -99,15 +99,15 @@ in
     (lib.mkIf (cfg.gpuVendor == "nvidia") {
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
-capture = "kms";
+capture = "x11";
   encoder = "nvenc";
   videoFormat = "h264";
   hevc_mode = 2;
   av1_mode = 0;
 
-  bitrate = 20000;
-  packetSize = 768;           # ← Lower this (was 1024)
-  fecPercentage = 80;
+  bitrate = 15000;
+  packetSize = 512;           # ← Lower this (was 1024)
+  fecPercentage = 100;
   pingTimeout = 120000;
       };
     })
