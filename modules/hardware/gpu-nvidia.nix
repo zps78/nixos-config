@@ -33,10 +33,11 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # Wayland + NVIDIA fixes (cursor issues)
-  environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-  };
+# Outdated config settings:
+#  # Wayland + NVIDIA fixes (cursor issues)
+#  environment.sessionVariables = {
+#    WLR_NO_HARDWARE_CURSORS = "1";
+#  };
 
   systemd.services.nvidia-suspend.enable = true;
   systemd.services.nvidia-resume.enable = true;
