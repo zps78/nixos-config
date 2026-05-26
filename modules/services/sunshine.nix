@@ -18,7 +18,7 @@ let
     if cfg.gpuVendor == "nvidia" then
       pkgs.sunshine.override {
         cudaSupport = true;
-        cudaPackages = config.boot.kernelPackages.nvidiaPackages.stable.cudaPackages; # or pkgs.cudaPackages;
+        cudaPackages = pkgs.cudaPackages_12;
         }
     else
       pkgs.sunshine;
