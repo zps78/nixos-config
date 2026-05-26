@@ -18,7 +18,7 @@ let
     if cfg.gpuVendor == "nvidia" then
       pkgs.sunshine.override {
         cudaSupport = true;
-        cudaPackages = config.boot.kernelPackages.nvidiaPackages.stable.cudaPackages or pkgs.cudaPackages;
+        cudaPackages = config.boot.kernelPackages.nvidiaPackages.stable.cudaPackages; # or pkgs.cudaPackages;
         }
     else
       pkgs.sunshine;
@@ -100,6 +100,13 @@ in
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
         capture = "kms";
+      encoder = "nvenc";
+      videoFormat = "h264";   # force
+      hevc_mode = 0;
+      av1_mode = 0;
+      bitrate = 40000;        # 40 Mbps
+      packetSize = 1024;
+      fecPercentage = 20;
       };
     })
   ]);
