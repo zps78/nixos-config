@@ -99,17 +99,17 @@ in
     (lib.mkIf (cfg.gpuVendor == "nvidia") {
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
-capture = "wayland";
+capture = "kms";           # ← Back to KMS
       encoder = "nvenc";
       videoFormat = "h264";
 
-      hevc_mode = 1;           # ← Change to 1 (do not advertise HEVC)
+      hevc_mode = 2;             # ← 2 = Force disable HEVC (stronger than 1)
       av1_mode = 0;
 
-      bitrate = 30000;
+      bitrate = 25000;           # Even more conservative
       packetSize = 1024;
-      fecPercentage = 50;
-      pingTimeout = 60000;     # 60 seconds
+      fecPercentage = 60;
+      pingTimeout = 60000;
       };
     })
   ]);
