@@ -8,7 +8,7 @@
 {
   # Import modules
   imports = [
-    ../../modules/networking/nfs-client.nix
+    ../nfs-client.nix
   ];
 
   ############################################################
