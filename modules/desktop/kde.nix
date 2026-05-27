@@ -25,7 +25,6 @@
     xdgOpenUsePortal = true;
     extraPortals = [
       pkgs.kdePackages.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal-wlr
     ];
     config.common.default = "kde";
   };

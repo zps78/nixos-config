@@ -24,6 +24,7 @@
     xdgOpenUsePortal = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal
+      xdg-desktop-portal-wlr
       xdg-desktop-portal-hyprland
     ];
 
