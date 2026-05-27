@@ -66,7 +66,7 @@
 
   my.services.ssh = {
     enable = true;
-    passwordAuth = false;   # keep disabled for security
+    passwordAuth = true;   # keep disabled for security
   };
 
   my.services.sunshine = {
