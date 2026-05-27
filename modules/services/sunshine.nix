@@ -16,12 +16,12 @@ let
 
   sunshinePkg =
     if cfg.gpuVendor == "nvidia" then
-      sunshine.packages.${pkgs.system}.default.override {
+      pkgs.sunshine.override {
         cudaSupport = true;
         cudaPackages = pkgs.cudaPackages_12;
         }
     else
-      sunshine.packages.${pkgs.system}.default;
+      pkgs.sunshine;
 in
 {
   options.my.services.sunshine = {

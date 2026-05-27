@@ -10,10 +10,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sunshine.url = "github:LizardByte/Sunshine";
   };
 
-  outputs = { self, nixpkgs, home-manager, sunshine, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
 
     let
       system = "x86_64-linux";
@@ -30,10 +29,6 @@
           inherit system;
 
           nixpkgs.config.allowUnfree = true;
-
-          specialArgs = {
-            inherit sunshine;
-          };
 
           modules =
             [
