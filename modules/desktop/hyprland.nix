@@ -23,14 +23,13 @@
     enable = true;
     xdgOpenUsePortal = true;
     extraPortals = with pkgs; [
-      xdg-desktop-portal
-      xdg-desktop-portal-wlr
       xdg-desktop-portal-hyprland
-    ];
+      xdg-desktop-portal-gtk
+      ];
 
     # Default portal selection for Wayland apps.
     # If you later add a second desktop profile, this is a key place to check.
-    config.common.default = lib.mkDefault [ "hyprland" "gtk" ];
+    config.common.default = "hyprland";
   };
 
   # Helpful desktop services for a Hyprland session.
