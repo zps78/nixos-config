@@ -1,0 +1,46 @@
+# ../../modules/networking/core.nix
+{ config, pkgs, lib, ... }:
+
+{
+  ############################################################
+  # Networking baseline
+  ############################################################
+
+  networking.networkmanager.enable = true;
+
+  ############################################################
+  # DNS / system integration
+  ############################################################
+  #
+  # systemd-resolved improves:
+  # - VPN DNS handling (Tailscale, WireGuard)
+  # - split DNS
+  # - caching
+  #
+
+  services.resolved.enable = lib.mkDefault true;
+
+  ############################################################
+  # Firewall baseline enforcement
+  ############################################################
+  #
+  # Server systems should be explicit about firewall backend
+  #
+
+  networking.nftables.enable = lib.mkDefault true;
+
+  ############################################################
+  # Optional: Extra networking tools
+  ############################################################
+  #
+  # Nice troubleshooting tools for desktop systems.
+  #
+
+  environment.systemPackages = with pkgs; [
+    wget
+    curl
+    dig
+    inetutils
+    nmap
+  ];
+}

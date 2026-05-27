@@ -21,7 +21,8 @@
   };
 
   # ----------------------------
-  # Firewall: trust Tailscale network
+  # Firewall integration
   # ----------------------------
-  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+  services.tailscale.openFirewall = true;    # Recommended as often better than: " networking.firewall.trustedInterfaces = [ "tailscale0" ]; "
+
 }

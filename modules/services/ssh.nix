@@ -38,8 +38,16 @@ in
       # Open firewall for all interfaces (LAN + Tailscale)
       openFirewall = true;
     };
-
-    # Optional: Extra hardening
-    networking.firewall.allowedTCPPorts = cfg.ports;
   };
+
+  ############################################################
+  # Optional: OpenSSH client QoL
+  ############################################################
+  #
+  # Makes SSH-based desktop workflows nicer.
+  #
+  # Safe on almost all systems.
+  #
+
+  programs.ssh.startAgent = true;
 }

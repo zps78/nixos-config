@@ -28,15 +28,23 @@
 #   ../../modules/desktop/hyprland.nix
     ../../modules/desktop/kde.nix
 
-    ../../modules/networking/nfs-shares.nix
-    ../../modules/networking/nfs-torrents.nix
+    ../../modules/networking/core.nix
     ../../modules/networking/tailscale.nix
+    ../../modules/networking/wifi.nix
+
+    ../../modules/networking/mounts/nfs-backup.nix
+    ../../modules/networking/mounts/nfs-home.nix
+    ../../modules/networking/mounts/nfs-media.nix
+    ../../modules/networking/mounts/nfs-paperless.nix
+    ../../modules/networking/mounts/nfs-torrents.nix
+    ../../modules/networking/mounts/nfs-trading.nix
 
     ../../modules/apps/android.nix
     ../../modules/apps/core.nix
 #   ../../modules/apps/steam.nix
     ../../modules/apps/wine.nix
 
+    ../../modules/services/discovery.nix
 #   ../../modules/services/docker.nix
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix

@@ -1,26 +1,19 @@
 # ../../modules/system/common.nix
 { config, pkgs, lib, ... }:
 
+
 {
-  # ----------------------------
-  # Nix (flakes + new CLI)
-  # ----------------------------
+  ############################################################
+  # Nix core system behavior (ALL hosts)
+  ############################################################
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # ----------------------------
-  # Networking baseline
-  # ----------------------------
-  networking.networkmanager.enable = true;
-  services.resolved.enable = true;
+  ############################################################
+  # Base system utilities (safe everywhere)
+  ############################################################
 
-  # ----------------------------
-  # Modern firewall backend
-  # ----------------------------
-  networking.nftables.enable = lib.mkDefault true;
-
-  # ----------------------------
-  # Base system tools
-  # ----------------------------
   programs.git.enable = true;
   services.fwupd.enable = true;
+
 }
