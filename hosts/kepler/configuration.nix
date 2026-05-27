@@ -42,7 +42,7 @@
     ../../modules/services/hp-officejet-pro-8715.nix
     ../../modules/services/rustdesk.nix
     ../../modules/services/ssh.nix
-#   ../../modules/services/sunshine.nix
+    ../../modules/services/sunshine.nix
 #   ../../modules/services/waydroid.nix
   ];
 

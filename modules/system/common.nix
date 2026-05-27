@@ -19,11 +19,6 @@
   networking.nftables.enable = lib.mkDefault true;
 
   # ----------------------------
-  # Licensing
-  # ----------------------------
-  nixpkgs.config.allowUnfree = true;
-
-  # ----------------------------
   # Base system tools
   # ----------------------------
   programs.git.enable = true;
