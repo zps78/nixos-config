@@ -106,14 +106,12 @@ capture = "kms";
       hevc_mode = 2;
       av1_mode = 0;
 
-      # Very conservative for your 2.5Gbps + Shield setup
-      bitrate = 12000;           # 12 Mbps
-      packetSize = 512;          # Very small packets
-      fecPercentage = 100;       # Maximum redundancy
+      bitrate = 10000;           # Very low for testing
+      packetSize = 512;          # Smallest reasonable
+      fecPercentage = 100;
       pingTimeout = 120000;
 
-      # Extra
-      qp = 28;
+      qp = 30;
       minThreads = 4;
       };
     })

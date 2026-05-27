@@ -41,6 +41,7 @@
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
     ../../modules/services/rustdesk.nix
+    ../../modules/services/ssh.nix
     ../../modules/services/sunshine.nix
 #   ../../modules/services/waydroid.nix
   ];
@@ -51,6 +52,11 @@
   # Networking
   networking.hostName = "kimi";
   networking.interfaces.eno2.wakeOnLan.enable = true; # -> only for etheret wired hosts
+
+  my.services.ssh = {
+    enable = true;
+    passwordAuth = false;   # keep disabled for security
+  };
 
   my.services.sunshine = {
     enable = true;
