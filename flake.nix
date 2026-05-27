@@ -3,75 +3,83 @@
   description = "multi-host NixOS config with Home Manager";
 
   inputs = {
-#   nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sunshine.url = "github:LizardByte/Sunshine";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, sunshine, ... }:
 
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
 
-      # Home Manager user helper
       makeUser = userName: userFile: {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "backup";
         home-manager.users.${userName} = import userFile;
       };
-    in
-    {
+
+      mkHost = {
+        hostname,
+        users,
+      }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+
+          nixpkgs.config.allowUnfree = true;
+
+          specialArgs = {
+            inherit sunshine;
+          };
+
+          modules =
+            [
+              ./hosts/${hostname}/configuration.nix
+
+              home-manager.nixosModules.home-manager
+
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.backupFileExtension = "backup";
+              }
+            ]
+            ++ users;
+        };
+
+    in {
       nixosConfigurations = {
 
-        # --------------------------
-        # Host: kepler
-        # --------------------------
-        kepler = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/kepler/configuration.nix
-            home-manager.nixosModules.home-manager
+        kepler = mkHost {
+          hostname = "kepler";
+          users = [
             (makeUser "sc" ./home/sc.nix)
           ];
         };
 
-        # --------------------------
-        # Host: kimi
-        # --------------------------
-        kimi = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/kimi/configuration.nix
-            home-manager.nixosModules.home-manager
+        kimi = mkHost {
+          hostname = "kimi";
+          users = [
             (makeUser "gt" ./home/gt.nix)
+
+            # easy to add later
+            # (makeUser "alice" ./home/alice.nix)
           ];
         };
 
-        # --------------------------
-        # Host: krieger
-        # --------------------------
-        krieger = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/krieger/configuration.nix
-            home-manager.nixosModules.home-manager
+        krieger = mkHost {
+          hostname = "krieger";
+          users = [
             (makeUser "bb" ./home/bb.nix)
           ];
         };
 
-        # --------------------------
-        # Host: krugerrand
-        # --------------------------
-        krugerrand = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/krugerrand/configuration.nix
-            home-manager.nixosModules.home-manager
+        krugerrand = mkHost {
+          hostname = "krugerrand";
+          users = [
             (makeUser "zp" ./home/zp.nix)
           ];
         };

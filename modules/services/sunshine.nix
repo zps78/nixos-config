@@ -9,19 +9,19 @@
 #   3. Create username/password
 #   4. Pair using Moonlight client
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, sunshine, ... }:
 
 let
   cfg = config.my.services.sunshine;
 
   sunshinePkg =
     if cfg.gpuVendor == "nvidia" then
-      pkgs.sunshine.override {
+      sunshine.packages.${pkgs.system}.default.override {
         cudaSupport = true;
         cudaPackages = pkgs.cudaPackages_12;
         }
     else
-      pkgs.sunshine;
+      sunshine.packages.${pkgs.system}.default;
 in
 {
   options.my.services.sunshine = {
@@ -99,20 +99,20 @@ in
     (lib.mkIf (cfg.gpuVendor == "nvidia") {
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
-capture = "kms";
-      encoder = "nvenc";
-      videoFormat = "h264";
+      #capture = "kms";
+      #encoder = "nvenc";
+      #videoFormat = "h264";
 
-      hevc_mode = 2;
-      av1_mode = 0;
+      #hevc_mode = 2;
+      #av1_mode = 0;
 
-      bitrate = 10000;           # Very low for testing
-      packetSize = 512;          # Smallest reasonable
-      fecPercentage = 100;
-      pingTimeout = 120000;
+      #bitrate = 10000;           # Very low for testing
+      #packetSize = 512;          # Smallest reasonable
+      #fecPercentage = 100;
+      #pingTimeout = 120000;
 
-      qp = 30;
-      minThreads = 4;
+      #qp = 30;
+      #minThreads = 4;
       };
     })
   ]);
