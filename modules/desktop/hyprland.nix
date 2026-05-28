@@ -29,7 +29,7 @@
 
     # Default portal selection for Wayland apps.
     # If you later add a second desktop profile, this is a key place to check.
-    config.hyprland.default = [ ]"hyprland" "gtk" ];
+    config.hyprland.default = [ "hyprland" "gtk" ];
   };
 
   # Helpful desktop services for a Hyprland session.
