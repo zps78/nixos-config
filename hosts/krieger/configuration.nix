@@ -49,7 +49,7 @@
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
     ../../modules/services/rustdesk.nix
-#   ../../modules/services/ssh.nix         # <- do not import with gnome
+    ../../modules/services/ssh.nix
     ../../modules/services/sunshine.nix
 #   ../../modules/services/waydroid.nix
   ];
@@ -72,7 +72,7 @@
   ];
 
   my.services.ssh = {
-    enable = true;
+    enable = false;
     passwordAuth = true;   # keep disabled for security
   };
 
