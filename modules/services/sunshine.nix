@@ -65,10 +65,11 @@ in
     networking.firewall = {
       allowedTCPPorts = [ 47984 47989 47990 ];
       allowedUDPPortRanges = [
-        { from = 47998; to = 48010; }
+        { from = 47998; to = 48010; }   # Main Sunshine UDP range
       ];
-      extraCommands = ''
-        nft add rule inet filter nixos-fw udp dport 47998-48100 accept
+      # Extra safety range for Moonlight (nftables style)
+      extraRules = ''
+        add rule inet filter nixos-fw udp dport 47998-48100 accept
       '';
     };
 #      systemd.user.services.sunshine = {
