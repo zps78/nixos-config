@@ -61,7 +61,16 @@ in
 
         package = sunshinePkg;
       };
-
+# === Proper Firewall Configuration ===
+    networking.firewall = {
+      allowedTCPPorts = [ 47984 47989 47990 ];
+      allowedUDPPortRanges = [
+        { from = 47998; to = 48010; }
+      ];
+      extraCommands = ''
+        nft add rule inet filter nixos-fw udp dport 47998-48100 accept
+      '';
+    };
 #      systemd.user.services.sunshine = {
 #        after = [ "graphical-session.target" ];
 #        wants = [ "graphical-session.target" ];
@@ -71,16 +80,7 @@ in
         sunshinePkg
       ];
     }
-networking.firewall = {
-  allowedTCPPorts = [ 47984 47989 47990 ];
-  allowedUDPPortRanges = [
-    { from = 47998; to = 48010; }
-  ];
-  # Extra wide range as backup (sometimes needed for Moonlight)
-  extraCommands = ''
-    nft add rule inet filter nixos-fw udp dport 47998-48100 accept
-  '';
-};
+
     (lib.mkIf (cfg.gpuVendor == "intel") {
       hardware.graphics = {
         enable = true;
