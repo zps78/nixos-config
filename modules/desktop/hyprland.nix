@@ -29,7 +29,7 @@
 
     # Default portal selection for Wayland apps.
     # If you later add a second desktop profile, this is a key place to check.
-    config.common.default = "hyprland";
+    config.hyprland.default = [ ]"hyprland" "gtk" ];
   };
 
   # Helpful desktop services for a Hyprland session.
@@ -41,14 +41,18 @@
   # Desktop integration helpers.
   programs.dconf.enable = true;
   security.polkit.enable = true;
+    services.dbus.enable = true;
+        services.libinput.enable = true;
 
   # Wayland session environment variables.
   # These are session-level, so keep them out of shared system modules unless
   # you want them to apply to every desktop session.
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-    SDL_VIDEODRIVER = "wayland,x11";
-    _JAVA_AWT_WM_NONREPARENTING = "1";
+      XDG_SESSION_TYPE = "wayland";
+      XDG_CURRENT_DESKTOP = "Hyprland";
+      MOZ_ENABLE_WAYLAND = "1";
+      QT_QPA_PLATFORM = "wayland";
+      SDL_VIDEODRIVER = "wayland";
   };
 
   # Hyprland desktop package set.
