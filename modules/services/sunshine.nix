@@ -9,7 +9,7 @@
 #   3. Create username/password
 #   4. Pair using Moonlight client
 
-{ config, lib, pkgs, sunshine, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.my.services.sunshine;
@@ -62,11 +62,11 @@ in
         package = sunshinePkg;
       };
 
-      systemd.user.services.sunshine = {
-        after = [ "graphical-session.target" ];
-        wants = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-    };
+#      systemd.user.services.sunshine = {
+#        after = [ "graphical-session.target" ];
+#        wants = [ "graphical-session.target" ];
+#        partOf = [ "graphical-session.target" ];
+#    };
       environment.systemPackages = [
         sunshinePkg
       ];
@@ -99,7 +99,6 @@ in
     (lib.mkIf (cfg.gpuVendor == "nvidia") {
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
-        capture = pipewire
       };
     })
   ]);
