@@ -62,14 +62,14 @@ in
         package = sunshinePkg;
       };
 # === Proper Firewall Configuration ===
-    networking.firewall = {
+networking.firewall = {
       allowedTCPPorts = [ 47984 47989 47990 ];
       allowedUDPPortRanges = [
-        { from = 47998; to = 48010; }   # Main Sunshine UDP range
+        { from = 47998; to = 48010; }
       ];
-      # Extra safety range for Moonlight (nftables style)
-      extraRules = ''
-        add rule inet filter nixos-fw udp dport 47998-48100 accept
+      # Extra rule for safety
+      extraInputRules = ''
+        udp dport 47998-48100 accept
       '';
     };
 #      systemd.user.services.sunshine = {
