@@ -18,7 +18,7 @@ let
     if cfg.gpuVendor == "nvidia" then
       pkgs.sunshine.override {
         cudaSupport = true;
-        cudaPackages = pkgs.cudaPackages_12;
+        cudaPackages = pkgs.cudaPackages;
         }
     else
       pkgs.sunshine;
@@ -99,19 +99,6 @@ in
     (lib.mkIf (cfg.gpuVendor == "nvidia") {
       services.sunshine.settings = {
         # NVIDIA-specific Sunshine settings
-capture = "kms";
-      encoder = "nvenc";
-      videoFormat = "h264";     # Force H.264
-
-      hevc_mode = 2;            # Do not advertise HEVC
-      av1_mode = 0;
-
-      bitrate = 10000;          # Start very low
-      packetSize = 512;         # Small packets (critical)
-      fecPercentage = 100;      # Max error correction
-      pingTimeout = 120000;
-
-      qp = 30;
       };
     })
   ]);
