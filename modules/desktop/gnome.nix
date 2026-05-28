@@ -8,7 +8,6 @@
   # Display manager
   services.displayManager.gdm = {
     enable = true;
-    wayland = true;
   };
 
   # GNOME desktop
