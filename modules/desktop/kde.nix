@@ -2,12 +2,35 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Desktop & Display Manager
+  ############################################################
+  # KDE Plasma desktop
+  ############################################################
+
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
+  ############################################################
+  # XDG Portal stack (CRITICAL for Sunshine)
+  ############################################################
+
+  xdg.portal = {
+    enable = true;
+
+    xdgOpenUsePortal = true;
+
+    extraPortals = with pkgs; [
+      kdePackages.xdg-desktop-portal-kde
+      xdg-desktop-portal-gtk   # important fallback for capture sessions
+    ];
+
+    config.common.default = "kde";
+  };
+
+  ############################################################
   # KDE apps
+  ############################################################
+
   environment.systemPackages = with pkgs.kdePackages; [
     isoimagewriter
 #   merkuro
@@ -19,18 +42,11 @@
     partitionmanager
   ];
 
-    # KDE portal (FIX for Plex + Electron apps)
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = true;
-    extraPortals = [
-      pkgs.kdePackages.xdg-desktop-portal-kde
-    ];
-    config.common.default = "kde";
-  };
-
-  # Optional: KDE-specific programs
   programs.kdeconnect.enable = true;
+
+  ############################################################
+  # Optional UI defaults
+  ############################################################
 
   environment.etc."xdg/kdeglobals".text = ''
   [General]
