@@ -2,13 +2,26 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Desktop & Display Manager
+  # X11/Wayland base
   services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
+
+  # Display manager
+  services.displayManager.gdm = {
+    enable = true;
+    wayland = true;
+  };
+
+  # GNOME desktop
   services.desktopManager.gnome.enable = true;
 
-  # GNOME services
+  # dconf is required for GNOME settings
+  programs.dconf.enable = true;
+
+  # GNOME keyring
   services.gnome.gnome-keyring.enable = true;
+
+  # Polkit authentication dialogs
+  security.polkit.enable = true;
 
   # Portal integration
   xdg.portal = {
@@ -19,14 +32,12 @@
       pkgs.xdg-desktop-portal-gnome
     ];
 
-    config.common.default = "gnome";
+    config = {
+      common = {
+        default = [ "gnome" "gtk" ];
+      };
+    };
   };
-
-  # Required by many GNOME settings/apps
-  programs.dconf.enable = true;
-
-  # Polkit authentication dialogs
-  security.polkit.enable = true;
 
   # Useful GNOME additions
   environment.systemPackages = with pkgs; [

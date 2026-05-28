@@ -24,9 +24,9 @@
     ../../modules/system/memory.nix
 
     ../../modules/desktop/fonts.nix
-#   ../../modules/desktop/gnome.nix
+    ../../modules/desktop/gnome.nix
 #   ../../modules/desktop/hyprland.nix
-    ../../modules/desktop/kde.nix
+#   ../../modules/desktop/kde.nix
 
     ../../modules/networking/core.nix
     ../../modules/networking/tailscale.nix
