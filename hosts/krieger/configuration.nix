@@ -10,7 +10,7 @@
 
     ../../modules/hardware/audio.nix
     ../../modules/hardware/bluetooth.nix
-#   ../../modules/hardware/fingerprint.nix
+    ../../modules/hardware/fingerprint.nix
 
 #   ../../modules/hardware/gpu-hybrid.nix
 #   ../../modules/hardware/gpu-intel.nix
@@ -24,6 +24,7 @@
     ../../modules/system/memory.nix
 
     ../../modules/desktop/fonts.nix
+
     ../../modules/desktop/gnome.nix
 #   ../../modules/desktop/hyprland.nix
 #   ../../modules/desktop/kde.nix
@@ -62,6 +63,9 @@
   networking.interfaces.enp4s0 = {
     wakeOnLan.enable = true;   # -> only for ethernet wired hosts
   };
+
+  # enable fingerprint on this host
+  mySystem.hasFingerprint = false;
 
   nixpkgs.overlays = [
     (final: prev: {

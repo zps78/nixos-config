@@ -24,6 +24,7 @@
     ../../modules/system/memory.nix
 
     ../../modules/desktop/fonts.nix
+
 #   ../../modules/desktop/gnome.nix
 #   ../../modules/desktop/hyprland.nix
     ../../modules/desktop/kde.nix
@@ -59,7 +60,12 @@
 
   # Networking
   networking.hostName = "kepler";
-#  networking.interfaces.enp4s0.wakeOnLan.enable = true; # -> only for etheret wired hosts
+#  networking.interfaces.eno2 = {
+#    wakeOnLan.enable = true;   # -> only for ethernet wired hosts
+#  };
+
+  # enable fingerprint on this host
+  mySystem.hasFingerprint = true;
 
   my.services.ssh = {
     enable = true;

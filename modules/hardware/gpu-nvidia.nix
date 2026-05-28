@@ -33,11 +33,12 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-# Outdated config settings:
-#  # Wayland + NVIDIA fixes (cursor issues)
-#  environment.sessionVariables = {
-#    WLR_NO_HARDWARE_CURSORS = "1";
-#  };
+  # Wayland + NVIDIA stability
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+  };
+
+  hardware.nvidia-container-toolkit.enable = true;
 
   systemd.services.nvidia-suspend.enable = true;
   systemd.services.nvidia-resume.enable = true;

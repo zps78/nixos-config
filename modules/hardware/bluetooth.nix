@@ -7,6 +7,5 @@
     powerOnBoot = true;
   };
 
-  # KDE works fine without blueman, but it can be a useful fallback
-  # services.blueman.enable = true;
+  services.blueman.enable = true;
 }

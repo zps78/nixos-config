@@ -10,7 +10,7 @@
 
     ../../modules/hardware/audio.nix
     ../../modules/hardware/bluetooth.nix
-#   ../../modules/hardware/fingerprint.nix
+    ../../modules/hardware/fingerprint.nix
 
 #   ../../modules/hardware/gpu-hybrid.nix
     ../../modules/hardware/gpu-intel.nix
@@ -24,6 +24,7 @@
     ../../modules/system/memory.nix
 
     ../../modules/desktop/fonts.nix
+
 #   ../../modules/desktop/gnome.nix
 #   ../../modules/desktop/hyprland.nix
     ../../modules/desktop/kde.nix
@@ -59,7 +60,12 @@
 
   # Networking
   networking.hostName = "kimi";
-  networking.interfaces.eno2.wakeOnLan.enable = true; # -> only for etheret wired hosts
+  networking.interfaces.eno2 = {
+    wakeOnLan.enable = true;   # -> only for ethernet wired hosts
+  };
+
+  # enable fingerprint on this host
+  mySystem.hasFingerprint = false;
 
   my.services.ssh = {
     enable = true;
