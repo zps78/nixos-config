@@ -50,7 +50,7 @@
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
     ../../modules/services/rustdesk.nix
-    ../../modules/services/ssh.nix
+#   ../../modules/services/ssh.nix
     ../../modules/services/sunshine.nix
 #   ../../modules/services/waydroid.nix
   ];
@@ -67,18 +67,18 @@
   # enable fingerprint on this host
   mySystem.hasFingerprint = false;
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      openldap = prev.openldap.overrideAttrs (old: {
-        doCheck = false;
-      });
-    })
-  ];
+#  nixpkgs.overlays = [
+#    (final: prev: {
+#      openldap = prev.openldap.overrideAttrs (old: {
+#        doCheck = false;
+#      });
+#    })
+#  ];
 
-  my.services.ssh = {
-    enable = false;
-    passwordAuth = true;   # keep disabled for security
-  };
+#  my.services.ssh = {
+#    enable = false;
+#    passwordAuth = true;   # keep disabled for security
+#  };
 
   my.services.sunshine = {
     enable = true;
