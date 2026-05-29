@@ -67,13 +67,13 @@
   # enable fingerprint on this host
   mySystem.hasFingerprint = false;
 
-#  nixpkgs.overlays = [
-#    (final: prev: {
-#      openldap = prev.openldap.overrideAttrs (old: {
-#        doCheck = false;
-#      });
-#    })
-#  ];
+  nixpkgs.overlays = [
+    (final: prev: {
+      openldap = prev.openldap.overrideAttrs (old: {
+        doCheck = false;
+      });
+    })
+  ];
 
 #  my.services.ssh = {
 #    enable = false;
