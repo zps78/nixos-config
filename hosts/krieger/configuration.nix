@@ -60,8 +60,9 @@
 
   # Networking
   networking.hostName = "krieger";
-  networking.interfaces.enp4s0 = {
-    wakeOnLan.enable = true;   # -> only for ethernet wired hosts
+# networking.interfaces.enp4s0 = { # <- atlantis nic
+  networking.interfaces.enp5s0 = {  # <- intel nic
+    wakeOnLan.enable = true;        # -> only for ethernet wired hosts
   };
 
   # enable fingerprint on this host
