@@ -10,13 +10,17 @@
   services.mako.enable = true;
   services.swayidle = {
     enable = true;
-    events = [
-      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
-    ];
-    timeouts = [
-      { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -f"; }
-      { timeout = 600; command = "niri msg action power-off-monitors"; }
-    ];
+    events = {
+      before-sleep = "${pkgs.swaylock}/bin/swaylock -f";
+      # or if you have multiple commands, you can still use a list:
+      # before-sleep = [
+      #   { command = "${pkgs.swaylock}/bin/swaylock -f"; }
+      # ];
+    };
+    timeouts = {
+      300 = "${pkgs.swaylock}/bin/swaylock -f";
+      600 = "niri msg action power-off-monitors";
+    };
   };
 
   # Drop a KDL config via xdg.configFile; edit the source path to taste.

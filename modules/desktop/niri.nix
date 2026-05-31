@@ -44,20 +44,16 @@
   ];
 
   # Needed for portals (screen share, file pickers)
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome
-    ];
+xdg.portal = {
+  enable = true;
+  extraPortals = with pkgs; [
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-gnome
+  ];
 
-    config = {
-      common.default = [ "gtk" ];
-      niri.default = [ "gtk" "gnome" ];
-      niri."org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
-      niri."org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
-    };
-  };
+  # No `config.niri.default` here — let programs.niri module decide
+  config.common.default = [ "gtk" ];
+};
 
   environment.sessionVariables = {
     XDG_CURRENT_DESKTOP = "niri";
