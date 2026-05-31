@@ -5,7 +5,7 @@
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
-    ./niri.nix
+#   ./niri.nix
     ../modules/apps/zp.nix
   ];
 

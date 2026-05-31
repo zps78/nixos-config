@@ -1,3 +1,4 @@
+# ../../home/niri.nix
 { config, pkgs, inputs, ... }:
 
 {

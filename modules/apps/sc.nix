@@ -7,6 +7,16 @@
     ../../modules/apps/firefox.nix
     ../../modules/apps/plex.nix
   ];
+
+    programs.vscodium = {
+    enable = true;
+    profiles.default.extensions = with pkgs.vscode-extensions; [
+      enkia.tokyo-night
+      esbenp.prettier-vscode
+      jeff-hykin.better-nix-syntax
+    ];
+  };
+
   # ----------------------
   # Packages
   # ----------------------

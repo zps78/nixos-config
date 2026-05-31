@@ -5,6 +5,7 @@
   home.stateVersion = "25.11"; # match your NixOS version
 
   imports = [
+#   ./niri.nix
     ../modules/apps/gt.nix
   ];
 

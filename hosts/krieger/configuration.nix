@@ -2,8 +2,6 @@
 { config, pkgs, lib, ... }:
 
 {
-#  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   # Import modules
   imports = [
     ./hardware-configuration.nix
@@ -28,6 +26,7 @@
 #   ../../modules/desktop/gnome.nix
 #   ../../modules/desktop/hyprland.nix
     ../../modules/desktop/kde.nix
+#   ../../modules/desktop/niri.nix
 
     ../../modules/networking/core.nix
     ../../modules/networking/tailscale.nix
@@ -50,7 +49,7 @@
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
     ../../modules/services/rustdesk.nix
-#   ../../modules/services/ssh.nix
+    ../../modules/services/ssh.nix
     ../../modules/services/sunshine.nix
 #   ../../modules/services/waydroid.nix
   ];
@@ -60,30 +59,22 @@
 
   # Networking
   networking.hostName = "krieger";
-# networking.interfaces.enp4s0 = { # <- atlantis nic
-  networking.interfaces.enp5s0 = {  # <- intel nic
-    wakeOnLan.enable = true;        # -> only for ethernet wired hosts
+  networking.interfaces = {            # <- set WOL for wired interfaces
+    enp4s0.wakeOnLan.enable = true;    # <- atlantis nic
+    enp5s0.wakeOnLan.enable = true;    # <- intel nic
   };
 
   # enable fingerprint on this host
   mySystem.hasFingerprint = false;
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      openldap = prev.openldap.overrideAttrs (old: {
-        doCheck = false;
-      });
-    })
-  ];
-
-#  my.services.ssh = {
-#    enable = false;
-#    passwordAuth = true;   # keep disabled for security
-#  };
+  my.services.ssh = {
+    enable = true;
+    passwordAuth = true;               # keep disabled for security
+  };
 
   my.services.sunshine = {
     enable = true;
-    gpuVendor = "nvidia"; # choose from: "none" "nvidia" "amd" "intel"
+    gpuVendor = "nvidia";              # choose from: "none" "nvidia" "amd" "intel"
   };
 
   # Users
@@ -96,9 +87,9 @@
       "audio"
       "video"
       "render"
-      "input"      # -> enable with sunshine
-#     "libvirtd"   # -> enable with libvirt
-      "docker"     # -> enable with docker
+      "input"                          # -> enable with sunshine
+#     "libvirtd"                       # -> enable with libvirt
+      "docker"                         # -> enable with docker
     ];
   };
 
@@ -118,9 +109,9 @@
   };
 
   # Libinput - disabled because kde overrides it
-#  services.libinput.enable = true;
-#  services.libinput.touchpad.naturalScrolling = true;
-#  services.libinput.mouse.naturalScrolling = true;
+# services.libinput.enable = true;
+# services.libinput.touchpad.naturalScrolling = true;
+# services.libinput.mouse.naturalScrolling = true;
 
   # System packages
   environment.systemPackages = with pkgs; [

@@ -2,8 +2,6 @@
 { config, pkgs, lib, ... }:
 
 {
-#  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   # Import modules
   imports = [
     ./hardware-configuration.nix
@@ -28,6 +26,7 @@
 #   ../../modules/desktop/gnome.nix
 #   ../../modules/desktop/hyprland.nix
     ../../modules/desktop/kde.nix
+#   ../../modules/desktop/niri.nix
 
     ../../modules/networking/core.nix
     ../../modules/networking/tailscale.nix
@@ -59,9 +58,10 @@
   boot.kernel.sysctl."vm.swappiness" = 100;
 
   # Networking
-  networking.hostName = "kepler";
-#  networking.interfaces.eno2 = {
-#    wakeOnLan.enable = true;   # -> only for ethernet wired hosts
+  networking.hostName = "krugerrand";
+  networking.interfaces = {            # <- set WOL for wired interfaces
+#   enp4s0.wakeOnLan.enable = true;    # <- atlantis nic
+#   enp5s0.wakeOnLan.enable = true;    # <- intel nic
 #  };
 
   # enable fingerprint on this host
@@ -69,12 +69,12 @@
 
   my.services.ssh = {
     enable = true;
-    passwordAuth = false;   # keep disabled for security
+    passwordAuth = true;               # keep disabled for security
   };
 
   my.services.sunshine = {
     enable = false;
-    gpuVendor = "none"; # choose from: "none" "nvidia" "amd" "intel"
+    gpuVendor = "none";                # choose from: "none" "nvidia" "amd" "intel"
   };
 
   # Users
@@ -87,13 +87,13 @@
       "audio"
       "video"
       "render"
-#     "input"      # -> enable with sunshine
-#     "libvirtd"   # -> enable with libvirt
-#     "docker"     # -> enable with docker
+#     "input"                          # -> enable with sunshine
+#     "libvirtd"                       # -> enable with libvirt
+#     "docker"                         # -> enable with docker
     ];
   };
 
-    # Display manager - auto login
+  # Display manager - auto login
 # services.displayManager.autoLogin = {
 #   enable = true;
 #   user = "sc";
@@ -109,9 +109,9 @@
   };
 
   # Libinput - disabled because kde overrides it
-#  services.libinput.enable = true;
-#  services.libinput.touchpad.naturalScrolling = true;
-#  services.libinput.mouse.naturalScrolling = true;
+# services.libinput.enable = true;
+# services.libinput.touchpad.naturalScrolling = true;
+# services.libinput.mouse.naturalScrolling = true;
 
   # System packages
   environment.systemPackages = with pkgs; [
