@@ -12,7 +12,7 @@
     enable = true;
     settings.default_session = {
       user = "greeter";
-      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri";
     };
   };
 
