@@ -7,14 +7,23 @@
     ../../modules/apps/firefox.nix
     ../../modules/apps/plex.nix
   ];
+
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscodium;
+    profiles.default.extensions = with pkgs.vscode-extensions; [
+      enkia.tokyo-night
+      esbenp.prettier-vscode
+      jeff-hykin.better-nix-syntax
+    ];
+  };
+
   # ----------------------
   # Packages
   # ----------------------
   home.packages = with pkgs; [
    ## Development
     # godot
-    # vscode
-      vscodium
 
    ## Media
     # obs-studio
