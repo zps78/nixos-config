@@ -22,5 +22,5 @@
   # Drop a KDL config via xdg.configFile; edit the source path to taste.
   # You can also manage it fully in Nix via the niri-flake HM module,
   # but this gives you a plain KDL file you can live-reload.
-  xdg.configFile."niri/config.kdl".source = ./niri/config.kdl;
+  # xdg.configFile."niri/config.kdl".source = ./niri/config.kdl;
 }
