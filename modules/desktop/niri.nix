@@ -25,7 +25,7 @@
   # Secret service (used by e.g. Chromium, VSCode)
   services.gnome.gnome-keyring.enable = true;
 
-  services.gnome.gcr-ssh-agent.enable = false
+  services.gnome.gcr-ssh-agent.enable = false;
 
   # XWayland support via xwayland-satellite (niri integrates it automatically)
   environment.systemPackages = with pkgs; [
