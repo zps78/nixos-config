@@ -37,7 +37,7 @@
   # Authentication
   ############################################################
 
-  security.polkit.enable = true;
+#  security.polkit.enable = true;
 
   ############################################################
   # Desktop integration
