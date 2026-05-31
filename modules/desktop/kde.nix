@@ -21,7 +21,7 @@
 
     extraPortals = with pkgs; [
       kdePackages.xdg-desktop-portal-kde
-      xdg-desktop-portal-gtk   # important fallback for capture sessions
+#      xdg-desktop-portal-gtk   # important fallback for capture sessions
     ];
 
     config.common.default = "kde";
