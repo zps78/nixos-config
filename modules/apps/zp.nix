@@ -6,6 +6,7 @@
   imports = [
     ../../modules/apps/firefox.nix
     ../../modules/apps/plex.nix
+    ../../modules/apps/zen-browser.nix
   ];
 
   programs.vscodium = {

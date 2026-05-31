@@ -34,13 +34,14 @@
     swayidle        # idle/DPMS management
     mako            # notification daemon
     swaybg          # wallpaper setter
-    fuzzel          # app launcher (Super+D default)
+#    fuzzel          # app launcher (Super+D default)
     alacritty       # terminal (Super+T default)
-    waybar          # status bar
+#    waybar          # status bar
     brightnessctl   # laptop brightness keys
     playerctl       # media keys
     wl-clipboard    # wl-copy / wl-paste
     grim slurp      # screenshot (grim + region selector)
+#    noctalia-shell
   ];
 
   # Needed for portals (screen share, file pickers)

@@ -9,7 +9,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,13 +22,14 @@
 
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+outputs = inputs@{ self, nixpkgs, home-manager, ... }:
 
     let
       system = "x86_64-linux";
 
       makeUser = userName: userFile: {
         home-manager.users.${userName} = import userFile;
+        home-manager.extraSpecialArgs = { inherit inputs; };
       };
 
       mkHost = {
@@ -36,9 +42,9 @@
           modules =
             [
               ./hosts/${hostname}/configuration.nix
-
+              ./modules/desktop/niri.nix
               home-manager.nixosModules.home-manager
-
+              
               {
                 nixpkgs.config.allowUnfree = true;
 
