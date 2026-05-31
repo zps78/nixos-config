@@ -113,6 +113,14 @@
 # services.libinput.touchpad.naturalScrolling = true;
 # services.libinput.mouse.naturalScrolling = true;
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      openldap = prev.openldap.overrideAttrs (old: {
+        doCheck = false;
+      });
+    })
+  ];
+
   # System packages
   environment.systemPackages = with pkgs; [
     #
