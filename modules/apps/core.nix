@@ -18,6 +18,7 @@
     unrar            # .rar files (optional but useful)
     unzip            # .zip files
     wget             # Tool for retrieving files using HTTP, HTTPS, and FTP
+    lm_sensors       # Tools for reading hardware sensors - maintained fork
 
   # Networking
     arp-scan         # ARP scanning and fingerprinting tool
