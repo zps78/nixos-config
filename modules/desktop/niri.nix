@@ -1,68 +1,46 @@
 # modules/desktop/niri.nix
+# Niri scrollable-tiling Wayland compositor for krugerrand.
+# Enable with: imports = [ ../../modules/desktop/niri.nix ];
+# Do NOT import alongside kde.nix or gnome.nix.
 { pkgs, ... }:
 
 {
-  ############################################################
-  # Display manager
-  ############################################################
-
-  services.xserver.enable = true;
-
-  # Keep SDDM initially
-  services.displayManager.sddm.enable = true;
-
-  ############################################################
-  # Niri
-  ############################################################
-
+  # Niri is in nixpkgs since ~24.11; no extra flake needed
   programs.niri.enable = true;
 
-  ############################################################
-  # XDG Portal stack
-  ############################################################
+  # Required for screen locking, polkit auth prompts, etc.
+  security.polkit.enable = true;
 
-  xdg.portal = {
-    enable = true;
+  # PAM rule for swaylock (Super+Alt+L default keybind)
+  security.pam.services.swaylock = {};
 
-    xdgOpenUsePortal = true;
+  # Secret service (used by e.g. Chromium, VSCode)
+  services.gnome.gnome-keyring.enable = true;
 
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-    ];
-
-    config.common.default = "gtk";
-  };
-
-  ############################################################
-  # Authentication
-  ############################################################
-
-#  security.polkit.enable = true;
-services.gnome.gcr-ssh-agent.enable = false;
-  ############################################################
-  # Desktop integration
-  ############################################################
-
-#  programs.dconf.enable = true;
-
-#  services.gnome.gnome-keyring.enable = true;
-
-  ############################################################
-  # Applications
-  ############################################################
-
+  # XWayland support via xwayland-satellite (niri integrates it automatically)
   environment.systemPackages = with pkgs; [
-    ghostty
-    fuzzel
-    wl-clipboard
     xwayland-satellite
-
-    kdePackages.kate
-    kdePackages.partitionmanager
-    kdePackages.kdeconnect-kde
-    kdePackages.kcalc
-    kdePackages.kompare
+    swaylock        # screen locker
+    swayidle        # idle/DPMS management
+    mako            # notification daemon
+    swaybg          # wallpaper setter
+    fuzzel          # app launcher (Super+D default)
+    alacritty       # terminal (Super+T default)
+    waybar          # status bar
+    brightnessctl   # laptop brightness keys
+    playerctl       # media keys
+    wl-clipboard    # wl-copy / wl-paste
+    grim slurp      # screenshot (grim + region selector)
   ];
 
-  programs.kdeconnect.enable = true;
+  # Needed for portals (screen share, file pickers)
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+    config.niri.default = [ "gnome" "gtk" ];
+  };
+
+  # Udev rules already handled by programs.niri.enable, but make sure
+  # the user is in the video/input groups (usually set in your common.nix)
+  # users.users.zp.extraGroups = [ "video" "input" ];
 }
