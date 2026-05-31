@@ -22,6 +22,12 @@ let
     # the short ID in the url (like https://addons.mozilla.org/en-US/firefox/addon/!SHORT_ID!/)
     # Then go to https://addons.mozilla.org/api/v5/addons/addon/!SHORT_ID!/ to get the guid
     (extension "ublock-origin" "uBlock0@raymondhill.net")
+    (extension "sponsorblock" "sponsorBlocker@ajay.app")
+    (extension "keepa" "amptra@keepa.com")
+    (extension "bitwarden-password-manager" "{446900e4-71c2-419f-a6a7-df9c091e268b}")
+    (extension "video-downloadhelper" "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}")
+    (extension "consent-o-matic" "gdpr@cavi.au.dk")
+    (extension "torrent-control" "{e6e36c9a-8323-446c-b720-a176017e38ff}")
     # ...
   ];
 
