@@ -8,9 +8,8 @@
     ../../modules/apps/plex.nix
   ];
 
-  programs.vscode = {
+  programs.vscodium = {
     enable = true;
-    package = pkgs.vscodium;
     profiles.default.extensions = with pkgs.vscode-extensions; [
       enkia.tokyo-night
       esbenp.prettier-vscode
