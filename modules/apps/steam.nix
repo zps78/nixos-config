@@ -66,6 +66,7 @@
 
     # Game installer / launcher
     bottles
+    lutris
 
     # Proton management utility
     protonup-qt

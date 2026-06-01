@@ -1,11 +1,7 @@
 # ../../home/niri.nix
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, ... }:
 
 {
-  imports = [
-    inputs.noctalia.homeModules.default
-  ];
-
   programs.alacritty.enable = true;
   programs.swaylock.enable = true;
   services.mako.enable = true;
