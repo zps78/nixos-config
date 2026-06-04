@@ -3,10 +3,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.my.services.ssh;
+  cfg = config.myServices.ssh;
 in
 {
-  options.my.services.ssh = {
+  options.myServices.ssh = {
     enable = lib.mkEnableOption "SSH server";
 
     passwordAuth = lib.mkOption {

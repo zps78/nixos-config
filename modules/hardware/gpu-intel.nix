@@ -1,7 +1,7 @@
 # ../../modules/hardware/gpu-intel.nix
 { config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myHardware.gpuVendor == "intel") {
   ############################################################
   # Intel iGPU
   # ThinkCentre M920q / i7-8700T

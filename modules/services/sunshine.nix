@@ -12,7 +12,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.my.services.sunshine;
+  cfg = config.myServices.sunshine;
 
   sunshinePkg =
     if cfg.gpuVendor == "nvidia" then
@@ -24,7 +24,7 @@ let
       pkgs.sunshine;
 in
 {
-  options.my.services.sunshine = {
+  options.myServices.sunshine = {
     enable = lib.mkEnableOption "Sunshine host";
 
     gpuVendor = lib.mkOption {
@@ -62,21 +62,19 @@ in
         package = sunshinePkg;
       };
 # === Proper Firewall Configuration ===
-networking.firewall = {
-      allowedTCPPorts = [ 47984 47989 47990 ];
-      allowedUDPPortRanges = [
-        { from = 47998; to = 48010; }
-      ];
+      networking.firewall = {
+        allowedTCPPorts = [ 47984 47989 47990 ];
+        allowedUDPPortRanges = [ { from = 47998; to = 48010; } ];
       # Extra rule for safety
-      extraInputRules = ''
-        udp dport 47998-48100 accept
-      '';
-    };
-#      systemd.user.services.sunshine = {
-#        after = [ "graphical-session.target" ];
-#        wants = [ "graphical-session.target" ];
-#        partOf = [ "graphical-session.target" ];
-#    };
+        extraInputRules = ''
+          udp dport 47998-48100 accept
+        '';
+      };
+#     systemd.user.services.sunshine = {
+#       after = [ "graphical-session.target" ];
+#       wants = [ "graphical-session.target" ];
+#       partOf = [ "graphical-session.target" ];
+#     };
       environment.systemPackages = [
         sunshinePkg
       ];

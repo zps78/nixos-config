@@ -1,7 +1,7 @@
 # ../../modules/hardware/gpu-nvidia.nix
 { config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myHardware.gpuVendor == "nvidia") {
   ############################################################
   # NVIDIA GPU (Desktop - Single GPU)
   # RTX 4060 Ti

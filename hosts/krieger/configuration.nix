@@ -59,16 +59,18 @@
 
   programs.kdeconnect.enable = false;
 
-  myHardware.bluetooth.enable = true;       # enable bluetooth on this host
-  myHardware.fingerprint.enable = false;    # enable fingerprint on this host
-  myHardware.gpuVendor = "nvidia";          # choose from: "hybrid" "nvidia" "amd" "intel"
+  myHardware = {
+    bluetooth.enable = true;           # enable bluetooth on this host
+    fingerprint.enable = false;        # enable fingerprint on this host
+    gpuVendor = "nvidia";              # choose from: "hybrid" "nvidia" "amd" "intel"
+  }
 
-  my.services.ssh = {
+  myServices.ssh = {
     enable = true;
     passwordAuth = true;               # keep disabled for security
   };
 
-  my.services.sunshine = {
+  myServices.sunshine = {
     enable = true;
     gpuVendor = "nvidia";              # choose from: "none" "nvidia" "amd" "intel"  ????????????
   };

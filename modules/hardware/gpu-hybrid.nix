@@ -1,7 +1,7 @@
 # ../../modules/hardware/gpu-hybrid.nix
 { config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myHardware.gpuVendor == "hybrid") {
   ############################################################
   # Hybrid GPU (Intel + NVIDIA) configuration
   # - Intel iGPU handles display

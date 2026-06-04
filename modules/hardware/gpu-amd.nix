@@ -1,7 +1,7 @@
 # ../../modules/hardware/gpu-amd.nix
 { config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myHardware.gpuVendor == "amd") {
   ############################################################
   # AMD GPU (Laptop - Integrated GPU only)
   # ThinkPad X13 Gen 3 (Ryzen + Radeon iGPU)
@@ -13,8 +13,8 @@
     enable32Bit = true; # needed for some apps (e.g. Steam, Wine)
 
     extraPackages = with pkgs; [
-#      mesa
-#      vaapiVdpau
+#     mesa
+#     vaapiVdpau
       libvdpau-va-gl
     ];
   };
