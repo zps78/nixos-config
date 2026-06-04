@@ -67,6 +67,7 @@
     sunshine.enable = true;
     rustdesk.enable = true;
     rustdesk.openFirewall = false;
+    rustdesk.runService = true;
   };
 
   # Users
