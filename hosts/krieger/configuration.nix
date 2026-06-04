@@ -61,7 +61,7 @@
 
   myHardware.bluetooth.enable = true;       # enable bluetooth on this host
   myHardware.fingerprint.enable = false;    # enable fingerprint on this host
-  myHardware.gpuVendor = "hybrid";          # choose from: "hybrid" "nvidia" "amd" "intel"
+  myHardware.gpuVendor = "nvidia";          # choose from: "hybrid" "nvidia" "amd" "intel"
 
   my.services.ssh = {
     enable = true;
