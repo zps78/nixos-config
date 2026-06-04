@@ -10,6 +10,7 @@
     fio              # Flexible IO Tester - an IO benchmark tool
     git              # Distributed version control system
     lm_sensors       # Tools for reading hardware sensors - maintained fork
+    lsof             # Tool to list open files
     p7zip            # .7z, many formats, very important
     pciutils         # Collection of programs for inspecting and manipulating configuration of PCI devices
     rclone           # Command line program to sync files and directories to and from major cloud storage

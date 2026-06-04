@@ -24,13 +24,13 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      rustdesk
+      rustdesk-flutter
     ];
 
     # RustDesk client doesn't require services,
     # but relay/server mode does
     services.rustdesk-server = lib.mkIf cfg.relay {
-      enable = true;
+      enable = false;
 
       # ID server + relay server
       openFirewall = cfg.openFirewall;
