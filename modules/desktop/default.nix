@@ -7,4 +7,8 @@
     ../../modules/desktop/kde.nix
     ../../modules/desktop/niri.nix
   ];
+
+  options.myDesktop.stack = lib.mkOption {
+    type = lib.types.enum [ "gnome" "hyprland" "kde" "niri" ];
+  };
 }
