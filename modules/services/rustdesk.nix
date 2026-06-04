@@ -42,7 +42,7 @@ in
     };
 
     networking.firewall = lib.mkIf (cfg.relay && cfg.openFirewall) {
-      allowedTCPPorts = [ 21115 21116 21117 ];
+      allowedTCPPorts = [ 21115 21116 21117 21118 21119 ];
       allowedUDPPorts = [ 21116 ];
     };
   };
