@@ -25,8 +25,8 @@
 
 #   ../../modules/desktop/gnome.nix
 #   ../../modules/desktop/hyprland.nix
-#   ../../modules/desktop/kde.nix
-    ../../modules/desktop/niri.nix
+    ../../modules/desktop/kde.nix
+#   ../../modules/desktop/niri.nix
 
     ../../modules/networking/core.nix
     ../../modules/networking/tailscale.nix
@@ -64,8 +64,13 @@
 #   enp5s0.wakeOnLan.enable = true;    # <- intel nic
   };
 
+  programs.kdeconnect.enable = true;
+
   # enable fingerprint on this host
   mySystem.hasFingerprint = true;
+
+  # enable bluetooth on this host
+  mySystem.hasBluetooth = true;
 
   my.services.ssh = {
     enable = true;

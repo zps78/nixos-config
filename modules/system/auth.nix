@@ -3,19 +3,29 @@
 
 {
   security.pam.services = {
+    ############################################################
     # TTY login
+    ############################################################
     login.fprintAuth = false;
 
-    # KDE display manager
-    sddm.fprintAuth = false;
+    ############################################################
+    # Display managers
+    ############################################################
+    sddm.fprintAuth = false;   # KDE
+    gdm.fprintAuth = false;    # GNOME (safe even if unused)
+    greetd.fprintAuth = false; # Hyprland / Niri setups
 
-    # Hyprland setups (if used)
-    greetd.fprintAuth = false;
+    ############################################################
+    # Sudo
+    ############################################################
+    sudo.fprintAuth = true;
 
-    # Lockscreen (Hyprland)
+    ############################################################
+    # Screen lockers (important for Wayland setups)
+    ############################################################
+    swaylock.fprintAuth = false;
     hyprlock.fprintAuth = false;
 
-    # Sudo (allowed)
-    sudo.fprintAuth = true;
+    # If you use other lockers later, add them here
   };
 }

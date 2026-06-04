@@ -6,9 +6,10 @@
   # KDE Plasma desktop
   ############################################################
 
-  services.xserver.enable = true;
+  services.xserver.enable = lib.mkDefault true;
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.settings.General.Numlock = "on";
 
   ############################################################
   # XDG Portal stack (CRITICAL for Sunshine)
@@ -33,7 +34,6 @@
 
   environment.systemPackages = with pkgs.kdePackages; [
     isoimagewriter
-#   merkuro
     kate
     kcalc
     kdeconnect-kde
@@ -41,8 +41,6 @@
 #   krohnkite
     partitionmanager
   ];
-
-  programs.kdeconnect.enable = true;
 
   ############################################################
   # Optional UI defaults

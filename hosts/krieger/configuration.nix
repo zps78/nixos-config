@@ -64,8 +64,13 @@
     enp5s0.wakeOnLan.enable = true;    # <- intel nic
   };
 
+  programs.kdeconnect.enable = false;
+
   # enable fingerprint on this host
   mySystem.hasFingerprint = false;
+
+  # enable bluetooth on this host
+  mySystem.hasBluetooth = true;
 
   my.services.ssh = {
     enable = true;

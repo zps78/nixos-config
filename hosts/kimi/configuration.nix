@@ -64,8 +64,13 @@
 #   eno2.wakeOnLan.enable = true;
   };
 
+  programs.kdeconnect.enable = false;
+
   # enable fingerprint on this host
   mySystem.hasFingerprint = false;
+
+  # enable bluetooth on this host
+  mySystem.hasBluetooth = true;
 
   my.services.ssh = {
     enable = true;

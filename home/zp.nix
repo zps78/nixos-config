@@ -1,35 +1,72 @@
 # ../../home/zp.nix
-{ config, pkgs, lib, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
-  home.stateVersion = "25.11"; # match your NixOS version
-
-  imports = [
-#   ./niri.nix
-    ../modules/apps/zp.nix
-  ];
+  ############################################################
+  # Home Manager basics
+  ############################################################
 
   home.username = "zp";
   home.homeDirectory = "/home/zp";
+  home.stateVersion = "25.11"; # match your NixOS version
+
+  ############################################################
+  # Imports (user environment composition)
+  ############################################################
+
+  imports = [
+  # ./niri.nix
+    ../modules/apps/3d.nix
+    ../modules/apps/firefox.nix
+    ../modules/apps/godot.nix
+    ../modules/apps/plex.nix
+    ../modules/apps/vscodium.nix
+    ../modules/apps/zen-browser.nix
+  ];
+
+  ############################################################
+  # User applications (only truly global desktop apps)
+  ############################################################
+
+  myApps.godot.enable = false;
+
+  myApps.vscodium.enable = true;
+
+  programs.thunderbird.enable = true;
 
   programs.git = {
     enable = true;
-
     settings = {
       user = {
         name = "zp";
         email = "mostly@krugerrand";
       };
-
       init.defaultBranch = "main";
     };
   };
 
-  # ----------------------
-  # Packages needed for activation scripts
-  # ----------------------
   home.packages = with pkgs; [
+ ## Media
+  # obs-studio
+    spotify
 
+ ## Remote access
+    moonlight-qt
+    remmina
+  # sunshine        # -> import sunshine.nix in the host's configuration.nix
+  # teamviewer
+
+ ## Office
+    onlyoffice-desktopeditors
+    xournalpp
+
+ ## Gaming
+  # steam           # -> import steam.nix in the host's configuration.nix
+
+ ## Virtualization / Emulation
+  # libvirt         # -> import libvirt.nix in the host's configuration.nix
+  # waydroid        # -> import waydroid.nix in the host's configuration.nix
+  # wine            # -> import wine.nix in the host's configuration.nix
   ];
 
   # ----------------------

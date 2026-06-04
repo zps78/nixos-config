@@ -17,7 +17,7 @@
 
   };
 
-outputs = inputs@{ self, nixpkgs, home-manager, ... }:
+outputs = inputs@{ nixpkgs, home-manager, ... }:
 
     let
       system = "x86_64-linux";
@@ -67,7 +67,7 @@ outputs = inputs@{ self, nixpkgs, home-manager, ... }:
             (makeUser "gt" ./home/gt.nix)
 
             # easy to add later
-            # (makeUser "alice" ./home/alice.nix)
+            # (makeUser "john" ./home/john.nix)
           ];
         };
 

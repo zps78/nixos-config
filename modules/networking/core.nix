@@ -28,19 +28,4 @@
   #
 
   networking.nftables.enable = lib.mkDefault true;
-
-  ############################################################
-  # Optional: Extra networking tools
-  ############################################################
-  #
-  # Nice troubleshooting tools for desktop systems.
-  #
-
-  environment.systemPackages = with pkgs; [
-    wget
-    curl
-    dig
-    inetutils
-    nmap
-  ];
 }

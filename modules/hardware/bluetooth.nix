@@ -1,11 +1,17 @@
 # ../../modules/hardware/bluetooth.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
+  options.mySystem.hasBluetooth = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = "Whether this machine has Bluetooth hardware";
   };
 
-  services.blueman.enable = true;
+  config = lib.mkIf config.mySystem.hasBluetooth {
+    hardware.bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
+  };
 }

@@ -62,10 +62,15 @@
   networking.interfaces = {            # <- set WOL for wired interfaces
 #   enp4s0.wakeOnLan.enable = true;    # <- atlantis nic
 #   enp5s0.wakeOnLan.enable = true;    # <- intel nic
-#  };
+  };
+
+  programs.kdeconnect.enable = true;
 
   # enable fingerprint on this host
   mySystem.hasFingerprint = true;
+
+  # enable bluetooth on this host
+  mySystem.hasBluetooth = true;
 
   my.services.ssh = {
     enable = true;
