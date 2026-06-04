@@ -1,4 +1,6 @@
 # ../../modules/desktop/default.nix
+{ lib, ... }:
+
 {
   imports = [
     ../../modules/desktop/fonts.nix
