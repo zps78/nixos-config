@@ -37,7 +37,6 @@
     ../../modules/services/docker.nix
 #   ../../modules/services/libvirt.nix
     ../../modules/services/hp-officejet-pro-8715.nix
-    ../../modules/services/rustdesk.nix
     ../../modules/services/ssh.nix
     ../../modules/services/sunshine.nix
 #   ../../modules/services/waydroid.nix
@@ -65,9 +64,6 @@
     ssh.enable = true;
     ssh.passwordAuth = true;           # keep disabled for security
     sunshine.enable = true;
-    rustdesk.enable = true;
-    rustdesk.openFirewall = false;
-    rustdesk.runService = true;
   };
 
   # Users
