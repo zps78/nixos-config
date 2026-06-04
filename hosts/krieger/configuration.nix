@@ -6,14 +6,7 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../../modules/hardware/audio.nix
-    ../../modules/hardware/bluetooth.nix
-    ../../modules/hardware/fingerprint.nix
-
-#   ../../modules/hardware/gpu-hybrid.nix
-#   ../../modules/hardware/gpu-intel.nix
-    ../../modules/hardware/gpu-nvidia.nix
-#   ../../modules/hardware/gpu-amd.nix
+    ../../modules/hardware
 
     ../../modules/system/auth.nix
     ../../modules/system/boot.nix
@@ -66,11 +59,9 @@
 
   programs.kdeconnect.enable = false;
 
-  # enable fingerprint on this host
-  mySystem.hasFingerprint = false;
-
-  # enable bluetooth on this host
-  mySystem.hasBluetooth = true;
+  myHardware.bluetooth.enable = true;       # enable bluetooth on this host
+  myHardware.fingerprint.enable = false;    # enable fingerprint on this host
+  myHardware.gpuVendor = "hybrid";          # choose from: "hybrid" "nvidia" "amd" "intel"
 
   my.services.ssh = {
     enable = true;
@@ -79,7 +70,7 @@
 
   my.services.sunshine = {
     enable = true;
-    gpuVendor = "nvidia";              # choose from: "none" "nvidia" "amd" "intel"
+    gpuVendor = "nvidia";              # choose from: "none" "nvidia" "amd" "intel"  ????????????
   };
 
   # Users
