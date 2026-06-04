@@ -1,49 +1,49 @@
-{ config, pkgs, lib, ... }:
+# ../../modules/services/rustdesk.nix
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.myServices.rustdesk;
+in
 {
-  environment.systemPackages = with pkgs; [
-    rustdesk
-  ];
+  options.myServices.rustdesk = {
+    enable = lib.mkEnableOption "RustDesk remote desktop";
 
-  networking.firewall = {
-    allowedTCPPorts = [
-      21115
-      21116
-      21117
-      21118
-      21119
-    ];
+    relay = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Run as RustDesk relay/server (hbbs/hbbr)";
+    };
 
-    allowedUDPPorts = [
-      21116
-    ];
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Open required firewall ports for RustDesk";
+    };
   };
 
-  systemd.services.rustdesk = {
-    description = "RustDesk Remote Desktop Service";
-    requires = [ "network-online.target" ];
-    after = [ "network-online.target" "display-manager.service" ];
-    wantedBy = [ "graphical.target" ];
+  config = lib.mkIf cfg.enable {
 
-    path = with pkgs; [
+    environment.systemPackages = with pkgs; [
       rustdesk
-      procps
-      gawk
-      gnugrep
-      findutils
-      bash
-      coreutils
     ];
 
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.rustdesk}/bin/rustdesk --service";
-      Restart = "always";
-      RestartSec = 5;
-      KillMode = "mixed";
-      TimeoutStopSec = 30;
-      User = "root";
-      LimitNOFILE = "100000";
+    # RustDesk client doesn't require services,
+    # but relay/server mode does
+    services.rustdesk-server = lib.mkIf cfg.relay {
+      enable = true;
+
+      # ID server + relay server
+      openFirewall = cfg.openFirewall;
+
+      # default ports (RustDesk standard)
+      # 21115 TCP (ID)
+      # 21116 TCP/UDP (relay)
+      # 21117 TCP (web console optional)
+    };
+
+    networking.firewall = lib.mkIf (cfg.relay && cfg.openFirewall) {
+      allowedTCPPorts = [ 21115 21116 21117 ];
+      allowedUDPPorts = [ 21116 ];
     };
   };
 }
