@@ -1,10 +1,7 @@
-# modules/desktop/niri.nix
-# Niri scrollable-tiling Wayland compositor for krugerrand.
-# Enable with: imports = [ ../../modules/desktop/niri.nix ];
-# Do NOT import alongside kde.nix or gnome.nix.
-{ pkgs, lib, ... }:
+# ../../modules/desktop/niri.nix
+{ config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myDesktop.stack == "niri") {
   ############################################################
   # Niri compositor (system-level enablement)
   ############################################################

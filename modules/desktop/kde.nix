@@ -1,7 +1,7 @@
 # ../../modules/desktop/kde.nix
 { config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myDesktop.stack == "kde") {
   ############################################################
   # KDE Plasma desktop
   ############################################################

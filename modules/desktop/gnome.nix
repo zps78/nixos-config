@@ -1,7 +1,7 @@
 # ../../modules/desktop/gnome.nix
 { config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myDesktop.stack == "gnome") {
   # X11/Wayland base
   services.xserver.enable = true;
 

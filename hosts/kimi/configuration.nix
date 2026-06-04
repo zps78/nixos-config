@@ -10,12 +10,7 @@
 
     ../../modules/system
 
-    ../../modules/desktop/fonts.nix
-
-#   ../../modules/desktop/gnome.nix
-#   ../../modules/desktop/hyprland.nix
-    ../../modules/desktop/kde.nix
-#   ../../modules/desktop/niri.nix
+    ../../modules/desktop
 
     ../../modules/networking/core.nix
     ../../modules/networking/tailscale.nix
@@ -51,6 +46,8 @@
     eno2.wakeOnLan.enable = true;
 #   eno2.wakeOnLan.enable = true;
   };
+
+  myDesktop.stack = "kde";             #  choose from: "gnome" "hyprland" "kde" "niri"
 
   programs.kdeconnect.enable = false;
 

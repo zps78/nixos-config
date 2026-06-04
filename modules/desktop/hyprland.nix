@@ -1,7 +1,7 @@
-# ../../modules/desktop/fonts.nix
+# ../../modules/desktop/hyprland.nix
 { config, pkgs, lib, ... }:
 
-{
+lib.mkIf (config.myDesktop.stack == "hyprland") {
   # Hyprland owns the Wayland compositor session.
   # Keep this file mutually exclusive with modules/desktop/kde.nix.
   programs.hyprland = {
