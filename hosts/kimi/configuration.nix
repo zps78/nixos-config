@@ -63,12 +63,12 @@
   myHardware.fingerprint.enable = false;    # enable fingerprint on this host
   myHardware.gpuVendor = "intel";           # choose from: "hybrid" "nvidia" "amd" "intel"
 
-  my.services.ssh = {
+  myServices.ssh = {
     enable = true;
     passwordAuth = true;               # keep disabled for security
   };
 
-  my.services.sunshine = {
+  myServices.sunshine = {
     enable = true;
     gpuVendor = "intel";               # choose from: "none" "nvidia" "amd" "intel"
   };
