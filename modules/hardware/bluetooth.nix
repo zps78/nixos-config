@@ -2,13 +2,10 @@
 { config, lib, ... }:
 
 {
-  options.myHardware.bluetooth = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = "Whether this machine has Bluetooth hardware";
-  };
+  options.myHardware.bluetooth.enable =
+    lib.mkEnableOption "Bluetooth support";
 
-  config = lib.mkIf config.myHardware.bluetooth {
+  config = lib.mkIf config.myHardware.bluetooth.enable {
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;

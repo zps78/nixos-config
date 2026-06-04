@@ -8,11 +8,7 @@
 
     ../../modules/hardware
 
-    ../../modules/system/auth.nix
-    ../../modules/system/boot.nix
-    ../../modules/system/common.nix
-    ../../modules/system/localization.nix
-    ../../modules/system/memory.nix
+    ../../modules/system
 
     ../../modules/desktop/fonts.nix
 
@@ -59,18 +55,16 @@
 
   programs.kdeconnect.enable = true;
 
-  myHardware.bluetooth.enable = true;       # enable bluetooth on this host
-  myHardware.fingerprint.enable = true;     # enable fingerprint on this host
-  myHardware.gpuVendor = "hybrid";          # choose from: "hybrid" "nvidia" "amd" "intel"
-
-  myServices.ssh = {
-    enable = true;
-    passwordAuth = true;               # keep disabled for security
+  myHardware = {
+    bluetooth.enable = true;           # enable bluetooth on this host
+    fingerprint.enable = true;         # enable fingerprint on this host
+    gpuVendor = "hybrid";              # choose from: "hybrid" "nvidia" "amd" "intel"
   };
 
-  myServices.sunshine = {
-    enable = false;
-    gpuVendor = "none";                # choose from: "none" "nvidia" "amd" "intel"
+  myServices = {
+    ssh.enable = true;
+    ssh.passwordAuth = true;           # keep disabled for security
+    sunshine.enable = false;
   };
 
   # Users

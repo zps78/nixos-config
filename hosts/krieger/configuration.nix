@@ -8,11 +8,7 @@
 
     ../../modules/hardware
 
-    ../../modules/system/auth.nix
-    ../../modules/system/boot.nix
-    ../../modules/system/common.nix
-    ../../modules/system/localization.nix
-    ../../modules/system/memory.nix
+    ../../modules/system
 
     ../../modules/desktop/fonts.nix
 
@@ -63,16 +59,12 @@
     bluetooth.enable = true;           # enable bluetooth on this host
     fingerprint.enable = false;        # enable fingerprint on this host
     gpuVendor = "nvidia";              # choose from: "hybrid" "nvidia" "amd" "intel"
-  }
-
-  myServices.ssh = {
-    enable = true;
-    passwordAuth = true;               # keep disabled for security
   };
 
-  myServices.sunshine = {
-    enable = true;
-    gpuVendor = "nvidia";              # choose from: "none" "nvidia" "amd" "intel"  ????????????
+  myServices = {
+    ssh.enable = true;
+    ssh.passwordAuth = true;           # keep disabled for security
+    sunshine.enable = true;
   };
 
   # Users

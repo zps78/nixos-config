@@ -2,13 +2,10 @@
 { config, lib, ... }:
 
 {
-  options.myHardware.fingerprint = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = "Whether this machine has a fingerprint reader";
-  };
+  options.myHardware.fingerprint.enable =
+    lib.mkEnableOption "Fingerprint reader";
 
-  config = lib.mkIf config.myHardware.fingerprint {
+  config = lib.mkIf config.myHardware.fingerprint.enable {
     services.fprintd.enable = true;
   };
 }
