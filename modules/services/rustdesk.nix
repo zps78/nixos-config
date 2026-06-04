@@ -6,44 +6,32 @@ let
 in
 {
   options.myServices.rustdesk = {
-    enable = lib.mkEnableOption "RustDesk remote desktop";
+    enable = lib.mkEnableOption "RustDesk client (Tailscale-first)";
 
-    relay = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Run as RustDesk relay/server (hbbs/hbbr)";
+    port = lib.mkOption {
+      type = lib.types.port;
+      default = 21118;
+      description = "RustDesk direct connection port";
     };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Open required firewall ports for RustDesk";
+      description = "Open RustDesk port for direct connections";
     };
   };
 
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      rustdesk-flutter
+      rustdesk
     ];
 
-    # RustDesk client doesn't require services,
-    # but relay/server mode does
-    services.rustdesk-server = lib.mkIf cfg.relay {
-      enable = false;
+    # Only needed for direct IP / Tailscale usage
+    networking.firewall.allowedTCPPorts =
+      lib.mkIf cfg.openFirewall [ cfg.port ];
 
-      # ID server + relay server
-      openFirewall = cfg.openFirewall;
-
-      # default ports (RustDesk standard)
-      # 21115 TCP (ID)
-      # 21116 TCP/UDP (relay)
-      # 21117 TCP (web console optional)
-    };
-
-    networking.firewall = lib.mkIf (cfg.relay && cfg.openFirewall) {
-      allowedTCPPorts = [ 21115 21116 21117 21118 21119 ];
-      allowedUDPPorts = [ 21116 ];
-    };
+    networking.firewall.allowedUDPPorts =
+      lib.mkIf cfg.openFirewall [ 21119 ];
   };
 }

@@ -66,6 +66,7 @@
     ssh.passwordAuth = true;           # keep disabled for security
     sunshine.enable = true;
     rustdesk.enable = true;
+    rustdesk.openFirewall = false;
   };
 
   # Users
