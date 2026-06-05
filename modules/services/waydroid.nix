@@ -1,6 +1,11 @@
 # ../../modules/services/waydroid.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
-  virtualisation.waydroid.enable = true;
+  options.myServices.waydroid.enable =
+    lib.mkEnableOption "Waydroid";
+
+  config = lib.mkIf config.myServices.waydroid.enable {
+    virtualisation.waydroid.enable = true;
+  };
 }

@@ -7,9 +7,8 @@
     ./hardware-configuration.nix
 
     ../../modules/hardware
-
     ../../modules/system
-
+    ../../modules/services
     ../../modules/desktop
 
     ../../modules/networking/core.nix
@@ -28,76 +27,72 @@
     ../../modules/apps/steam.nix
 #   ../../modules/apps/wine.nix
 
-    ../../modules/services/discovery.nix
-    ../../modules/services/docker.nix
-#   ../../modules/services/libvirt.nix
-    ../../modules/services/hp-officejet-pro-8715.nix
-    ../../modules/services/ssh.nix
-    ../../modules/services/sunshine.nix
-#   ../../modules/services/waydroid.nix
   ];
 
   # Memory
-  boot.kernel.sysctl."vm.swappiness" = 10;
+  boot.kernel.sysctl."vm.swappiness"             = 10;
 
   # Networking
-  networking.hostName = "krieger";
-  networking.interfaces = {            # <- set WOL for wired interfaces
-    enp4s0.wakeOnLan.enable = true;    # <- atlantis nic
-    enp5s0.wakeOnLan.enable = true;    # <- intel nic
+  networking.hostName                            = "krieger";
+  networking.interfaces = {                                          # set WOL for wired interfaces
+    enp4s0.wakeOnLan.enable                      = true;             # atlantis nic
+    enp5s0.wakeOnLan.enable                      = true;             # intel nic
   };
 
-  myDesktop.stack = "kde";             #  choose from: "gnome" "hyprland" "kde" "niri"
+  myDesktop.stack                                = "kde";            # choose from: "gnome" "hyprland" "kde" "niri"
 
-  programs.kdeconnect.enable = false;
+  programs.kdeconnect.enable                     = true;
 
   myHardware = {
-    bluetooth.enable = true;           # enable bluetooth on this host
-    fingerprint.enable = false;        # enable fingerprint on this host
-    gpuVendor = "nvidia";              # choose from: "hybrid" "nvidia" "amd" "intel"
+    bluetooth.enable                             = true;             # enable bluetooth on this host
+    fingerprint.enable                           = false;            # enable fingerprint on this host
+    gpuVendor                                    = "nvidia";         # choose from: "hybrid" "nvidia" "amd" "intel"
   };
 
   myServices = {
-    ssh.enable = true;
-    ssh.passwordAuth = true;           # keep disabled for security
-    sunshine.enable = true;
+    docker.enable                                = true;
+    libvirt.enable                               = false;
+    hp8715.enable                                = true;
+    ssh.enable                                   = true;
+    ssh.passwordAuth                             = true;             # keep disabled for security
+    sunshine.enable                              = true;
   };
 
   # Users
   users.users.bb = {
-    isNormalUser = true;
-    description = "bb";
+    isNormalUser                                 = true;
+    description                                  = "bb";
     extraGroups = [
-      "wheel"
-      "networkmanager"
-      "audio"
-      "video"
-      "render"
-      "input"                          # -> enable with sunshine
-#     "libvirtd"                       # -> enable with libvirt
-      "docker"                         # -> enable with docker
+                                                   "wheel"
+                                                   "networkmanager"
+                                                   "audio"
+                                                   "video"
+                                                   "render"
+                                                   "input"           # enable with sunshine
+#                                                  "libvirtd"        # enable with libvirt
+                                                   "docker"          # enable with docker
     ];
   };
 
   # Display manager - auto login
   services.displayManager.autoLogin = {
-    enable = true;
-    user = "bb";
+    enable                                       = true;
+    user                                         = "bb";
   };
 
   # Prevent idle suspend (desktop / remote / gaming stability)
   services.logind.settings.Login = {
-    IdleAction = "ignore";
-    IdleActionSec = "0";
-#   HandleLidSwitch = "suspend";
-#   HandleLidSwitchExternalPower = "suspend";
-#   HandleLidSwitchDocked = "ignore";
+    IdleAction                                   = "ignore";
+    IdleActionSec                                = "0";
+#   HandleLidSwitch                              = "suspend";
+#   HandleLidSwitchExternalPower                 = "suspend";
+#   HandleLidSwitchDocked                        = "ignore";
   };
 
   # Libinput - disabled because kde overrides it
-# services.libinput.enable = true;
-# services.libinput.touchpad.naturalScrolling = true;
-# services.libinput.mouse.naturalScrolling = true;
+# services.libinput.enable                       = true;
+# services.libinput.touchpad.naturalScrolling    = true;
+# services.libinput.mouse.naturalScrolling       = true;
 
   nixpkgs.overlays = [
     (final: prev: {
@@ -108,10 +103,10 @@
   ];
 
   # System packages
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages                     = with pkgs; [
     #
   ];
 
   # System state version
-  system.stateVersion = "25.11";
+  system.stateVersion                            = "25.11";
 }

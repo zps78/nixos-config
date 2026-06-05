@@ -1,31 +1,35 @@
 # ../../modules/services/libvirt.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
+  options.myServices.libvirt.enable =
+    lib.mkEnableOption "libvirt virtualization host";
+
+  config = lib.mkIf config.myServices.libvirt.enable {
   # ------------------------------------------------------------
   # Virtualization stack (KVM + QEMU + libvirt)
   # ------------------------------------------------------------
 
-  virtualisation.libvirtd = {
-    enable = true;
+    virtualisation.libvirtd = {
+      enable = true;
 
-    # Optional but recommended for better performance
-    qemu = {
-      runAsRoot = false;
+      # Optional but recommended for better performance
+      qemu = {
+        runAsRoot = false;
 
-      # Enables TPM / UEFI / modern VM features if needed
-      swtpm.enable = true;
-      ovmf.enable = true;
+        # Enables TPM / UEFI / modern VM features if needed
+        swtpm.enable = true;
+        ovmf.enable = true;
+      };
     };
-  };
 
   # ------------------------------------------------------------
   # Networking for VMs (NAT bridge support)
   # ------------------------------------------------------------
 
-  networking.firewall.trustedInterfaces = [
+    networking.firewall.trustedInterfaces = [
     "virbr0"
-  ];
+    ];
 
   # ------------------------------------------------------------
   # User access to libvirt
@@ -42,10 +46,10 @@
   # Packages for VM management tools
   # ------------------------------------------------------------
 
-  environment.systemPackages = with pkgs; [
-#   libvirt           # already installed by virtualisation.libvirtd.enable = true;
-    virt-manager      # GUI VM manager
-    virt-viewer       # SPICE/VNC viewer
-    virtiofsd         # file sharing with VMs
-  ];
+    environment.systemPackages = with pkgs; [
+      virt-manager      # GUI VM manager
+      virt-viewer       # SPICE/VNC viewer
+      virtiofsd         # file sharing with VMs
+    ];
+  };
 }

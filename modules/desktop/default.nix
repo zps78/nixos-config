@@ -3,11 +3,11 @@
 
 {
   imports = [
-    ../../modules/desktop/fonts.nix
-    ../../modules/desktop/gnome.nix
-    ../../modules/desktop/hyprland.nix
-    ../../modules/desktop/kde.nix
-    ../../modules/desktop/niri.nix
+    ./fonts.nix
+    ./gnome.nix
+    ./hyprland.nix
+    ./kde.nix
+    ./niri.nix
   ];
 
   options.myDesktop.stack = lib.mkOption {

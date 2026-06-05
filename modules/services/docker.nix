@@ -5,7 +5,6 @@
 # Provides:
 # - Docker Engine
 # - Docker CLI
-# - Docker Compose v2
 # - optional non-root access via docker group
 #
 # Notes:
@@ -15,38 +14,35 @@
 # Security warning:
 # - docker group is effectively root access
 #
-
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  virtualisation.docker = {
+  options.myServices.docker.enable =
+    lib.mkEnableOption "Docker container host";
 
-    # Enable Docker daemon
-    enable = true;
+  config = lib.mkIf config.myServices.docker.enable {
+    virtualisation.docker = {
 
-    # Enable Docker Compose v2 plugin
-    #
-    # Allows:
-    #   docker compose up
-    #
-    enableOnBoot = true;
+      # Enable Docker daemon
+      enable = true;
 
-    # Optional:
-    # Enable automatic pruning support later if desired
-    autoPrune.enable = false;
+      # Start Docker automatically at boot
+      enableOnBoot = true;
+
+      # Optional:
+      # Enable automatic pruning support later if desired
+      autoPrune.enable = false;
+    };
+
+    environment.systemPackages = with pkgs; [
+
+      # Optional but useful Docker tools
+
+      # Interactive container management UI
+      lazydocker
+
+      # Container inspection/debugging
+      dive
+    ];
   };
-
-  environment.systemPackages = with pkgs; [
-
-    # Optional but useful Docker tools
-
-    # Interactive container management UI
-    lazydocker
-
-    # Better docker compose logging
-    docker-compose
-
-    # Container inspection/debugging
-    dive
-  ];
 }

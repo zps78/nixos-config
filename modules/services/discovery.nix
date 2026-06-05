@@ -1,5 +1,4 @@
 # ../../modules/services/discovery.nix
-
 { config, pkgs, ... }:
 
 {
