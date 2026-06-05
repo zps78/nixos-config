@@ -7,12 +7,14 @@
   # ----------------------------
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 7;
+  boot.loader.systemd-boot.editor = false;
 
   # ----------------------------
   # Faster boot (avoid network wait delays)
   # ----------------------------
-  systemd.network.wait-online.enable = lib.mkDefault false;
-  boot.initrd.systemd.network.wait-online.enable = false;
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   # ----------------------------
   # Boot experience (UI)
   # ----------------------------
