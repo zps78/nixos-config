@@ -22,8 +22,9 @@
     ../../modules/networking/mounts/nfs-torrents.nix
 #   ../../modules/networking/mounts/nfs-trading.nix
 
+    ../../modules/features
+
     ../../modules/apps/android.nix
-    ../../modules/apps/core.nix
 
   ];
 
@@ -41,10 +42,6 @@
 
   programs.kdeconnect.enable                     = true;
 
-  myApps = {
-    wine.enable                                  = true;
-  };
-
   myHardware = {
     bluetooth.enable                             = true;             # enable bluetooth on this host
     fingerprint.enable                           = true;             # enable fingerprint on this host
@@ -58,6 +55,12 @@
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
     sunshine.enable                              = false;
+  };
+
+  myFeatures = {
+    data-rescue.enable                           = false;
+    steam.enable                                 = true;
+    wine.enable                                  = true;
   };
 
   # Users
