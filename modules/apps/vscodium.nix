@@ -2,7 +2,8 @@
 { config, pkgs, lib, ... }:
 
 {
-  options.myApps.vscodium.enable = lib.mkEnableOption "VSCodium";
+  options.myApps.vscodium.enable =
+    lib.mkEnableOption "VSCodium";
 
   config = lib.mkIf config.myApps.vscodium.enable {
     programs.vscodium = {

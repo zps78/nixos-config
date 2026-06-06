@@ -15,5 +15,4 @@
 
   programs.git.enable = true;
   services.fwupd.enable = true;
-
 }

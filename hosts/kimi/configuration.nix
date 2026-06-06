@@ -24,8 +24,6 @@
 
     ../../modules/apps/android.nix
     ../../modules/apps/core.nix
-#   ../../modules/apps/steam.nix
-    ../../modules/apps/wine.nix
 
   ];
 
@@ -94,7 +92,7 @@
 # services.libinput.touchpad.naturalScrolling    = true;
 # services.libinput.mouse.naturalScrolling       = true;
 
-k  # System packages
+  # System packages
   environment.systemPackages                     = with pkgs; [
     #
   ];

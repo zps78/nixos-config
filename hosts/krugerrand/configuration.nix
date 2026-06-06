@@ -22,10 +22,9 @@
     ../../modules/networking/mounts/nfs-torrents.nix
     ../../modules/networking/mounts/nfs-trading.nix
 
+    ../../modules/features
+
     ../../modules/apps/android.nix
-    ../../modules/apps/core.nix
-#   ../../modules/apps/steam.nix
-    ../../modules/apps/wine.nix
 
   ];
 
@@ -56,6 +55,12 @@
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
     sunshine.enable                              = false;
+  };
+
+  myFeatures = {
+    data-rescue.enable                           = false;
+    steam.enable                                 = false;
+    wine.enable                                  = true;
   };
 
   # Users

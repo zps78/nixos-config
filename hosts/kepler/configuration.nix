@@ -24,8 +24,6 @@
 
     ../../modules/apps/android.nix
     ../../modules/apps/core.nix
-    ../../modules/apps/steam.nix
-#   ../../modules/apps/wine.nix
 
   ];
 
@@ -42,6 +40,10 @@
   myDesktop.stack                                = "kde";            # choose from: "gnome" "hyprland" "kde" "niri"
 
   programs.kdeconnect.enable                     = true;
+
+  myApps = {
+    wine.enable                                  = true;
+  };
 
   myHardware = {
     bluetooth.enable                             = true;             # enable bluetooth on this host

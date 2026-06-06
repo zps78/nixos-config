@@ -2,8 +2,12 @@
 { config, pkgs, lib, ... }:
 
 {
-  options.myApps.godot.enable = lib.mkEnableOption "Godot";
+  options.myApps.godot.enable = 
+    lib.mkEnableOption "Godot";
 
+  # ----------------------
+  # Packages
+  # ----------------------
   config = lib.mkIf config.myApps.godot.enable {
     home.packages = with pkgs; [
       godot

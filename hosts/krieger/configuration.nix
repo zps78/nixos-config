@@ -24,8 +24,6 @@
 
     ../../modules/apps/android.nix
     ../../modules/apps/core.nix
-    ../../modules/apps/steam.nix
-#   ../../modules/apps/wine.nix
 
   ];
 
