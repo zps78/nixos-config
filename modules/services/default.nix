@@ -3,8 +3,8 @@
   imports = [
     ./discovery.nix
     ./docker.nix
-    ./libvirt.nix
     ./hp-officejet-pro-8715.nix
+    ./libvirt.nix
     ./ssh.nix
     ./sunshine.nix
     ./waydroid.nix

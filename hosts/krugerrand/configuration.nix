@@ -7,20 +7,18 @@
     ./hardware-configuration.nix
 
     ../../modules/hardware
-    ../../modules/system
-    ../../modules/services
-    ../../modules/desktop
 
     ../../modules/networking/core.nix
     ../../modules/networking/tailscale.nix
     ../../modules/networking/wifi.nix
 
-    ../../modules/networking/mounts/nfs-backup.nix
-    ../../modules/networking/mounts/nfs-home.nix
-    ../../modules/networking/mounts/nfs-media.nix
-    ../../modules/networking/mounts/nfs-paperless.nix
-    ../../modules/networking/mounts/nfs-torrents.nix
-    ../../modules/networking/mounts/nfs-trading.nix
+    ../../modules/shares
+
+    ../../modules/services
+
+    ../../modules/system
+
+    ../../modules/desktop
 
     ../../modules/features
 
@@ -55,6 +53,15 @@
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
     sunshine.enable                              = false;
+  };
+
+  myShares = {
+    nfs-backup.enable                            = true;
+    nfs-home.enable                              = true;
+    nfs-media.enable                             = true;
+    nfs-paperless.enable                         = true;
+    nfs-torrents.passwordAuth                    = true;
+    nfs-trading.enable                           = true;
   };
 
   myFeatures = {

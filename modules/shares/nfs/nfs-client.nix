@@ -1,4 +1,4 @@
-# ../../modules/networking/nfs-client.nix
+# ../../modules/shares/nfs/nfs-client.nix
 #
 # NFS client configuration for NixOS desktops/workstations.
 #
