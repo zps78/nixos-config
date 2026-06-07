@@ -60,7 +60,7 @@
     nfs-home.enable                              = true;
     nfs-media.enable                             = true;
     nfs-paperless.enable                         = true;
-    nfs-torrents.passwordAuth                    = true;
+    nfs-torrents.enable                          = true;
     nfs-trading.enable                           = true;
   };
 
