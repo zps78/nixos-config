@@ -46,7 +46,7 @@
   # wine                                         > enable feature in the host's configuration.nix
 
     # gaming
-    lutris.enable                                = true;             # Open Source gaming platform for GNU/Linux
+    lutris.enable                                = false;            # Open Source gaming platform for GNU/Linux
     moonlight.enable                             = true;             # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
 

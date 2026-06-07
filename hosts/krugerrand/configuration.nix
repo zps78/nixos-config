@@ -5,25 +5,15 @@
   # Import modules
   imports = [
     ./hardware-configuration.nix
-
+    ../../modules/desktop
+    ../../modules/features
     ../../modules/hardware
-
-    ../../modules/networking/core.nix
-    ../../modules/networking/tailscale.nix
-    ../../modules/networking/wifi.nix
-
+    ../../modules/networking
     ../../modules/shares
-
     ../../modules/services
-
     ../../modules/system
 
-    ../../modules/desktop
-
-    ../../modules/features
-
     ../../modules/apps/android.nix
-
   ];
 
   # Memory
@@ -44,6 +34,11 @@
     bluetooth.enable                             = true;             # enable bluetooth on this host
     fingerprint.enable                           = true;             # enable fingerprint on this host
     gpuVendor                                    = "hybrid";         # choose from: "hybrid" "nvidia" "amd" "intel"
+  };
+
+  myNetwork = {
+    tailscale.enable                             = true;
+    wifi.enable                                  = true;
   };
 
   myServices = {

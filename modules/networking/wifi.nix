@@ -16,32 +16,37 @@
 { config, lib, pkgs, ... }:
 
 {
-  ############################################################
-  # NetworkManager WiFi backend
-  ############################################################
-  #
-  # Uses iwd instead of wpa_supplicant.
-  # iwd is faster, simpler, and more modern.
-  #
+  options.myNetwork.wifi.enable =
+    lib.mkEnableOption "Wifi iwd backend activation";
 
-  networking.networkmanager.wifi.backend = "iwd";
+  config = lib.mkIf config.myNetwork.wifi.enable {
+    ############################################################
+    # NetworkManager WiFi backend
+    ############################################################
+    #
+    # Uses iwd instead of wpa_supplicant.
+    # iwd is faster, simpler, and more modern.
+    #
 
-  ############################################################
-  # iwd daemon
-  ############################################################
-  #
-  # Required when using iwd backend in NetworkManager.
-  # Handles authentication + connection management.
-  #
-  # AutoConnect:
-  # reconnect automatically to known networks.
-  #
-  networking.wireless.iwd = {
-    enable = true;
+    networking.networkmanager.wifi.backend = "iwd";
 
-    settings = {
-      Settings = {
-        AutoConnect = true;
+    ############################################################
+    # iwd daemon
+    ############################################################
+    #
+    # Required when using iwd backend in NetworkManager.
+    # Handles authentication + connection management.
+    #
+    # AutoConnect:
+    # reconnect automatically to known networks.
+    #
+    networking.wireless.iwd = {
+      enable = true;
+
+      settings = {
+        Settings = {
+          AutoConnect = true;
+        };
       };
     };
   };

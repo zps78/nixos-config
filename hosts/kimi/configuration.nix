@@ -5,27 +5,15 @@
   # Import modules
   imports = [
     ./hardware-configuration.nix
-
-    ../../modules/hardware
-    ../../modules/system
-    ../../modules/services
     ../../modules/desktop
-
-    ../../modules/networking/core.nix
-    ../../modules/networking/tailscale.nix
-#   ../../modules/networking/wifi.nix
-
-#   ../../modules/networking/mounts/nfs-backup.nix
-#   ../../modules/networking/mounts/nfs-home.nix
-#   ../../modules/networking/mounts/nfs-media.nix
-#   ../../modules/networking/mounts/nfs-paperless.nix
-    ../../modules/networking/mounts/nfs-torrents.nix
-    ../../modules/networking/mounts/nfs-trading.nix
-
     ../../modules/features
+    ../../modules/hardware
+    ../../modules/networking
+    ../../modules/shares
+    ../../modules/services
+    ../../modules/system
 
     ../../modules/apps/android.nix
-
   ];
 
   # Memory
@@ -48,13 +36,27 @@
     gpuVendor                                    = "intel";          # choose from: "hybrid" "nvidia" "amd" "intel"
   };
 
+  myNetwork = {
+    tailscale.enable                             = true;
+    wifi.enable                                  = true;
+  };
+
   myServices = {
     docker.enable                                = false;
     libvirt.enable                               = false;
     hp8715.enable                                = true;
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
-    sunshine.enable                              = true;
+    sunshine.enable                              = false;
+  };
+
+  myShares = {
+    nfs-backup.enable                            = true;
+    nfs-home.enable                              = true;
+    nfs-media.enable                             = true;
+    nfs-paperless.enable                         = true;
+    nfs-torrents.enable                          = true;
+    nfs-trading.enable                           = true;
   };
 
   myFeatures = {

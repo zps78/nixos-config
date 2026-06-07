@@ -1,28 +1,32 @@
 # ../../modules/networking/tailscale.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  services.tailscale = {
-    enable = true;
+  options.myNetwork.tailscale.enable =
+    lib.mkEnableOption "Tailscale";
 
-  # ----------------------------
-  # Needed for --accept-routes to behave properly
-  # ----------------------------
-    useRoutingFeatures = "client";
+  config = lib.mkIf config.myNetwork.tailscale.enable {
+    services.tailscale = {
+      enable = true;
 
-  # ----------------------------
-  # Not auto-applied in manual mode, but good to keep
-  # ----------------------------
-    extraUpFlags = [
-      "--accept-dns"
-      "--accept-routes"
-      "--ssh"
-    ];
+    # ----------------------------
+    # Needed for --accept-routes to behave properly
+    # ----------------------------
+      useRoutingFeatures = "client";
+
+    # ----------------------------
+    # Not auto-applied in manual mode, but good to keep
+    # ----------------------------
+      extraUpFlags = [
+        "--accept-dns"
+        "--accept-routes"
+        "--ssh"
+      ];
+    };
+
+    # ----------------------------
+    # Firewall integration
+    # ----------------------------
+    services.tailscale.openFirewall = true;
   };
-
-  # ----------------------------
-  # Firewall integration
-  # ----------------------------
-  services.tailscale.openFirewall = true;    # Recommended as often better than: " networking.firewall.trustedInterfaces = [ "tailscale0" ]; "
-
 }
