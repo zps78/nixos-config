@@ -11,9 +11,9 @@
 
   config = lib.mkIf config.myShares.nfs-trading.enable {
     # Import modules
-    imports = [
-      ../nfs-client.nix
-    ];
+  #  imports = [
+   #   ../nfs-client.nix
+   # ];
 
     ############################################################
     # NFS mount: trading directory

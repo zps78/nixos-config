@@ -11,9 +11,9 @@
 
   config = lib.mkIf config.myShares.nfs-torrents.enable {
     # Import modules
-    imports = [
-      ../nfs-client.nix
-    ];
+   # imports = [
+   #   ../nfs-client.nix
+   # ];
 
     ############################################################
     # NFS mount: torrents directory
