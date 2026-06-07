@@ -43,12 +43,12 @@
   };
 
   myServices = {
-    docker.enable                                = true;
-    libvirt.enable                               = false;
+    docker.enable                                = true;             # add user to group docker below
+    libvirt.enable                               = false;            # add user to group LIBVIRT below
     hp8715.enable                                = true;
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
-    sunshine.enable                              = false;
+    sunshine.enable                              = true;             # add user to group input below
   };
 
   myShares = {
@@ -61,7 +61,7 @@
   };
 
   myFeatures = {
-    data-rescue.enable                           = false;
+    data-rescue.enable                           = true;
     steam.enable                                 = true;
     wine.enable                                  = true;
   };

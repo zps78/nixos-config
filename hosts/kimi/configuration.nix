@@ -38,25 +38,25 @@
 
   myNetwork = {
     tailscale.enable                             = true;
-    wifi.enable                                  = true;
+    wifi.enable                                  = false;
   };
 
   myServices = {
-    docker.enable                                = false;
-    libvirt.enable                               = false;
+    docker.enable                                = false;            # add user to group docker below
+    libvirt.enable                               = false;            # add user to group LIBVIRT below
     hp8715.enable                                = true;
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
-    sunshine.enable                              = false;
+    sunshine.enable                              = true;             # add user to group input below
   };
 
   myShares = {
-    nfs-backup.enable                            = true;
-    nfs-home.enable                              = true;
-    nfs-media.enable                             = true;
-    nfs-paperless.enable                         = true;
+    nfs-backup.enable                            = false;
+    nfs-home.enable                              = false;
+    nfs-media.enable                             = false;
+    nfs-paperless.enable                         = false;
     nfs-torrents.enable                          = true;
-    nfs-trading.enable                           = true;
+    nfs-trading.enable                           = false;
   };
 
   myFeatures = {
