@@ -28,8 +28,6 @@
 
   myDesktop.stack                                = "kde";            # choose from: "gnome" "hyprland" "kde" "niri"
 
-  programs.kdeconnect.enable                     = true;
-
   myHardware = {
     bluetooth.enable                             = true;             # enable bluetooth on this host
     fingerprint.enable                           = true;             # enable fingerprint on this host
@@ -61,6 +59,7 @@
 
   myFeatures = {
     data-rescue.enable                           = false;
+    kde-connect.enable                           = true;
     steam.enable                                 = true;
     wine.enable                                  = true;
   };
