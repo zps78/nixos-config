@@ -46,6 +46,7 @@
   # wine                                         > enable feature in the host's configuration.nix
 
     # gaming
+    chiaki-ng.enable                             = true;             # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
     lutris.enable                                = false;            # Open Source gaming platform for GNU/Linux
     moonlight.enable                             = true;             # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix

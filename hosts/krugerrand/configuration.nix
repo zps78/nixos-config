@@ -1,4 +1,4 @@
-# ../../hosts/krugerrand/configuration.nix
+# ../../hosts/krugerrand/configuration.nix # VRF9-HZFL-9XPR-K4CB
 { config, pkgs, lib, ... }:
 
 {

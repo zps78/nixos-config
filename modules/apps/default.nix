@@ -6,6 +6,7 @@
     ./bambu-studio.nix
     ./blender.nix
     ./bottles.nix
+    ./chiaki-ng.nix
     ./darktable.nix
     ./firefox.nix
     ./freecad.nix
