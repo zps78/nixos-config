@@ -101,7 +101,7 @@
 
     # media
     ffmpeg-full    # Complete multimedia framework
-    f3e            # Fast and minimalist 3D viewer using VTK
+    f3d            # Fast and minimalist 3D viewer using VTK
     # documentation
     tealdeer       # Fast tldr client
   ];
