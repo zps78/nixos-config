@@ -2,6 +2,7 @@
 {
   imports = [
 #    ./android.nix
+    ./ardour.nix
     ./audacity.nix
     ./bambu-studio.nix
     ./blender.nix
