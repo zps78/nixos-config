@@ -60,6 +60,7 @@
     obs-studio.enable                            = true;             # Free and open source software for video recording and live streaming
 
     # media players
+    freetube.enable                              = true;             # Open Source YouTube app for privacy
     plex.enable                                  = true;             # Media library streaming server
     spotify.enable                               = true;             # Play music from the Spotify music service
     vlc.enable                                   = true;             # Cross-platform media player and streaming server

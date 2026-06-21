@@ -11,6 +11,7 @@
     ./darktable.nix
     ./firefox.nix
     ./freecad.nix
+    ./freetube.nix
     ./gimp.nix
     ./godot.nix
     ./handbrake.nix
