@@ -42,7 +42,7 @@
   myServices = {
     docker.enable                                = false;            # add user to group docker below
     libvirt.enable                               = false;            # add user to group LIBVIRT below
-    hp8715.enable                                = true;
+    hp8715.enable                                = false;
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
     sunshine.enable                              = true;             # add user to group input below
