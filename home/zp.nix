@@ -26,11 +26,11 @@
   myApps = {
 
     # 3d modeling
-    bambu-studio.enable                          = true;             # PC Software for BambuLab's 3D printers
+    bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
     blender.enable                               = false;            # 3D Creation/Animation/Publishing System
     freecad.enable                               = true;             # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     openscad.enable                              = false;            # 3D parametric model compiler
-    orca-slicer.enable                           = true;             # G-code generator for 3D printers
+    orca-slicer.enable                           = false;            # G-code generator for 3D printers
 
     # programming
     godot.enable                                 = false;            # Free and Open Source 2D and 3D game engine
@@ -38,7 +38,7 @@
 
     # office and productivity
     office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors
-    thunderbird.enable                           = true;             # Full-featured e-mail client
+    thunderbird.enable                           = false;            # Full-featured e-mail client
 
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
