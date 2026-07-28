@@ -84,6 +84,13 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
             (makeUser "zp" ./home/zp.nix)
           ];
         };
+
+        kuro = mkHost {
+          hostname = "kuro";
+          users = [
+            (makeUser "zp" ./home/zp.nix)
+          ];
+        };
       };
     };
 }

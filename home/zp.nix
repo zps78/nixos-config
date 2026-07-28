@@ -81,7 +81,7 @@
     settings = {
       user = {
         name = "zp";
-        email = "mostly@krugerrand";
+        email = "mostly@kuro";
       };
       init.defaultBranch = "main";
     };
