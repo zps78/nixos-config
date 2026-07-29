@@ -7,8 +7,8 @@ NixOS install
 :3:
 sudo nano /etc/nixos/configuration.nix:
   + packages:
-    git
-    vscodium
+      git
+      vscodium
 
 :4:
 sudo nixos-rebuild switch
