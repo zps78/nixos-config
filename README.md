@@ -1,11 +1,13 @@
 firmware: disable secure boot
 
-reboot from usb nixos install
+install nixos
 
-from nixos gnome setup install nixos kde
-
-edit /etc/nixos/configuration.nix:
+sudo nano /etc/nixos/configuration.nix:
 
   - add packages git + vscodium
-  - 
+
 sudo nixos-rebuild switch
+
+cd ~
+
+git clone https://github.com/zps78/nixos-config.git
