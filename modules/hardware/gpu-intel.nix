@@ -4,6 +4,7 @@
 lib.mkIf (config.myHardware.gpuVendor == "intel") {
   ############################################################
   # Intel iGPU
+  # ThinkPad X12 Ultra 7 164U
   # ThinkCentre M920q / i7-8700T
   ############################################################
 
@@ -23,8 +24,4 @@ lib.mkIf (config.myHardware.gpuVendor == "intel") {
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
   };
-
-  # Optional, but often useful on Intel systems
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
-  hardware.enableRedistributableFirmware = lib.mkDefault true;
 }
