@@ -57,28 +57,16 @@ in
               Default = "@ddg";
               Add = [
                 {
+                  Name = "Startpage";
+                  URLTemplate = "https://www.startpage.com/sp/search?query={searchTerms}";
+                  IconURL = "https://www.startpage.com/favicon.ico";
+                  Alias = "@sp";
+                }
+                {
                   Name = "nixpkgs packages";
                   URLTemplate = "https://search.nixos.org/packages?query={searchTerms}";
                   IconURL = "https://wiki.nixos.org/favicon.ico";
                   Alias = "@np";
-                }
-                {
-                  Name = "NixOS options";
-                  URLTemplate = "https://search.nixos.org/options?query={searchTerms}";
-                  IconURL = "https://wiki.nixos.org/favicon.ico";
-                  Alias = "@no";
-                }
-                {
-                  Name = "NixOS Wiki";
-                  URLTemplate = "https://wiki.nixos.org/w/index.php?search={searchTerms}";
-                  IconURL = "https://wiki.nixos.org/favicon.ico";
-                  Alias = "@nw";
-                }
-                {
-                  Name = "noogle";
-                  URLTemplate = "https://noogle.dev/q?term={searchTerms}";
-                  IconURL = "https://noogle.dev/favicon.ico";
-                  Alias = "@ng";
                 }
               ];
             };
