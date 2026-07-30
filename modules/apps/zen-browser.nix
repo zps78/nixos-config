@@ -57,6 +57,12 @@ in
               Default = "ddg";
               Add = [
                 {
+                  Name = "DuckDuckGo";
+                  URLTemplate = "https://duckduckgo.com/?q={searchTerms}";
+                  IconURL = "https://duckduckgo.com/favicon.ico";
+                  Alias = "@ddg";
+                }
+                {
                   Name = "nixpkgs packages";
                   URLTemplate = "https://search.nixos.org/packages?query={searchTerms}";
                   IconURL = "https://wiki.nixos.org/favicon.ico";
