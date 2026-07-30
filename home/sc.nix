@@ -38,9 +38,9 @@
 
     # office and productivity
     office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors
-    protonmail-desktop.enable                    = true;             # Desktop application for Mail and Calendar, made with Electron
+    protonmail-desktop.enable                    = false;            # Desktop application for Mail and Calendar, made with Electron
     proton-pass.enable                           = false;            # Desktop application for Proton Pass
-    thunderbird.enable                           = true;             # Full-featured e-mail client
+    thunderbird.enable                           = false;            # Full-featured e-mail client
 
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
