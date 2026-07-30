@@ -38,7 +38,7 @@
 
     # office and productivity
     office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors
-    proton-desktop.enable                        = true;             # Desktop application for Mail and Calendar, made with Electron
+    protonmail-desktop.enable                    = true;             # Desktop application for Mail and Calendar, made with Electron
     proton-pass.enable                           = false;            # Desktop application for Proton Pass
     thunderbird.enable                           = false;            # Full-featured e-mail client
 
