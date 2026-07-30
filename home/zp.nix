@@ -52,7 +52,7 @@
   # steam                                        > enable feature in the host's configuration.nix
 
     # media editing
-    ardour.enable                                = true;             # Multi-track hard disk recording software
+    ardour.enable                                = false;            # Multi-track hard disk recording software
     audacity.enable                              = true;             # Sound editor with graphical UI
     handbrake.enable                             = true;             # Tool for converting video files and ripping DVDs
     losslesscut.enable                           = true;             # Swiss army knife of lossless video/audio editing
@@ -74,7 +74,6 @@
     firefox.enable                               = true;             # Web browser built from Firefox source tree
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
-
 
   programs.git = {
     enable = true;

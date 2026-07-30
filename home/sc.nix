@@ -75,7 +75,6 @@
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
 
-
   programs.git = {
     enable = true;
     settings = {
