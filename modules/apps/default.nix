@@ -26,7 +26,6 @@
     ./orca-slicer.nix
     ./plex.nix
     ./proton-pass.nix
-    ./protonmail-desktop.nix
     ./spotify.nix
     ./thunderbird.nix
     ./vlc.nix
