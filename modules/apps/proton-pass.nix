@@ -1,16 +1,16 @@
-# ../../modules/apps/darktable.nix
+# ../../modules/apps/proton-pass.nix
 { config, pkgs, lib, ... }:
 
 {
-  options.myApps.darktable.enable =
-    lib.mkEnableOption "Darktable";
+  options.myApps.proton-pass.enable =
+    lib.mkEnableOption "Proton Pass";
 
   # ----------------------
   # Packages
   # ----------------------
-  config = lib.mkIf config.myApps.darktable.enable {
+  config = lib.mkIf config.myApps.proton-pass.enable {
     home.packages = with pkgs; [
-      darktable
+      proton-pass
     ];
   };
 }
