@@ -25,6 +25,8 @@
     ./openscad.nix
     ./orca-slicer.nix
     ./plex.nix
+    ./proton-pass.nix
+    ./proton-desktop.nix
     ./spotify.nix
     ./thunderbird.nix
     ./vlc.nix
