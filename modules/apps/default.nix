@@ -27,6 +27,7 @@
     ./plex.nix
     ./proton-pass.nix
     ./spotify.nix
+    ./telegram.nix
     ./thunderbird.nix
     ./vlc.nix
     ./vscodium.nix

@@ -39,6 +39,7 @@
     # office and productivity
     office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors
     proton-pass.enable                           = true;             # Desktop application for Proton Pass
+    telegram.enable                              = true;             # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
 
     # Emulation / virtualization
