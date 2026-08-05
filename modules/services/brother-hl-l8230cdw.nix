@@ -25,10 +25,13 @@
         };
       }
     ];
-
+    
     hardware.printers.ensureDefaultPrinter =
       "Brother-HL-L8230CDW";
 
+    # Disable duplicate printer entries
+    systemd.services.cups-browsed.enable = false;
+    
     # Useful user tools
     environment.systemPackages = with pkgs; [
   #   system-config-printer
