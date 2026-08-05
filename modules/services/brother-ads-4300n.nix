@@ -11,7 +11,8 @@
       enable = true;
       extraBackends = [ pkgs.sane-airscan ];
     };
-
+    # Disable dulpicate printer entries
+    systemd.services.cups-browsed.enable = false;
     # Useful user tools
     environment.systemPackages = with pkgs; [
       simple-scan
