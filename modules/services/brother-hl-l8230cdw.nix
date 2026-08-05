@@ -29,6 +29,9 @@
     hardware.printers.ensureDefaultPrinter =
       "Brother-HL-L8230CDW";
 
+    # Remove duplicate printer entries
+    systemd.services.cups-browsed.enable = false;
+
     # Useful user tools
     environment.systemPackages = with pkgs; [
   #   system-config-printer
