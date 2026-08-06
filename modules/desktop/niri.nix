@@ -12,19 +12,14 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   # Display / login manager
   ############################################################
 
-  services.displayManager.sddm = {
-    enable = lib.mkDefault true;
-    wayland.enable = true;
-  };
-
   # Use greetd (lightweight and Wayland-friendly)
-#  services.greetd = {
-#    enable = true;
-#    settings.default_session = {
-#      user = "greeter";
-#      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri";
-#    };
-#  };
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+      user = "greeter";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri";
+    };
+  };
 
   ############################################################
   # Authentication / permissions
