@@ -12,7 +12,10 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   # Display / login manager
   ############################################################
 
-  services.displayManager.sddm.enable = lib.mkDefault true;
+  services.displayManager.sddm = {
+    enable = lib.mkDefault true;
+    wayland.enable = true;
+  };
 
   # Use greetd (lightweight and Wayland-friendly)
 #  services.greetd = {
