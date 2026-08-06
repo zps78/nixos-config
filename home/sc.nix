@@ -1,5 +1,5 @@
 # ../../home/sc.nix
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, osConfig, inputs, ... }:
 
 {
   ############################################################
@@ -15,8 +15,10 @@
   ############################################################
 
   imports = [
-  # ./niri.nix
     ../modules/apps
+  ];
+  ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
+    ./niri.nix
   ];
 
   ############################################################

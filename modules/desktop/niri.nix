@@ -12,14 +12,16 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   # Display / login manager
   ############################################################
 
+  services.displayManager.sddm.enable = lib.mkDefault true;
+
   # Use greetd (lightweight and Wayland-friendly)
-  services.greetd = {
-    enable = true;
-    settings.default_session = {
-      user = "greeter";
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri";
-    };
-  };
+#  services.greetd = {
+#    enable = true;
+#    settings.default_session = {
+#      user = "greeter";
+#      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri";
+#    };
+#  };
 
   ############################################################
   # Authentication / permissions
@@ -36,7 +38,6 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
   services.gnome.gcr-ssh-agent.enable = false;
 
-
   ############################################################
   # XDG portals (IMPORTANT: only define defaults here ONCE)
   ############################################################
@@ -47,7 +48,6 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
-#     xdg-desktop-portal-gnome
     ];
 
     # IMPORTANT:
@@ -61,18 +61,18 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
   #  via xwayland-satellite (niri integrates it automatically)
   environment.systemPackages = with pkgs; [
-    xwayland-satellite       # Xwayland outside your Wayland compositor
-    swaylock                 # Screen locker for Wayland
-    swayidle                 # Idle management daemon for Wayland
-    mako                     # Lightweight Wayland notification daemon
-    swaybg                   # Wallpaper tool for Wayland compositors
-    alacritty                # Cross-platform, GPU-accelerated terminal emulator (Super+T default)
+#   alacritty                # Cross-platform, GPU-accelerated terminal emulator (Super+T default)
     brightnessctl            # This program allows you read and control device brightness
-    playerctl                # Command-line utility and library for controlling media players that implement MPRIS
-    wl-clipboard             # Command-line copy/paste utilities for Wayland
     grim                     # Grab images from a Wayland compositor
+#   mako                     # Lightweight Wayland notification daemon
+#   noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
+    playerctl                # Command-line utility and library for controlling media players that implement MPRIS
     slurp                    # Select a region in a Wayland compositor
-    noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
+#   swaybg                   # Wallpaper tool for Wayland compositors
+#   swayidle                 # Idle management daemon for Wayland
+#   swaylock                 # Screen locker for Wayland
+    wl-clipboard             # Command-line copy/paste utilities for Wayland
+#   xwayland-satellite       # Xwayland outside your Wayland compositor
   ];
 
   environment.sessionVariables = {
