@@ -34,6 +34,14 @@
 #   swayidle                 # Idle management daemon for Wayland
 #   swaylock                 # Screen locker for Wayland
 #   xwayland-satellite       # Xwayland outside your Wayland compositor
+    kdePackages.dolphin          # File manager by KDE
+    kdePackages.isoimagewriter   # Program to write hybrid ISO files onto USB disks
+    kdePackages.kate             # Advanced text editor
+    kdePackages.kcalc            # Calculator offering everything a scientific calculator does, and more
+    kdePackages.kdeconnect-kde   # Multi-platform app that allows your devices to communicate
+    kdePackages.kompare          # Graphical File Differences Tool
+    kdePackages.okular           # KDE document viewer
+    kdePackages.partitionmanager # Manage the disk devices, partitions and file systems on your computer
   ];
 
   xdg.configFile."niri/config.kdl".source =
