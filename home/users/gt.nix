@@ -1,4 +1,4 @@
-# ../../home/gt.nix
+# ../../home/users/gt.nix
 { config, pkgs, lib, osConfig, inputs, ... }:
 
 {
@@ -18,7 +18,7 @@
     ../../modules/apps
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
-    ./niri.nix
+    ../niri.nix
   ];
 
   ############################################################

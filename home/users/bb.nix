@@ -1,4 +1,4 @@
-# ../../home/bb.nix
+# ../../home/users/bb.nix
 { config, pkgs, lib, osConfig, inputs, ... }:
 
 {
@@ -18,7 +18,7 @@
     ../../modules/apps
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
-    ./niri.nix
+    ../niri.nix
   ];
 
   ############################################################
