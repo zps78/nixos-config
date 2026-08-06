@@ -15,7 +15,7 @@
   ############################################################
 
   imports = [
-    ../modules/apps
+    ../../modules/apps
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ./niri.nix
