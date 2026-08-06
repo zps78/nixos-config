@@ -57,14 +57,14 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
         kepler = mkHost {
           hostname = "kepler";
           users = [
-            (makeUser "sc" ./home/sc.nix)
+            (makeUser "sc" ./home/users/sc.nix)
           ];
         };
 
         kimi = mkHost {
           hostname = "kimi";
           users = [
-            (makeUser "gt" ./home/gt.nix)
+            (makeUser "gt" ./home/users/gt.nix)
 
             # easy to add later
             # (makeUser "john" ./home/john.nix)
@@ -74,21 +74,21 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
         krieger = mkHost {
           hostname = "krieger";
           users = [
-            (makeUser "bb" ./home/bb.nix)
+            (makeUser "bb" ./home/users/bb.nix)
           ];
         };
 
         krugerrand = mkHost {
           hostname = "krugerrand";
           users = [
-            (makeUser "zp" ./home/zp.nix)
+            (makeUser "zp" ./home/users/zp.nix)
           ];
         };
 
         kuro = mkHost {
           hostname = "kuro";
           users = [
-            (makeUser "zp" ./home/zp.nix)
+            (makeUser "zp" ./home/users/zp.nix)
           ];
         };
       };
