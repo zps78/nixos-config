@@ -17,14 +17,10 @@
     ];
   };
 
-  programs.noctalia-shell = {
-    enable = true;
-    settings = { };
-  };
-
   home.packages = with pkgs; [
     brightnessctl            # This program allows you read and control device brightness
     grim                     # Grab images from a Wayland compositor
+    noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
     playerctl                # Command-line utility and library for controlling media players that implement MPRIS
     slurp                    # Select a region in a Wayland compositor
 #   swaybg                   # Wallpaper tool for Wayland compositors
