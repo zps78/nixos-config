@@ -53,7 +53,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     # IMPORTANT:
     # Use mkDefault so KDE/GNOME modules can override cleanly if needed
     config.common.default = lib.mkDefault "gtk";
-};
+  };
 
   ############################################################
   # System packages required for Niri sessions
@@ -61,25 +61,17 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
   #  via xwayland-satellite (niri integrates it automatically)
   environment.systemPackages = with pkgs; [
-#   alacritty                # Cross-platform, GPU-accelerated terminal emulator (Super+T default)
-    brightnessctl            # This program allows you read and control device brightness
-    grim                     # Grab images from a Wayland compositor
-#   mako                     # Lightweight Wayland notification daemon
-#   noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
-    playerctl                # Command-line utility and library for controlling media players that implement MPRIS
-    slurp                    # Select a region in a Wayland compositor
 #   swaybg                   # Wallpaper tool for Wayland compositors
 #   swayidle                 # Idle management daemon for Wayland
 #   swaylock                 # Screen locker for Wayland
-    wl-clipboard             # Command-line copy/paste utilities for Wayland
 #   xwayland-satellite       # Xwayland outside your Wayland compositor
   ];
 
-  environment.sessionVariables = {
-    XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "niri";
-    XDG_SESSION_DESKTOP = "niri";
-  };
+#  environment.sessionVariables = {
+#    XDG_SESSION_TYPE = "wayland";
+#    XDG_CURRENT_DESKTOP = "niri";
+#    XDG_SESSION_DESKTOP = "niri";
+#  };
 
   # Udev rules already handled by programs.niri.enable, but make sure
   # the user is in the video/input groups (usually set in your common.nix)

@@ -37,7 +37,6 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
           modules =
             [
               ./hosts/${hostname}/configuration.nix
-#             ./modules/desktop/niri.nix
               home-manager.nixosModules.home-manager
               
               {
