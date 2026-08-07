@@ -21,7 +21,7 @@
           name = "kdl";
           publisher = "kdl-org";
           version = "2.1.0";
-          hash = lib.fakeHash;
+          hash = "sha256-kT7IyhRwuOc+jHDcPiwN768eqgIxFCSndTGk4NS9/QY=";
         }
       ];
     };
