@@ -43,6 +43,5 @@
     kdePackages.partitionmanager # Manage the disk devices, partitions and file systems on your computer
   ];
 
-  xdg.configFile."niri/config.kdl".source =
-    ../dotfiles/niri/config.kdl;
+  xdg.configFile."niri".source = ../dotfiles/niri;
 }
