@@ -30,7 +30,6 @@
 
 #   alacritty                # Cross-platform, GPU-accelerated terminal emulator (Super+T default)
 #   mako                     # Lightweight Wayland notification daemon
-#   noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
 #   swayidle                 # Idle management daemon for Wayland
 #   swaylock                 # Screen locker for Wayland
 #   xwayland-satellite       # Xwayland outside your Wayland compositor

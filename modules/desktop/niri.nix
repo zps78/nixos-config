@@ -65,11 +65,9 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 #   xwayland-satellite       # Xwayland outside your Wayland compositor
   ];
 
-#  environment.sessionVariables = {
-#    XDG_SESSION_TYPE = "wayland";
-#    XDG_CURRENT_DESKTOP = "niri";
-#    XDG_SESSION_DESKTOP = "niri";
-#  };
+  environment.sessionVariables = {
+    XDG_SESSION_DESKTOP = "niri";
+  };
 
   # Udev rules already handled by programs.niri.enable, but make sure
   # the user is in the video/input groups (usually set in your common.nix)
