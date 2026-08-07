@@ -1,4 +1,4 @@
-// include "binds.kdl"
+include "binds.kdl"
 
 input {
     touchpad {
