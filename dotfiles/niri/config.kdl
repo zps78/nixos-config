@@ -15,9 +15,7 @@ layout {
 spawn-at-startup "noctalia-shell"
 
 binds {
-    Mod+T {
-        spawn "alacritty"
-    }
+
 
     Mod+Q {
         close-window
