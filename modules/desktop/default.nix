@@ -8,7 +8,6 @@
     ./hyprland.nix
     ./kde.nix
     ./niri.nix
-    ./theme.nix
   ];
 
   options.myDesktop.stack = lib.mkOption {

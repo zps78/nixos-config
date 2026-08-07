@@ -19,10 +19,12 @@
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix
+    ../theme.nix
   ];
+  myDesktop.theme.enable                         = true;             # enable breeze dark theme
 
   ############################################################
-  # User applications (only truly global desktop apps)
+  # User applications
   ############################################################
 
   myApps = {

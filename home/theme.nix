@@ -1,4 +1,4 @@
-# ../../modules/desktop/theme.nix
+# ../../home/theme.nix
 { config, lib, pkgs, ... }:
 
 {
