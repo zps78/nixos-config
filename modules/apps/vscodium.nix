@@ -18,10 +18,11 @@
       )
       ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
-          name = "kdl";
-          publisher = "kdl-org";
-          version = "2.1.0";
-          hash = "sha256-kT7IyhRwuOc+jHDcPiwN768eqgIxFCSndTGk4NS9/QY=";
+        name = "kdl";
+        publisher = "v1hz";
+        version = "2.1.3";
+        # Replace after first build failure
+        hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         }
       ];
     };
