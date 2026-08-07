@@ -17,7 +17,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     enable = true;
     settings.default_session = {
       user = "greeter";
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri-session";
     };
   };
 
