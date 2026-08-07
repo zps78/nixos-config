@@ -15,7 +15,7 @@
         esbenp.prettier-vscode
         jeff-hykin.better-nix-syntax
         ]
-      )
+      );
     #  ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
  #       {
  #         name = "kdl";
