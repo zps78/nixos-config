@@ -41,6 +41,7 @@
   };
 
   myServices = {
+    battery.enable                               = false;            # battery support
     brother-ads-4300n.enable                     = true;             # Brother ADS-4300N network document scanner
     brother-hl-l8230cdw.enable                   = true;             # Brother HL-L8230CDW network color laser printer
     docker.enable                                = false;            # add user to group docker below
