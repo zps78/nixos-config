@@ -3,6 +3,8 @@ include "binds.kdl"
 include "decorations.kdl"
 include "layout.kdl"
 include "screenshots.kdl"
+include "spawn-at-startup.kdl"
+include "window-rules.kdl"
 
 input {
     touchpad {
@@ -12,4 +14,7 @@ input {
     }
 }
 
-spawn-at-startup "noctalia-shell"
+hotkey-overlay {
+    // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
+    // skip-at-startup
+}
