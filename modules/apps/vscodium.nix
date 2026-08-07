@@ -16,14 +16,14 @@
         jeff-hykin.better-nix-syntax
         ]
       )
-      ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
+    #  ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+ #       {
  #         name = "kdl";
   #        publisher = "kdl-org";
    #       version = "2.1.0";
     #      hash = "sha256-kT7IyhRwuOc+jHDcPiwN768eqgIxFCSndTGk4NS9/QY=";
-        }
-      ];
+  #      }
+   #   ];
     };
   };
 }
