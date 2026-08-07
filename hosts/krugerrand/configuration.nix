@@ -27,6 +27,7 @@
   };
 
   myDesktop.stack                                = "niri";           # choose from: "gnome" "hyprland" "kde" "niri"
+  myDesktop.theme.enable                         = true;             # enable breeze dark theme
 
   myHardware = {
     bluetooth.enable                             = true;             # enable bluetooth on this host
