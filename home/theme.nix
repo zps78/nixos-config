@@ -1,4 +1,5 @@
 # ../../home/theme.nix
+
 { config, lib, pkgs, ... }:
 
 {
@@ -8,10 +9,20 @@
   config = lib.mkIf config.myDesktop.theme.enable {
 
     ########################################
+    ## Packages
+    ########################################
+
+    home.packages = with pkgs; [
+      kdePackages.breeze-icons
+    ];
+
+    ########################################
     ## Cursor
     ########################################
 
     home.pointerCursor = {
+      enable = true;
+
       gtk.enable = true;
       x11.enable = true;
 
@@ -32,9 +43,12 @@
         name = "Breeze-Dark";
       };
 
+      # Silence Home Manager warning
+      gtk4.theme = config.gtk.theme;
+
       iconTheme = {
         package = pkgs.kdePackages.breeze-icons;
-        name = "Breeze Dark";
+        name = "breeze-dark";
       };
 
       gtk3.extraConfig = {
@@ -74,14 +88,9 @@
     ########################################
 
     home.sessionVariables = {
-
       GTK_THEME = "Breeze-Dark";
-
       QT_STYLE_OVERRIDE = "Breeze";
-
       QT_QPA_PLATFORMTHEME = "gtk3";
-
-      XDG_CURRENT_DESKTOP = "niri";
     };
   };
 }
