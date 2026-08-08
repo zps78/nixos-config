@@ -28,6 +28,7 @@
     wl-clipboard             # Command-line copy/paste utilities for Wayland
 
 #   swaylock                 # Screen locker for Wayland
+    kdePackages.ark                      # File archiver by KDE
     kdePackages.dolphin                  # File manager by KDE
     kdePackages.gwenview                 # Image viewer by KDE
     kdePackages.isoimagewriter           # Program to write hybrid ISO files onto USB disks
