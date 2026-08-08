@@ -1,20 +1,11 @@
 # ../../home/theme.nix
-
 { config, lib, pkgs, ... }:
 
 {
-  options.myDesktop.theme.enable =
-    lib.mkEnableOption "Desktop theme";
+  options.myDesktop.force.theme.enable =
+    lib.mkEnableOption "Force desktop theme";
 
-  config = lib.mkIf config.myDesktop.theme.enable {
-
-    ########################################
-    ## Packages
-    ########################################
-
-    home.packages = with pkgs; [
-      kdePackages.breeze-icons
-    ];
+  config = lib.mkIf config.myDesktop.force.theme.enable {
 
     ########################################
     ## Cursor

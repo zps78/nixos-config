@@ -16,12 +16,12 @@
 
   imports = [
     ../../modules/apps
+    ../theme.nix
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix
-    ../theme.nix
   ];
-  myDesktop.theme.enable                         = true;             # enable breeze dark theme
+  myDesktop.force.theme.enable                   = true;             # force breeze dark theme
 
   ############################################################
   # User applications (only truly global desktop apps)
