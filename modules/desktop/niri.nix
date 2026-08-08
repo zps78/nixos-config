@@ -62,7 +62,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 #   swaybg                   # Wallpaper tool for Wayland compositors
 #   swayidle                 # Idle management daemon for Wayland
 #   swaylock                 # Screen locker for Wayland
-#   xwayland-satellite       # Xwayland outside your Wayland compositor
+    xwayland-satellite       # Xwayland outside your Wayland compositor
   ];
 
   environment.etc."xdg/menus/applications.menu".source =

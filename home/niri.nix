@@ -28,7 +28,6 @@
     wl-clipboard             # Command-line copy/paste utilities for Wayland
 
 #   swaylock                 # Screen locker for Wayland
-#   xwayland-satellite       # Xwayland outside your Wayland compositor
     kdePackages.dolphin          # File manager by KDE
     kdePackages.kdegraphics-thumbnailers
     kdePackages.isoimagewriter   # Program to write hybrid ISO files onto USB disks
