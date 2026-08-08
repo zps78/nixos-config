@@ -43,7 +43,7 @@
   xdg.dataFile."org.kde.syntax-highlighting/syntax/kdl.xml".source =
     pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/larsgw/katepart-kdl/main/kdl.xml";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-Hb0lChLsRstZQ02I1A/J7KWQ6OISMw7ji3zUNGWONu4=";
     };
 
 #  xdg.configFile."niri".source = ../dotfiles/niri;
