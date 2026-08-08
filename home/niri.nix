@@ -19,21 +19,17 @@
 
   home.packages = with pkgs; [
     brightnessctl            # This program allows you read and control device brightness
+    ffmpegthumbnailer
     grim                     # Grab images from a Wayland compositor
     noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
     playerctl                # Command-line utility and library for controlling media players that implement MPRIS
     slurp                    # Select a region in a Wayland compositor
-#   swaybg                   # Wallpaper tool for Wayland compositors
     wl-clipboard             # Command-line copy/paste utilities for Wayland
-#   pavucontrol              # PulseAudio Volume Control
-#   blueman                  # GTK-based Bluetooth Manager
 
-#   alacritty                # Cross-platform, GPU-accelerated terminal emulator (Super+T default)
-#   mako                     # Lightweight Wayland notification daemon
-#   swayidle                 # Idle management daemon for Wayland
 #   swaylock                 # Screen locker for Wayland
 #   xwayland-satellite       # Xwayland outside your Wayland compositor
     kdePackages.dolphin          # File manager by KDE
+    kdePackages.kdegraphics-thumbnailers
     kdePackages.isoimagewriter   # Program to write hybrid ISO files onto USB disks
     kdePackages.kate             # Advanced text editor
     kdePackages.kcalc            # Calculator offering everything a scientific calculator does, and more

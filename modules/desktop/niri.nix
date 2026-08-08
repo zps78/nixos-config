@@ -65,8 +65,11 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 #   xwayland-satellite       # Xwayland outside your Wayland compositor
   ];
 
-  environment.etc."xdg/menus/applications.menu".source =
-    "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+environment.etc."xdg/menus/applications.menu".source =
+  "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+
+environment.pathsToLink = [
+  "share/thumbnailers"
 
   environment.sessionVariables = {
     XDG_SESSION_DESKTOP = "niri";
