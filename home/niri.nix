@@ -19,6 +19,7 @@
 
   home.packages = with pkgs; [
     brightnessctl            # This program allows you read and control device brightness
+    ffmpeg-headless
     ffmpegthumbnailer
     grim                     # Grab images from a Wayland compositor
     noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
