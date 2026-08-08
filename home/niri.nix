@@ -19,8 +19,8 @@
 
   home.packages = with pkgs; [
     brightnessctl            # This program allows you read and control device brightness
-    ffmpeg-headless
-    ffmpegthumbnailer
+    ffmpeg-headless          # Complete, cross-platform solution to record, convert and stream audio and video
+    ffmpegthumbnailer        # Lightweight video thumbnailer
     grim                     # Grab images from a Wayland compositor
     noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
     playerctl                # Command-line utility and library for controlling media players that implement MPRIS
@@ -28,15 +28,17 @@
     wl-clipboard             # Command-line copy/paste utilities for Wayland
 
 #   swaylock                 # Screen locker for Wayland
-    kdePackages.dolphin          # File manager by KDE
-    kdePackages.kdegraphics-thumbnailers
-    kdePackages.isoimagewriter   # Program to write hybrid ISO files onto USB disks
-    kdePackages.kate             # Advanced text editor
-    kdePackages.kcalc            # Calculator offering everything a scientific calculator does, and more
-    kdePackages.kdeconnect-kde   # Multi-platform app that allows your devices to communicate
-    kdePackages.kompare          # Graphical File Differences Tool
-    kdePackages.okular           # KDE document viewer
-    kdePackages.partitionmanager # Manage the disk devices, partitions and file systems on your computer
+    kdePackages.dolphin                  # File manager by KDE
+    kdePackages.gwenview                 # Image viewer by KDE
+    kdePackages.isoimagewriter           # Program to write hybrid ISO files onto USB disks
+    kdePackages.kate                     # Advanced text editor
+    kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
+    kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
+    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
+    kdePackages.kompare                  # Graphical File Differences Tool
+    kdePackages.konsole                  # Terminal emulator by KDE
+    kdePackages.okular                   # KDE document viewer
+    kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
   ];
 
 #  xdg.configFile."niri".source = ../dotfiles/niri;
