@@ -62,10 +62,6 @@
         name = "Breeze";
         package = pkgs.kdePackages.breeze;
       };
-
-      platformTheme = {
-        name = "gtk3";
-      };
     };
 
     ########################################
