@@ -43,6 +43,9 @@
     kdePackages.partitionmanager # Manage the disk devices, partitions and file systems on your computer
   ];
 
+environment.etc."xdg/menus/applications.menu".source =
+  "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+
 #  xdg.configFile."niri".source = ../dotfiles/niri;
   xdg.configFile."niri".source =
   config.lib.file.mkOutOfStoreSymlink
