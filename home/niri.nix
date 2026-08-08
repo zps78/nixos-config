@@ -40,6 +40,12 @@
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
     ];
 
+  xdg.dataFile."org.kde.syntax-highlighting/syntax/kdl.xml".source =
+    pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/larsgw/katepart-kdl/main/kdl.xml";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+
 #  xdg.configFile."niri".source = ../dotfiles/niri;
   xdg.configFile."niri".source =
   config.lib.file.mkOutOfStoreSymlink
