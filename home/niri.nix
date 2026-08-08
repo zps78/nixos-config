@@ -19,8 +19,6 @@
 
   home.packages = with pkgs; [
     brightnessctl            # This program allows you read and control device brightness
-    ffmpeg-headless          # Complete, cross-platform solution to record, convert and stream audio and video
-    ffmpegthumbnailer        # Lightweight video thumbnailer
     grim                     # Grab images from a Wayland compositor
     noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
     playerctl                # Command-line utility and library for controlling media players that implement MPRIS
@@ -30,6 +28,8 @@
 #   swaylock                 # Screen locker for Wayland
     kdePackages.ark                      # File archiver by KDE
     kdePackages.dolphin                  # File manager by KDE
+    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
+    kdePackages.filelight                # Quickly visualize your disk space usage
     kdePackages.gwenview                 # Image viewer by KDE
     kdePackages.isoimagewriter           # Program to write hybrid ISO files onto USB disks
     kdePackages.kate                     # Advanced text editor
@@ -40,7 +40,7 @@
     kdePackages.konsole                  # Terminal emulator by KDE
     kdePackages.okular                   # KDE document viewer
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
-  ];
+    ];
 
 #  xdg.configFile."niri".source = ../dotfiles/niri;
   xdg.configFile."niri".source =
