@@ -81,7 +81,6 @@
     home.sessionVariables = {
       GTK_THEME = "Breeze-Dark";
       QT_STYLE_OVERRIDE = "Breeze";
-      QT_QPA_PLATFORMTHEME = "gtk3";
     };
   };
 }
