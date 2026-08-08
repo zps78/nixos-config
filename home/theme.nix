@@ -62,6 +62,10 @@
         name = "Breeze";
         package = pkgs.kdePackages.breeze;
       };
+
+      platformTheme = {
+        name = "kde";
+      };
     };
 
     ########################################
