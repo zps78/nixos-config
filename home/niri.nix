@@ -25,7 +25,6 @@
     slurp                    # Select a region in a Wayland compositor
     wl-clipboard             # Command-line copy/paste utilities for Wayland
 
-#   swaylock                 # Screen locker for Wayland
     kdePackages.ark                      # File archiver by KDE
     kdePackages.dolphin                  # File manager by KDE
     kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
@@ -37,7 +36,6 @@
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
     kdePackages.kompare                  # Graphical File Differences Tool
-    kdePackages.konsole                  # Terminal emulator by KDE
     kdePackages.okular                   # KDE document viewer
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
     ];

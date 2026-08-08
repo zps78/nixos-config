@@ -59,11 +59,6 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
   #  via xwayland-satellite (niri integrates it automatically)
   environment.systemPackages = with pkgs; [
-#    ffmpeg-headless          # Complete, cross-platform solution to record, convert and stream audio and video
-#    ffmpegthumbnailer        # Lightweight video thumbnailer
-#   swaybg                   # Wallpaper tool for Wayland compositors
-#   swayidle                 # Idle management daemon for Wayland
-#   swaylock                 # Screen locker for Wayland
     xwayland-satellite       # Xwayland outside your Wayland compositor
   ];
 
