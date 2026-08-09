@@ -43,11 +43,13 @@
     croc           # Secure and simple file transfer tool
 
     # development
+    clang-tools    # Standalone command line tools for C++ development
     git            # Distributed version control system
     git-lfs        # Git extension for large files
     gnumake        # Build automation tool
     just           # Command runner and task automation tool
     helix          # Post-modern modal text editor
+    nil            # Yet another language server for Nix
     nushell        # Modern shell focused on structured data
 
     # search and text processing
