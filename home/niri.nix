@@ -39,6 +39,20 @@
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
     ];
 
+  xdg.dataFile."applications/systemsettings.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=KDE System Settings
+    NoDisplay=true
+  '';
+
+  xdg.dataFile."applications/kdesystemsettings.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=KDE System Settings
+    NoDisplay=true
+  '';
+
 #  xdg.configFile."niri".source = ../dotfiles/niri;
   xdg.configFile."niri".source =
   config.lib.file.mkOutOfStoreSymlink
