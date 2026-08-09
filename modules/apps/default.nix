@@ -22,6 +22,7 @@
     ./lutris.nix
     ./mkvtoolnix.nix
     ./moonlight.nix
+    ./mpv.nix
     ./obs-studio.nix
     ./office.nix
     ./openscad.nix

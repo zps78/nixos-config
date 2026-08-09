@@ -58,8 +58,7 @@
     moonlight.enable                             = true;             # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
 
-    # media players
-    iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
+    # media editing
     ardour.enable                                = true;             # Multi-track hard disk recording software
     audacity.enable                              = true;             # Sound editor with graphical UI
     handbrake.enable                             = false;            # Tool for converting video files and ripping DVDs
@@ -68,7 +67,9 @@
     obs-studio.enable                            = true;             # Free and open source software for video recording and live streaming
 
     # media players
+    iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = true;             # Open Source YouTube app for privacy
+    mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2
     plex.enable                                  = true;             # Media library streaming server
     spotify.enable                               = true;             # Play music from the Spotify music service
     vlc.enable                                   = true;             # Cross-platform media player and streaming server
