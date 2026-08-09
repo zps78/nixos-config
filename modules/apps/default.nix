@@ -15,6 +15,7 @@
     ./gimp.nix
     ./godot.nix
     ./handbrake.nix
+    ./iptvnator.nix
     ./kate.nix
     ./krita.nix
     ./losslesscut.nix

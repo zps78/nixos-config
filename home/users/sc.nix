@@ -58,7 +58,8 @@
     moonlight.enable                             = true;             # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
 
-    # media editing
+    # media players
+    iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     ardour.enable                                = true;             # Multi-track hard disk recording software
     audacity.enable                              = true;             # Sound editor with graphical UI
     handbrake.enable                             = false;            # Tool for converting video files and ripping DVDs

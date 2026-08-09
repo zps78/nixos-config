@@ -67,6 +67,7 @@
     obs-studio.enable                            = false;            # Free and open source software for video recording and live streaming
 
     # media players
+    iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = true;             # Open Source YouTube app for privacy
     plex.enable                                  = true;             # Media library streaming server
     spotify.enable                               = true;             # Play music from the Spotify music service
