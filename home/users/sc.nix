@@ -1,5 +1,5 @@
 # ../../home/users/sc.nix
-{ config, pkgs, lib, osConfig, inputs, ... }:
+{ pkgs, lib, osConfig, ... }:
 
 {
   ############################################################
@@ -97,7 +97,7 @@
   home.packages = with pkgs; [
 
  ## Remote access
-  # remmina
+    remmina
   # sunshine        # -> import sunshine.nix in the host's configuration.nix
   # teamviewer
 

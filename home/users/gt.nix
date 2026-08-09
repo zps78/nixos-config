@@ -1,5 +1,5 @@
 # ../../home/users/gt.nix
-{ config, pkgs, lib, osConfig, inputs, ... }:
+{ pkgs, lib, osConfig, ... }:
 
 {
   ############################################################

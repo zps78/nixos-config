@@ -1,5 +1,5 @@
 # ../../home/users/bb.nix
-{ config, pkgs, lib, osConfig, inputs, ... }:
+{ pkgs, lib, osConfig, ... }:
 
 {
   ############################################################

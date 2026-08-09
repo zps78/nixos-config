@@ -1,5 +1,5 @@
 # ../../home/users/zp.nix
-{ config, pkgs, lib, osConfig, inputs, ... }:
+{ pkgs, lib, osConfig, ... }:
 
 {
   ############################################################
