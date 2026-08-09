@@ -38,7 +38,7 @@
 
     # programming
     godot.enable                                 = true;             # Free and Open Source 2D and 3D game engine
-    kate.enable                                  = true;             # Advanced text editor
+    kate.enable                                  = true;             # Advanced text editor ()+ nix + kdl + c++ lang)
     vscodium.enable                              = true;             # VS Code without MS branding/telemetry/licensing
 
     # office and productivity
@@ -69,10 +69,10 @@
     # media players
     iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = true;             # Open Source YouTube app for privacy
-    mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2
+    mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
     plex.enable                                  = true;             # Media library streaming server
     spotify.enable                               = true;             # Play music from the Spotify music service
-    vlc.enable                                   = true;             # Cross-platform media player and streaming server
+    vlc.enable                                   = false;            # Cross-platform media player and streaming server
 
     # image editors
     gimp.enable                                  = true;             # GNU Image Manipulation Program
