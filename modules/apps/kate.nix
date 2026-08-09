@@ -39,6 +39,15 @@
     '';
 
   # ----------------------
+  # Update MIME database
+  # ----------------------
+    home.activation.updateKdlMimeDatabase =
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        $DRY_RUN_CMD ${pkgs.shared-mime-info}/bin/update-mime-database \
+          "$HOME/.local/share/mime"
+      '';
+
+  # ----------------------
   # Default application
   # ----------------------
     xdg.mimeApps.defaultApplications = {
