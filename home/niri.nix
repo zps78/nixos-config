@@ -2,6 +2,11 @@
 { config, pkgs, ... }:
 
 {
+
+  imports = [
+    ./mime.nix
+  ];
+
   programs.alacritty.enable = true;
   programs.swaylock.enable = true;
   services.mako.enable = true;
