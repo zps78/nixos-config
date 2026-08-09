@@ -38,7 +38,8 @@
 
     # programming
     godot.enable                                 = false;            # Free and Open Source 2D and 3D game engine
-    vscodium.enable                              = true;             # VS Code without MS branding/telemetry/licensing
+    kate.enable                                  = true;             # Advanced text editor
+    vscodium.enable                              = false;            # VS Code without MS branding/telemetry/licensing
 
     # office and productivity
     office.enable                                = false;            # Office suite that combines text, spreadsheet and presentation editors

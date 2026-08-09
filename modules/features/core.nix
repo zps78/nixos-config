@@ -49,8 +49,10 @@
     gnumake        # Build automation tool
     just           # Command runner and task automation tool
     helix          # Post-modern modal text editor
+    marksman       # Language Server for Markdown
     nil            # Yet another language server for Nix
     nushell        # Modern shell focused on structured data
+    oh-my-posh     # Prompt theme engine for any shell
 
     # search and text processing
     bat            # cat with syntax highlighting

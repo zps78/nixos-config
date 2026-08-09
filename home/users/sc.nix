@@ -38,6 +38,7 @@
 
     # programming
     godot.enable                                 = true;             # Free and Open Source 2D and 3D game engine
+    kate.enable                                  = true;             # Advanced text editor
     vscodium.enable                              = true;             # VS Code without MS branding/telemetry/licensing
 
     # office and productivity

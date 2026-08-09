@@ -31,7 +31,6 @@
     kdePackages.filelight                # Quickly visualize your disk space usage
     kdePackages.gwenview                 # Image viewer by KDE
     kdePackages.isoimagewriter           # Program to write hybrid ISO files onto USB disks
-    kdePackages.kate                     # Advanced text editor
     kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
