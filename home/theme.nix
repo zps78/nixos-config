@@ -58,15 +58,19 @@
     qt = {
       enable = true;
 
-      style = {
-        name = "Breeze";
-        package = pkgs.kdePackages.breeze;
-      };
+    style = {
+      name = "kvantum";
+      package = pkgs.kdePackages.qtstyleplugin-kvantum;
+    };
 
       platformTheme = {
         name = "kde";
       };
     };
+
+    home.packages = [
+      pkgs.gruvbox-kvantum
+    ];
 
     ########################################
     ## XDG
@@ -80,7 +84,7 @@
 
     home.sessionVariables = {
         GTK_THEME = "gruvbox-dark";
-        QT_STYLE_OVERRIDE = "Breeze";
+#        QT_STYLE_OVERRIDE = "Breeze";
     };
   };
 }
