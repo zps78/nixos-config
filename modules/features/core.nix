@@ -2,8 +2,6 @@
 { pkgs, ... }:
 
 {
-  programs.oh-my-posh.enable = true;
-
   environment.systemPackages = with pkgs; [
 
     # networking

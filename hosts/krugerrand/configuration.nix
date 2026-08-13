@@ -83,6 +83,7 @@
 #                                                  "docker"          # enable for docker
     ];
   };
+  programs.oh-my-posh.enable = true;
 
   # Display manager - auto login
   services.displayManager.autoLogin = {
