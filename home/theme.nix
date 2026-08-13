@@ -37,10 +37,10 @@
       # Silence Home Manager warning
       gtk4.theme = config.gtk.theme;
 
-      iconTheme = {
-        package = pkgs.kdePackages.breeze-icons;
-        name = "breeze-dark";
-      };
+#      iconTheme = {
+#        package = pkgs.kdePackages.breeze-icons;
+#        name = "breeze-dark";
+#      };
 
       gtk3.extraConfig = {
         gtk-application-prefer-dark-theme = 1;
