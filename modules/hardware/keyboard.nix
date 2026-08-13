@@ -9,7 +9,7 @@
       description = "Primary keyboard layout.";
     };
 
-    secondLayout = lib.mkOption {
+    secondary.layout = lib.mkOption {
       type = lib.types.nullOr (lib.types.enum [ "pt" "gb" "us" ]);
       default = null;
       description = "Optional second keyboard layout.";
@@ -21,12 +21,12 @@
     # X11 / Wayland keyboard
     services.xserver.xkb = {
       layout =
-        if config.myHardware.keyboard.secondLayout == null
+        if config.myHardware.keyboard.secondary.layout == null
         then config.myHardware.keyboard.layout
         else
-          "${config.myHardware.keyboard.layout},${config.myHardware.keyboard.secondLayout}";
+          "${config.myHardware.keyboard.layout},${config.myHardware.keyboard.secondary.layout}";
 
-      options = lib.mkIf (config.myHardware.keyboard.secondLayout != null)
+      options = lib.mkIf (config.myHardware.keyboard.secondary.layout != null)
         "grp:alt_space_toggle";
     };
 

@@ -32,6 +32,7 @@
     bluetooth.enable                             = true;             # enable bluetooth on this host
     fingerprint.enable                           = true;             # enable fingerprint on this host
     keyboard.layout                              = "gb";             # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
+    keyboard.secondary.layout                    = "pt";             # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "intel";          # choose from: "hybrid" "nvidia" "amd" "intel"
   };
 
