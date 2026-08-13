@@ -1,5 +1,5 @@
 # ../../modules/desktop/yamis.nix
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   yamis = pkgs.stdenvNoCC.mkDerivation {
@@ -9,7 +9,7 @@ let
     src = pkgs.fetchgit {
       url = "https://bitbucket.org/dirn-typo/yet-another-monochrome-icon-set.git";
       rev = "c5c3efe961e843b865d2b13b8180aff6ce64e496";
-      hash = lib.fakeHash;
+      hash = "sha256-1UrfH4AH2+tlFgc13X1nacaBzbucPeF8N/1m9gDDf30=";
     };
 
     installPhase = ''
