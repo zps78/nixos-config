@@ -5,6 +5,7 @@
 
   imports = [
     ./mime.nix
+    ./yamis.nix
   ];
 
   programs.alacritty.enable = true;
