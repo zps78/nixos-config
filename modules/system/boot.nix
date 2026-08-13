@@ -1,5 +1,5 @@
 # ../../modules/system/boot.nix
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # ----------------------------

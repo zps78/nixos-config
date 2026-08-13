@@ -1,5 +1,5 @@
 # ../../modules/networking/tailscale.nix
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myNetwork.tailscale.enable =

@@ -11,7 +11,7 @@
 # - NFS server reachable on network
 # - rpcbind enabled (usually needed for NFSv3; safe for v4 too)
 
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   ############################################################

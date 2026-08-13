@@ -1,5 +1,5 @@
 # ../../home/niri.nix
-{ config, pkgs, osConfig, ... }:
+{ pkgs, osConfig, ... }:
 
 {
 
@@ -60,16 +60,14 @@
 
   xdg.configFile = {
     "niri/animations.kdl".source         = ../dotfiles/niri/animations.kdl;
+    "niri/binds.kdl".source              = ../dotfiles/niri/binds.kdl;
+    "niri/config.kdl".source             = ../dotfiles/niri/config.kdl;
     "niri/decorations.kdl".source        = ../dotfiles/niri/decorations.kdl;
+    "niri/input.kdl".source              = ../dotfiles/niri/input.kdl;
     "niri/layout.kdl".source             = ../dotfiles/niri/layout.kdl;
     "niri/screenshots.kdl".source        = ../dotfiles/niri/screenshots.kdl;
     "niri/spawn-at-startup.kdl".source   = ../dotfiles/niri/spawn-at-startup.kdl;
     "niri/window-rules.kdl".source       = ../dotfiles/niri/window-rules.kdl;
     "niri/output.kdl".source             = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
   };
-
-#  xdg.configFile."niri".source = ../dotfiles/niri;
-#  xdg.configFile."niri".source =
-#  config.lib.file.mkOutOfStoreSymlink
-#    "${config.home.homeDirectory}/nixos-config/dotfiles/niri";
 }

@@ -3,7 +3,7 @@
 # NFS mount for backup share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-backup.enable =

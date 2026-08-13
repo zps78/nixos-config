@@ -1,5 +1,5 @@
 # ../../modules/hardware/audio.nix
-{ config, pkgs, lib, ... }:
+{ ... }:
 
 {
   # Disable legacy PulseAudio

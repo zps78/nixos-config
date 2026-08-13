@@ -1,5 +1,5 @@
 # ../../modules/system/auth.nix
-{ config, lib, ... }:
+{ ... }:
 
 {
   security.pam.services = {

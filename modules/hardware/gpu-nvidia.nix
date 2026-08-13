@@ -1,5 +1,5 @@
 # ../../modules/hardware/gpu-nvidia.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 lib.mkIf (config.myHardware.gpuVendor == "nvidia") {
   ############################################################

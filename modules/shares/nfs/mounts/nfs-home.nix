@@ -3,7 +3,7 @@
 # NFS mount for home share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-home.enable =

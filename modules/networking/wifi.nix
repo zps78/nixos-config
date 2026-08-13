@@ -13,7 +13,7 @@
 # - define system networking profile
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myNetwork.wifi.enable =

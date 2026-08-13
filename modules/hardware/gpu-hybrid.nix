@@ -1,5 +1,5 @@
 # ../../modules/hardware/gpu-hybrid.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 lib.mkIf (config.myHardware.gpuVendor == "hybrid") {
   ############################################################

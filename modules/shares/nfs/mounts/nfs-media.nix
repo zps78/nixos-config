@@ -3,7 +3,7 @@
 # NFS mount for media share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-media.enable =

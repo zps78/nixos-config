@@ -1,149 +1,3 @@
-===== DIRECTORY STRUCTURE =====
-.
-./dotfiles
-./dotfiles/niri
-./dotfiles/niri/animations.kdl
-./dotfiles/niri/binds.kdl
-./dotfiles/niri/config.kdl
-./dotfiles/niri/decorations.kdl
-./dotfiles/niri/layout.kdl
-./dotfiles/niri/screenshots.kdl
-./dotfiles/niri/spawn-at-startup.kdl
-./dotfiles/niri/window-rules.kdl
-./flake.lock
-./flake.nix
-./home
-./home/niri.nix
-./home/theme.nix
-./home/users
-./home/users/bb.nix
-./home/users/gt.nix
-./home/users/sc.nix
-./home/users/zp.nix
-./hosts
-./hosts/kepler
-./hosts/kepler/configuration.nix
-./hosts/kepler/hardware-configuration.nix
-./hosts/kimi
-./hosts/kimi/configuration.nix
-./hosts/kimi/hardware-configuration.nix
-./hosts/krieger
-./hosts/krieger/configuration.nix
-./hosts/krieger/hardware-configuration.nix
-./hosts/krugerrand
-./hosts/krugerrand/configuration.nix
-./hosts/krugerrand/hardware-configuration.nix
-./hosts/kuro
-./hosts/kuro/configuration.nix
-./hosts/kuro/hardware-configuration.nix
-./modules
-./modules/apps
-./modules/apps/android.nix
-./modules/apps/ardour.nix
-./modules/apps/audacity.nix
-./modules/apps/bambu-studio.nix
-./modules/apps/blender.nix
-./modules/apps/bottles.nix
-./modules/apps/chiaki-ng.nix
-./modules/apps/darktable.nix
-./modules/apps/default.nix
-./modules/apps/firefox.nix
-./modules/apps/freecad.nix
-./modules/apps/freetube.nix
-./modules/apps/gimp.nix
-./modules/apps/godot.nix
-./modules/apps/handbrake.nix
-./modules/apps/iptvnator.nix
-./modules/apps/kate.nix
-./modules/apps/krita.nix
-./modules/apps/losslesscut.nix
-./modules/apps/lutris.nix
-./modules/apps/mkvtoolnix.nix
-./modules/apps/moonlight.nix
-./modules/apps/mpv.nix
-./modules/apps/obs-studio.nix
-./modules/apps/office.nix
-./modules/apps/openscad.nix
-./modules/apps/orca-slicer.nix
-./modules/apps/plex.nix
-./modules/apps/proton-pass.nix
-./modules/apps/spotify.nix
-./modules/apps/telegram.nix
-./modules/apps/thunderbird.nix
-./modules/apps/vlc.nix
-./modules/apps/vscodium.nix
-./modules/apps/zen-browser.nix
-./modules/desktop
-./modules/desktop/default.nix
-./modules/desktop/fonts.nix
-./modules/desktop/gnome.nix
-./modules/desktop/hyprland.nix
-./modules/desktop/kde.nix
-./modules/desktop/niri.nix
-./modules/features
-./modules/features/core.nix
-./modules/features/data-rescue.nix
-./modules/features/default.nix
-./modules/features/kde-connect.nix
-./modules/features/steam.nix
-./modules/features/wine.nix
-./modules/hardware
-./modules/hardware/audio.nix
-./modules/hardware/bluetooth.nix
-./modules/hardware/default.nix
-./modules/hardware/fingerprint.nix
-./modules/hardware/gpu-amd.nix
-./modules/hardware/gpu-hybrid.nix
-./modules/hardware/gpu-intel.nix
-./modules/hardware/gpu-nvidia.nix
-./modules/networking
-./modules/networking/core.nix
-./modules/networking/default.nix
-./modules/networking/tailscale.nix
-./modules/networking/wifi.nix
-./modules/services
-./modules/services/battery.nix
-./modules/services/brother-ads-4300n.nix
-./modules/services/brother-hl-l8230cdw.nix
-./modules/services/default.nix
-./modules/services/discovery.nix
-./modules/services/docker.nix
-./modules/services/libvirt.nix
-./modules/services/ssh.nix
-./modules/services/sunshine.nix
-./modules/services/waydroid.nix
-./modules/shares
-./modules/shares/default.nix
-./modules/shares/nfs
-./modules/shares/nfs/mounts
-./modules/shares/nfs/mounts/nfs-backup.nix
-./modules/shares/nfs/mounts/nfs-home.nix
-./modules/shares/nfs/mounts/nfs-media.nix
-./modules/shares/nfs/mounts/nfs-paperless.nix
-./modules/shares/nfs/mounts/nfs-torrents.nix
-./modules/shares/nfs/mounts/nfs-trading.nix
-./modules/shares/nfs/nfs-client.nix
-./modules/system
-./modules/system/auth.nix
-./modules/system/boot.nix
-./modules/system/common.nix
-./modules/system/default.nix
-./modules/system/localization.nix
-./modules/system/memory.nix
-./nixos-config-snapshot.txt
-./README.md
-./result
-./wallpapers
-./wallpapers/wallpaper-lock-mc.jpg
-./wallpapers/wallpaper-lock-sc.jpg
-./wallpapers/wallpaper-lock-steam.jpg
-./wallpapers/wallpaper-lock-zp.jpg
-./wallpapers/wallpaper-mc.jpg
-./wallpapers/wallpaper-sc.jpg
-./wallpapers/wallpaper-steam.jpg
-./wallpapers/wallpaper-zp.jpg
-
-===== FILE CONTENTS =====
 
 
 ===== ./home/users/zp.nix =====
@@ -699,11 +553,174 @@
 }
 
 
-===== ./home/niri.nix =====
-# ../../home/niri.nix
-{ config, pkgs, ... }:
+===== ./home/mime.nix =====
+# ../../home/mime.nix
+{ ... }:
 
 {
+  xdg.mimeApps = {
+    enable = true;
+
+    defaultApplications = {
+      # ==========================
+      # Images
+      # ==========================
+
+      "image/jpeg"                     = "org.kde.gwenview.desktop";
+      "image/png"                      = "org.kde.gwenview.desktop";
+      "image/gif"                      = "org.kde.gwenview.desktop";
+      "image/webp"                     = "org.kde.gwenview.desktop";
+      "image/avif"                     = "org.kde.gwenview.desktop";
+      "image/heif"                     = "org.kde.gwenview.desktop";
+      "image/bmp"                      = "org.kde.gwenview.desktop";
+      "image/tiff"                     = "org.kde.gwenview.desktop";
+      "image/svg+xml"                  = "org.kde.gwenview.desktop";
+      "image/jxl"                      = "org.kde.gwenview.desktop";
+
+      # ==========================
+      # RAW photographs
+      # ==========================
+
+      "image/x-adobe-dng"              = "org.darktable.darktable.desktop";
+      "image/x-canon-cr2"              = "org.darktable.darktable.desktop";
+      "image/x-canon-cr3"              = "org.darktable.darktable.desktop";
+      "image/x-canon-crw"              = "org.darktable.darktable.desktop";
+      "image/x-nikon-nef"              = "org.darktable.darktable.desktop";
+      "image/x-nikon-nrw"              = "org.darktable.darktable.desktop";
+      "image/x-olympus-orf"            = "org.darktable.darktable.desktop";
+      "image/x-panasonic-rw"           = "org.darktable.darktable.desktop";
+      "image/x-panasonic-rw2"          = "org.darktable.darktable.desktop";
+      "image/x-pentax-pef"             = "org.darktable.darktable.desktop";
+      "image/x-sony-arw"               = "org.darktable.darktable.desktop";
+      "image/x-sony-sr2"               = "org.darktable.darktable.desktop";
+      "image/x-sony-srf"               = "org.darktable.darktable.desktop";
+
+      # ==========================
+      # Documents
+      # ==========================
+
+      "application/pdf"                = "okularApplication_pdf.desktop";
+      "application/epub+zip"           = "okularApplication_epub.desktop";
+      "application/x-mobipocket-ebook" = "okularApplication_mobi.desktop";
+
+      # Comics
+      "application/x-cbz"              = "okularApplication_comicbook.desktop";
+      "application/x-cbr"              = "okularApplication_comicbook.desktop";
+      "application/x-cbt"              = "okularApplication_comicbook.desktop";
+      "application/x-cb7"              = "okularApplication_comicbook.desktop";
+
+      # ==========================
+      # Text / configuration / code
+      # ==========================
+
+      "text/plain"                     = "org.kde.kate.desktop";
+      "text/markdown"                  = "org.kde.kate.desktop";
+      "text/x-nix"                     = "org.kde.kate.desktop";
+      "text/xml"                       = "org.kde.kate.desktop";
+
+      # KDL — MIME type provided by our declarative KDL definition
+      "application/vnd.kdl"            = "org.kde.kate.desktop";
+
+      # ==========================
+      # Microsoft Office
+      # ==========================
+
+      "application/msword"                                         = "onlyoffice-desktopeditors.desktop";
+      "application/msword-template"                                = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-word.document.macroEnabled.12"           = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-word.template.macroEnabled.12"           = "onlyoffice-desktopeditors.desktop";
+
+      "application/vnd.ms-excel"                                   = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-excel.sheet.macroEnabled.12"             = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-excel.sheet.binary.macroEnabled.12"      = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-excel.template.macroEnabled.12"          = "onlyoffice-desktopeditors.desktop";
+
+      "application/vnd.ms-powerpoint"                              = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-powerpoint.presentation.macroEnabled.12" = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-powerpoint.slideshow.macroEnabled.12"    = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.ms-powerpoint.template.macroEnabled.12"     = "onlyoffice-desktopeditors.desktop";
+
+      # ==========================
+      # Microsoft / OpenXML Office
+      # ==========================
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"      = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.template"      = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"            = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.template"         = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation"    = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.openxmlformats-officedocument.presentationml.slideshow"       = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.openxmlformats-officedocument.presentationml.template"        = "onlyoffice-desktopeditors.desktop";
+
+      # ==========================
+      # OpenDocument
+      # ==========================
+      "application/vnd.oasis.opendocument.text"                    = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.oasis.opendocument.text-template"           = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.oasis.opendocument.spreadsheet"             = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.oasis.opendocument.spreadsheet-template"    = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.oasis.opendocument.presentation"            = "onlyoffice-desktopeditors.desktop";
+      "application/vnd.oasis.opendocument.presentation-template"   = "onlyoffice-desktopeditors.desktop";
+
+      # Other common office formats
+      "text/csv"                       = "onlyoffice-desktopeditors.desktop";
+      "text/tab-separated-values"      = "onlyoffice-desktopeditors.desktop";
+      "application/rtf"                = "onlyoffice-desktopeditors.desktop";
+
+      # ==========================
+      # Audio
+      # ==========================
+      "audio/mpeg"                     = "mpv.desktop";
+      "audio/mp4"                      = "mpv.desktop";
+      "audio/m4a"                      = "mpv.desktop";
+      "audio/flac"                     = "mpv.desktop";
+      "audio/ogg"                      = "mpv.desktop";
+      "audio/wav"                      = "mpv.desktop";
+      "audio/x-wav"                    = "mpv.desktop";
+      "audio/aac"                      = "mpv.desktop";
+      "audio/opus"                     = "mpv.desktop";
+      "audio/ac3"                      = "mpv.desktop";
+      "audio/eac3"                     = "mpv.desktop";
+      "audio/webm"                     = "mpv.desktop";
+
+      # ==========================
+      # Video
+      # ==========================
+      "video/mp4"                      = "mpv.desktop";
+      "video/x-matroska"               = "mpv.desktop";
+      "video/mkv"                      = "mpv.desktop";
+      "video/webm"                     = "mpv.desktop";
+      "video/mpeg"                     = "mpv.desktop";
+      "video/avi"                      = "mpv.desktop";
+      "video/x-avi"                    = "mpv.desktop";
+      "video/x-msvideo"                = "mpv.desktop";
+      "video/quicktime"                = "mpv.desktop";
+      "video/x-flv"                    = "mpv.desktop";
+      "video/x-ms-wmv"                 = "mpv.desktop";
+      "video/ogg"                      = "mpv.desktop";
+      "video/3gp"                      = "mpv.desktop";
+
+      # ==========================
+      # IPTV / playlists
+      # ==========================
+      "application/x-mpegurl"          = "iptvnator.desktop";
+      "application/vnd.apple.mpegurl"  = "iptvnator.desktop";
+      "audio/mpegurl"                  = "iptvnator.desktop";
+      "audio/x-mpegurl"                = "iptvnator.desktop";
+    };
+  };
+}
+
+
+===== ./home/niri.nix =====
+# ../../home/niri.nix
+{ pkgs, osConfig, ... }:
+
+{
+
+  imports = [
+    ./mime.nix
+  ];
+
   programs.alacritty.enable = true;
   programs.swaylock.enable = true;
   services.mako.enable = true;
@@ -755,16 +772,22 @@
     NoDisplay=true
   '';
 
-#  xdg.configFile."niri".source = ../dotfiles/niri;
-  xdg.configFile."niri".source =
-  config.lib.file.mkOutOfStoreSymlink
-    "${config.home.homeDirectory}/nixos-config/dotfiles/niri";
+  xdg.configFile = {
+    "niri/animations.kdl".source         = ../dotfiles/niri/animations.kdl;
+    "niri/decorations.kdl".source        = ../dotfiles/niri/decorations.kdl;
+    "niri/input.kdl".source              = ../dotfiles/niri/input.kdl;
+    "niri/layout.kdl".source             = ../dotfiles/niri/layout.kdl;
+    "niri/screenshots.kdl".source        = ../dotfiles/niri/screenshots.kdl;
+    "niri/spawn-at-startup.kdl".source   = ../dotfiles/niri/spawn-at-startup.kdl;
+    "niri/window-rules.kdl".source       = ../dotfiles/niri/window-rules.kdl;
+    "niri/output.kdl".source             = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
+  };
 }
 
 
 ===== ./modules/system/boot.nix =====
 # ../../modules/system/boot.nix
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # ----------------------------
@@ -799,27 +822,12 @@
 
 ===== ./modules/system/localization.nix =====
 # ../../modules/system/localization.nix
-{ config, lib, pkgs, ... }:
+{ config, ... }:
 
 {
-  options.myHardware.keyboard.layout = lib.mkOption {
-    type = lib.types.enum [ "pt" "gb" "us" ];
-    default = "pt";
-    description = "Keyboard layout for X11/Wayland and console.";
-  };
-
   config = {
     # Timezone
     time.timeZone = "Europe/Lisbon";
-
-    # X11 / Wayland keyboard
-    services.xserver.xkb.layout = config.myHardware.keyboard.layout;
-
-    # Console (TTY)
-    console.keyMap =
-      if config.myHardware.keyboard.layout == "pt" then "pt-latin1"
-      else if config.myHardware.keyboard.layout == "gb" then "uk"
-      else "us";
 
   # Locale
     i18n.defaultLocale = "en_US.UTF-8";
@@ -905,7 +913,7 @@ in
 
 ===== ./modules/system/auth.nix =====
 # ../../modules/system/auth.nix
-{ config, lib, ... }:
+{ ... }:
 
 {
   security.pam.services = {
@@ -936,9 +944,10 @@ in
   };
 }
 
+
 ===== ./modules/system/common.nix =====
 # ../../modules/system/common.nix
-{ config, pkgs, lib, ... }:
+{ ... }:
 
 {
   ############################################################
@@ -973,7 +982,7 @@ in
 
 ===== ./modules/services/brother-hl-l8230cdw.nix =====
 # ../../modules/services/brother-hl-l8230cdw.nix
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myServices.brother-hl-l8230cdw.enable =
@@ -1007,10 +1016,10 @@ in
     systemd.services.cups-browsed.enable = false;
 
     # Useful user tools
-    environment.systemPackages = with pkgs; [
-  #   system-config-printer
-  #   simple-scan
-    ];
+#    environment.systemPackages = with pkgs; [
+#     system-config-printer
+#     simple-scan
+#    ];
   };
 }
 
@@ -1075,7 +1084,7 @@ in
 
 ===== ./modules/services/discovery.nix =====
 # ../../modules/services/discovery.nix
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   ############################################################
@@ -1151,7 +1160,7 @@ in
 
 ===== ./modules/services/ssh.nix =====
 # ../../modules/services/ssh.nix
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.myServices.ssh;
@@ -1368,7 +1377,7 @@ in
 
 ===== ./modules/features/core.nix =====
 # ../../modules/features/core.nix
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -1724,7 +1733,7 @@ in
 
 ===== ./modules/desktop/fonts.nix =====
 # ../../modules/desktop/fonts.nix
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   fonts.packages = with pkgs; [
@@ -2078,7 +2087,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # - NFS server reachable on network
 # - rpcbind enabled (usually needed for NFSv3; safe for v4 too)
 
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   ############################################################
@@ -2110,7 +2119,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # NFS mount for home share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-home.enable =
@@ -2182,7 +2191,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # NFS mount for paperless share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-paperless.enable =
@@ -2254,7 +2263,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # NFS mount for torrents share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-torrents.enable =
@@ -2326,7 +2335,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # NFS mount for trading share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-trading.enable =
@@ -2398,7 +2407,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # NFS mount for media share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-media.enable =
@@ -2470,7 +2479,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # NFS mount for backup share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-backup.enable =
@@ -2553,7 +2562,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 
 ===== ./modules/networking/core.nix =====
 # ../../modules/networking/core.nix
-{ config, pkgs, lib, ... }:
+{ lib, ... }:
 
 {
   ############################################################
@@ -2601,7 +2610,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 # - define system networking profile
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myNetwork.wifi.enable =
@@ -2643,7 +2652,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 
 ===== ./modules/networking/tailscale.nix =====
 # ../../modules/networking/tailscale.nix
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myNetwork.tailscale.enable =
@@ -2988,7 +2997,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 
 ===== ./modules/apps/thunderbird.nix =====
 # ../../modules/apps/thunderbird.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
   options.myApps.thunderbird.enable =
@@ -3005,7 +3014,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 
 ===== ./modules/apps/firefox.nix =====
 # ../../modules/apps/firefox.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
   options.myApps.firefox.enable =
@@ -3140,6 +3149,7 @@ lib.mkIf (config.myDesktop.stack == "kde") {
     };
   };
 }
+
 
 ===== ./modules/apps/losslesscut.nix =====
 # ../../modules/apps/losslesscut.nix
@@ -3469,11 +3479,44 @@ lib.mkIf (config.myDesktop.stack == "kde") {
       marksman
       nil
     ];
+
+  # ----------------------
+  # KDL syntax highlighting
+  # ----------------------
     xdg.dataFile."org.kde.syntax-highlighting/syntax/kdl.xml".source =
       pkgs.fetchurl {
         url = "https://raw.githubusercontent.com/larsgw/katepart-kdl/main/kdl.xml";
         hash = "sha256-Hb0lChLsRstZQ02I1A/J7KWQ6OISMw7ji3zUNGWONu4=";
       };
+
+  # ----------------------
+  # KDL MIME type
+  # ----------------------
+    xdg.dataFile."mime/packages/kdl.xml".text = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+        <mime-type type="application/vnd.kdl">
+          <comment>KDL document</comment>
+          <glob pattern="*.kdl"/>
+        </mime-type>
+      </mime-info>
+    '';
+
+  # ----------------------
+  # Update MIME database
+  # ----------------------
+    home.activation.updateKdlMimeDatabase =
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        $DRY_RUN_CMD ${pkgs.shared-mime-info}/bin/update-mime-database \
+          "$HOME/.local/share/mime"
+      '';
+
+  # ----------------------
+  # Default application
+  # ----------------------
+    xdg.mimeApps.defaultApplications = {
+      "application/vnd.kdl" = "org.kde.kate.desktop";
+    };
   };
 }
 
@@ -3649,7 +3692,7 @@ in
 
 ===== ./modules/hardware/audio.nix =====
 # ../../modules/hardware/audio.nix
-{ config, pkgs, lib, ... }:
+{ ... }:
 
 {
   # Disable legacy PulseAudio
@@ -3751,9 +3794,51 @@ lib.mkIf (config.myHardware.gpuVendor == "intel") {
 }
 
 
+===== ./modules/hardware/keyboard.nix =====
+# ../../modules/hardware/keyboard.nix
+{ config, lib, ... }:
+
+{
+  options.myHardware.keyboard = {
+    layout = lib.mkOption {
+      type = lib.types.enum [ "pt" "gb" "us" ];
+      default = "pt";
+      description = "Primary keyboard layout.";
+    };
+
+    secondLayout = lib.mkOption {
+      type = lib.types.nullOr (lib.types.enum [ "pt" "gb" "us" ]);
+      default = null;
+      description = "Optional second keyboard layout.";
+    };
+  };
+
+  config = {
+
+    # X11 / Wayland keyboard
+    services.xserver.xkb = {
+      layout =
+        if config.myHardware.keyboard.secondLayout == null
+        then config.myHardware.keyboard.layout
+        else
+          "${config.myHardware.keyboard.layout},${config.myHardware.keyboard.secondLayout}";
+
+      options = lib.mkIf (config.myHardware.keyboard.secondLayout != null)
+        "grp:alt_space_toggle";
+    };
+
+    # Console (TTY)
+    console.keyMap =
+      if config.myHardware.keyboard.layout == "pt" then "pt-latin1"
+      else if config.myHardware.keyboard.layout == "gb" then "uk"
+      else "us";
+  };
+}
+
+
 ===== ./modules/hardware/gpu-nvidia.nix =====
 # ../../modules/hardware/gpu-nvidia.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 lib.mkIf (config.myHardware.gpuVendor == "nvidia") {
   ############################################################
@@ -3810,7 +3895,7 @@ lib.mkIf (config.myHardware.gpuVendor == "nvidia") {
 
 ===== ./modules/hardware/gpu-hybrid.nix =====
 # ../../modules/hardware/gpu-hybrid.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 lib.mkIf (config.myHardware.gpuVendor == "hybrid") {
   ############################################################
@@ -3890,6 +3975,7 @@ lib.mkIf (config.myHardware.gpuVendor == "hybrid") {
     ./gpu-hybrid.nix
     ./gpu-intel.nix
     ./gpu-nvidia.nix
+    ./keyboard.nix
   ];
 
   options.myHardware.gpuVendor = lib.mkOption {
@@ -3996,6 +4082,46 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 }
 
 
+===== ./hosts/krieger/niri/output.kdl =====
+// ../../hosts/krieger/output.kdl
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://niri-wm.github.io/niri/Configuration:-Outputs
+// Remember to uncomment the node by removing "/-"!
+-output "eDP-1" {
+    // Uncomment this line to disable this output.
+    // off
+
+    // Resolution and, optionally, refresh rate of the output.
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // If the refresh rate is omitted, niri will pick the highest refresh rate
+    // for the resolution.
+    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "2560x1600@60.001"
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1.2
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
+    // The cursor can only move between directly adjacent outputs.
+    // Output scale and rotation has to be taken into account for positioning:
+    // outputs are sized in logical, or scaled, pixels.
+    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
+    // so to put another output directly adjacent to it on the right, set its x to 1920.
+    // If the position is unset or results in an overlap, the output is instead placed
+    // automatically.
+    position x=0 y=0
+}
+
+
 ===== ./hosts/krieger/hardware-configuration.nix =====
 # Do not modify this file!  It was generated by ‘nixos-generate-config’
 # and may be overwritten by future invocations.  Please make changes
@@ -4032,7 +4158,7 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 
 ===== ./hosts/krieger/configuration.nix =====
 # ../../hosts/krieger/configuration.nix
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -4145,12 +4271,52 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
   ];
 
   # System packages
-  environment.systemPackages                     = with pkgs; [
-    #
-  ];
+#  environment.systemPackages                     = with pkgs; [
+#
+#  ];
 
   # System state version
   system.stateVersion                            = "25.11";
+}
+
+
+===== ./hosts/kepler/niri/output.kdl =====
+// ../../hosts/kepler/output.kdl
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://niri-wm.github.io/niri/Configuration:-Outputs
+// Remember to uncomment the node by removing "/-"!
+-output "eDP-1" {
+    // Uncomment this line to disable this output.
+    // off
+
+    // Resolution and, optionally, refresh rate of the output.
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // If the refresh rate is omitted, niri will pick the highest refresh rate
+    // for the resolution.
+    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "2560x1600@60.001"
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1.2
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
+    // The cursor can only move between directly adjacent outputs.
+    // Output scale and rotation has to be taken into account for positioning:
+    // outputs are sized in logical, or scaled, pixels.
+    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
+    // so to put another output directly adjacent to it on the right, set its x to 1920.
+    // If the position is unset or results in an overlap, the output is instead placed
+    // automatically.
+    position x=0 y=0
 }
 
 
@@ -4190,7 +4356,7 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 
 ===== ./hosts/kepler/configuration.nix =====
 # ../../hosts/kepler/configuration.nix
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -4295,12 +4461,52 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-  environment.systemPackages                     = with pkgs; [
-    #
-  ];
+#  environment.systemPackages                     = with pkgs; [
+#
+#  ];
 
   # System state version
   system.stateVersion                            = "25.11";
+}
+
+
+===== ./hosts/kuro/niri/output.kdl =====
+// ../../hosts/kuru/output.kdl
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://niri-wm.github.io/niri/Configuration:-Outputs
+// Remember to uncomment the node by removing "/-"!
+-output "eDP-1" {
+    // Uncomment this line to disable this output.
+    // off
+
+    // Resolution and, optionally, refresh rate of the output.
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // If the refresh rate is omitted, niri will pick the highest refresh rate
+    // for the resolution.
+    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "2560x1600@60.001"
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1.2
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
+    // The cursor can only move between directly adjacent outputs.
+    // Output scale and rotation has to be taken into account for positioning:
+    // outputs are sized in logical, or scaled, pixels.
+    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
+    // so to put another output directly adjacent to it on the right, set its x to 1920.
+    // If the position is unset or results in an overlap, the output is instead placed
+    // automatically.
+    position x=0 y=0
 }
 
 
@@ -4344,7 +4550,7 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 
 ===== ./hosts/kuro/configuration.nix =====
 # ../../hosts/kuro/configuration.nix
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -4449,12 +4655,52 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-  environment.systemPackages                     = with pkgs; [
-    #
-  ];
+#  environment.systemPackages                     = with pkgs; [
+#
+#  ];
 
   # System state version
   system.stateVersion                            = "25.11";
+}
+
+
+===== ./hosts/krugerrand/niri/output.kdl =====
+// ../../hosts/krugerrand/niri/output.kdl
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://niri-wm.github.io/niri/Configuration:-Outputs
+// Remember to uncomment the node by removing "/-"!
+  output "eDP-1" {
+    // Uncomment this line to disable this output.
+    // off
+
+    // Resolution and, optionally, refresh rate of the output.
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // If the refresh rate is omitted, niri will pick the highest refresh rate
+    // for the resolution.
+    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "2560x1600@60.001"
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1.2
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
+    // The cursor can only move between directly adjacent outputs.
+    // Output scale and rotation has to be taken into account for positioning:
+    // outputs are sized in logical, or scaled, pixels.
+    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
+    // so to put another output directly adjacent to it on the right, set its x to 1920.
+    // If the position is unset or results in an overlap, the output is instead placed
+    // automatically.
+    position x=0 y=0
 }
 
 
@@ -4496,7 +4742,7 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 
 ===== ./hosts/krugerrand/configuration.nix =====
 # ../../hosts/krugerrand/configuration.nix # VRF9-HZFL-9XPR-K4CB
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -4541,11 +4787,11 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
     battery.enable                               = true;             # battery support
     brother-ads-4300n.enable                     = true;             # Brother ADS-4300N network document scanner
     brother-hl-l8230cdw.enable                   = true;             # Brother HL-L8230CDW network color laser printer
-    docker.enable                                = false;            # add user to group docker below
-    libvirt.enable                               = false;            # add user to group LIBVIRT below
+    docker.enable                                = false;            # remmeber to add user to group docker below
+    libvirt.enable                               = false;            # remmeber to add user to group LIBVIRT below
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
-    sunshine.enable                              = false;            # add user to group input below
+    sunshine.enable                              = false;            # remmeber to add user to group input below
   };
 
   myShares = {
@@ -4574,9 +4820,9 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
                                                    "audio"
                                                    "video"
                                                    "render"
-#                                                  "input"           # enable with sunshine
-#                                                  "libvirtd"        # enable with libvirt
-#                                                  "docker"          # enable with docker
+#                                                  "input"           # enable for sunshine
+#                                                  "libvirtd"        # enable for libvirt
+#                                                  "docker"          # enable for docker
     ];
   };
 
@@ -4601,12 +4847,52 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-  environment.systemPackages                     = with pkgs; [
-    #
-  ];
+#  environment.systemPackages                     = with pkgs; [
+#
+#  ];
 
   # System state version
   system.stateVersion                            = "25.11";
+}
+
+
+===== ./hosts/kimi/niri/output.kdl =====
+// ../../hosts/kimi/output.kdl
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://niri-wm.github.io/niri/Configuration:-Outputs
+// Remember to uncomment the node by removing "/-"!
+-output "eDP-1" {
+    // Uncomment this line to disable this output.
+    // off
+
+    // Resolution and, optionally, refresh rate of the output.
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // If the refresh rate is omitted, niri will pick the highest refresh rate
+    // for the resolution.
+    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "2560x1600@60.001"
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1.2
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
+    // The cursor can only move between directly adjacent outputs.
+    // Output scale and rotation has to be taken into account for positioning:
+    // outputs are sized in logical, or scaled, pixels.
+    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
+    // so to put another output directly adjacent to it on the right, set its x to 1920.
+    // If the position is unset or results in an overlap, the output is instead placed
+    // automatically.
+    position x=0 y=0
 }
 
 
@@ -4646,7 +4932,7 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 
 ===== ./hosts/kimi/configuration.nix =====
 # ../../hosts/kimi/configuration.nix
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -4751,263 +5037,29 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-  environment.systemPackages                     = with pkgs; [
-    #
-  ];
+#  environment.systemPackages                     = with pkgs; [
+#
+#  ];
 
   # System state version
   system.stateVersion                            = "25.11";
 }
 
 
-===== ./dotfiles/niri/spawn-at-startup.kdl =====
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
-
-// This line starts waybar, a commonly used bar for Wayland compositors.
-// spawn-at-startup "waybar"
-spawn-at-startup "noctalia-shell"
-
-// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
-// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
-
-
-===== ./dotfiles/niri/layout.kdl =====
-// Settings that influence how windows are positioned and sized.
-// Find more information on the wiki:
-// https://niri-wm.github.io/niri/Configuration:-Layout
-layout {
-    // Set gaps around windows in logical pixels.
-    gaps 2
-
-    // When to center a column when changing focus, options are:
-    // - "never", default behavior, focusing an off-screen column will keep at the left
-    //   or right edge of the screen.
-    // - "always", the focused column will always be centered.
-    // - "on-overflow", focusing a column will center it if it doesn't fit
-    //   together with the previously focused column.
-    center-focused-column "never"
-
-    // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
-    preset-column-widths {
-        // Proportion sets the width as a fraction of the output width, taking gaps into account.
-        // For example, you can perfectly fit four windows sized "proportion 0.25" on an output.
-        // The default preset widths are 1/3, 1/2 and 2/3 of the output.
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
-
-        // Fixed sets the width in logical pixels exactly.
-        // fixed 1920
-    }
-
-    // You can also customize the heights that "switch-preset-window-height" (Mod+Ctrl+Shift+R) toggles between.
-    // preset-window-heights { }
-
-    // You can change the default width of the new windows.
-    default-column-width { proportion 0.5; }
-    // If you leave the brackets empty, the windows themselves will decide their initial width.
-    // default-column-width {}
-
-    // By default focus ring and border are rendered as a solid background rectangle
-    // behind windows. That is, they will show up through semitransparent windows.
-    // This is because windows using client-side decorations can have an arbitrary shape.
-    //
-    // If you don't like that, you should uncomment `prefer-no-csd` below.
-    // Niri will draw focus ring and border *around* windows that agree to omit their
-    // client-side decorations.
-    //
-    // Alternatively, you can override it with a window rule called
-    // `draw-border-with-background`.
-
-    // You can change how the focus ring looks.
-    focus-ring {
-        // Uncomment this line to disable the focus ring.
-        // off
-
-        // How many logical pixels the ring extends out from the windows.
-        width 1
-
-        // Colors can be set in a variety of ways:
-        // - CSS named colors: "red"
-        // - RGB hex: "#rgb", "#rgba", "#rrggbb", "#rrggbbaa"
-        // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
-
-        // Color of the ring on the active monitor.
-        active-color "#7fc8ff"
-
-        // Color of the ring on inactive monitors.
-        //
-        // The focus ring only draws around the active window, so the only place
-        // where you can see its inactive-color is on other monitors.
-        inactive-color "#505050"
-
-        // You can also use gradients. They take precedence over solid colors.
-        // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
-        // The angle is the same as in linear-gradient, and is optional,
-        // defaulting to 180 (top-to-bottom gradient).
-        // You can use any CSS linear-gradient tool on the web to set these up.
-        // Changing the color space is also supported, check the wiki for more info.
-        //
-        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
-
-        // You can also color the gradient relative to the entire view
-        // of the workspace, rather than relative to just the window itself.
-        // To do that, set relative-to="workspace-view".
-        //
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
-    }
-
-    // You can also add a border. It's similar to the focus ring, but always visible.
-    border {
-        // The settings are the same as for the focus ring.
-        // If you enable the border, you probably want to disable the focus ring.
-        off
-
-        width 4
-        active-color "#ffc87f"
-        inactive-color "#505050"
-
-        // Color of the border around windows that request your attention.
-        urgent-color "#9b0000"
-
-        // Gradients can use a few different interpolation color spaces.
-        // For example, this is a pastel rainbow gradient via in="oklch longer hue".
-        //
-        // active-gradient from="#e5989b" to="#ffb4a2" angle=45 relative-to="workspace-view" in="oklch longer hue"
-
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
-    }
-
-    // You can enable drop shadows for windows.
-    shadow {
-        // Uncomment the next line to enable shadows.
-        // on
-
-        // By default, the shadow draws only around its window, and not behind it.
-        // Uncomment this setting to make the shadow draw behind its window.
-        //
-        // Note that niri has no way of knowing about the CSD window corner
-        // radius. It has to assume that windows have square corners, leading to
-        // shadow artifacts inside the CSD rounded corners. This setting fixes
-        // those artifacts.
-        //
-        // However, instead you may want to set prefer-no-csd and/or
-        // geometry-corner-radius. Then, niri will know the corner radius and
-        // draw the shadow correctly, without having to draw it behind the
-        // window. These will also remove client-side shadows if the window
-        // draws any.
-        //
-        // draw-behind-window true
-
-        // You can change how shadows look. The values below are in logical
-        // pixels and match the CSS box-shadow properties.
-
-        // Softness controls the shadow blur radius.
-        softness 30
-
-        // Spread expands the shadow.
-        spread 5
-
-        // Offset moves the shadow relative to the window.
-        offset x=0 y=5
-
-        // You can also change the shadow color and opacity.
-        color "#0007"
-    }
-
-    // Struts shrink the area occupied by windows, similarly to layer-shell panels.
-    // You can think of them as a kind of outer gaps. They are set in logical pixels.
-    // Left and right struts will cause the next window to the side to always be visible.
-    // Top and bottom struts will simply add outer gaps in addition to the area occupied by
-    // layer-shell panels and regular gaps.
-    struts {
-        // left 64
-        // right 64
-        // top 64
-        // bottom 64
-    }
-}
-
 ===== ./dotfiles/niri/config.kdl =====
 include "animations.kdl"
 include "binds.kdl"
 include "decorations.kdl"
+include "input.kdl"
 include "layout.kdl"
+include "output.kdl"
 include "screenshots.kdl"
 include "spawn-at-startup.kdl"
 include "window-rules.kdl"
 
-input {
-    touchpad {
-        tap
-        natural-scroll
-        accel-speed 0.2
-    }
-}
-
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
     // skip-at-startup
-}
-
-
-===== ./dotfiles/niri/animations.kdl =====
-// Animation settings.
-// The wiki explains how to configure individual animations:
-// https://niri-wm.github.io/niri/Configuration:-Animations
-animations {
-    // Uncomment to turn off all animations.
-    // off
-
-    // Slow down all animations by this factor. Values below 1 speed them up instead.
-    // slowdown 3.0
-}
-
-
-===== ./dotfiles/niri/window-rules.kdl =====
-// Window rules let you adjust behavior for individual windows.
-// Find more information on the wiki:
-// https://niri-wm.github.io/niri/Configuration:-Window-Rules
-
-// Work around WezTerm's initial configure bug
-// by setting an empty default-column-width.
-//window-rule {
-    // This regular expression is intentionally made as specific as possible,
-    // since this is the default config, and we want no false positives.
-    // You can get away with just app-id="wezterm" if you want.
-//    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-//    default-column-width {}
-//}
-
-// Open the Firefox picture-in-picture player as floating by default.
-window-rule {
-    // This app-id regular expression will work for both:
-    // - host Firefox (app-id is "firefox")
-    // - Flatpak Firefox (app-id is "org.mozilla.firefox")
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-
-// Example: block out two password managers from screen capture.
-// (This example rule is commented out with a "/-" in front.)
-/-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
-    block-out-from "screen-capture"
-
-    // Use this instead if you want them visible on third-party screenshot tools.
-    // block-out-from "screencast"
-}
-
-// Example: enable rounded corners for all windows.
-// (This example rule is commented out with a "/-" in front.)
-/-window-rule {
-    geometry-corner-radius 12
-    clip-to-geometry true
 }
 
 
@@ -5298,22 +5350,3 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
 }
-
-
-===== ./dotfiles/niri/screenshots.kdl =====
-// You can change the path where screenshots are saved.
-// A ~ at the front will be expanded to the home directory.
-// The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
-// You can also set this to null to disable saving screenshots to disk.
-// screenshot-path null
-
-
-===== ./dotfiles/niri/decorations.kdl =====
-// Uncomment this line to ask the clients to omit their client-side decorations if possible.
-// If the client will specifically ask for CSD, the request will be honored.
-// Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.
-// This option will also fix border/focus ring drawing behind some semitransparent windows.
-// After enabling or disabling this, you need to restart the apps for this to take effect.
-prefer-no-csd

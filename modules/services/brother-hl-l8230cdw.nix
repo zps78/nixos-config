@@ -1,5 +1,5 @@
 # ../../modules/services/brother-hl-l8230cdw.nix
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myServices.brother-hl-l8230cdw.enable =
@@ -33,9 +33,9 @@
     systemd.services.cups-browsed.enable = false;
 
     # Useful user tools
-    environment.systemPackages = with pkgs; [
-  #   system-config-printer
-  #   simple-scan
-    ];
+#    environment.systemPackages = with pkgs; [
+#     system-config-printer
+#     simple-scan
+#    ];
   };
 }

@@ -10,6 +10,7 @@
     ./gpu-hybrid.nix
     ./gpu-intel.nix
     ./gpu-nvidia.nix
+    ./keyboard.nix
   ];
 
   options.myHardware.gpuVendor = lib.mkOption {

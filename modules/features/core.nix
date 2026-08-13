@@ -1,5 +1,5 @@
 # ../../modules/features/core.nix
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [

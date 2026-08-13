@@ -1,5 +1,5 @@
 # ../../modules/apps/firefox.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
   options.myApps.firefox.enable =

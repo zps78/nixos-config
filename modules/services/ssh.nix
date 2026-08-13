@@ -1,5 +1,5 @@
 # ../../modules/services/ssh.nix
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.myServices.ssh;

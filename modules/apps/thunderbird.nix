@@ -1,5 +1,5 @@
 # ../../modules/apps/thunderbird.nix
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
   options.myApps.thunderbird.enable =

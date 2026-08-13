@@ -3,7 +3,7 @@
 # NFS mount for torrents share
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myShares.nfs-torrents.enable =

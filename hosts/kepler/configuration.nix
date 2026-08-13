@@ -1,5 +1,5 @@
 # ../../hosts/kepler/configuration.nix
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -44,11 +44,11 @@
     battery.enable                               = true;             # battery support
     brother-ads-4300n.enable                     = true;             # Brother ADS-4300N network document scanner
     brother-hl-l8230cdw.enable                   = true;             # Brother HL-L8230CDW network color laser printer
-    docker.enable                                = false;            # add user to group docker below
-    libvirt.enable                               = false;            # add user to group LIBVIRT below
+    docker.enable                                = false;            # remmeber to add user to group docker below
+    libvirt.enable                               = false;            # remmeber to add user to group libvirtd below
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;             # keep disabled for security
-    sunshine.enable                              = false;            # add user to group input below
+    sunshine.enable                              = false;            # remmeber to add user to group input below
   };
 
   myShares = {
@@ -77,9 +77,9 @@
                                                    "audio"
                                                    "video"
                                                    "render"
-#                                                  "input"           # enable with sunshine
-#                                                  "libvirtd"        # enable with libvirt
-#                                                  "docker"          # enable with docker
+#                                                  "input"           # enable for sunshine
+#                                                  "libvirtd"        # enable for libvirt
+#                                                  "docker"          # enable for docker
     ];
   };
 
@@ -104,9 +104,9 @@
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-  environment.systemPackages                     = with pkgs; [
-    #
-  ];
+#  environment.systemPackages                     = with pkgs; [
+#
+#  ];
 
   # System state version
   system.stateVersion                            = "25.11";
