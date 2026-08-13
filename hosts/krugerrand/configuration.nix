@@ -32,7 +32,7 @@
     bluetooth.enable                             = true;             # enable bluetooth on this host
     fingerprint.enable                           = true;             # enable fingerprint on this host
     keyboard.layout                              = "pt";             # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
-    keyboard.secondary.layout                    = "";               # secondary keyboard layout (not available on tty)
+    keyboard.secondary.layout                    = null;               # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "hybrid";         # choose from: "hybrid" "nvidia" "amd" "intel"
   };
 
@@ -83,7 +83,6 @@
 #                                                  "docker"          # enable for docker
     ];
   };
-  programs.oh-my-posh.enable = true;
 
   # Display manager - auto login
   services.displayManager.autoLogin = {

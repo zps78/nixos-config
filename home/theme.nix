@@ -30,8 +30,8 @@
       enable = true;
 
       theme = {
-        package = pkgs.kdePackages.breeze-gtk;
-        name = "Breeze-Dark";
+        package = pkgs.gruvbox-gtk-theme;
+        name = "Gruvbox-Dark";
       };
 
       # Silence Home Manager warning
@@ -79,7 +79,7 @@
     ########################################
 
     home.sessionVariables = {
-      GTK_THEME = "Breeze-Dark";
+      GTK_THEME = "Gruvbox-Dark";
       QT_STYLE_OVERRIDE = "Breeze";
     };
   };
