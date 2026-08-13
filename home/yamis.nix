@@ -8,7 +8,7 @@ let
 
     src = pkgs.fetchgit {
       url = "https://bitbucket.org/dirn-typo/yet-another-monochrome-icon-set.git";
-      rev = "a4cf21df7e3e4455b85d15145735557f";
+      rev = "c5c3efe961e843b865d2b13b8180aff6ce64e496";
       hash = lib.fakeHash;
     };
 
