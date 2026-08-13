@@ -30,8 +30,8 @@
       enable = true;
 
       theme = {
-        package = pkgs.gruvbox-dark-gtk;
-        name = "gruvbox-dark";
+        package = pkgs.kdePackages.breeze-gtk;
+        name = "Breeze-Dark";
       };
 
       # Silence Home Manager warning
@@ -58,19 +58,15 @@
     qt = {
       enable = true;
 
-    style = {
-      name = "kvantum";
-      package = pkgs.kdePackages.qtstyleplugin-kvantum;
-    };
+      style = {
+        name = "Breeze";
+        package = pkgs.kdePackages.breeze;
+      };
 
       platformTheme = {
         name = "kde";
       };
     };
-
-    home.packages = [
-      pkgs.gruvbox-kvantum
-    ];
 
     ########################################
     ## XDG
@@ -83,8 +79,8 @@
     ########################################
 
     home.sessionVariables = {
-        GTK_THEME = "gruvbox-dark";
-#        QT_STYLE_OVERRIDE = "Breeze";
+      GTK_THEME = "Breeze-Dark";
+      QT_STYLE_OVERRIDE = "Breeze";
     };
   };
 }
