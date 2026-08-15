@@ -83,7 +83,8 @@
 #                                                  "docker"          # enable for docker
     ];
   };
-  hardware.modemmanager.enable = true;
+    networking.modemmanager.enable = true;
+
 
   # Display manager - auto login
   services.displayManager.autoLogin = {
