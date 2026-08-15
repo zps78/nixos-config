@@ -11,7 +11,7 @@ binds {
 
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
-    Mod+Shift+? { show-hotkey-overlay; } // original = Mod+Shift+Slash
+    Mod+Shift+Return { show-hotkey-overlay; } // original = Mod+Shift+Slash
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a terminal: alacritty" { spawn "alacritty"; }
