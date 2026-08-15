@@ -11,13 +11,13 @@ binds {
 
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
-    Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Shift+Alt { show-hotkey-overlay; } // original = Mod+Shift+Slash
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    Mod+D hotkey-overlay-title="Run an Application: noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Mod+Return hotkey-overlay-title="Open a terminal: alacritty" { spawn "alacritty"; }
+    Mod+D hotkey-overlay-title="Run an application: noctalia" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+    Mod+B hotkey-overlay-title="Open a web browser: zen browser" { spawn "zen"; }
+    Super+Alt+L hotkey-overlay-title="Lock the screen: swaylock" { spawn "swaylock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -50,7 +50,7 @@ binds {
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
-    Mod+O repeat=false { toggle-overview; }
+    Mod+Space repeat=false { toggle-overview; } // original = Mod+O
 
     Mod+Q repeat=false { close-window; }
 
