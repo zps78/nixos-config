@@ -52,19 +52,17 @@ let
 
   copilotLayout = "copilot-${primaryLayout}";
 
-  copilotSymbols = pkgs.writeText copilotLayout ''
-    partial alphanumeric_keys
-    xkb_symbols "${copilotLayout}" {
-      include "${primaryLayout}(basic)"
+copilotSymbols = pkgs.writeText copilotLayout ''
+  partial alphanumeric_keys
+  xkb_symbols "${copilotLayout}" {
+    include "${primaryLayout}(basic)"
 
-      // ThinkPad X12 Copilot key:
-      // F23 normally, Super+F23 switches keyboard group.
-      key <FK23> {
-        type = "PC_SUPER_LEVEL2",
-        [ F23, ISO_Next_Group ]
-      };
+    key <FK23> {
+      type = "PC_SUPER_LEVEL2",
+      symbols[Group1] = [ F23, ISO_Next_Group ]
     };
-  '';
+  };
+'';
 in
 {
   options.myHardware.keyboard = {
