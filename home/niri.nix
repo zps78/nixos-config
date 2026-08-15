@@ -71,6 +71,6 @@
     "niri/output.kdl".source             = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
 
     "alacritty/alacritty.toml".source    = ../dotfiles/alacritty/alacritty.toml;
-    "alacritty/breeze.yaml".source       = ../dotfiles/alacritty/breeze.yaml;
+    "alacritty/breeze.toml".source       = ../dotfiles/alacritty/breeze.toml;
   };
 }
