@@ -24,7 +24,7 @@
   myDesktop.force.theme.enable                   = true;             # force breeze dark theme
 
   ############################################################
-  # User applications (only truly global desktop apps)
+  # User applications
   ############################################################
 
   myApps = {
