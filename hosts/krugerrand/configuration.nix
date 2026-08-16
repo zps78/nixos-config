@@ -31,6 +31,8 @@
   myHardware = {
     bluetooth.enable                             = true;             # enable bluetooth on this host
     fingerprint.enable                           = true;             # enable fingerprint on this host
+    wwan.enable                                  = false;            # enable wwan mhi driver and install modem manager
+
     keyboard.layout                              = "pt";             # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
     keyboard.secondary.layout                    = null;               # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "hybrid";         # choose from: "hybrid" "nvidia" "amd" "intel"

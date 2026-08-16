@@ -31,6 +31,8 @@
   myHardware = {
     bluetooth.enable                             = true;             # enable bluetooth on this host
     fingerprint.enable                           = true;             # enable fingerprint on this host
+    wwan.enable                                  = false;            # enable wwan mhi driver and install modem manager
+
     keyboard.layout                              = "gb";             # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
     keyboard.secondary.layout                    = "pt";             # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "intel";          # choose from: "hybrid" "nvidia" "amd" "intel"
@@ -83,8 +85,6 @@
 #                                                  "docker"          # enable for docker
     ];
   };
-    networking.modemmanager.enable = true;
-
 
   # Display manager - auto login
   services.displayManager.autoLogin = {
