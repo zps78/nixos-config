@@ -1,5 +1,5 @@
 # ../../modules/hardware/wwan.nix
-{ config, lib, ... }:
+{ config, lib,pkgs, ... }:
 
 {
   options.myHardware.wwan.enable =
