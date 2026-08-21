@@ -35,9 +35,9 @@
     xfce.thunar-archive-plugin
 
 #    kdePackages.dolphin                  # File manager by KDE
-    xfce.thunar
-    xfce.thunar-volman
-    xfce.thunar-media-tags-plugin
+    thunar
+    thunar-volman
+    thunar-media-tags-plugin
 
 #    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
     ffmpegthumbnailer
@@ -58,7 +58,7 @@
 
 
 #    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-    xfce.tumbler
+    tumbler
 
 
 #    kdePackages.kompare                  # Graphical File Differences Tool

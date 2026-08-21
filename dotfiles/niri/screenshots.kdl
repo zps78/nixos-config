@@ -1,7 +1,1 @@
-// You can change the path where screenshots are saved.
-// A ~ at the front will be expanded to the home directory.
-// The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
-// You can also set this to null to disable saving screenshots to disk.
-// screenshot-path null
+/nix/store/ng545vcl860y0jjzvirhl6zh5kc03bfi-home-manager-files/.config/niri/screenshots.kdl
