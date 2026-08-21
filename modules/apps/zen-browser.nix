@@ -14,6 +14,7 @@ let
   prefs = {
     # Check these out at about:config
     "extensions.autoDisableScopes" = 0;
+    "browser.backspace_action" = 0;
     "extensions.pocket.enabled" = false;
     # ...
   };
