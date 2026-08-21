@@ -4,7 +4,7 @@
 {
 
   imports = [
-    ./mime.nix
+    ./niri-mime.nix
   ];
 
   programs.alacritty.enable = true;
@@ -23,25 +23,52 @@
   };
 
   home.packages = with pkgs; [
-    brightnessctl            # This program allows you read and control device brightness
-    grim                     # Grab images from a Wayland compositor
-    noctalia-shell           # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
-    playerctl                # Command-line utility and library for controlling media players that implement MPRIS
-    slurp                    # Select a region in a Wayland compositor
-    wl-clipboard             # Command-line copy/paste utilities for Wayland
+    brightnessctl                         # This program allows you read and control device brightness
+    grim                                  # Grab images from a Wayland compositor
+    noctalia-shell                        # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
+    playerctl                             # Command-line utility and library for controlling media players that implement MPRIS
+    slurp                                 # Select a region in a Wayland compositor
+    wl-clipboard                          # Command-line copy/paste utilities for Wayland
 
-    kdePackages.ark                      # File archiver by KDE
-    kdePackages.dolphin                  # File manager by KDE
-    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
-    kdePackages.filelight                # Quickly visualize your disk space usage
-    kdePackages.gwenview                 # Image viewer by KDE
-    kdePackages.isoimagewriter           # Program to write hybrid ISO files onto USB disks
-    kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
+#    kdePackages.ark                      # File archiver by KDE
+    file-roller
+    xfce.thunar-archive-plugin
+
+#    kdePackages.dolphin                  # File manager by KDE
+    xfce.thunar
+    xfce.thunar-volman
+    xfce.thunar-media-tags-plugin
+
+#    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
+    ffmpegthumbnailer
+
+#    kdePackages.filelight                # Quickly visualize your disk space usage
+    baobab
+
+#    kdePackages.gwenview                 # Image viewer by KDE
+    imv
+
+#    kdePackages.isoimagewriter           # Program to write hybrid ISO files onto USB disks
+    usbimager
+
+#    kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
+    galculator
+
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
-    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-    kdePackages.kompare                  # Graphical File Differences Tool
-    kdePackages.okular                   # KDE document viewer
-    kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
+
+
+#    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
+    xfce.tumbler
+
+
+#    kdePackages.kompare                  # Graphical File Differences Tool
+    meld
+
+#    kdePackages.okular                   # KDE document viewer
+    evince
+
+#    kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
+    gparted
     ];
 
   xdg.dataFile."applications/systemsettings.desktop".text = ''
