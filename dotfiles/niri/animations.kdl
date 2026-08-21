@@ -1,1 +1,10 @@
-/nix/store/da6mig1390p7ggrr00kadvcyq854v85l-home-manager-files/.config/niri/animations.kdl
+// Animation settings.
+// The wiki explains how to configure individual animations:
+// https://niri-wm.github.io/niri/Configuration:-Animations
+animations {
+    // Uncomment to turn off all animations.
+    // off
+
+    // Slow down all animations by this factor. Values below 1 speed them up instead.
+    // slowdown 3.0
+}

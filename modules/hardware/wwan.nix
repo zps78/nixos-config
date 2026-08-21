@@ -1,36 +1,4 @@
 # ../../modules/hardware/wwan.nix
-#{ config, lib, pkgs, ... }:
-#
-#{
-#  options.myHardware.wwan.enable =
-#    lib.mkEnableOption "WWAN modem support";
-#
-#  config = {
-#    # WWAN disabled by default:
-#    # prevent mhi-pci-generic from binding to MHI devices.
-#    boot.blacklistedKernelModules = lib.mkIf (!config.myHardware.wwan.enable) [
-#      "mhi_pci_generic"
-#    ];
-#
-#    # Only run ModemManager when WWAN support is requested.
-#    networking.modemmanager.enable =
-#      config.myHardware.wwan.enable;
-#
-#    # Only install WWAN-specific packages/rules when enabled.
-#    environment.systemPackages =
-#      lib.mkIf config.myHardware.wwan.enable [
-#        pkgs.libmbim
-#      ];
-#
-#    # Keep Quectel EM160R_GL out of runtime suspend.
-#    # Does not prevent system suspend from affecting the device.
-#    services.udev.extraRules = lib.mkIf config.myHardware.wwan.enable ''
-#      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x1eac", ATTR{device}=="0x100d", ATTR{power/control}="on"
-#    '';
-#  };
-#}
-
-# ../../modules/hardware/wwan.nix
 { config, lib, pkgs, ... }:
 
 let
