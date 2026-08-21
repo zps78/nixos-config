@@ -1,1 +1,11 @@
-/nix/store/ng545vcl860y0jjzvirhl6zh5kc03bfi-home-manager-files/.config/niri/spawn-at-startup.kdl
+// Add lines like this to spawn processes at startup.
+// Note that running niri as a session supports xdg-desktop-autostart,
+// which may be more convenient to use.
+// See the binds section below for more spawn examples.
+
+// This line starts waybar, a commonly used bar for Wayland compositors.
+// spawn-at-startup "waybar"
+spawn-at-startup "noctalia-shell"
+
+// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
+// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
