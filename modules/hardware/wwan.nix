@@ -71,8 +71,12 @@ in
     # ModemManager needs the low-power suspend/resume test flags
     # for this modem.
     systemd.services.ModemManager = lib.mkIf enabled {
-      serviceConfig.ExecStart = lib.mkForce
-        "${pkgs.modemmanager}/sbin/ModemManager --test-low-power-suspend-resume --test-quick-suspend-resume";
+      serviceConfig = {
+        ExecStart = [
+          ""
+          "${pkgs.modemmanager}/sbin/ModemManager --test-low-power-suspend-resume --test-quick-suspend-resume"
+        ];
+      };
     };
 
     # Quectel EM160R-GL FCC unlock.
