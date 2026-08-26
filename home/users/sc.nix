@@ -16,12 +16,10 @@
 
   imports = [
     ../../modules/apps
-    ../theme.nix
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix
   ];
-  myDesktop.force.theme.enable                   = true;             # force breeze dark theme
 
   ############################################################
   # User applications
@@ -39,7 +37,8 @@
     # programming
     godot.enable                                 = true;             # Free and Open Source 2D and 3D game engine
     kate.enable                                  = true;             # Advanced text editor ()+ nix + kdl + c++ lang)
-    vscodium.enable                              = true;             # VS Code without MS branding/telemetry/licensing
+    vscodium.enable                              = true;            # VS Code without MS branding/telemetry/licensing
+    zed.enable                                   = true;             # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
 
     # office and productivity
     office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors

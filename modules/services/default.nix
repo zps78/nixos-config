@@ -6,6 +6,7 @@
     ./brother-hl-l8230cdw.nix
     ./discovery.nix
     ./docker.nix
+    ./gvfs.nix
     ./libvirt.nix
     ./ssh.nix
     ./sunshine.nix

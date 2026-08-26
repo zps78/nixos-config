@@ -1,2 +1,4 @@
 [general]
-  import = ["breeze.toml"]
+  import = [
+    "~/.config/alacritty/theme.toml"
+  ]

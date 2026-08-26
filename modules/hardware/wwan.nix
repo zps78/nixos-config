@@ -1,4 +1,5 @@
 # ../../modules/hardware/wwan.nix
+# https://github.com/harenber/em160r-gl-unlock
 { config, lib, pkgs, ... }:
 
 let

@@ -34,6 +34,7 @@
     ./thunderbird.nix
     ./vlc.nix
     ./vscodium.nix
+    ./zed.nix
     ./zen-browser.nix
   ];
 }

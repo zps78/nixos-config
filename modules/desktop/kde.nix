@@ -34,19 +34,13 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 
   environment.systemPackages = with pkgs.kdePackages; [
     isoimagewriter           # Program to write hybrid ISO files onto USB disks
-    kate
     kcalc                    # Calculator offering everything a scientific calculator does, and more
-    kdeconnect-kde           # Multi-platform app that allows your devices to communicate
     kompare                  # Graphical File Differences Tool
     partitionmanager         # Manage the disk devices, partitions and file systems on your computer
 
-#    ark                      # File archiver by KDE
-#    dolphin                  # File manager by KDE
-#    ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
-#    filelight                # Quickly visualize your disk space usage
-#    gwenview                 # Image viewer by KDE
-#    kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-#    okular                   # KDE document viewer
+    ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
+    filelight                # Quickly visualize your disk space usage
+    kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
   ];
 
   ############################################################

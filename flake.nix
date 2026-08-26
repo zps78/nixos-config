@@ -10,6 +10,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,8 +22,7 @@
 
   };
 
-outputs = inputs@{ nixpkgs, home-manager, ... }:
-
+  outputs = inputs@{ nixpkgs, home-manager, stylix, ... }:
     let
       system = "x86_64-linux";
 
@@ -38,13 +42,16 @@ outputs = inputs@{ nixpkgs, home-manager, ... }:
             [
               ./hosts/${hostname}/configuration.nix
               home-manager.nixosModules.home-manager
-              
+              stylix.nixosModules.stylix
               {
                 nixpkgs.config.allowUnfree = true;
 
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.backupFileExtension = "backup";
+                home-manager.sharedModules = [
+                  stylix.homeModules.stylix
+                ];
               }
             ]
             ++ users;

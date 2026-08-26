@@ -65,6 +65,7 @@
 
   myFeatures = {
     data-rescue.enable                           = true;
+    easyeffects.enable                           = false;
     kde-connect.enable                           = false;
     steam.enable                                 = true;
     wine.enable                                  = true;

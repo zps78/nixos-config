@@ -2,6 +2,8 @@
 { pkgs, ... }:
 
 {
+  programs.dconf.enable = true;
+
   environment.systemPackages = with pkgs; [
 
     # networking
@@ -70,7 +72,6 @@
     # archives
     zip            # ZIP archive utility
     unzip          # Extract ZIP archives
-    p7zip          # 7-Zip archive manager
     unrar          # Extract RAR archives
     xz             # XZ compression utilities
     zstd           # Zstandard compression utilities
@@ -88,7 +89,6 @@
     # benchmarking
     hyperfine      # Command-line benchmarking tool
     sysbench       # Modular benchmark suite
-    iperf3         # Network performance measurement tool
     fio            # Flexible I/O benchmark and workload generator
 
     # monitoring
@@ -106,6 +106,7 @@
     # media
     ffmpeg-full    # Complete multimedia framework
     f3d            # Fast and minimalist 3D viewer using VTK
+
     # documentation
     tealdeer       # Fast tldr client
   ];

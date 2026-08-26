@@ -2,14 +2,13 @@
 { pkgs, osConfig, ... }:
 
 {
-
   imports = [
-    ./niri-mime.nix
+    ./mime.nix
+    #./gruvbox-niri.nix
   ];
 
   programs.alacritty.enable = true;
   programs.swaylock.enable = true;
-  services.mako.enable = true;
 
   services.swayidle = {
     enable = true;
@@ -23,52 +22,36 @@
   };
 
   home.packages = with pkgs; [
-    brightnessctl                         # This program allows you read and control device brightness
     grim                                  # Grab images from a Wayland compositor
     noctalia-shell                        # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
     playerctl                             # Command-line utility and library for controlling media players that implement MPRIS
     slurp                                 # Select a region in a Wayland compositor
-    wl-clipboard                          # Command-line copy/paste utilities for Wayland
 
-#    kdePackages.ark                      # File archiver by KDE
-    file-roller
-    xfce.thunar-archive-plugin
+    kdePackages.ark                      # File archiver by KDE
 
-#    kdePackages.dolphin                  # File manager by KDE
-    thunar
-    thunar-volman
-    thunar-media-tags-plugin
+    kdePackages.dolphin                  # File manager by KDE
 
-#    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
-    ffmpegthumbnailer
+    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
 
-#    kdePackages.filelight                # Quickly visualize your disk space usage
-    baobab
+    kdePackages.filelight                # Quickly visualize your disk space usage
 
-#    kdePackages.gwenview                 # Image viewer by KDE
-    imv
+    kdePackages.gwenview                 # Image viewer by KDE
 
-#    kdePackages.isoimagewriter           # Program to write hybrid ISO files onto USB disks
     usbimager
 
-#    kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
     galculator
 
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
 
+    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
+#    tumbler
 
-#    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-    tumbler
-
-
-#    kdePackages.kompare                  # Graphical File Differences Tool
+    kdePackages.kompare                  # Graphical File Differences Tool
     meld
 
-#    kdePackages.okular                   # KDE document viewer
-    evince
+    kdePackages.okular                   # KDE document viewer
 
-#    kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
-    gparted
+    kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
     ];
 
   xdg.dataFile."applications/systemsettings.desktop".text = ''
@@ -97,7 +80,6 @@
     "niri/window-rules.kdl".source       = ../dotfiles/niri/window-rules.kdl;
     "niri/output.kdl".source             = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
 
-    "alacritty/alacritty.toml".source    = ../dotfiles/alacritty/alacritty.toml;
-    "alacritty/breeze.toml".source       = ../dotfiles/alacritty/breeze.toml;
-  };
+#    "alacritty/alacritty.toml".source    = ../dotfiles/alacritty/alacritty.toml;
+    };
 }

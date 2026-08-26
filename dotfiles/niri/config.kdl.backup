@@ -1,0 +1,14 @@
+include "animations.kdl"
+include "binds.kdl"
+include "decorations.kdl"
+include "input.kdl"
+include "layout.kdl"
+include "output.kdl"
+include "screenshots.kdl"
+include "spawn-at-startup.kdl"
+include "window-rules.kdl"
+
+hotkey-overlay {
+    // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
+    // skip-at-startup
+}
