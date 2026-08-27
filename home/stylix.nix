@@ -15,5 +15,8 @@
       name = "Bibata-Modern-Ice";
       size = 24;
     };
+    targets.firefox.profileNames = [ "default" ];
+    targets.zen-browser.profileNames = [ "default" ];
+    overlays.enable = false;
   };
 }
