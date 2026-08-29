@@ -17,6 +17,7 @@
     };
     targets.firefox.profileNames = [ "default" ];
     targets.zen-browser.profileNames = [ "default" ];
+
     overlays.enable = false;
   };
 }

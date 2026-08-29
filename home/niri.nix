@@ -36,17 +36,16 @@
 
     kdePackages.gwenview                 # Image viewer by KDE
 
-    usbimager
+    usbimager                            # Very minimal GUI app that can write compressed disk images to USB drives
 
-    galculator
-    kdePackages.kcalc
+    galculator                           # GTK algebraic and RPN calculator
 
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
 
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
 
     kdePackages.kompare                  # Graphical File Differences Tool
-    meld
+    meld                                 # Visual diff and merge tool
 
     kdePackages.okular                   # KDE document viewer
 
@@ -78,7 +77,5 @@
     "niri/spawn-at-startup.kdl".source   = ../dotfiles/niri/spawn-at-startup.kdl;
     "niri/window-rules.kdl".source       = ../dotfiles/niri/window-rules.kdl;
     "niri/output.kdl".source             = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
-
-#    "alacritty/alacritty.toml".source    = ../dotfiles/alacritty/alacritty.toml;
     };
 }

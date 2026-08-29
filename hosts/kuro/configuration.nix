@@ -21,21 +21,22 @@
 
   # Networking
   networking.hostName                            = "kuro";
-  networking.interfaces = {                                          # set WOL for wired interfaces
-#   enp4s0.wakeOnLan.enable                      = true;             # atlantis nic
-#   enp5s0.wakeOnLan.enable                      = true;             # intel nic
+  networking.interfaces = {                                                    # set WOL for wired interfaces
+#   enp4s0.wakeOnLan.enable                      = true;                       # atlantis nic
+#   enp5s0.wakeOnLan.enable                      = true;                       # intel nic
   };
 
-  myDesktop.stack                                = "niri";           # choose from: "gnome" "hyprland" "kde" "niri"
+  myDesktop.stack                                = "niri";                     # choose from: "gnome" "hyprland" "kde" "niri"
+  stylix.image                                   = ../../wallpapers/login.png;
 
   myHardware = {
-    bluetooth.enable                             = true;             # enable bluetooth on this host
-    fingerprint.enable                           = true;             # enable fingerprint on this host
-    wwan.enable                                  = true;             # enable wwan mhi driver and install modem manager
+    bluetooth.enable                             = true;                       # enable bluetooth on this host
+    fingerprint.enable                           = true;                       # enable fingerprint on this host
+    wwan.enable                                  = true;                       # enable wwan mhi driver and install modem manager
 
-    keyboard.layout                              = "gb";             # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
-    keyboard.secondary.layout                    = "pt";             # secondary keyboard layout (not available on tty)
-    gpuVendor                                    = "intel";          # choose from: "hybrid" "nvidia" "amd" "intel"
+    keyboard.layout                              = "gb";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
+    keyboard.secondary.layout                    = "pt";                       # secondary keyboard layout (not available on tty)
+    gpuVendor                                    = "intel";                    # choose from: "hybrid" "nvidia" "amd" "intel"
   };
 
   myNetwork = {
@@ -44,14 +45,14 @@
   };
 
   myServices = {
-    battery.enable                               = true;             # battery support
-    brother-ads-4300n.enable                     = true;             # Brother ADS-4300N network document scanner
-    brother-hl-l8230cdw.enable                   = true;             # Brother HL-L8230CDW network color laser printer
-    docker.enable                                = false;            # remmeber to add user to group docker below
-    libvirt.enable                               = false;            # remmeber to add user to group libvirtd below
+    battery.enable                               = true;                       # battery support
+    brother-ads-4300n.enable                     = true;                       # Brother ADS-4300N network document scanner
+    brother-hl-l8230cdw.enable                   = true;                       # Brother HL-L8230CDW network color laser printer
+    docker.enable                                = false;                      # remmeber to add user to group docker below
+    libvirt.enable                               = false;                      # remmeber to add user to group libvirtd below
     ssh.enable                                   = true;
-    ssh.passwordAuth                             = true;             # keep disabled for security
-    sunshine.enable                              = false;            # remmeber to add user to group input below
+    ssh.passwordAuth                             = true;                       # keep disabled for security
+    sunshine.enable                              = false;                      # remmeber to add user to group input below
   };
 
   myShares = {
@@ -81,9 +82,9 @@
                                                    "audio"
                                                    "video"
                                                    "render"
-#                                                  "input"           # enable for sunshine
-#                                                  "libvirtd"        # enable for libvirt
-#                                                  "docker"          # enable for docker
+#                                                  "input"                     # enable for sunshine
+#                                                  "libvirtd"                  # enable for libvirt
+#                                                  "docker"                    # enable for docker
     ];
   };
 

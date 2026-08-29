@@ -16,6 +16,8 @@
 
   imports = [
     ../../modules/apps
+    ../stylix.nix
+#    inputs.zen-browser.homeModules.beta
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix
@@ -53,7 +55,7 @@
 
     # gaming
     chiaki-ng.enable                             = false;            # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
-    lutris.enable                                = false;            # Open Source gaming platform for GNU/Linux
+    lutris.enable                                = true;             # Open Source gaming platform for GNU/Linux
     moonlight.enable                             = false;            # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
 

@@ -13,11 +13,30 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   ############################################################
 
   # Use greetd (lightweight and Wayland-friendly)
+#  services.greetd = {
+#    enable = true;
+#    settings.default_session = {
+#      user = "greeter";
+#      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri-session";
+#    };
+#  };
+
+    # Use greetd + ReGreet
+  services.displayManager.regreet = {
+    enable = true;
+  };
+
   services.greetd = {
     enable = true;
     settings.default_session = {
       user = "greeter";
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri-session";
+      command = "${pkgs.niri}/bin/niri --config ${pkgs.writeText "greetd-niri.kdl" ''
+        hotkey-overlay {
+          skip-at-startup
+        }
+
+        spawn-sh-at-startup "${pkgs.regreet}/bin/regreet; ${pkgs.niri}/bin/niri msg action quit --skip-confirmation"
+      ''}";
     };
   };
 
