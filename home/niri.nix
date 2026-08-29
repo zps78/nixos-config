@@ -4,7 +4,6 @@
 {
   imports = [
     ./mime.nix
-    #./gruvbox-niri.nix
   ];
 
   programs.alacritty.enable = true;
@@ -40,11 +39,11 @@
     usbimager
 
     galculator
+    kdePackages.kcalc
 
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
 
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-#    tumbler
 
     kdePackages.kompare                  # Graphical File Differences Tool
     meld
