@@ -26,7 +26,7 @@
     enp5s0.wakeOnLan.enable                      = true;             # intel nic
   };
 
-  myDesktop.stack                                = "kde";            # choose from: "gnome" "hyprland" "kde" "niri"
+  myDesktop.stack                                = "kde";            # choose from: "gnome" "kde" "niri"
 
   myHardware = {
     bluetooth.enable                             = true;             # enable bluetooth on this host

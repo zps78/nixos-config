@@ -7,22 +7,12 @@
   ];
 
   programs.alacritty.enable = true;
-  programs.swaylock.enable = true;
-
-  services.swayidle = {
+  programs.noctalia = {
     enable = true;
-    events = {
-      before-sleep = "${pkgs.swaylock}/bin/swaylock -f";
-    };
-    timeouts = [
-      { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -f"; }
-      { timeout = 600; command = "niri msg action power-off-monitors"; }
-    ];
   };
 
   home.packages = with pkgs; [
     grim                                  # Grab images from a Wayland compositor
-    noctalia-shell                        # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
     playerctl                             # Command-line utility and library for controlling media players that implement MPRIS
     slurp                                 # Select a region in a Wayland compositor
 

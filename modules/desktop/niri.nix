@@ -12,32 +12,8 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   # Display / login manager
   ############################################################
 
-  # Use greetd (lightweight and Wayland-friendly)
-#  services.greetd = {
-#    enable = true;
-#    settings.default_session = {
-#      user = "greeter";
-#      command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd niri-session";
-#    };
-#  };
-
-    # Use greetd + ReGreet
-  services.displayManager.regreet = {
+  programs.noctalia-greeter = {
     enable = true;
-  };
-
-  services.greetd = {
-    enable = true;
-    settings.default_session = {
-      user = "greeter";
-      command = "${pkgs.niri}/bin/niri --config ${pkgs.writeText "greetd-niri.kdl" ''
-        hotkey-overlay {
-          skip-at-startup
-        }
-
-        spawn-sh-at-startup "${pkgs.regreet}/bin/regreet; ${pkgs.niri}/bin/niri msg action quit --skip-confirmation"
-      ''}";
-    };
   };
 
   ############################################################
@@ -46,9 +22,6 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
   # Required for screen locking, polkit auth prompts, etc.
   security.polkit.enable = true;
-
-  # PAM rule for swaylock (Super+Alt+L default keybind)
-  security.pam.services.swaylock = {};
 
   # Secret service (used by e.g. Chromium, VSCode)
   services.gnome.gnome-keyring.enable = true;

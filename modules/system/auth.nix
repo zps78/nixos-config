@@ -13,7 +13,7 @@
     ############################################################
     sddm.fprintAuth = false;   # KDE
     gdm.fprintAuth = false;    # GNOME (safe even if unused)
-    greetd.fprintAuth = false; # Hyprland / Niri setups
+    greetd.fprintAuth = false; # Niri setups
 
     ############################################################
     # Sudo
@@ -23,9 +23,6 @@
     ############################################################
     # Screen lockers (important for Wayland setups)
     ############################################################
-    swaylock.fprintAuth = false;
-    hyprlock.fprintAuth = false;
-
     # If you use other lockers later, add them here
   };
 }

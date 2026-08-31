@@ -15,6 +15,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    noctalia-greeter = {
+      url = "github:noctalia-dev/noctalia-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     stylix = {
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,19 +35,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
-#    zen-browser = {
-#      url = "github:youwen5/zen-browser-flake";
-#      inputs.nixpkgs.follows = "nixpkgs";
-#    };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, stylix, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, stylix, ... }:
     let
       system = "x86_64-linux";
 
       makeUser = userName: userFile: {
-        home-manager.users.${userName} = import userFile;
+        home-manager.users.${userName} = {
+          imports = [
+            noctalia.homeModules.default
+            (import userFile)
+          ];
+        };
+
         home-manager.extraSpecialArgs = { inherit inputs; };
       };
 
@@ -52,6 +63,7 @@
             [
               ./hosts/${hostname}/configuration.nix
               home-manager.nixosModules.home-manager
+              noctalia-greeter.nixosModules.default
               stylix.nixosModules.stylix
               {
                 nixpkgs.config.allowUnfree = true;
