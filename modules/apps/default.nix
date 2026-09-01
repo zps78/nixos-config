@@ -7,6 +7,7 @@
     ./bambu-studio.nix
     ./blender.nix
     ./bottles.nix
+    ./brave.nix
     ./chiaki-ng.nix
     ./darktable.nix
     ./firefox.nix

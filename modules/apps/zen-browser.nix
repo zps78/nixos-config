@@ -5,10 +5,26 @@ let
   cfg = config.myApps.zen-browser;
 
   prefs = {
+    # Extension installation
     "extensions.autoDisableScopes" = 0;
+
+    # Navigation
     "browser.backspace_action" = 0;
+
+    # Disable unwanted features
     "extensions.pocket.enabled" = false;
+
+    # Passwords / form data
     "signon.rememberSignons" = false;
+    "browser.formfill.enable" = false;
+
+        # Telemetry / data collection
+    "datareporting.healthreport.uploadEnabled" = false;
+    "toolkit.telemetry.enabled" = false;
+
+    # Studies / experiments
+    "app.shield.optoutstudies.enabled" = false;
+    "app.normandy.enabled" = false;
   };
 
 in

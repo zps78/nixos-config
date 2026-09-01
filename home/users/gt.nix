@@ -79,6 +79,7 @@
     krita.enable                                 = false;            # Free and open source painting application
 
     # web browsers
+    brave.enable                                 = true;             # Privacy-oriented browser for Desktop and Laptop computers
     firefox.enable                               = true;             # Web browser built from Firefox source tree
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
