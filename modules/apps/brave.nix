@@ -40,44 +40,44 @@
     # ----------------------
     # Brave / Chromium policies
     # ----------------------
-    programs.chromium = {
-      enable = true;
-
-      extraOpts = {
-        # Updates / background behaviour
-        BackgroundModeEnabled = false;
-
-        # Default browser
-        DefaultBrowserSettingEnabled = false;
-
-        # Autofill
-        AutofillAddressEnabled = false;
-        AutofillCreditCardEnabled = false;
-
-        # Passwords
-        PasswordManagerEnabled = false;
-
-        # Privacy
-        MetricsReportingEnabled = false;
-        SafeBrowsingExtendedReportingEnabled = false;
-
-        # Suggestions / promotions
-        PromotionsEnabled = false;
-
-        # Brave-specific
-        BraveRewardsDisabled = true;
-        BraveWalletDisabled = true;
-        TorDisabled = true;
-        BraveWebDiscoveryEnabled = false;
-        BraveP3AEnabled = false;
-        BraveStatsPingEnabled = 0;
-
-        # Permissions
-        DefaultGeolocationSetting = 2;
-        DefaultNotificationsSetting = 2;
-        DefaultSensorsSetting = 2;
-        DefaultSerialGuardSetting = 2;
-      };
-    };
+#    programs.chromium = {
+#      enable = true;
+#
+#      extraOpts = {
+#        # Updates / background behaviour
+#        BackgroundModeEnabled = false;
+#
+#        # Default browser
+#        DefaultBrowserSettingEnabled = false;
+#
+#        # Autofill
+#        AutofillAddressEnabled = false;
+#        AutofillCreditCardEnabled = false;
+#
+#        # Passwords
+#        PasswordManagerEnabled = false;
+#
+#        # Privacy
+#        MetricsReportingEnabled = false;
+#        SafeBrowsingExtendedReportingEnabled = false;
+#
+#        # Suggestions / promotions
+#        PromotionsEnabled = false;
+#
+#        # Brave-specific
+#        BraveRewardsDisabled = true;
+#        BraveWalletDisabled = true;
+#        TorDisabled = true;
+#        BraveWebDiscoveryEnabled = false;
+#        BraveP3AEnabled = false;
+#        BraveStatsPingEnabled = 0;
+#
+#        # Permissions
+#        DefaultGeolocationSetting = 2;
+#        DefaultNotificationsSetting = 2;
+#        DefaultSensorsSetting = 2;
+#        DefaultSerialGuardSetting = 2;
+#      };
+#    };
   };
 }
