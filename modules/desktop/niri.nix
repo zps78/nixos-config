@@ -6,7 +6,9 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   # Niri compositor (system-level enablement)
   ############################################################
 
-  programs.niri.enable = true;
+  programs.niri = {
+    enable = true;
+  };
 
   ############################################################
   # Display / login manager
@@ -14,6 +16,10 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
   programs.noctalia-greeter = {
     enable = true;
+    settings = {
+      appearance.scheme = "Synced";
+      appearance.hide_logo = true;
+    };
   };
 
   ############################################################
@@ -52,6 +58,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   #  via xwayland-satellite (niri integrates it automatically)
   environment.systemPackages = with pkgs; [
     xwayland-satellite       # Xwayland outside your Wayland compositor
+    polkit_gnome
   ];
 
   environment.pathsToLink = [
