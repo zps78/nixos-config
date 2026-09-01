@@ -15,9 +15,11 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    Mod+B hotkey-overlay-title="Open a Web Browser: zen browser" { spawn "zen-beta"; }
     Mod+E hotkey-overlay-title="Open File Manager: dolphin" { spawn "dolphin"; }
     Mod+D hotkey-overlay-title="Open Application Launcher: noctalia" { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+
+    Mod+B hotkey-overlay-title="Open Web Browser: Brave" { spawn "brave"; }
+    Mod+Z hotkey-overlay-title="Open Web Browser: Zen" { spawn "zen-beta"; }
 
     Super+Alt+L hotkey-overlay-title="Lock the Screen: noctalia" { spawn "noctalia" "msg" "session" "lock"; }
 
