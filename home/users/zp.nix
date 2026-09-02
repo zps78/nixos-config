@@ -16,8 +16,7 @@
 
   imports = [
     ../../modules/apps
-    ../stylix.nix
-#    inputs.zen-browser.homeModules.beta
+#    ../stylix.nix
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix

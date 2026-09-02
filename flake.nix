@@ -25,10 +25,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+#    stylix = {
+#      url = "github:nix-community/stylix";
+#      inputs.nixpkgs.follows = "nixpkgs";
+#    };
 
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
@@ -37,7 +37,7 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, stylix, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, ... }:
     let
       system = "x86_64-linux";
 
@@ -64,7 +64,7 @@
               ./hosts/${hostname}/configuration.nix
               home-manager.nixosModules.home-manager
               noctalia-greeter.nixosModules.default
-              stylix.nixosModules.stylix
+             # stylix.nixosModules.stylix
               {
                 nixpkgs.config.allowUnfree = true;
 
@@ -72,7 +72,7 @@
                 home-manager.useUserPackages = true;
                 home-manager.backupFileExtension = "backup";
                 home-manager.sharedModules = [
-                  stylix.homeModules.stylix
+              #    stylix.homeModules.stylix
                 ];
               }
             ]

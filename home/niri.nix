@@ -60,6 +60,7 @@
     "niri/animations.kdl".source         = ../dotfiles/niri/animations.kdl;
     "niri/binds.kdl".source              = ../dotfiles/niri/binds.kdl;
     "niri/config.kdl".source             = ../dotfiles/niri/config.kdl;
+    "niri/cursor.kdl".source             = ../dotfiles/niri/cursor.kdl;
     "niri/decorations.kdl".source        = ../dotfiles/niri/decorations.kdl;
     "niri/input.kdl".source              = ../dotfiles/niri/input.kdl;
     "niri/layout.kdl".source             = ../dotfiles/niri/layout.kdl;

@@ -59,6 +59,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   environment.systemPackages = with pkgs; [
     xwayland-satellite       # Xwayland outside your Wayland compositor
     polkit_gnome
+    bibata-cursors
   ];
 
   environment.pathsToLink = [
