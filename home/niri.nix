@@ -12,9 +12,15 @@
   };
 
   home.packages = with pkgs; [
-    grim                                  # Grab images from a Wayland compositor
-    playerctl                             # Command-line utility and library for controlling media players that implement MPRIS
-    slurp                                 # Select a region in a Wayland compositor
+    grim                                 # Grab images from a Wayland compositor
+
+    playerctl                            # Command-line utility and library for controlling media players that implement MPRIS
+
+    slurp                                # Select a region in a Wayland compositor
+
+    adw-gtk3                             # Unofficial GTK 3 port of libadwaita
+
+    kdePackages.qt6ct                    # Qt6 Configuration Tool
 
     kdePackages.ark                      # File archiver by KDE
 
@@ -68,5 +74,7 @@
     "niri/spawn-at-startup.kdl".source   = ../dotfiles/niri/spawn-at-startup.kdl;
     "niri/window-rules.kdl".source       = ../dotfiles/niri/window-rules.kdl;
     "niri/output.kdl".source             = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
+
+    "noctalia/templates.toml".source     = ../dotfiles/noctalia/templates.toml;
     };
 }

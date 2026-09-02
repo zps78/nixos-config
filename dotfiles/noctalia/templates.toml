@@ -1,0 +1,26 @@
+[theme.templates]
+enable_builtin_templates = true
+
+builtin_ids = [
+    "alacritty",
+    "btop",
+    "cava",
+    "helix",
+    "gtk3",
+    "gtk4",
+    "kcolorscheme",
+    "niri",
+    "qt",
+]
+
+enable_community_templates = true
+
+community_ids = [
+    "blender",
+    "brave",
+    "darktable",
+    "gimp",
+    "yazi",
+    "zed",
+    "zen-browser",
+]

@@ -9,6 +9,10 @@ include "screenshots.kdl"
 include "spawn-at-startup.kdl"
 include "window-rules.kdl"
 
+environment {
+    QT_QPA_PLATFORMTHEME "qt6ct"
+}
+
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
     // skip-at-startup

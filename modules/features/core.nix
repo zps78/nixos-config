@@ -104,6 +104,7 @@
     libargon2      # Argon2 password hashing library and tools
 
     # media
+    cava           # Console-based Audio Visualizer for Alsa
     ffmpeg-full    # Complete multimedia framework
     f3d            # Fast and minimalist 3D viewer using VTK
 
