@@ -16,10 +16,17 @@ builtin_ids = [
 enable_community_templates = true
 
 community_ids = [
+    "bat",
     "blender",
     "brave",
     "darktable",
+    "discord",
+    "fastfetch",
+    "fzf",
     "gimp",
+    "steam",
+    "telegram",
+    "vscode",
     "yazi",
     "zed",
     "zen-browser",

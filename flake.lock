@@ -98,6 +98,26 @@
         "type": "github"
       }
     },
+    "plex-tui": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788224501,
+        "narHash": "sha256-ABbtWzp8zGhcuSOZSsA3T0PbMKSItkQuG0TV+Cd18Io=",
+        "owner": "so1omon563",
+        "repo": "plex-tui",
+        "rev": "3229b436002bcc5e6b6bc3ac77ba7a8f7da6200b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "so1omon563",
+        "repo": "plex-tui",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "firefox-addons": "firefox-addons",
@@ -105,6 +125,7 @@
         "nixpkgs": "nixpkgs",
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
+        "plex-tui": "plex-tui",
         "zen-browser": "zen-browser"
       }
     },

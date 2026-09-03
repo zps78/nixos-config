@@ -10,6 +10,7 @@
   # ----------------------
   config = lib.mkIf config.myApps.spotify.enable {
     home.packages = with pkgs; [
+      spicetify-cli
       spotify
     ];
   };

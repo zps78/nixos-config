@@ -111,4 +111,8 @@
     # documentation
     tealdeer       # Fast tldr client
   ];
+
+    programs.bash.interactiveShellInit = ''
+    eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash)"
+  '';
 }
