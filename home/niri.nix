@@ -6,7 +6,7 @@
     ./mime.nix
   ];
 
-  programs.alacritty.enable = true;
+  programs.ghostty.enable = true;
   programs.noctalia = {
     enable = true;
   };

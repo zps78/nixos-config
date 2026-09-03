@@ -2,9 +2,9 @@
 enable_builtin_templates = true
 
 builtin_ids = [
-    "alacritty",
     "btop",
     "cava",
+    "ghostty",
     "helix",
     "gtk3",
     "gtk4",
