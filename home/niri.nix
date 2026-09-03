@@ -12,12 +12,6 @@
   };
 
   home.packages = with pkgs; [
-    grim                                 # Grab images from a Wayland compositor
-
-    playerctl                            # Command-line utility and library for controlling media players that implement MPRIS
-
-    slurp                                # Select a region in a Wayland compositor
-
     adw-gtk3                             # Unofficial GTK 3 port of libadwaita
 
     kdePackages.qt6ct                    # Qt6 Configuration Tool
@@ -36,12 +30,17 @@
 
     galculator                           # GTK algebraic and RPN calculator
 
+    kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
+
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
 
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
 
     kdePackages.kompare                  # Graphical File Differences Tool
+
     meld                                 # Visual diff and merge tool
+
+    kdePackages.kolourpaint              # Easy-to-use paint program
 
     kdePackages.okular                   # KDE document viewer
 

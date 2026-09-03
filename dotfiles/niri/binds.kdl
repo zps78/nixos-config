@@ -39,11 +39,12 @@ binds {
 
     // Example media keys mapping using playerctl.
     // This will work with any MPRIS-enabled media player.
-    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioPause       allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
-    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
-    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+    // Media controls via Noctalia
+    XF86AudioPlay        allow-when-locked=true { spawn "noctalia" "msg" "media" "play-pause"; }
+    XF86AudioPause       allow-when-locked=true { spawn "noctalia" "msg" "media" "play-pause"; }
+    XF86AudioStop        allow-when-locked=true { spawn "noctalia" "msg" "media" "stop"; }
+    XF86AudioPrev        allow-when-locked=true { spawn "noctalia" "msg" "media" "previous"; }
+    XF86AudioNext        allow-when-locked=true { spawn "noctalia" "msg" "media" "next"; }
 
     // Example brightness key mappings for brightnessctl.
     // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
@@ -266,9 +267,10 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    // Screenshots via Noctalia
+    Print      hotkey-overlay-title="Screenshot: Select Region" { spawn "noctalia" "msg" "screenshot-region"; }
+    Ctrl+Print hotkey-overlay-title="Screenshot: Screen"        { spawn "noctalia" "msg" "screenshot-screen"; }
+    Alt+Print  hotkey-overlay-title="Screenshot: Window"        { spawn "noctalia" "msg" "screenshot-window"; }
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
