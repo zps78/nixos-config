@@ -27,7 +27,10 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   ############################################################
 
   # Required for screen locking, polkit auth prompts, etc.
-  security.polkit.enable = true;
+  security.polkit = {
+    enable = true;
+    enablePkexecWrapper = true;
+  };
 
   # Secret service (used by e.g. Chromium, VSCode)
   services.gnome.gnome-keyring.enable = true;

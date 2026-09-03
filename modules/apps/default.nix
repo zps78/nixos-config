@@ -29,7 +29,9 @@
     ./openscad.nix
     ./orca-slicer.nix
     ./plex.nix
+    ./plex-tui.nix
     ./proton-pass.nix
+    ./spotatui.nix
     ./spotify.nix
     ./telegram.nix
     ./thunderbird.nix

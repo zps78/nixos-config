@@ -1,4 +1,2 @@
 [general]
-  import = [
-    "~/.config/alacritty/theme.toml"
-  ]
+
