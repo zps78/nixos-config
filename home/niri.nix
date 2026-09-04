@@ -9,6 +9,7 @@
   programs.ghostty = {
     enable = true;
     settings = {
+      theme = "noctalia";
       cursor-style = "block";
       shell-integration-features = "no-cursor";
       scrollback-limit = 50000000;

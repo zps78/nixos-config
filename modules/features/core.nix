@@ -43,6 +43,7 @@
     rclone         # Sync files to and from cloud storage
     rsync          # Fast incremental file transfer utility
     croc           # Secure and simple file transfer tool
+    yazi           # Blazing fast terminal file manager written in Rust, based on async I/O
 
     # development
     clang-tools    # Standalone command line tools for C++ development
