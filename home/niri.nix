@@ -6,7 +6,16 @@
     ./mime.nix
   ];
 
-  programs.ghostty.enable = true;
+  programs.ghostty = {
+    enable = true;
+
+    settings = {
+      env = "GTK_IM_MODULE=simple";
+
+      # your other settings...
+    };
+  };
+
   programs.noctalia = {
     enable = true;
   };
