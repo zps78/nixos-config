@@ -8,11 +8,10 @@
 
   programs.ghostty = {
     enable = true;
-
     settings = {
-      env = "GTK_IM_MODULE=simple";
-
-      # your other settings...
+      cursor-style = "block";
+      scrollback-limit = 50000000;
+      mouse-hide-while-typing = true;
     };
   };
 
