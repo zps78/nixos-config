@@ -10,6 +10,7 @@
     enable = true;
     settings = {
       cursor-style = "block";
+      shell-integration-features = "no-cursor";
       scrollback-limit = 50000000;
       mouse-hide-while-typing = true;
     };
