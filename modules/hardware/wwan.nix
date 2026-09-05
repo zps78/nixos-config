@@ -19,6 +19,23 @@ in
     # Only enable ModemManager when WWAN is enabled.
     networking.modemmanager.enable = enabled;
 
+    networking.networkmanager.ensureProfiles.profiles =
+      lib.mkIf enabled {
+        "Digi.mobil" = {
+          connection = {
+            id = "Digi.mobil";
+            type = "gsm";
+          };
+
+          gsm = {
+            apn = "internet";
+          };
+
+          ipv4.method = "auto";
+          ipv6.method = "auto";
+        };
+      };
+
     # WWAN-specific tools.
     environment.systemPackages = lib.mkIf enabled [
       pkgs.libmbim
