@@ -31,7 +31,14 @@
     kdePackages.kolourpaint              # Easy-to-use paint program
     kdePackages.okular                   # KDE document viewer
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
-    kdePackages.qt6ct                    # Qt6 Configuration Tool
+    (kdePackages.qt6ct.overrideAttrs (oldAttrs: {
+      patches = (oldAttrs.patches or []) ++ [
+        (pkgs.fetchpatch {
+          url = "https://aur.archlinux.org/cgit/aur.git/plain/qt6ct-shenanigans.patch?h=qt6ct-kde";
+          hash = "sha256-Q8QOMDy84z6FD0OkSLylEwB+/Zs50jcUgR+4J6Lmwmk=";
+        })
+      ];
+    }))
 
     # Other GUI
     galculator                           # GTK algebraic and RPN calculator
@@ -61,8 +68,8 @@
   # Niri theming
   # ===========================================================================
   #
-  # Noctalia generates the actual themes. This section connects enabled
-  # applications to the Noctalia theme.
+  # Noctalia generates the actual themes. This section connects Niri-specific
+  # applications and toolkits to the Noctalia theme.
   # ===========================================================================
 
   # ---------------------------------------------------------------------------
