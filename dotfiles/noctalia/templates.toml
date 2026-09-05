@@ -31,3 +31,7 @@ community_ids = [
     "zed",
     "zen-browser",
 ]
+
+[theme.templates.user.oh_my_posh]
+input_path = "templates/oh-my-posh.json"
+output_path = "$XDG_CONFIG_HOME/oh-my-posh/quick-term.json"

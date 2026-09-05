@@ -142,18 +142,19 @@
   # ===========================================================================
 
   xdg.configFile = {
-    "niri/animations.kdl".source         = ../dotfiles/niri/animations.kdl;
-    "niri/binds.kdl".source              = ../dotfiles/niri/binds.kdl;
-    "niri/config.kdl".source             = ../dotfiles/niri/config.kdl;
-    "niri/cursor.kdl".source             = ../dotfiles/niri/cursor.kdl;
-    "niri/decorations.kdl".source        = ../dotfiles/niri/decorations.kdl;
-    "niri/input.kdl".source              = ../dotfiles/niri/input.kdl;
-    "niri/layout.kdl".source             = ../dotfiles/niri/layout.kdl;
-    "niri/screenshots.kdl".source        = ../dotfiles/niri/screenshots.kdl;
-    "niri/spawn-at-startup.kdl".source   = ../dotfiles/niri/spawn-at-startup.kdl;
-    "niri/window-rules.kdl".source       = ../dotfiles/niri/window-rules.kdl;
-    "niri/output.kdl".source             = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
+    "niri/animations.kdl".source                  = ../dotfiles/niri/animations.kdl;
+    "niri/binds.kdl".source                       = ../dotfiles/niri/binds.kdl;
+    "niri/config.kdl".source                      = ../dotfiles/niri/config.kdl;
+    "niri/cursor.kdl".source                      = ../dotfiles/niri/cursor.kdl;
+    "niri/decorations.kdl".source                 = ../dotfiles/niri/decorations.kdl;
+    "niri/input.kdl".source                       = ../dotfiles/niri/input.kdl;
+    "niri/layout.kdl".source                      = ../dotfiles/niri/layout.kdl;
+    "niri/screenshots.kdl".source                 = ../dotfiles/niri/screenshots.kdl;
+    "niri/spawn-at-startup.kdl".source            = ../dotfiles/niri/spawn-at-startup.kdl;
+    "niri/window-rules.kdl".source                = ../dotfiles/niri/window-rules.kdl;
+    "niri/output.kdl".source                      = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;
 
-    "noctalia/templates.toml".source     = ../dotfiles/noctalia/templates.toml;
+    "noctalia/templates.toml".source              = ../dotfiles/noctalia/templates.toml;
+    "noctalia/templates/oh-my-posh.json".source   = ../dotfiles/noctalia/templates/oh-my-posh.json;
   };
 }
