@@ -98,13 +98,10 @@
   # remove gtk min/max/close buttons
   # ---------------------------------------------------------------------------
 
-  gtk = {
-    gtk3.extraConfig = ''
-      gtk-decoration-layout = :
-    '';
-    gtk4.extraConfig = ''
-      gtk-decoration-layout = :
-    '';
+  dconf.settings = {
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = ":";
+    };
   };
 
   # ---------------------------------------------------------------------------
