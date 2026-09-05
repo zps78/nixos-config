@@ -114,7 +114,7 @@
   ];
 
   programs.bash.interactiveShellInit = ''
-    eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config quick-term)"
+    eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config ~/.config/oh-my-posh/quick-term.json)"
   '';
 
 }
