@@ -62,9 +62,17 @@
   # applications to the Noctalia theme.
   # ===========================================================================
 
+  # ---------------------------------------------------------------------------
+  # ghostty
+  # ---------------------------------------------------------------------------
+
   programs.ghostty.settings = {
     theme = "noctalia";
   };
+
+  # ---------------------------------------------------------------------------
+  # kate
+  # ---------------------------------------------------------------------------
 
   home.activation.kateNoctaliaTheme =
     lib.mkIf config.myApps.kate.enable
@@ -75,6 +83,23 @@
           --key "ColorScheme" \
           "noctalia"
       '');
+
+  # ---------------------------------------------------------------------------
+  # qt6ct
+  # ---------------------------------------------------------------------------
+
+  home.activation.qt6ctNoctaliaTheme =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      qt6ct_conf="$HOME/.config/qt6ct/qt6ct.conf"
+
+      if [ -f "$qt6ct_conf" ]; then
+        $DRY_RUN_CMD ${pkgs.gnused}/bin/sed \
+          -i \
+          -e "s|^color_scheme_path=.*|color_scheme_path=$HOME/.config/qt6ct/colors/noctalia.conf|" \
+          -e "s|^standard_dialogs=.*|standard_dialogs=xdgdesktopportal|" \
+          "$qt6ct_conf"
+      fi
+    '';
 
   # ===========================================================================
   # Desktop integration
