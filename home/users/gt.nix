@@ -76,7 +76,7 @@
     vlc.enable                                   = false;            # Cross-platform media player and streaming server
 
     # image editors
-    gimp.enable                                  = true;             # GNU Image Manipulation Program
+    gimp.enable                                  = false;            # GNU Image Manipulation Program
     darktable.enable                             = false;            # Virtual lighttable and darkroom for photographers
     krita.enable                                 = false;            # Free and open source painting application
 

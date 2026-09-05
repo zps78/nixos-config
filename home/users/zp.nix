@@ -16,7 +16,6 @@
 
   imports = [
     ../../modules/apps
-#    ../stylix.nix
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix
