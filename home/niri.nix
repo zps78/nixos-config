@@ -25,7 +25,6 @@
     kdePackages.gwenview                 # Image viewer by KDE
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-    kdePackages.kolourpaint              # Easy-to-use paint program
     kdePackages.okular                   # KDE document viewer
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
     (kdePackages.qt6ct.overrideAttrs (oldAttrs: {
