@@ -57,20 +57,14 @@ in
       lib.mkIf enabled {
         mode = "0755";
         text = ''
-          #!/bin/bash
-          # Quectel EM160R-GL FCC unlock for Lenovo ThinkPad X12 Detachable Gen 2
+          #!${pkgs.bash}/bin/bash
 
           set -e
 
           DEV="''${1:-/dev/wwan0mbim0}"
 
           ${pkgs.libmbim}/bin/mbimcli -d "$DEV" -p \
-            --quectel-set-command='AT+QCFG="fcc_enable",0' || exit 1
-
-          ${pkgs.libmbim}/bin/mbimcli -d "$DEV" -p \
-            --quectel-set-command='AT+CFUN=1' || exit 1
-
-          exit 0
+            --quectel-set-radio-state=on
         '';
       };
 
