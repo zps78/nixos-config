@@ -22,12 +22,9 @@
     kdePackages.ark                      # File archiver by KDE
     kdePackages.dolphin                  # File manager by KDE
     kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
-    kdePackages.filelight                # Quickly visualize your disk space usage
     kdePackages.gwenview                 # Image viewer by KDE
-    kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
     kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-    kdePackages.kompare                  # Graphical File Differences Tool
     kdePackages.kolourpaint              # Easy-to-use paint program
     kdePackages.okular                   # KDE document viewer
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
@@ -43,6 +40,8 @@
     # Other GUI
     galculator                           # GTK algebraic and RPN calculator
     meld                                 # Visual diff and merge tool
+    pinta                                # Drawing/editing program modeled after Paint.NET
+    qdirstat                             # Graphical disk usage analyzer
     usbimager                            # Very minimal GUI app that can write compressed disk images to USB drives
   ];
 
