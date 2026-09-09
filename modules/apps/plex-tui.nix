@@ -10,7 +10,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = [
-      inputs.plex-tui.packages.${pkgs.system}.default
+      inputs.plex-tui.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 }

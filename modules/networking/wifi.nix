@@ -4,7 +4,7 @@
 #
 # Purpose:
 # - Enables modern WiFi backend (iwd)
-# - Configures NetworkManager WiFi behavior
+# - Points NetworkManager at that backend
 #
 # This module does NOT:
 # - enable NetworkManager
@@ -24,30 +24,12 @@
     # NetworkManager WiFi backend
     ############################################################
     #
-    # Uses iwd instead of wpa_supplicant.
-    # iwd is faster, simpler, and more modern.
+    # Uses iwd instead of wpa_supplicant: faster, simpler, more modern.
+    # NetworkManager owns the connection profiles and autoconnect; iwd
+    # just handles authentication and the radio.
     #
 
     networking.networkmanager.wifi.backend = "iwd";
-
-    ############################################################
-    # iwd daemon
-    ############################################################
-    #
-    # Required when using iwd backend in NetworkManager.
-    # Handles authentication + connection management.
-    #
-    # AutoConnect:
-    # reconnect automatically to known networks.
-    #
-    networking.wireless.iwd = {
-      enable = true;
-
-      settings = {
-        Settings = {
-          AutoConnect = true;
-        };
-      };
-    };
+    networking.wireless.iwd.enable = true;
   };
 }

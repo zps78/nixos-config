@@ -44,7 +44,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   # Needed for portals (screen share, file pickers)
   xdg.portal = {
     enable = true;
-    
+
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
     ];
@@ -72,8 +72,4 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   environment.sessionVariables = {
     XDG_SESSION_DESKTOP = "niri";
   };
-
-  # Udev rules already handled by programs.niri.enable, but make sure
-  # the user is in the video/input groups (usually set in your common.nix)
-  # users.users.zp.extraGroups = [ "video" "input" ];
 }

@@ -48,8 +48,6 @@
             (import userFile)
           ];
         };
-
-        home-manager.extraSpecialArgs = { inherit inputs; };
       };
 
       mkHost = {
@@ -57,23 +55,21 @@
         users,
       }:
         nixpkgs.lib.nixosSystem {
-          inherit system;
+          specialArgs = { inherit inputs; };
 
           modules =
             [
               ./hosts/${hostname}/configuration.nix
               home-manager.nixosModules.home-manager
               noctalia-greeter.nixosModules.default
-             # stylix.nixosModules.stylix
               {
+                nixpkgs.hostPlatform = system;
                 nixpkgs.config.allowUnfree = true;
 
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.backupFileExtension = "backup";
-                home-manager.sharedModules = [
-              #    stylix.homeModules.stylix
-                ];
+                home-manager.extraSpecialArgs = { inherit inputs; };
               }
             ]
             ++ users;

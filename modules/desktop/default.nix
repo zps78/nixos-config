@@ -11,5 +11,7 @@
 
   options.myDesktop.stack = lib.mkOption {
     type = lib.types.enum [ "gnome" "kde" "niri" ];
+    default = "niri";
+    description = "Which desktop stack to enable for this host.";
   };
 }

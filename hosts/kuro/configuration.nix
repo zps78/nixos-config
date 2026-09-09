@@ -1,5 +1,5 @@
 # ../../hosts/kuro/configuration.nix
-{ pkgs, ... }:
+{ ... }:
 
 {
   # Import modules
@@ -15,9 +15,6 @@
 
     ../../modules/apps/android.nix
   ];
-
-  # Memory
-  boot.kernel.sysctl."vm.swappiness"             = 60;
 
   # Networking
   networking.hostName                            = "kuro";
@@ -36,6 +33,7 @@
     keyboard.layout                              = "gb";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
     keyboard.secondary.layout                    = "pt";                       # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "intel";                    # choose from: "hybrid" "nvidia" "amd" "intel"
+    ramGB                                        = 32;                         # this host's actual installed RAM (GB)
   };
 
   myNetwork = {

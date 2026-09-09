@@ -9,24 +9,24 @@
     services.tailscale = {
       enable = true;
 
-    # ----------------------------
-    # Needed for --accept-routes to behave properly
-    # ----------------------------
+      # Needed for --accept-routes to behave properly (subnet routes).
       useRoutingFeatures = "client";
 
-    # ----------------------------
-    # Not auto-applied in manual mode, but good to keep
-    # ----------------------------
+      # Only applied automatically when authKeyFile is set; otherwise run
+      # `tailscale up` with these flags once, by hand.
       extraUpFlags = [
         "--accept-dns"
         "--accept-routes"
         "--ssh"
       ];
+
+      # Opens the WireGuard listen port (UDP 41641) for the daemon.
+      openFirewall = true;
     };
 
-    # ----------------------------
-    # Firewall integration
-    # ----------------------------
-    services.tailscale.openFirewall = true;
+    # Trust inbound traffic on the tailnet interface. openFirewall above
+    # only opens the daemon's port, not services reached over tailscale0.
+    # Access is still gated by Tailscale ACLs.
+    networking.firewall.trustedInterfaces = [ "tailscale0" ];
   };
 }

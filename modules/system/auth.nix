@@ -1,7 +1,7 @@
 # ../../modules/system/auth.nix
-{ ... }:
+{ config, lib, ... }:
 
-{
+lib.mkIf config.services.fprintd.enable {
   security.pam.services = {
     ############################################################
     # TTY login

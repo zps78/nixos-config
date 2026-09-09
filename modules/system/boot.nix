@@ -1,5 +1,5 @@
 # ../../modules/system/boot.nix
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # ----------------------------
@@ -28,5 +28,6 @@
   # ----------------------------
   # Kernel selection
   # ----------------------------
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # mkDefault so a host can pin an older kernel (nvidia / regression).
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 }

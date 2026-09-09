@@ -13,19 +13,20 @@
   ############################################################
   #
   # systemd-resolved improves:
-  # - VPN DNS handling (Tailscale, WireGuard)
-  # - split DNS
+  # - Tailscale DNS handling (MagicDNS, split DNS)
   # - caching
+  #
+  # NetworkManager already hands DNS to resolved when it is enabled;
+  # setting it explicitly keeps Tailscale split-DNS predictable.
   #
 
   services.resolved.enable = lib.mkDefault true;
+  networking.networkmanager.dns = "systemd-resolved";
 
   ############################################################
   # Firewall baseline enforcement
   ############################################################
-  #
-  # Server systems should be explicit about firewall backend
-  #
 
+  networking.firewall.enable = lib.mkDefault true;
   networking.nftables.enable = lib.mkDefault true;
 }

@@ -1,5 +1,5 @@
 # ../../hosts/krugerrand/configuration.nix # VRF9-HZFL-9XPR-K4CB
-{ pkgs, ... }:
+{ ... }:
 
 {
   # Import modules
@@ -15,9 +15,6 @@
 
     ../../modules/apps/android.nix
   ];
-
-  # Memory
-  boot.kernel.sysctl."vm.swappiness"             = 60;
 
   # Networking
   networking.hostName                            = "krugerrand";
@@ -36,6 +33,7 @@
     keyboard.layout                              = "pt";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
     keyboard.secondary.layout                    = null;                       # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "hybrid";                   # choose from: "hybrid" "nvidia" "amd" "intel"
+    ramGB                                        = 64;                         # installed RAM (GB)
   };
 
   myNetwork = {

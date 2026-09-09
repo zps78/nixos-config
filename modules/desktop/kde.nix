@@ -22,7 +22,6 @@ lib.mkIf (config.myDesktop.stack == "kde") {
 
     extraPortals = with pkgs; [
       kdePackages.xdg-desktop-portal-kde
-#      xdg-desktop-portal-gtk   # important fallback for capture sessions
     ];
 
     config.common.default = "kde";
@@ -60,10 +59,4 @@ lib.mkIf (config.myDesktop.stack == "kde") {
   [UiSettings]
   ColorScheme=BreezeDark
   '';
-
-  # home.nix
-#  programs.plasma.configFile = {
-#    "kcminputrc".Mouse.naturalScrolling = true;
-#    "kcminputrc".Touchpad.naturalScrolling = true;
-#  };
 }

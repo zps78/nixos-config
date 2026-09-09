@@ -2,11 +2,7 @@
 { config, lib, ... }:
 
 let
-  # Total RAM in MB (provided by NixOS)
-  ramMB = config.hardware.memorySize or 0;
-
-  # Convert to GB
-  ramGB = ramMB / 1024;
+  ramGB = config.myHardware.ramGB;
 
   # ----------------------------
   # Adaptive logic
@@ -25,7 +21,6 @@ let
     if ramGB <= 16 then 8192
     else if ramGB <= 64 then 4096
     else 0; # disable on large RAM systems
-
 in
 {
   # ----------------------------
@@ -53,7 +48,9 @@ in
   # Kernel tuning (important for zram)
   # ----------------------------
   boot.kernel.sysctl = {
-    # Prefer swapping to zram instead of killing processes
+    # Primary swap is zram (RAM-speed, compressed), so bias hard toward
+    # swapping cold anon pages rather than dropping file cache. This is
+    # a function of the swap backend, not RAM size.
     "vm.swappiness" = lib.mkDefault 100;
 
     # Avoid swapping tiny amounts constantly

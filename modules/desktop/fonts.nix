@@ -10,7 +10,6 @@
     material-symbols
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
-    vista-fonts
   ];
 
   fonts.fontconfig.enable = true;
