@@ -1,5 +1,24 @@
 # ../../modules/hardware/wwan.nix
 # https://github.com/harenber/em160r-gl-unlock
+#
+# Rebuilt 2026-09-08 from a pre-Lenovo-blob backup, after a night of
+# work on the lenovo/lenovo-wwan-unlock binary-based approach turned
+# up:
+#   - DPR_Fcc_unlock_service crashing the MHI controller outright
+#     when actually run (mhi: "failed to resume device: -22" ->
+#     device recovery -> "failed to power up MHI controller")
+#   - a ~33-34s MHI reset/recovery loop that reproduces with NO
+#     unlock mechanism active at all (confirmed via raw `mbimcli
+#     --query-registration-state`, ModemManager fully stopped) —
+#     so registration failure is not obviously caused by which
+#     unlock command is used, if any
+#   - --test-low-power-suspend-resume ruled out as the cause of
+#     that reset loop, but confirmed genuinely required for
+#     keyboard/touchpad recovery after sleep
+#
+# This version never touches Lenovo's proprietary binary, and adds
+# the ASPM/D3cold udev rule (untested in any of last night's Lenovo-
+# blob attempts) as a new variable against the same reset loop.
 { config, lib, pkgs, ... }:
 
 let
@@ -47,6 +66,15 @@ in
     #
     # This prevents the modem from falling into L1.2 and subsequently
     # getting stuck during MHI power-state transitions.
+    #
+    # UNTESTED as of 2026-09-08 against the ~33-34s MHI reset loop
+    # (mhi: "Resuming from non M3 state (RESET)" ->
+    # "failed to resume device: -22" -> "device recovery started")
+    # observed repeatedly the night before this rebuild, under a
+    # completely different (Lenovo-blob) module that never included
+    # this rule. Worth watching `dmesg -T | grep -iE "mhi|wwan"`
+    # closely after this change specifically to see if the reset
+    # cadence changes or stops.
     services.udev.extraRules = lib.mkIf enabled ''
       # Quectel EM160R-GL: deactivate ASPM and D3cold
       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x1eac", ATTR{device}=="0x100d", \
@@ -56,6 +84,13 @@ in
 
     # ModemManager needs the low-power suspend/resume test flags
     # for this modem.
+    #
+    # Both flags confirmed together (2026-09-08, different module)
+    # to give stable keyboard/touchpad recovery after sleep.
+    # --test-low-power-suspend-resume alone was separately confirmed
+    # NOT responsible for the MHI reset loop (identical reset
+    # cadence reproduced with it fully absent) — so both are kept
+    # here without suspicion of causing WWAN instability.
     systemd.services.ModemManager = lib.mkIf enabled {
       serviceConfig = {
         ExecStart = [
@@ -67,9 +102,24 @@ in
 
     # Quectel EM160R-GL FCC unlock.
     #
-    # fcc_enable=0 means FCC lock disabled on this modem.
+    # Uses libmbim's Quectel-specific radio-state vendor extension
+    # (as opposed to the alternative approach of sending raw
+    # AT+QCFG="fcc_enable",0 / AT+CFUN=1 over the AT passthrough,
+    # which is also a real documented Quectel command but unverified
+    # on this Lenovo-OEM firmware — chosen here as the more commonly
+    # reported working method for this exact modem family, but this
+    # was a judgment call, not a certainty; the AT+QCFG variant is
+    # a reasonable thing to try if this doesn't work).
+    #
     # ModemManager runs this hook after modem initialization,
     # including after suspend/resume.
+    #
+    # Logs every invocation and its outcome explicitly to the
+    # journal (tagged "wwan-fcc-unlock") — every previous unlock
+    # attempt last night that used verbose flags was still hard to
+    # trace back to cause/effect, so this logs unconditionally
+    # rather than relying on -v flags that may or may not surface
+    # anything.
     environment.etc."ModemManager/fcc-unlock.d/1eac:100d" =
       lib.mkIf enabled {
         mode = "0755";
@@ -79,12 +129,16 @@ in
           set -e
 
           DEV="''${1:-/dev/wwan0mbim0}"
+          LOG="${pkgs.util-linux}/bin/logger -t wwan-fcc-unlock"
 
-          ${pkgs.libmbim}/bin/mbimcli -d "$DEV" -p \
-            --quectel-set-command='AT+QCFG="fcc_enable",0' || exit 1
+          $LOG "invoked for $DEV"
 
-          ${pkgs.libmbim}/bin/mbimcli -d "$DEV" -p \
-            --quectel-set-command='AT+CFUN=1' || exit 1
+          if ${pkgs.libmbim}/bin/mbimcli -d "$DEV" -p --quectel-set-radio-state=on 2>&1 | ${pkgs.util-linux}/bin/logger -t wwan-fcc-unlock; then
+            $LOG "quectel-set-radio-state=on: success"
+          else
+            $LOG "quectel-set-radio-state=on: FAILED (exit $?)"
+            exit 1
+          fi
         '';
       };
 

@@ -1,0 +1,577 @@
+{ config, lib, pkgs, ... }:
+let
+  cfg = config.myHardware.wwan;
+  #
+  # Lenovo WWAN Unlock package
+  #
+  # Official Lenovo release:
+  #   v4.0.0
+  #
+  # This is intentionally kept as the complete Lenovo payload rather
+  # than replacing individual components with NixOS equivalents.
+  #
+  lenovoWwan = pkgs.fetchFromGitHub {
+    owner = "lenovo";
+    repo = "lenovo-wwan-unlock";
+    rev = "v4.0.0";
+    hash = "sha256-Y/eHHHQ80KEkTAzqw+1Aq5jbcsRyQQKMj9EcCoUK6gI=";
+  };
+  #
+  # ------------------------------------------------------------
+  # DMI spoof target
+  # ------------------------------------------------------------
+  #
+  # The ThinkPad X12 Detachable Gen 2 ships with the EM160R-GL
+  # (confirmed: PCI ID 1eac:100d, product_family "ThinkPad X12
+  # Detachable Gen 2") but is NOT on the public supported-systems
+  # list shipped in lenovo-wwan-unlock v4.0.0. Both
+  # DPR_Fcc_unlock_service and configservice_lenovo read
+  # /sys/class/dmi/id/product_family and no-op on unrecognized
+  # models (confirmed via configservice_lenovo logging
+  # "WWAN SAR Configuration is not required for this product").
+  #
+  # Lenovo's own internal WWAN config table nonetheless groups
+  # the X12 Detachable Gen 2 under the same config bundle (29619)
+  # as the T14 Gen 5 Intel/AMD, and the X13 2-in-1 Gen 5 is the
+  # closest publicly-supported system with matching hardware
+  # (same Core Ultra U-series platform, same soldered LPDDR5x,
+  # same EM160R-GL module) — chosen over T14 Gen 5 (different
+  # chassis class, DDR5 SODIMM) and X1 2-in-1 Gen 9 (still a
+  # reasonable second choice if this doesn't work).
+  #
+  # This is a targeted experiment, not a permanent assumption:
+  # if Lenovo revises the supported-systems list to include the
+  # X12, or a cleaner classifier-level patch is worked out, this
+  # spoof should be removed.
+  #
+  lenovoSpoofProductFamily = "ThinkPad X13 2-in-1 Gen 5";
+  #
+  # Lenovo's exact 1eac:100d FCC unlock script from
+  # fcc-unlock.d.tar.gz, wrapped with a DMI spoof.
+  #
+  # The original (unmodified) script is:
+  #
+  #   #!/bin/bash
+  #   ./opt/fcc_lenovo/DPR_Fcc_unlock_service
+  #   exit $?
+  #
+  # NixOS' networking.modemmanager.fccUnlockScripts option installs
+  # this into /etc/ModemManager/fcc-unlock.d/1eac:100d.
+  #
+  # The bind mount below is scoped to ModemManager's own private
+  # mount namespace: systemd automatically gives a unit a private
+  # mount namespace once BindReadOnlyPaths/BindPaths are used on
+  # it (see systemd.services.ModemManager below), so this does not
+  # touch /sys/class/dmi on the rest of the system.
+  #
+  lenovoFccUnlock = pkgs.writeShellScript "1eac:100d" ''
+    #!/bin/sh
+    set -e
+    # SPDX-License-Identifier: CC0-1.0
+    # 2023 Nitin Joshi <njoshi1@lenovo.com>
+    # Quectel EM160R-GL FCC Lock Mechanism
+    #
+    # --- DMI spoof (see lenovoSpoofProductFamily comment above) ---
+    #
+    # NB: this script gets no guaranteed PATH (it's invoked
+    # directly by ModemManager, not via the lenovo-cfgservice
+    # unit's Environment=PATH), so every tool below is called by
+    # its full Nix store path rather than relying on PATH lookup.
+    #
+    "${pkgs.coreutils}/bin/echo" "${lenovoSpoofProductFamily}" > /tmp/lenovo-product-family
+    if "${pkgs.util-linux}/bin/mount" --bind /tmp/lenovo-product-family /sys/class/dmi/id/product_family; then
+      "${pkgs.coreutils}/bin/echo" "wwan-spoof: mount ok, product_family now: $(${pkgs.coreutils}/bin/cat /sys/class/dmi/id/product_family)"
+    else
+      "${pkgs.coreutils}/bin/echo" "wwan-spoof: mount FAILED with status $?"
+    fi
+    # If product_family alone isn't sufficient, also spoof
+    # product_name by uncommenting and filling in an X13 2-in-1
+    # Gen 5 machine-type/model string:
+    # "${pkgs.coreutils}/bin/echo" "<MTM here>" > /tmp/lenovo-product-name
+    # "${pkgs.util-linux}/bin/mount" --bind /tmp/lenovo-product-name /sys/class/dmi/id/product_name
+    # --- end DMI spoof ---
+    ./opt/fcc_lenovo/DPR_Fcc_unlock_service
+    exit $?
+  '';
+  #
+  # Wrapper for configservice_lenovo (the SAR config binary),
+  # applying the same DMI spoof and Lenovo's recommended verbose
+  # flag (per lenovo-wwan-unlock README: "Modification -
+  # ExecStart=/opt/fcc_lenovo/configservice_lenovo -v").
+  #
+  lenovoCfgServiceWrapper = pkgs.writeShellScript "lenovo-cfgservice-wrapper" ''
+    #!/bin/sh
+    # Called by full Nix store path — see note in lenovoFccUnlock
+    # above; this unit's Environment=PATH doesn't include
+    # util-linux either.
+    "${pkgs.coreutils}/bin/echo" "${lenovoSpoofProductFamily}" > /tmp/lenovo-product-family
+    if "${pkgs.util-linux}/bin/mount" --bind /tmp/lenovo-product-family /sys/class/dmi/id/product_family; then
+      "${pkgs.coreutils}/bin/echo" "wwan-spoof: mount ok, product_family now: $(${pkgs.coreutils}/bin/cat /sys/class/dmi/id/product_family)"
+    else
+      "${pkgs.coreutils}/bin/echo" "wwan-spoof: mount FAILED with status $?"
+    fi
+    # "${pkgs.coreutils}/bin/echo" "<MTM here>" > /tmp/lenovo-product-name
+    # "${pkgs.util-linux}/bin/mount" --bind /tmp/lenovo-product-name /sys/class/dmi/id/product_name
+    exec /opt/fcc_lenovo/configservice_lenovo -v
+  '';
+  #
+  # Reconstruct Lenovo's /opt/fcc_lenovo runtime tree inside
+  # an immutable Nix store derivation.
+  #
+  # Lenovo's installer creates:
+  #
+  #   /opt/fcc_lenovo/
+  #   /opt/fcc_lenovo/lib/
+  #   /opt/fcc_lenovo/DEV_OTA_PACKAGE/
+  #   /opt/fcc_lenovo/sar_config_files/
+  #
+  # and copies the binaries/libraries into it.
+  #
+  lenovoWwanRuntime = pkgs.stdenv.mkDerivation {
+    pname = "lenovo-wwan-unlock-runtime";
+    version = "4.0.0";
+    src = lenovoWwan;
+    nativeBuildInputs = [
+      pkgs.patchelf
+    ];
+    buildInputs = [
+      pkgs.pciutils
+      pkgs.zlib
+      pkgs.openssl
+    ];
+    dontConfigure = true;
+    dontBuild = true;
+    installPhase = ''
+      #
+      # /opt/fcc_lenovo
+      #
+      mkdir -p $out/opt/fcc_lenovo
+      #
+      # Lenovo creates /opt/fcc_lenovo/lib
+      #
+      mkdir -p $out/opt/fcc_lenovo/lib
+      #
+      # Lenovo creates /opt/fcc_lenovo/DEV_OTA_PACKAGE
+      # and extracts DEV_OTA_PACKAGE.tar.gz into /opt/fcc_lenovo.
+      #
+      tar -xzf DEV_OTA_PACKAGE.tar.gz \
+        -C $out/opt/fcc_lenovo/
+      #
+      # Lenovo extracts sar_config_files.tar.gz into
+      # /opt/fcc_lenovo.
+      #
+      tar -xzf sar_config_files.tar.gz \
+        -C $out/opt/fcc_lenovo/
+      #
+      # Lenovo copies these nine libraries on both supported
+      # distributions.
+      #
+      cp libmodemauth.so \
+        $out/opt/fcc_lenovo/lib/
+      cp libmodemauth.so.1.1 \
+        $out/opt/fcc_lenovo/lib/
+      cp libconfigserviceR+.so \
+        $out/opt/fcc_lenovo/lib/
+      cp libconfigservice350.so \
+        $out/opt/fcc_lenovo/lib/
+      cp libconfigservice350.so.1.2 \
+        $out/opt/fcc_lenovo/lib/
+      cp libconfigservice101.so.1.2 \
+        $out/opt/fcc_lenovo/lib/
+      cp libmbimtools.so \
+        $out/opt/fcc_lenovo/lib/
+      cp libfiisdk.so.2.2.2 \
+        $out/opt/fcc_lenovo/lib/
+      cp libmodemauthRW101.so.1.1 \
+        $out/opt/fcc_lenovo/lib/
+      #
+      # Lenovo's Fedora installation also copies these SELinux
+      # policy files into /opt/fcc_lenovo and installs them with
+      # semodule.
+      #
+      # NixOS does not use the Fedora SELinux policy mechanism,
+      # so the files are retained in the payload but not installed
+      # into an SELinux policy store.
+      #
+      cp mm_FccUnlock.cil \
+        $out/opt/fcc_lenovo/
+      cp mm_dmidecode.cil \
+        $out/opt/fcc_lenovo/
+      cp mm_sh.cil \
+        $out/opt/fcc_lenovo/
+      #
+      # Lenovo copies both executable binaries into
+      # /opt/fcc_lenovo.
+      #
+      cp DPR_Fcc_unlock_service \
+        $out/opt/fcc_lenovo/
+      cp configservice_lenovo \
+        $out/opt/fcc_lenovo/
+      #
+      # Lenovo runs:
+      #
+      #   chmod ugo+x /opt/fcc_lenovo/*
+      #
+      # The relevant executable payload is made executable here.
+      #
+      chmod ugo+x \
+        $out/opt/fcc_lenovo/DPR_Fcc_unlock_service \
+        $out/opt/fcc_lenovo/configservice_lenovo
+      #
+      # NixOS does not provide the filesystem layout assumed by the
+      # prebuilt Lenovo binaries.
+      #
+      # Lenovo's binaries expect the standard Linux ELF interpreter
+      # and dynamically load libraries from /opt/fcc_lenovo/lib.
+      #
+      # Preserve the binaries themselves while adapting only the
+      # ELF runtime requirements to NixOS.
+      #
+      patchelf \
+        --set-interpreter \
+          "${pkgs.stdenv.cc.bintools.dynamicLinker}" \
+        --set-rpath \
+          "${pkgs.pciutils}/lib:${pkgs.zlib}/lib:${pkgs.openssl.out}/lib" \
+        $out/opt/fcc_lenovo/DPR_Fcc_unlock_service
+      patchelf \
+        --set-interpreter \
+          "${pkgs.stdenv.cc.bintools.dynamicLinker}" \
+        --set-rpath \
+          "${pkgs.openssl.out}/lib" \
+        $out/opt/fcc_lenovo/configservice_lenovo
+    '';
+  };
+in
+{
+  options.myHardware.wwan = {
+    enable = lib.mkEnableOption "WWAN modem support";
+    lenovoUnlock = {
+      enable =
+        lib.mkEnableOption
+          "Lenovo WWAN FCC/DPR unlock and suspend fix";
+      #
+      # Separate, defaults-off toggle for the unconditional
+      # pre-ModemManager unlock unit specifically.
+      #
+      # Confirmed on 2026-09-08: running DPR_Fcc_unlock_service
+      # against this modem (Quectel EM160R-GL, 1eac:100d, X12
+      # Detachable Gen 2) triggers an MHI-level fault:
+      #
+      #   mhi mhi0: Resuming from non M3 state (RESET)
+      #   mhi-pci-generic 0000:1d:00.0: failed to resume device: -22
+      #   mhi-pci-generic 0000:1d:00.0: device recovery started
+      #   ...
+      #   mhi-pci-generic 0000:1d:00.0: failed to power up MHI controller
+      #
+      # which fully kills the modem for the rest of that boot (no
+      # /dev/wwan*, ModemManager can't even D-Bus-activate). This
+      # is not a "no-op" like the SAR service — it's actively
+      # harmful — so it stays off by default until the actual
+      # MBIM command DPR sends is understood well enough to trust
+      # running it unconditionally on every boot.
+      #
+      unconditionalFccUnlock =
+        lib.mkEnableOption
+          "unconditional pre-ModemManager DPR_Fcc_unlock_service run (known to MHI-fault this modem — leave off until understood)";
+      #
+      # RULED OUT 2026-09-08: initially suspected as the cause of
+      # the ~33-34s MHI reset/recovery loop on this modem, but
+      # disproven — the identical crash cadence was reproduced with
+      # this flag fully absent from ExecStart (manually running
+      # plain ModemManager with no flag). The MHI reset loop is a
+      # separate, still-unresolved issue (possibly kernel MHI/RDDM
+      # handling — see /areas/wwan-x12 notes if this gets picked up
+      # again). This flag IS genuinely required for keyboard/
+      # touchpad recovery after sleep (confirmed by regression when
+      # briefly disabled) — leave at its default (true).
+      enableSuspendFixFlag =
+        lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Pass --test-low-power-suspend-resume to ModemManager. Required for keyboard/touchpad recovery after sleep. Confirmed NOT the cause of the separate ~33s MHI reset loop on this modem (ruled out 2026-09-08) — kept toggleable only in case that needs re-testing.";
+        };
+    };
+  };
+  config = lib.mkIf cfg.enable {
+    #
+    # Lenovo EM160R-GL uses the generic MHI PCI driver.
+    #
+    boot.kernelModules = [
+      "mhi_pci_generic"
+    ];
+    #
+    # Lenovo's solution is built around ModemManager.
+    #
+    networking.modemmanager.enable = true;
+    #
+    # ------------------------------------------------------------
+    # Lenovo FCC unlock
+    # ------------------------------------------------------------
+    #
+    # Lenovo installs:
+    #
+    #   fcc-unlock.d/1eac:100d
+    #
+    # into ModemManager's vendor FCC-unlock directory.
+    #
+    # NixOS exposes this through fccUnlockScripts. This is preferable
+    # to modifying the immutable ModemManager package, while still
+    # producing the equivalent /etc/ModemManager/fcc-unlock.d entry.
+    #
+    # lenovoFccUnlock now wraps DPR_Fcc_unlock_service with the DMI
+    # spoof described above (X12 Detachable Gen 2 -> X13 2-in-1
+    # Gen 5) since the unwrapped binary silently no-ops on the X12.
+    #
+    networking.modemmanager.fccUnlockScripts =
+      lib.mkIf cfg.lenovoUnlock.enable [
+        {
+          id = "1eac:100d";
+          path = lenovoFccUnlock;
+        }
+      ];
+    #
+    # ------------------------------------------------------------
+    # Unconditional FCC unlock (bypasses ModemManager's own trigger)
+    # ------------------------------------------------------------
+    #
+    # Observed on this hardware: ModemManager logs
+    #   "[modemN] SIM is ready, and no need for the after SIM
+    #    unlock step..."
+    # i.e. MM uses successful SIM/MBIM control-channel
+    # communication as its heuristic for "already unlocked" and
+    # never consults fcc-unlock.d/1eac:100d at all in that case.
+    # The SIM channel and the RF/FCC lock are independent on this
+    # modem, so that heuristic is wrong here — the radio stays
+    # locked (registration times out, port dies ~4s after every
+    # enable attempt) even though the SIM itself answers fine.
+    #
+    # This unit runs DPR_Fcc_unlock_service unconditionally,
+    # ordered before ModemManager ever starts (and so before it
+    # can open the MBIM port itself), so the unlock no longer
+    # depends on MM's SIM-based decision at all. The
+    # fccUnlockScripts entry above is left in place too, in case
+    # a future MM/firmware update makes it actually fire — it's
+    # harmless dead weight if not.
+    #
+    systemd.services.lenovo-fcc-unlock = lib.mkIf cfg.lenovoUnlock.unconditionalFccUnlock {
+      description = "Lenovo WWAN FCC/DPR unlock (unconditional, pre-ModemManager)";
+      before = [ "ModemManager.service" ];
+      after = [ "systemd-udev-settle.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = "root";
+        ExecStart = "${lenovoFccUnlock}";
+        BindReadOnlyPaths = [
+          "${lenovoWwanRuntime}/opt/fcc_lenovo:/opt/fcc_lenovo"
+          "${pkgs.pciutils}/bin/lspci:/usr/bin/lspci"
+        ];
+        Environment = [
+          "LD_LIBRARY_PATH=${lenovoWwanRuntime}/opt/fcc_lenovo/lib"
+          #
+          # DPR_Fcc_unlock_service shells out internally (observed:
+          # "ps: command not found" when this was unset) — almost
+          # certainly checking whether something else already holds
+          # the modem. Give it a real PATH so that check actually
+          # runs instead of erroring out.
+          "PATH=${pkgs.coreutils}/bin:${pkgs.procps}/bin:${pkgs.util-linux}/bin:${pkgs.pciutils}/bin:${pkgs.modemmanager}/bin:/usr/bin:/bin"
+        ];
+      };
+    };
+    #
+    # ------------------------------------------------------------
+    # Lenovo suspend fix
+    # ------------------------------------------------------------
+    #
+    # Lenovo's v4.0.0 suspend-fix script (suspend-fix/wwan_issue_fix.sh,
+    # verified 2026-09-08 against the actual file content) checks for
+    # PCI ID :100d (among others: :7560, :4d75, :1007, :0308), checks
+    # ModemManager >= 1.23.2, and appends:
+    #
+    #   --test-low-power-suspend-resume
+    #
+    # to ModemManager.service. Confirmed this is the ONLY flag the
+    # script's logic actually inserts.
+    #
+    # NOTE: the script's own top-of-file comment claims it adds a
+    # second flag too — "--test-quick-suspend-resume" — but the
+    # actual sed logic never references or inserts it; only
+    # STRING_LOW_POWER is ever appended. Either that comment is
+    # stale (flag dropped in a later revision) or it was never
+    # implemented. Left commented below, ready to try if the
+    # keyboard/touchpad-after-sleep fix ever turns out to be only
+    # partial with just the low-power flag:
+    #
+    #   --test-quick-suspend-resume
+    #
+    # (to enable, add it to the ExecStart string below manually)
+    #
+    # RULED OUT as the cause of the ~33-34s MHI reset loop
+    # (mhi: "failed to resume device: -22" -> device recovery)
+    # seen on this modem: the identical crash cadence was
+    # reproduced on 2026-09-08 with this flag completely absent
+    # from ExecStart. The MHI reset loop is a separate,
+    # still-unresolved problem — possibly kernel-side MHI/RDDM
+    # handling (see conversation history / project notes if
+    # picked up again; needs CONFIG_MHI_BUS_DEBUG=y to actually
+    # observe execution-environment transitions, which the
+    # current kernel doesn't have compiled in).
+    #
+    # This flag genuinely IS required for keyboard/touchpad
+    # recovery after sleep — confirmed by regression when briefly
+    # disabled for the above test. Keep enableSuspendFixFlag at
+    # its default (true) going forward; it is not implicated in
+    # the WWAN instability.
+    #
+    systemd.services.ModemManager =
+      lib.mkIf cfg.lenovoUnlock.enable {
+        after = lib.mkIf cfg.lenovoUnlock.unconditionalFccUnlock [ "lenovo-fcc-unlock.service" ];
+        serviceConfig = {
+          #
+          # Reset the ExecStart supplied by the NixOS ModemManager
+          # module, then reproduce Lenovo's modified command (or
+          # plain ModemManager, if enableSuspendFixFlag is ever
+          # set false again for testing).
+          #
+          ExecStart = [
+            ""
+            (if cfg.lenovoUnlock.enableSuspendFixFlag
+             then "${pkgs.modemmanager}/sbin/ModemManager --test-low-power-suspend-resume"
+             # ^ if this fix is ever found incomplete, the commented
+             # --test-quick-suspend-resume flag above (documented in
+             # Lenovo's script header but never actually wired into
+             # its logic) would go here too, space-separated.
+             else "${pkgs.modemmanager}/sbin/ModemManager")
+          ];
+          #
+          # Lenovo's binaries hard-code:
+          #
+          #   /opt/fcc_lenovo
+          #   /usr/bin/lspci
+          #
+          # Provide those paths inside the ModemManager service
+          # namespace without modifying the host filesystem.
+          #
+          # NB: this BindReadOnlyPaths usage is also what gives
+          # ModemManager.service its own private mount namespace,
+          # which is what makes the /sys/class/dmi/id/product_family
+          # bind mount inside lenovoFccUnlock safe (it cannot leak
+          # to the rest of the system).
+          #
+          BindReadOnlyPaths = [
+            "${lenovoWwanRuntime}/opt/fcc_lenovo:/opt/fcc_lenovo"
+            "${pkgs.pciutils}/bin/lspci:/usr/bin/lspci"
+          ];
+          #
+          # Lenovo's runtime libraries live under:
+          #
+          #   /opt/fcc_lenovo/lib
+          #
+          Environment = [
+            "LD_LIBRARY_PATH=${lenovoWwanRuntime}/opt/fcc_lenovo/lib"
+          ];
+        };
+      };
+    #
+    # ------------------------------------------------------------
+    # Lenovo SAR/configuration service
+    # ------------------------------------------------------------
+    #
+    # This is the direct NixOS equivalent of Lenovo's:
+    #
+    #   lenovo-cfgservice.service
+    #
+    # Lenovo's original unit is:
+    #
+    #   [Unit]
+    #   Description=sar config
+    #   After=ModemManager.service
+    #
+    #   [Service]
+    #   Type=simple
+    #   User=root
+    #   ExecStart=/opt/fcc_lenovo/configservice_lenovo
+    #   ExecReload=/bin/kill -HUP $MAINPID
+    #   Restart=on-failure
+    #   RestartSec=20
+    #
+    #   [Install]
+    #   WantedBy=multi-user.target
+    #
+    # ExecStart now points at lenovoCfgServiceWrapper, which applies
+    # the same DMI spoof as lenovoFccUnlock and adds Lenovo's
+    # recommended -v flag (both changes match observed behavior:
+    # the unwrapped binary logged "WWAN SAR Configuration is not
+    # required for this product" and exited 0 without doing anything
+    # on the unspoofed X12).
+    #
+    systemd.services.lenovo-cfgservice =
+      lib.mkIf cfg.lenovoUnlock.enable {
+        description = "sar config";
+        wantedBy = [
+          "multi-user.target"
+        ];
+        after = [
+          "ModemManager.service"
+        ];
+        serviceConfig = {
+          Type = "simple";
+          User = "root";
+          ExecStart = "${lenovoCfgServiceWrapper}";
+          ExecReload = "/bin/kill -HUP $MAINPID";
+          Restart = "on-failure";
+          RestartSec = 20;
+          #
+          # Reproduce Lenovo's expected filesystem paths. This also
+          # gives this unit its own private mount namespace, same
+          # reasoning as ModemManager.service above.
+          #
+          BindReadOnlyPaths = [
+            "${lenovoWwanRuntime}/opt/fcc_lenovo:/opt/fcc_lenovo"
+            "${pkgs.pciutils}/bin/lspci:/usr/bin/lspci"
+          ];
+          #
+          # Lenovo's binaries use libraries from
+          # /opt/fcc_lenovo/lib.
+          #
+          Environment = [
+            "LD_LIBRARY_PATH=${lenovoWwanRuntime}/opt/fcc_lenovo/lib"
+            #
+            # The Lenovo binary invokes standard utilities
+            # including ls and lspci. NixOS does not have the
+            # traditional /usr/bin PATH layout.
+            #
+            "PATH=${pkgs.coreutils}/bin:${pkgs.pciutils}/bin:${pkgs.modemmanager}/bin:/usr/bin:/bin"
+          ];
+        };
+      };
+    #
+    # ------------------------------------------------------------
+    # NetworkManager / DIGI profile
+    # ------------------------------------------------------------
+    #
+    # This is separate from Lenovo's FCC/SAR mechanism.
+    #
+    networking.networkmanager.ensureProfiles.profiles."Digi.mobil" = {
+      connection = {
+        id = "Digi.mobil";
+        type = "gsm";
+      };
+      gsm = {
+        apn = "internet";
+      };
+      ipv4.method = "auto";
+      ipv6.method = "auto";
+    };
+    #
+    # ------------------------------------------------------------
+    # WWAN diagnostic tools
+    # ------------------------------------------------------------
+    #
+    environment.systemPackages = with pkgs; [
+      libmbim
+      pciutils
+    ];
+  };
+}
