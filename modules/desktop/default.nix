@@ -30,6 +30,9 @@
       Whether the shell locks / blanks / suspends on inactivity
       (Noctalia idle behaviors). Disable on hosts that must stay awake
       (e.g. game streaming, long renders).
+
+      When enabled, idle is additionally inhibited automatically while
+      more than one output is connected (docked / external displays).
     '';
   };
 }

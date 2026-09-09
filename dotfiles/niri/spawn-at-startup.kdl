@@ -9,5 +9,9 @@
 // (programs.noctalia.settings.shell.polkit_agent).
 spawn-at-startup "noctalia"
 
+// Inhibit idle while docked (>1 output connected). Only present when
+// myDesktop.idle.enable = true; a no-op otherwise.
+spawn-sh-at-startup "test -x $HOME/.config/niri/scripts/idle-monitor.sh && exec $HOME/.config/niri/scripts/idle-monitor.sh"
+
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"

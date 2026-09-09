@@ -30,6 +30,40 @@
     };
   };
 
+  # While >1 output is connected (docked / external displays), inhibit
+  # idle via Noctalia caffeine; release it back to a single screen. Runs
+  # as a niri child (spawn-at-startup) so it inherits $NIRI_SOCKET.
+  # Edge-triggered so it doesn't fight a manual caffeine toggle.
+  xdg.configFile."niri/scripts/idle-monitor.sh" = lib.mkIf osConfig.myDesktop.idle.enable {
+    executable = true;
+    text = ''
+      #!${pkgs.runtimeShell}
+      niri=${pkgs.niri}/bin/niri
+      jq=${pkgs.jq}/bin/jq
+      noctalia=${lib.getExe config.programs.noctalia.package}
+      state="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/niri-idle-monitor.state"
+
+      while :; do
+        n=$("$niri" msg -j outputs 2>/dev/null | "$jq" 'length' 2>/dev/null || echo "")
+        case "$n" in
+          ""|*[!0-9]*) ;;   # no/garbled reading - skip this round
+          *)
+            if [ "$n" -gt 1 ]; then want=1; else want=0; fi
+            if [ "$want" != "$(cat "$state" 2>/dev/null || echo x)" ]; then
+              printf '%s' "$want" > "$state"
+              if [ "$want" = 1 ]; then
+                "$noctalia" msg caffeine-enable  >/dev/null 2>&1 || true
+              else
+                "$noctalia" msg caffeine-disable >/dev/null 2>&1 || true
+              fi
+            fi
+            ;;
+        esac
+        sleep 20
+      done
+    '';
+  };
+
   # ===========================================================================
   # App <-> Noctalia theme wiring
   # ===========================================================================
