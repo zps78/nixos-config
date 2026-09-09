@@ -29,7 +29,7 @@
   myApps = {
 
     # 3d modeling
-    bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
+    bambu-studio.enable                          = true;             # PC Software for BambuLab's 3D printers
     blender.enable                               = false;            # 3D Creation/Animation/Publishing System
     f3d.enable                                   = false;            # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = true;             # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
