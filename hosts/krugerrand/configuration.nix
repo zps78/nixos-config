@@ -1,5 +1,5 @@
 # ../../hosts/krugerrand/configuration.nix # VRF9-HZFL-9XPR-K4CB
-{ ... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -106,9 +106,9 @@
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-#  environment.systemPackages                     = with pkgs; [
-#
-#  ];
+  environment.systemPackages                     = with pkgs; [
+    claude-code
+  ];
 
   # System state version
   system.stateVersion                            = "25.11";
