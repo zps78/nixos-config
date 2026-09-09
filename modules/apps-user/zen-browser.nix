@@ -4,6 +4,10 @@
 let
   cfg = config.myApps.zen-browser;
 
+  firefoxAddons = pkgs.extend inputs.firefox-addons.overlays.default;
+  browserExtensions =
+    import ./browser-extensions.nix firefoxAddons.firefox-addons;
+
   prefs = {
     # Extension installation
     "extensions.autoDisableScopes" = 0;
@@ -18,7 +22,7 @@ let
     "signon.rememberSignons" = false;
     "browser.formfill.enable" = false;
 
-        # Telemetry / data collection
+    # Telemetry / data collection
     "datareporting.healthreport.uploadEnabled" = false;
     "toolkit.telemetry.enabled" = false;
 
@@ -26,7 +30,6 @@ let
     "app.shield.optoutstudies.enabled" = false;
     "app.normandy.enabled" = false;
   };
-
 in
 {
   imports = [
@@ -43,20 +46,7 @@ in
       profiles.default = {
         settings = prefs;
 
-        extensions.packages =
-          let
-            firefoxAddons = pkgs.extend inputs.firefox-addons.overlays.default;
-          in
-          with firefoxAddons.firefox-addons; [
-            ublock-origin
-            sponsorblock
-            keepa
-            proton-pass
-            print-edit-we
-            video-downloadhelper
-            consent-o-matic
-            torrent-control
-          ];
+        extensions.packages = browserExtensions;
 
         search = {
           force = true;

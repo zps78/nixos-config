@@ -29,25 +29,24 @@
       # ----------------------
       # Settings
       # ----------------------
-      userSettings =
-        {
-          tab_size = 2;
-          hard_tabs = false;
+      userSettings = {
+        tab_size = 2;
+        hard_tabs = false;
 
-          format_on_save = "on";
+        format_on_save = "on";
 
-          git_panel = {
-            tree_view = true;
+        git_panel = {
+          tree_view = true;
+        };
+
+        tabs = {
+          git_status = true;
+        };
+
+        languages = {
+          Nix = {
+            language_servers = [ "nixd" ];
           };
-
-          tabs = {
-            git_status = true;
-          };
-
-          languages = {
-            Nix = {
-              language_servers = [ "nixd" ];
-            };
           TOML = {
             language_servers = [ "tombi" ];
           };

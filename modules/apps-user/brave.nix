@@ -6,78 +6,20 @@
     lib.mkEnableOption "Brave Browser";
 
   config = lib.mkIf config.myApps.brave.enable {
-
-    # ----------------------
-    # Browser
-    # ----------------------
     programs.brave = {
       enable = true;
 
-      # Keep Brave's profile in the normal XDG location:
-      # ~/.config/BraveSoftware/Brave-Browser
-
+      # Chrome Web Store IDs. Firefox equivalents live in
+      # ./browser-extensions.nix - keep this list roughly in sync.
+      # (No uBlock: Brave has built-in adblock. No torrent-control.)
       extensions = [
-        # SponsorBlock
-        "mnjggcdmjocbbbhaepdhchncahnbgone"
-
-        # Keepa
-        "neebplgakaahbhdphmkckjjcegoiijjo"
-
-        # Proton Pass
-        "ghmbeldphafepmbegfdlkpapadhbakde"
-
-        # Print Edit WE
-        "olnblpmehglpcallpnbgmikjblmkopia"
-
-        # Video DownloadHelper
-        "lmjnegcaeklhafolokijcfjliaokphfk"
-
-        # Consent-O-Matic
-        "mdjildafknihdffpkfmmpnpoiajfjnjd"
+        "mnjggcdmjocbbbhaepdhchncahnbgone"  # SponsorBlock
+        "neebplgakaahbhdphmkckjjcegoiijjo"  # Keepa
+        "ghmbeldphafepmbegfdlkpapadhbakde"  # Proton Pass
+        "olnblpmehglpcallpnbgmikjblmkopia"  # Print Edit WE
+        "lmjnegcaeklhafolokijcfjliaokphfk"  # Video DownloadHelper
+        "mdjildafknihdffpkfmmpnpoiajfjnjd"  # Consent-O-Matic
       ];
     };
-
-    # ----------------------
-    # Brave / Chromium policies
-    # ----------------------
-#    programs.chromium = {
-#      enable = true;
-#
-#      extraOpts = {
-#        # Updates / background behaviour
-#        BackgroundModeEnabled = false;
-#
-#        # Default browser
-#        DefaultBrowserSettingEnabled = false;
-#
-#        # Autofill
-#        AutofillAddressEnabled = false;
-#        AutofillCreditCardEnabled = false;
-#
-#        # Passwords
-#        PasswordManagerEnabled = false;
-#
-#        # Privacy
-#        MetricsReportingEnabled = false;
-#        SafeBrowsingExtendedReportingEnabled = false;
-#
-#        # Suggestions / promotions
-#        PromotionsEnabled = false;
-#
-#        # Brave-specific
-#        BraveRewardsDisabled = true;
-#        BraveWalletDisabled = true;
-#        TorDisabled = true;
-#        BraveWebDiscoveryEnabled = false;
-#        BraveP3AEnabled = false;
-#        BraveStatsPingEnabled = 0;
-#
-#        # Permissions
-#        DefaultGeolocationSetting = 2;
-#        DefaultNotificationsSetting = 2;
-#        DefaultSensorsSetting = 2;
-#        DefaultSerialGuardSetting = 2;
-#      };
-#    };
   };
 }

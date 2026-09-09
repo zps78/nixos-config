@@ -2,7 +2,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  options.myApps.godot.enable = 
+  options.myApps.godot.enable =
     lib.mkEnableOption "Godot";
 
   # ----------------------
@@ -10,9 +10,8 @@
   # ----------------------
   config = lib.mkIf config.myApps.godot.enable {
     home.packages = with pkgs; [
-      godot
-      mono
-      dotnet-sdk
+      godot_4-mono   # Godot 4 with the C#/.NET module compiled in
+      dotnet-sdk     # needed by Godot to build C# assemblies
     ];
   };
 }
