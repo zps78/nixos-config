@@ -15,7 +15,7 @@
   ############################################################
 
   imports = [
-    ../../modules/apps
+    ../../modules/apps-user
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix
@@ -56,10 +56,12 @@
     lutris.enable                                = true;             # Open Source gaming platform for GNU/Linux
     moonlight.enable                             = true;             # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
+    steam-extras.enable                          = true;             # protonup-qt, MangoHud, vulkan-tools
 
     # media editing
     ardour.enable                                = true;             # Multi-track hard disk recording software
     audacity.enable                              = true;             # Sound editor with graphical UI
+    easyeffects.enable                           = true;             # System-wide audio effects (EQ, compressor, limiter)
     handbrake.enable                             = false;            # Tool for converting video files and ripping DVDs
     losslesscut.enable                           = true;             # Swiss army knife of lossless video/audio editing
     mkvtoolnix.enable                            = false;            # Cross-platform tools for Matroska

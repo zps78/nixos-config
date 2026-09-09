@@ -6,14 +6,12 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/desktop
-    ../../modules/features
+    ../../modules/apps-system
     ../../modules/hardware
     ../../modules/networking
     ../../modules/shares
     ../../modules/services
     ../../modules/system
-
-    ../../modules/apps/android.nix
   ];
 
   # Networking
@@ -62,8 +60,8 @@
   };
 
   myFeatures = {
+    android.enable                               = true;                       # ADB, scrcpy, APK tools
     data-rescue.enable                           = true;
-    easyeffects.enable                           = false;
     kde-connect.enable                           = false;
     steam.enable                                 = true;
     wine.enable                                  = true;
