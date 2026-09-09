@@ -1,4 +1,4 @@
-# ../../modules/services/discovery.nix
+# ../../modules/services/avahi.nix
 { ... }:
 
 {
@@ -26,24 +26,4 @@
     # Open firewall ports automatically
     openFirewall = true;
   };
-
-  ############################################################
-  # GVFS
-  ############################################################
-  #
-  # Adds desktop integration for:
-  # - SMB shares
-  # - SFTP
-  # - MTP
-  # - network browsing
-  #
-  # Important for:
-  # - Dolphin
-  # - Nautilus
-  # - GNOME Files
-  #
-  # Especially useful with NAS systems.
-  #
-
-  services.gvfs.enable = true;
 }

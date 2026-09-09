@@ -1,10 +1,10 @@
 # ../../modules/services/default.nix
 {
   imports = [
+    ./avahi.nix
     ./battery.nix
     ./brother-ads-4300n.nix
     ./brother-hl-l8230cdw.nix
-    ./discovery.nix
     ./docker.nix
     ./gvfs.nix
     ./libvirt.nix

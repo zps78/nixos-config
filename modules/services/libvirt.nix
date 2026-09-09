@@ -6,9 +6,9 @@
     lib.mkEnableOption "libvirt virtualization host";
 
   config = lib.mkIf config.myServices.libvirt.enable {
-  # ------------------------------------------------------------
-  # Virtualization stack (KVM + QEMU + libvirt)
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
+    # Virtualization stack (KVM + QEMU + libvirt)
+    # ------------------------------------------------------------
 
     virtualisation.libvirtd = {
       enable = true;
@@ -23,28 +23,27 @@
       };
     };
 
-  # ------------------------------------------------------------
-  # Networking for VMs (NAT bridge support)
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
+    # Networking for VMs (NAT bridge support)
+    # ------------------------------------------------------------
 
     networking.firewall.trustedInterfaces = [
-    "virbr0"
+      "virbr0"
     ];
 
-  # ------------------------------------------------------------
-  # User access to libvirt
-  # ------------------------------------------------------------
-  # IMPORTANT:
-  # Do NOT hardcode users here in scalable setups.
-  # Assign this per-host or per-user module.
+    # ------------------------------------------------------------
+    # User access to libvirt
+    # ------------------------------------------------------------
+    # IMPORTANT:
+    # Do NOT hardcode users here in scalable setups.
+    # Assign this per-host or per-user module.
+    #
+    # Example (in host config):
+    #   users.users.zp.extraGroups = lib.mkAfter [ "libvirtd" ];
 
-  # Example (uncomment in host config):
-  #
-  # users.users.zp.extraGroups = lib.mkAfter [ "libvirtd" ];
-
-  # ------------------------------------------------------------
-  # Packages for VM management tools
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
+    # Packages for VM management tools
+    # ------------------------------------------------------------
 
     environment.systemPackages = with pkgs; [
       virt-manager      # GUI VM manager
