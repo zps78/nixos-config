@@ -30,6 +30,7 @@
     # 3d modeling
     bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
     blender.enable                               = false;            # 3D Creation/Animation/Publishing System
+    f3d.enable                                   = false;            # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = false;            # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     openscad.enable                              = false;            # 3D parametric model compiler
     orca-slicer.enable                           = false;            # G-code generator for 3D printers
@@ -68,6 +69,7 @@
     obs-studio.enable                            = true;             # Free and open source software for video recording and live streaming
 
     # media players
+    cava.enable                                  = false;            # Console audio visualizer (ALSA/PipeWire)
     iptvnator.enable                             = false;            # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = false;            # Open Source YouTube app for privacy
     mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )

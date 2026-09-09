@@ -11,9 +11,11 @@
     ./blender.nix
     ./bottles.nix
     ./brave.nix
+    ./cava.nix
     ./chiaki-ng.nix
     ./darktable.nix
     ./easyeffects.nix
+    ./f3d.nix
     ./firefox.nix
     ./freecad.nix
     ./freetube.nix

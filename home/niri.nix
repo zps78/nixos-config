@@ -15,6 +15,9 @@
   # ===========================================================================
 
   home.packages = with pkgs; [
+    # CLI
+    oh-my-posh                           # Prompt theme engine (see programs.bash below)
+
     # GTK
     adw-gtk3                             # Unofficial GTK 3 port of libadwaita
 
@@ -23,7 +26,6 @@
     kdePackages.dolphin                  # File manager by KDE
     kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
     kdePackages.gwenview                 # Image viewer by KDE
-    kdePackages.kdeconnect-kde           # Multi-platform app that allows your devices to communicate
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
     kdePackages.okular                   # KDE document viewer
     kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
@@ -60,6 +62,16 @@
       scrollback-limit = 50000000;
       mouse-hide-while-typing = true;
     };
+  };
+
+  # Shell prompt: oh-my-posh, themed from
+  # ~/.config/oh-my-posh/quick-term.json which Noctalia regenerates from
+  # its template on theme changes.
+  programs.bash = {
+    enable = true;
+    initExtra = ''
+      eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config "$HOME/.config/oh-my-posh/quick-term.json")"
+    '';
   };
 
   # ===========================================================================

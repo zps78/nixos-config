@@ -1,8 +1,11 @@
 # ../../modules/apps-system/wine.nix
-# Provides:
-# - Wine (staging branch)
-# - 32-bit + 64-bit Windows compatibility
-# - Winetricks helper scripts
+#
+# Wine (staging, WoW64 build - 32- and 64-bit in one package, no multilib)
+# plus winetricks. 32-bit graphics libs come from the host's GPU module
+# (hardware.graphics.enable32Bit), so no hardware.graphics block here.
+#
+# DXVK / VKD3D are installed per-prefix with `winetricks dxvk vkd3d`, not
+# system-wide.
 { config, lib, pkgs, ... }:
 
 {
@@ -10,36 +13,9 @@
     lib.mkEnableOption "Wine";
 
   config = lib.mkIf config.myFeatures.wine.enable {
-
-    hardware.graphics = {
-
-      # Required for:
-      # - OpenGL
-      # - Vulkan
-      # - GPU acceleration
-      enable = true;
-
-      # Required for:
-      # - Steam
-      # - Proton
-      # - Wine
-      # - many older Linux games
-      enable32Bit = true;
-    };
-
     environment.systemPackages = with pkgs; [
-      # Wine
-      # Includes:
-      # - 64-bit Wine support
-      # - 32-bit Wine support
       wineWow64Packages.staging
-
-      # Wine helpers
       winetricks
-
-      # Vulkan translation layers
-      dxvk
-      vkd3d
     ];
   };
 }

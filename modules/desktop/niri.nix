@@ -10,6 +10,9 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     enable = true;
   };
 
+  # GTK/GSettings backend for app config (GNOME module sets this too).
+  programs.dconf.enable = true;
+
   ############################################################
   # Display / login manager
   ############################################################

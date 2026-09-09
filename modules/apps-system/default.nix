@@ -7,7 +7,6 @@
 {
   imports = [
     ./android.nix
-    ./core.nix
     ./data-rescue.nix
     ./kde-connect.nix
     ./steam.nix

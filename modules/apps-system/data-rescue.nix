@@ -1,53 +1,38 @@
 # ../../modules/apps-system/data-rescue.nix
 #
-# Data recovery / disk rescue toolkit
+# Data recovery / disk rescue toolkit. Enable on machines where you do
+# disk recovery, forensic inspection or filesystem repair.
 #
-# Enable only on machines where you do:
-# - disk recovery
-# - forensic inspection
-# - filesystem repair
-#
+# Note: parted, smartmontools, hdparm, nvme-cli, file and e2fsprogs are
+# already always present (system/packages.nix / the ext filesystem
+# module), so this list only adds what's missing.
 { config, lib, pkgs, ... }:
 
 {
   options.myFeatures.data-rescue.enable =
     lib.mkEnableOption "Data recovery / disk rescue tools";
 
-  # ----------------------
-  # Packages
-  # ----------------------
   config = lib.mkIf config.myFeatures.data-rescue.enable {
     environment.systemPackages = with pkgs; [
+      # Recovery / undelete
+      ddrescue      # recover data from failing drives
+      ddrescueview  # GUI for ddrescue mapfiles
+      ddrutility    # analyse disk damage / recovery cases
+      testdisk      # partition recovery + file undelete
 
-      ############################################################
-      # Core recovery tools (your requested set)
-      ############################################################
-      ddrescue         # GNU ddrescue - recover data from failing drives
-      ddrescueview     # GUI for ddrescue mapfiles (visual progress analysis)
-      ddrutility       # Utilities for analyzing disk damage / recovery cases
-      testdisk         # Partition recovery + file undelete toolkit
+      # Partitioning (GUI)
+      gparted
 
-      ############################################################
-      # Recommended additions (very useful in real recoveries)
-      ############################################################
+      # Filesystem tools not in the base set
+      ntfs3g        # NTFS read/write + ntfsfix / ntfsclone
+      btrfs-progs   # Btrfs recovery + inspection
+      exfatprogs    # exFAT tools
 
-      gparted          # Partition editor (GUI, extremely useful in recovery)
-      parted           # CLI partition manipulation
-
-      ntfs3g           # NTFS read/write support (common recovery scenario)
-      e2fsprogs        # ext4/ext3/ext2 tools (fsck, debugfs, resize2fs)
-      btrfs-progs      # Btrfs recovery + inspection tools
-      exfatprogs       # exFAT support tools
-
-      smartmontools    # SMART disk health inspection (predict failure)
-
-      hdparm           # low-level disk inspection & tuning
-      nvme-cli         # NVMe-specific diagnostics (critical for modern SSDs)
-      f3               # fight flash fraud
-
-      file             # identify unknown file types in broken filesystems
-
-      hexedit          # manual inspection/editing of raw disk data
+      # Media diagnostics
+      f3            # fight flash fraud (fake capacity SD/USB)
+      fio           # I/O benchmark - check a recovered drive's health/speed
+      hexedit       # inspect/edit raw disk data
+      sysbench      # CPU/memory/disk sanity check on suspect hardware
     ];
   };
 }

@@ -6,5 +6,6 @@
     ./common.nix
     ./localization.nix
     ./memory.nix
+    ./packages.nix
   ];
 }

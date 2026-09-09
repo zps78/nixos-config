@@ -4,6 +4,8 @@
 # User-space companions live in apps-user: bottles, lutris. Proton
 # management (protonup-qt), overlays (mangohud) and
 # STEAM_EXTRA_COMPAT_TOOLS_PATHS belong in the user's home config.
+#
+# hardware.graphics (incl. enable32Bit) comes from the host's GPU module.
 
 { config, lib, ... }:
 
@@ -25,10 +27,5 @@
 
     # Optimises system performance while games run.
     programs.gamemode.enable = true;
-
-    hardware.graphics = {
-      enable = true;
-      enable32Bit = true;  # Steam / Proton / 32-bit games
-    };
   };
 }
