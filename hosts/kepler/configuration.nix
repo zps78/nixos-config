@@ -22,6 +22,7 @@
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
+  myDesktop.primaryUser                         = "sc";
 
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host

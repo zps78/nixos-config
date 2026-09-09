@@ -37,3 +37,9 @@ community_ids = [
 [theme.templates.user.oh_my_posh]
 input_path = "templates/oh-my-posh.json"
 output_path = "$XDG_CONFIG_HOME/oh-my-posh/quick-term.json"
+
+# Hook-only template (no input/output). On wallpaper/theme change, blur +
+# tint the current wallpaper into /var/lib/greeter-wallpaper/login.png so
+# the noctalia-greeter login screen matches the lock screen.
+[theme.templates.user.greeter_wallpaper]
+post_hook = "bash '{{ config_dir }}/hooks/greeter-blur.sh' '{{ image }}' '{{ colors.surface.default.hex }}' '{{ mode }}'"

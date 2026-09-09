@@ -82,6 +82,75 @@
   '';
 
   # ===========================================================================
+  # Greeter wallpaper hook
+  # ===========================================================================
+  #
+  # Fired by the Noctalia template engine on wallpaper/theme change (see
+  # dotfiles/noctalia/templates.toml). Blurs + tints the current wallpaper
+  # to match the lock screen's [lockscreen] blur_intensity / tint_intensity
+  # / blurred_desktop, and writes /var/lib/greeter-wallpaper/login.png,
+  # which noctalia-greeter reads on the next login. No rebuild needed.
+
+  xdg.configFile."noctalia/hooks/greeter-blur.sh" = {
+    executable = true;
+    text = ''
+      #!${pkgs.runtimeShell}
+      set -euo pipefail
+
+      wallpaper="''${1:-}"
+      surface="''${2:-#000000}"
+      # ''${3:-} is the theme mode; unused for now.
+
+      out="/var/lib/greeter-wallpaper/login.png"
+      res="2560x1440"
+      blur_scale="20"   # ImageMagick sigma per unit of blur_intensity; tune to match
+
+      magick="${pkgs.imagemagick}/bin/magick"
+      yq="${pkgs.yq-go}/bin/yq"
+
+      state_toml="''${XDG_STATE_HOME:-$HOME/.local/state}/noctalia/settings.toml"
+      conf_toml="''${XDG_CONFIG_HOME:-$HOME/.config}/noctalia/settings.toml"
+
+      [ -n "$wallpaper" ] && [ -r "$wallpaper" ] || exit 0
+      [ -w "$(dirname "$out")" ] || exit 0
+
+      read_key() {   # $1 = dotted key, $2 = default
+        local f v
+        for f in "$state_toml" "$conf_toml"; do
+          [ -r "$f" ] || continue
+          v=$("$yq" -p toml -oy -r ".$1" "$f" 2>/dev/null || true)
+          if [ -n "$v" ] && [ "$v" != "null" ]; then printf '%s' "$v"; return; fi
+        done
+        printf '%s' "$2"
+      }
+
+      blurred=$(read_key 'lockscreen.blurred_desktop' 'false')
+      bi=$(read_key 'lockscreen.blur_intensity' '0.5')
+      ti=$(read_key 'lockscreen.tint_intensity' '0.3')
+
+      if [ "$blurred" = "true" ]; then
+        sigma=$(awk -v b="$bi" -v s="$blur_scale" 'BEGIN { printf "%.2f", b * s }')
+      else
+        sigma=0
+      fi
+      tint_pct=$(awk -v t="$ti" 'BEGIN { printf "%d", (t * 100) + 0.5 }')
+
+      tmp=$(mktemp "$out.XXXXXX")
+      trap 'rm -f "$tmp"' EXIT
+
+      args=( "$wallpaper" -auto-orient -resize "$res^" -gravity center -extent "$res" )
+      if awk -v s="$sigma" 'BEGIN { exit !(s + 0 > 0) }'; then
+        args+=( -blur "0x$sigma" )
+      fi
+      args+=( -fill "$surface" -colorize "$tint_pct%" "png:$tmp" )
+
+      "$magick" "''${args[@]}"
+      chmod 0644 "$tmp"
+      mv -f "$tmp" "$out"
+    '';
+  };
+
+  # ===========================================================================
   # niri configuration (from dotfiles/)
   # ===========================================================================
 

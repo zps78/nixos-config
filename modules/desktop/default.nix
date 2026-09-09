@@ -14,4 +14,12 @@
     default = "niri";
     description = "Which desktop stack to enable for this host.";
   };
+
+  options.myDesktop.primaryUser = lib.mkOption {
+    type = lib.types.str;
+    description = ''
+      The main login user on this host. Owns per-user runtime state that
+      the system side needs to hand off (e.g. the greeter wallpaper cache).
+    '';
+  };
 }
