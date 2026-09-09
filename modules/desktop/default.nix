@@ -22,4 +22,14 @@
       the system side needs to hand off (e.g. the greeter wallpaper cache).
     '';
   };
+
+  options.myDesktop.idle.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = ''
+      Whether the shell locks / blanks / suspends on inactivity
+      (Noctalia idle behaviors). Disable on hosts that must stay awake
+      (e.g. game streaming, long renders).
+    '';
+  };
 }

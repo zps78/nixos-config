@@ -9,7 +9,26 @@
   # Noctalia (bar / shell / theme generator)
   # ===========================================================================
 
-  programs.noctalia.enable = true;
+  programs.noctalia = {
+    enable = true;
+    settings = {
+      # Native themed polkit agent (replaces polkit-gnome). Needed for the
+      # greeter appearance-sync prompt among other things.
+      shell.polkit_agent = true;
+    }
+    // lib.optionalAttrs osConfig.myDesktop.idle.enable {
+      # Idle: lock, then blank, then suspend. (logind still handles lid
+      # close; lockscreen.lock_before_suspend handles lock-on-suspend.)
+      idle = {
+        behavior_order = [ "lock" "screen-off" "suspend" ];
+        behavior = {
+          lock         = { timeout = 600;  action = "lock";             enabled = true; };
+          "screen-off" = { timeout = 660;  action = "screen_off";       enabled = true; };
+          suspend      = { timeout = 1800; action = "lock_and_suspend"; enabled = true; };
+        };
+      };
+    };
+  };
 
   # ===========================================================================
   # App <-> Noctalia theme wiring
@@ -162,7 +181,6 @@
     "niri/decorations.kdl".source                 = ../dotfiles/niri/decorations.kdl;
     "niri/input.kdl".source                       = ../dotfiles/niri/input.kdl;
     "niri/layout.kdl".source                      = ../dotfiles/niri/layout.kdl;
-    "niri/screenshots.kdl".source                 = ../dotfiles/niri/screenshots.kdl;
     "niri/spawn-at-startup.kdl".source            = ../dotfiles/niri/spawn-at-startup.kdl;
     "niri/window-rules.kdl".source                = ../dotfiles/niri/window-rules.kdl;
     "niri/output.kdl".source                      = ../hosts/${osConfig.networking.hostName}/niri/output.kdl;

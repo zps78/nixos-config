@@ -1,6 +1,9 @@
 result
+result-*
 *.qcow2
 *.img
 *.iso
 *.log
+*.backup
+.direnv/
 .env

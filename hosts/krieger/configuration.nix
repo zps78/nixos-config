@@ -23,6 +23,7 @@
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
   myDesktop.primaryUser                         = "bb";
+  myDesktop.idle.enable                          = false;                      # workstation: no idle lock/suspend (sunshine, renders)
 
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host

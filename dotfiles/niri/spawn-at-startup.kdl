@@ -5,8 +5,9 @@
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // spawn-at-startup "waybar"
+// Noctalia is the bar/shell and also provides the polkit agent
+// (programs.noctalia.settings.shell.polkit_agent).
 spawn-at-startup "noctalia"
-spawn-at-startup "polkit-gnome-authentication-agent-1"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
