@@ -23,6 +23,7 @@
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
   myDesktop.primaryUser                         = "gt";
+  myDesktop.idle.enable                          = false;                      # headless appliance (dummy plug, SimHub via Wine) - never idle/suspend
 
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host
