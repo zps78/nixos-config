@@ -9,46 +9,26 @@
 #   3. Create username/password
 #   4. Pair using Moonlight client
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   options.myServices.sunshine.enable =
     lib.mkEnableOption "Sunshine host";
 
   config = lib.mkIf config.myServices.sunshine.enable {
+    # Provides the uinput device + udev rule for virtual input capture.
     hardware.uinput.enable = true;
 
-    services.udev.extraRules = ''
-      KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
-    '';
-
     services.sunshine = {
-      # Enable the Sunshine service
       enable = true;
-      # Automatically start Sunshine at boot
       autoStart = true;
 
-      # Grants CAP_SYS_ADMIN capability - required for:
-      # - input device capture
-      # - virtual input devices
-      # - controller support
+      # CAP_SYS_ADMIN: needed for input device / virtual input capture.
       capSysAdmin = true;
 
-      # Opens required firewall ports automatically - required for:
-      # - Moonlight discovery
-      # - streaming connections
+      # Opens the streaming + discovery ports (derived from the configured
+      # port) and installs sunshine's own udev rules.
       openFirewall = true;
     };
-
-    # Proper Firewall Configuration
-    networking.firewall = {
-      allowedTCPPorts = [ 47984 47989 47990 ];
-      allowedUDPPortRanges = [ { from = 47998; to = 48010; } ];
-      # Extra rule for safety
-      extraInputRules = ''
-        udp dport 47998-48100 accept
-      '';
-    };
-    environment.systemPackages = [ pkgs.sunshine ];
   };
 }

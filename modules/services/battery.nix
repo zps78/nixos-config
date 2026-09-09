@@ -11,8 +11,8 @@
 
     powerManagement.enable = true;
 
+    # upower itself comes from services.upower.enable
     environment.systemPackages = with pkgs; [
-      upower
       acpi
       powertop
     ];
