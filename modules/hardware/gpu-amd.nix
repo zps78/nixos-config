@@ -13,18 +13,14 @@ lib.mkIf (config.myHardware.gpuVendor == "amd") {
     enable32Bit = true; # needed for some apps (e.g. Steam, Wine)
 
     extraPackages = with pkgs; [
-#     mesa
-#     vaapiVdpau
       libvdpau-va-gl
     ];
   };
 
-  # Use AMD driver (optional but explicit)
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  # amdgpu is an in-kernel KMS driver; no services.xserver.videoDrivers
+  # entry needed for a Wayland-only session.
 
-  # Wayland / app compatibility tweaks
   environment.sessionVariables = {
-    MOZ_ENABLE_WAYLAND = "1";
     LIBVA_DRIVER_NAME = "radeonsi";
   };
 }

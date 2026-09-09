@@ -16,6 +16,7 @@
 
   options.myHardware.gpuVendor = lib.mkOption {
     type = lib.types.enum [ "amd" "intel" "nvidia" "hybrid" ];
+    description = "GPU configuration to apply for this host.";
   };
 
   options.myHardware.ramGB = lib.mkOption {

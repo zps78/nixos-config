@@ -21,18 +21,10 @@
     jack.enable = true;
   };
 
-  # Optional but recommended for low latency
-  services.pipewire.extraConfig.pipewire = {
-    "99-low-latency" = {
-      context.properties = {
-        default.clock.rate = 48000;
-        default.clock.quantum = 128;
-        default.clock.min-quantum = 128;
-        default.clock.max-quantum = 128;
-      };
-    };
-  };
+  # PipeWire's default quantum (floating 32-2048, 1024 default) is right
+  # for general desktop use; a fixed low quantum only helps live audio
+  # production and otherwise costs power and risks xruns.
 
-  # Real-time scheduling (important for low-latency audio)
+  # Real-time scheduling
   security.rtkit.enable = true;
 }

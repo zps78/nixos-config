@@ -71,5 +71,9 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
   environment.sessionVariables = {
     XDG_SESSION_DESKTOP = "niri";
+
+    # Wayland session, not GPU-specific: applies to every host.
+    NIXOS_OZONE_WL = "1";      # Chromium / Electron
+    MOZ_ENABLE_WAYLAND = "1";  # Firefox
   };
 }

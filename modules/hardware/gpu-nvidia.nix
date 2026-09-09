@@ -7,6 +7,11 @@ lib.mkIf (config.myHardware.gpuVendor == "nvidia") {
   # RTX 4060 Ti
   ############################################################
 
+  # Kernel comes from system/boot.nix (linuxPackages_latest). If a flake
+  # update lands a kernel newer than nvidiaPackages.stable supports, pin
+  # `boot.kernelPackages = pkgs.linuxPackages;` here or switch to
+  # nvidiaPackages.beta until it catches up.
+
   # Enable graphics stack
   hardware.graphics = {
     enable = true;
@@ -20,8 +25,9 @@ lib.mkIf (config.myHardware.gpuVendor == "nvidia") {
     # Required for Wayland / Plasma 6
     modesetting.enable = true;
 
-    # Desktop → no need for aggressive power saving
-    powerManagement.enable = false;
+    # Desktop: no runtime power saving, but still preserve VRAM across
+    # suspend and wire up the nvidia-suspend/resume/hibernate services.
+    powerManagement.enable = true;
 
     # Proprietary driver (best performance)
     open = false;
@@ -33,22 +39,9 @@ lib.mkIf (config.myHardware.gpuVendor == "nvidia") {
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # Wayland + NVIDIA stability
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-  };
-
   hardware.nvidia-container-toolkit.enable = true;
-
-  systemd.services.nvidia-suspend.enable = true;
-  systemd.services.nvidia-resume.enable = true;
-  systemd.services.nvidia-hibernate.enable = true;
 
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
   ];
-
-  boot.extraModprobeConfig = ''
-    options nvidia NVreg_PreserveVideoMemoryAllocations=1
-  '';
 }

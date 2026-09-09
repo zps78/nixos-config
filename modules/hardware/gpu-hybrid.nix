@@ -1,5 +1,5 @@
 # ../../modules/hardware/gpu-hybrid.nix
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 lib.mkIf (config.myHardware.gpuVendor == "hybrid") {
   ############################################################
@@ -8,10 +8,22 @@ lib.mkIf (config.myHardware.gpuVendor == "hybrid") {
   # - NVIDIA used via PRIME offload
   ############################################################
 
-  # Enable graphics stack
+  # Kernel comes from system/boot.nix (linuxPackages_latest). If a flake
+  # update lands a kernel newer than nvidiaPackages.stable supports, pin
+  # `boot.kernelPackages = pkgs.linuxPackages;` here or switch to
+  # nvidiaPackages.beta until it catches up.
+
+  # Enable graphics stack. The Intel iGPU drives display + video decode,
+  # so it needs the same VA-API stack as the intel-only hosts.
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+
+    extraPackages = with pkgs; [
+      intel-media-driver  # VA-API / iHD
+      vpl-gpu-rt          # oneVPL / QSV runtime
+      libvdpau-va-gl      # only if something needs VDPAU translation
+    ];
   };
 
   # Use NVIDIA driver (with modesetting)
@@ -54,13 +66,8 @@ lib.mkIf (config.myHardware.gpuVendor == "hybrid") {
     "nvidia-drm.modeset=1"
   ];
 
-  # Better Electron/Chromium Wayland support
+  # Intel iGPU is primary
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
+    LIBVA_DRIVER_NAME = "iHD";
   };
-
-  # Optional suspend/resume helpers
-  systemd.services.nvidia-suspend.enable = true;
-  systemd.services.nvidia-resume.enable = true;
-  systemd.services.nvidia-hibernate.enable = true;
 }
