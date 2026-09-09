@@ -9,6 +9,11 @@ include "screenshots.kdl"
 include "spawn-at-startup.kdl"
 include "window-rules.kdl"
 
+// Written by Noctalia (theme templates) - focus ring / border colors.
+// Absent until Noctalia renders once on first login; niri logs a warning
+// and continues.
+include "noctalia.kdl"
+
 environment {
     QT_QPA_PLATFORMTHEME "qt6ct"
 }

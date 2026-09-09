@@ -1,99 +1,36 @@
 # ../../home/niri.nix
+#
+# niri + Noctalia specific home config. Shared/desktop-agnostic bits live
+# in ./common.nix. Imported only when osConfig.myDesktop.stack == "niri".
 { lib, pkgs, config, osConfig, ... }:
 
 {
   # ===========================================================================
-  # Imports
+  # Noctalia (bar / shell / theme generator)
   # ===========================================================================
 
-  imports = [
-    ./mime.nix
-  ];
+  programs.noctalia.enable = true;
 
   # ===========================================================================
-  # Applications
-  # ===========================================================================
-
-  home.packages = with pkgs; [
-    # CLI
-    oh-my-posh                           # Prompt theme engine (see programs.bash below)
-
-    # GTK
-    adw-gtk3                             # Unofficial GTK 3 port of libadwaita
-
-    # KDE
-    kdePackages.ark                      # File archiver by KDE
-    kdePackages.dolphin                  # File manager by KDE
-    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
-    kdePackages.gwenview                 # Image viewer by KDE
-    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-    kdePackages.okular                   # KDE document viewer
-    kdePackages.partitionmanager         # Manage the disk devices, partitions and file systems on your computer
-    (kdePackages.qt6ct.overrideAttrs (oldAttrs: {
-      patches = (oldAttrs.patches or []) ++ [
-        (pkgs.fetchpatch {
-          url = "https://aur.archlinux.org/cgit/aur.git/plain/qt6ct-shenanigans.patch?h=qt6ct-kde";
-          hash = "sha256-Q8QOMDy84z6FD0OkSLylEwB+/Zs50jcUgR+4J6Lmwmk=";
-        })
-      ];
-    }))
-
-    # Other GUI
-    galculator                           # GTK algebraic and RPN calculator
-    meld                                 # Visual diff and merge tool
-    pinta                                # Drawing/editing program modeled after Paint.NET
-    qdirstat                             # Graphical disk usage analyzer
-    usbimager                            # Very minimal GUI app that can write compressed disk images to USB drives
-  ];
-
-
-  # ===========================================================================
-  # Noctalia
-  # ===========================================================================
-  programs.noctalia = {
-    enable = true;
-  };
-
-  programs.ghostty = {
-    enable = true;
-    settings = {
-      cursor-style = "block";
-      shell-integration-features = "no-cursor";
-      scrollback-limit = 50000000;
-      mouse-hide-while-typing = true;
-    };
-  };
-
-  # Shell prompt: oh-my-posh, themed from
-  # ~/.config/oh-my-posh/quick-term.json which Noctalia regenerates from
-  # its template on theme changes.
-  programs.bash = {
-    enable = true;
-    initExtra = ''
-      eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config "$HOME/.config/oh-my-posh/quick-term.json")"
-    '';
-  };
-
-  # ===========================================================================
-  # Niri theming
+  # App <-> Noctalia theme wiring
   # ===========================================================================
   #
-  # Noctalia generates the actual themes. This section connects Niri-specific
-  # applications and toolkits to the Noctalia theme.
-  # ===========================================================================
+  # Noctalia generates the themes; these connect specific apps to them.
 
-  # ---------------------------------------------------------------------------
+  # niri: config.kdl (in dotfiles/) has `include "noctalia.kdl"`; make sure
+  # the file exists so niri doesn't error on a missing include before
+  # Noctalia first renders it.
+  home.activation.niriNoctaliaPlaceholder =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      $DRY_RUN_CMD mkdir -p "$HOME/.config/niri"
+      [ -e "$HOME/.config/niri/noctalia.kdl" ] || \
+        $DRY_RUN_CMD touch "$HOME/.config/niri/noctalia.kdl"
+    '';
+
   # ghostty
-  # ---------------------------------------------------------------------------
+  programs.ghostty.settings.theme = "noctalia";
 
-  programs.ghostty.settings = {
-    theme = "noctalia";
-  };
-
-  # ---------------------------------------------------------------------------
   # kate
-  # ---------------------------------------------------------------------------
-
   home.activation.kateNoctaliaTheme =
     lib.mkIf config.myApps.kate.enable
       (lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -104,20 +41,7 @@
           "noctalia"
       '');
 
-  # ---------------------------------------------------------------------------
-  # remove gtk min/max/close buttons
-  # ---------------------------------------------------------------------------
-
-  dconf.settings = {
-    "org/gnome/desktop/wm/preferences" = {
-      button-layout = ":";
-    };
-  };
-
-  # ---------------------------------------------------------------------------
-  # qt6ct
-  # ---------------------------------------------------------------------------
-
+  # qt6ct (only rewrites an existing conf; first run needs qt6ct launched once)
   home.activation.qt6ctNoctaliaTheme =
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       qt6ct_conf="$HOME/.config/qt6ct/qt6ct.conf"
@@ -132,9 +56,17 @@
     '';
 
   # ===========================================================================
-  # Desktop integration
+  # Tiling-WM app behaviour
   # ===========================================================================
 
+  # No CSD min/max/close buttons under a tiling compositor.
+  dconf.settings = {
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = ":";
+    };
+  };
+
+  # Hide KDE System Settings from menus (not used on niri).
   xdg.dataFile."applications/systemsettings.desktop".text = ''
     [Desktop Entry]
     Type=Application
@@ -150,7 +82,7 @@
   '';
 
   # ===========================================================================
-  # Niri configuration
+  # niri configuration (from dotfiles/)
   # ===========================================================================
 
   xdg.configFile = {

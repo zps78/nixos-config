@@ -5,13 +5,15 @@ builtin_ids = [
     "btop",
     "cava",
     "ghostty",
-    "helix",
     "gtk3",
     "gtk4",
     "kcolorscheme",
     "niri",
     "qt",
 ]
+# dropped: "helix" (removed from config)
+# cava: needs ~/.config/cava/config with [color] theme = "noctalia"
+# (provided by modules/apps-user/cava.nix)
 
 enable_community_templates = true
 
@@ -20,17 +22,17 @@ community_ids = [
     "blender",
     "brave",
     "darktable",
-    "discord",
     "fastfetch",
     "fzf",
     "gimp",
     "steam",
     "telegram",
-    "vscode",
     "yazi",
     "zed",
     "zen-browser",
 ]
+# dropped: "discord" (not in config), "vscode" (using VSCodium; needs the
+# NoctaliaTheme extension installed to have any effect)
 
 [theme.templates.user.oh_my_posh]
 input_path = "templates/oh-my-posh.json"

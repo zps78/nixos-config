@@ -1,165 +1,131 @@
 # ../../home/mime.nix
-{ ... }:
+#
+# Default-application associations. App-specific blocks are gated on the
+# matching myApps.*.enable so a user who hasn't enabled an app never gets
+# a default handler pointing at a missing .desktop file.
+{ config, lib, ... }:
 
+let
+  app = config.myApps;
+
+  gwenview = "org.kde.gwenview.desktop";
+  dolphin = "org.kde.dolphin.desktop";
+  ark = "org.kde.ark.desktop";
+  darktable = "org.darktable.darktable.desktop";
+  kate = "org.kde.kate.desktop";
+  zen = "zen-beta.desktop";
+  office = "onlyoffice-desktopeditors.desktop";
+  mpv = "mpv.desktop";
+  iptvnator = "iptvnator.desktop";
+
+  forEach = handler: types: lib.genAttrs types (_: handler);
+in
 {
   xdg.mimeApps = {
     enable = true;
 
-    defaultApplications = {
-      # ==========================
-      # Images
-      # ==========================
+    defaultApplications = lib.mkMerge [
 
-      "image/jpeg"                     = "org.kde.gwenview.desktop";
-      "image/png"                      = "org.kde.gwenview.desktop";
-      "image/gif"                      = "org.kde.gwenview.desktop";
-      "image/webp"                     = "org.kde.gwenview.desktop";
-      "image/avif"                     = "org.kde.gwenview.desktop";
-      "image/heif"                     = "org.kde.gwenview.desktop";
-      "image/bmp"                      = "org.kde.gwenview.desktop";
-      "image/tiff"                     = "org.kde.gwenview.desktop";
-      "image/svg+xml"                  = "org.kde.gwenview.desktop";
-      "image/jxl"                      = "org.kde.gwenview.desktop";
+      # ----- always available (unconditional KDE app set in common.nix) -----
 
-      # ==========================
-      # RAW photographs
-      # ==========================
+      (forEach gwenview [
+        "image/jpeg" "image/png" "image/gif" "image/webp" "image/avif"
+        "image/heif" "image/bmp" "image/tiff" "image/svg+xml" "image/jxl"
+      ])
 
-      "image/x-adobe-dng"              = "org.darktable.darktable.desktop";
-      "image/x-canon-cr2"              = "org.darktable.darktable.desktop";
-      "image/x-canon-cr3"              = "org.darktable.darktable.desktop";
-      "image/x-canon-crw"              = "org.darktable.darktable.desktop";
-      "image/x-nikon-nef"              = "org.darktable.darktable.desktop";
-      "image/x-nikon-nrw"              = "org.darktable.darktable.desktop";
-      "image/x-olympus-orf"            = "org.darktable.darktable.desktop";
-      "image/x-panasonic-rw"           = "org.darktable.darktable.desktop";
-      "image/x-panasonic-rw2"          = "org.darktable.darktable.desktop";
-      "image/x-pentax-pef"             = "org.darktable.darktable.desktop";
-      "image/x-sony-arw"               = "org.darktable.darktable.desktop";
-      "image/x-sony-sr2"               = "org.darktable.darktable.desktop";
-      "image/x-sony-srf"               = "org.darktable.darktable.desktop";
+      {
+        "application/pdf"                = "okularApplication_pdf.desktop";
+        "application/epub+zip"           = "okularApplication_epub.desktop";
+        "application/x-mobipocket-ebook" = "okularApplication_mobi.desktop";
+        "application/x-cbz"              = "okularApplication_comicbook.desktop";
+        "application/x-cbr"              = "okularApplication_comicbook.desktop";
+        "application/x-cbt"              = "okularApplication_comicbook.desktop";
+        "application/x-cb7"              = "okularApplication_comicbook.desktop";
 
-      # ==========================
-      # Documents
-      # ==========================
+        "inode/directory"               = dolphin;
 
-      "application/pdf"                = "okularApplication_pdf.desktop";
-      "application/epub+zip"           = "okularApplication_epub.desktop";
-      "application/x-mobipocket-ebook" = "okularApplication_mobi.desktop";
+        "application/zip"                = ark;
+        "application/x-tar"              = ark;
+        "application/x-compressed-tar"   = ark;
+        "application/x-7z-compressed"    = ark;
+        "application/vnd.rar"            = ark;
+      }
 
-      # Comics
-      "application/x-cbz"              = "okularApplication_comicbook.desktop";
-      "application/x-cbr"              = "okularApplication_comicbook.desktop";
-      "application/x-cbt"              = "okularApplication_comicbook.desktop";
-      "application/x-cb7"              = "okularApplication_comicbook.desktop";
+      # ----- RAW photographs -----
 
-      # ==========================
-      # Text / configuration / code
-      # ==========================
+      (lib.mkIf app.darktable.enable (forEach darktable [
+        "image/x-adobe-dng" "image/x-canon-cr2" "image/x-canon-cr3"
+        "image/x-canon-crw" "image/x-nikon-nef" "image/x-nikon-nrw"
+        "image/x-olympus-orf" "image/x-panasonic-rw" "image/x-panasonic-rw2"
+        "image/x-pentax-pef" "image/x-sony-arw" "image/x-sony-sr2"
+        "image/x-sony-srf"
+      ]))
 
-      "text/plain"                     = "org.kde.kate.desktop";
-      "text/markdown"                  = "org.kde.kate.desktop";
-      "text/x-nix"                     = "org.kde.kate.desktop";
-      "text/xml"                       = "org.kde.kate.desktop";
+      # ----- text / code -----
 
-      # KDL — MIME type provided by our declarative KDL definition
-      "application/vnd.kdl"            = "org.kde.kate.desktop";
+      (lib.mkIf app.kate.enable (forEach kate [
+        "text/plain" "text/markdown" "text/x-nix" "text/xml"
+        "application/vnd.kdl"
+      ]))
 
-      # ==========================
-      # Web
-      # ==========================
+      # ----- web -----
 
-      "text/html"                      = "zen-beta.desktop";
-      "x-scheme-handler/http"          = "zen-beta.desktop";
-      "x-scheme-handler/https"         = "zen-beta.desktop";
-      "x-scheme-handler/about"         = "zen-beta.desktop";
-      "x-scheme-handler/unknown"       = "zen-beta.desktop";
+      (lib.mkIf app.zen-browser.enable (forEach zen [
+        "text/html" "x-scheme-handler/http" "x-scheme-handler/https"
+        "x-scheme-handler/about" "x-scheme-handler/unknown"
+      ]))
 
-      # ==========================
-      # Microsoft Office
-      # ==========================
+      # ----- office documents -----
 
-      "application/msword"                                         = "onlyoffice-desktopeditors.desktop";
-      "application/msword-template"                                = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-word.document.macroEnabled.12"           = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-word.template.macroEnabled.12"           = "onlyoffice-desktopeditors.desktop";
+      (lib.mkIf app.office.enable (forEach office [
+        "application/msword"
+        "application/msword-template"
+        "application/vnd.ms-word.document.macroEnabled.12"
+        "application/vnd.ms-word.template.macroEnabled.12"
+        "application/vnd.ms-excel"
+        "application/vnd.ms-excel.sheet.macroEnabled.12"
+        "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+        "application/vnd.ms-excel.template.macroEnabled.12"
+        "application/vnd.ms-powerpoint"
+        "application/vnd.ms-powerpoint.presentation.macroEnabled.12"
+        "application/vnd.ms-powerpoint.slideshow.macroEnabled.12"
+        "application/vnd.ms-powerpoint.template.macroEnabled.12"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+        "application/vnd.openxmlformats-officedocument.presentationml.template"
+        "application/vnd.oasis.opendocument.text"
+        "application/vnd.oasis.opendocument.text-template"
+        "application/vnd.oasis.opendocument.spreadsheet"
+        "application/vnd.oasis.opendocument.spreadsheet-template"
+        "application/vnd.oasis.opendocument.presentation"
+        "application/vnd.oasis.opendocument.presentation-template"
+        "text/csv"
+        "text/tab-separated-values"
+        "application/rtf"
+      ]))
 
-      "application/vnd.ms-excel"                                   = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-excel.sheet.macroEnabled.12"             = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-excel.sheet.binary.macroEnabled.12"      = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-excel.template.macroEnabled.12"          = "onlyoffice-desktopeditors.desktop";
+      # ----- audio / video -----
 
-      "application/vnd.ms-powerpoint"                              = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-powerpoint.presentation.macroEnabled.12" = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-powerpoint.slideshow.macroEnabled.12"    = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.ms-powerpoint.template.macroEnabled.12"     = "onlyoffice-desktopeditors.desktop";
+      (lib.mkIf app.mpv.enable (forEach mpv [
+        "audio/mpeg" "audio/mp4" "audio/m4a" "audio/flac" "audio/ogg"
+        "audio/wav" "audio/x-wav" "audio/aac" "audio/opus" "audio/ac3"
+        "audio/eac3" "audio/webm"
+        "video/mp4" "video/x-matroska" "video/mkv" "video/webm"
+        "video/mpeg" "video/avi" "video/x-avi" "video/x-msvideo"
+        "video/quicktime" "video/x-flv" "video/x-ms-wmv" "video/ogg"
+        "video/3gp"
+      ]))
 
-      # ==========================
-      # Microsoft / OpenXML Office
-      # ==========================
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"      = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.template"      = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"            = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.template"         = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation"    = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.openxmlformats-officedocument.presentationml.slideshow"       = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.openxmlformats-officedocument.presentationml.template"        = "onlyoffice-desktopeditors.desktop";
+      # ----- IPTV / playlists -----
 
-      # ==========================
-      # OpenDocument
-      # ==========================
-      "application/vnd.oasis.opendocument.text"                    = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.oasis.opendocument.text-template"           = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.oasis.opendocument.spreadsheet"             = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.oasis.opendocument.spreadsheet-template"    = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.oasis.opendocument.presentation"            = "onlyoffice-desktopeditors.desktop";
-      "application/vnd.oasis.opendocument.presentation-template"   = "onlyoffice-desktopeditors.desktop";
-
-      # Other common office formats
-      "text/csv"                       = "onlyoffice-desktopeditors.desktop";
-      "text/tab-separated-values"      = "onlyoffice-desktopeditors.desktop";
-      "application/rtf"                = "onlyoffice-desktopeditors.desktop";
-
-      # ==========================
-      # Audio
-      # ==========================
-      "audio/mpeg"                     = "mpv.desktop";
-      "audio/mp4"                      = "mpv.desktop";
-      "audio/m4a"                      = "mpv.desktop";
-      "audio/flac"                     = "mpv.desktop";
-      "audio/ogg"                      = "mpv.desktop";
-      "audio/wav"                      = "mpv.desktop";
-      "audio/x-wav"                    = "mpv.desktop";
-      "audio/aac"                      = "mpv.desktop";
-      "audio/opus"                     = "mpv.desktop";
-      "audio/ac3"                      = "mpv.desktop";
-      "audio/eac3"                     = "mpv.desktop";
-      "audio/webm"                     = "mpv.desktop";
-
-      # ==========================
-      # Video
-      # ==========================
-      "video/mp4"                      = "mpv.desktop";
-      "video/x-matroska"               = "mpv.desktop";
-      "video/mkv"                      = "mpv.desktop";
-      "video/webm"                     = "mpv.desktop";
-      "video/mpeg"                     = "mpv.desktop";
-      "video/avi"                      = "mpv.desktop";
-      "video/x-avi"                    = "mpv.desktop";
-      "video/x-msvideo"                = "mpv.desktop";
-      "video/quicktime"                = "mpv.desktop";
-      "video/x-flv"                    = "mpv.desktop";
-      "video/x-ms-wmv"                 = "mpv.desktop";
-      "video/ogg"                      = "mpv.desktop";
-      "video/3gp"                      = "mpv.desktop";
-
-      # ==========================
-      # IPTV / playlists
-      # ==========================
-      "application/x-mpegurl"          = "iptvnator.desktop";
-      "application/vnd.apple.mpegurl"  = "iptvnator.desktop";
-      "audio/mpegurl"                  = "iptvnator.desktop";
-      "audio/x-mpegurl"                = "iptvnator.desktop";
-    };
+      (lib.mkIf app.iptvnator.enable (forEach iptvnator [
+        "application/x-mpegurl" "application/vnd.apple.mpegurl"
+        "audio/mpegurl" "audio/x-mpegurl"
+      ]))
+    ];
   };
 }
