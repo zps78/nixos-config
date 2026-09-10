@@ -75,6 +75,10 @@
       shell-integration-features = "no-cursor";
       scrollback-limit = 50000000;
       mouse-hide-while-typing = true;
+
+      # Terminal translucency. Fades only the background, not the text.
+      # (niri has no compositor blur, so this won't be frosted.)
+      background-opacity = 0.92;
     };
   };
 

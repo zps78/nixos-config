@@ -35,6 +35,17 @@ window-rule {
 
 // Rounded corners for all windows.
 window-rule {
-    geometry-corner-radius 8
+    geometry-corner-radius 12
     clip-to-geometry true
 }
+
+// Subtle depth cue: dim windows that aren't focused. Tune 1.0 = off.
+// (This dims text too, not just the background - lower with care.)
+window-rule {
+    match is-active=false
+    opacity 0.92
+}
+
+// niri has no compositor-side blur, so translucency won't be frosted.
+// Terminal transparency is done in ghostty itself (background-opacity in
+// home/common.nix) so text stays fully opaque.
