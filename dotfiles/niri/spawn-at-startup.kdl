@@ -5,9 +5,10 @@
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // spawn-at-startup "waybar"
-// Noctalia is the bar/shell and also provides the polkit agent
-// (programs.noctalia.settings.shell.polkit_agent).
-spawn-at-startup "noctalia"
+// Noctalia is the bar/shell (and the polkit agent, via
+// programs.noctalia.settings.shell.polkit_agent). It runs as a systemd
+// user service now - see programs.noctalia.systemd.enable in home/niri.nix -
+// so it is NOT spawned here.
 
 // Inhibit idle while docked (>1 output connected). Only present when
 // myDesktop.idle.enable = true; a no-op otherwise.

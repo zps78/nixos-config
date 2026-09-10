@@ -11,6 +11,13 @@
 
   programs.noctalia = {
     enable = true;
+
+    # Run the shell/bar as a systemd user service (restart-on-failure,
+    # ordered after graphical-session.target) instead of niri
+    # spawn-at-startup. niri imports WAYLAND_DISPLAY / NIRI_SOCKET into the
+    # user manager, so the bar's niri IPC still works.
+    systemd.enable = true;
+
     settings = {
       # Native themed polkit agent (replaces polkit-gnome). Needed for the
       # greeter appearance-sync prompt among other things.

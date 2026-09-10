@@ -54,6 +54,20 @@
 
   programs.ghostty = {
     enable = true;
+
+    # Wrap the binary so GTK_IM_MODULE=simple applies to ghostty's own GTK
+    # process on every launch path (keybind, Noctalia launcher, .desktop),
+    # not just the niri bind. Fixes rendering/input of some special
+    # characters. --set-default so it can still be overridden at launch.
+    package = pkgs.symlinkJoin {
+      name = "ghostty-im-wrapped";
+      paths = [ pkgs.ghostty ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/ghostty --set-default GTK_IM_MODULE simple
+      '';
+    };
+
     settings = {
       cursor-style = "block";
       shell-integration-features = "no-cursor";
