@@ -18,10 +18,79 @@
     # user manager, so the bar's niri IPC still works.
     systemd.enable = true;
 
+    #
+    # These are declarative *defaults*. Noctalia's Settings GUI writes to
+    # ~/.local/state/noctalia/settings.toml, which wins over this file - so
+    # if a value here doesn't take, it's been overridden in the GUI and
+    # needs resetting there.
+    #
     settings = {
-      # Native themed polkit agent (replaces polkit-gnome). Needed for the
-      # greeter appearance-sync prompt among other things.
-      shell.polkit_agent = true;
+      shell = {
+        # Native themed polkit agent (replaces polkit-gnome). Needed for
+        # the greeter appearance-sync prompt among other things.
+        polkit_agent = true;
+
+        # Start typing in niri's Overview to filter / launch.
+        niri_overview_type_to_launch_enabled = true;
+
+        # Built-in clipboard manager (keybind in dotfiles/niri/binds.kdl).
+        clipboard_enabled = true;
+
+        # Alt-Tab in most-recently-used order, not layout order.
+        window_switcher.mru = true;
+
+        # Frosted-glass panel surfaces. niri has no compositor blur; the
+        # blur is drawn by Noctalia itself (see [backdrop] below).
+        panel.transparency_mode = "glass";
+
+        # Close the screenshot annotation editor once a copy succeeds.
+        screenshot.close_on_copy = true;
+
+        # Also surface calculator results in unprefixed launcher search.
+        launcher.providers.calculator = {
+          prefix = "calc";
+          global = true;
+        };
+      };
+
+      # Blur + tint drawn behind Noctalia's own panels / launcher.
+      backdrop = {
+        enabled = true;
+        blur_intensity = 0.5;
+        tint_intensity = 0.3;
+      };
+
+      # Blue-light filter; day/night boundaries come from [location].
+      nightlight = {
+        enabled = true;
+        temperature_day = 6500;
+        temperature_night = 3800;
+      };
+
+      # One "where am I": feeds night light and weather. Pinned rather
+      # than IP-resolved.
+      location = {
+        auto_locate = false;
+        address = "Maia, Porto, Portugal";
+      };
+
+      # Force dark; palette still follows the wallpaper.
+      theme.mode = "dark";
+
+      # Open-Meteo, no API key. Coordinates from [location].
+      weather.enabled = true;
+
+      # Month grid + control-center calendar tab. Proton Calendar event
+      # sync is added at runtime: Settings -> Services -> Calendar ->
+      # Add Account -> CalDAV (URL + app password from Proton's web
+      # settings; credentials land in gnome-keyring, not this repo).
+      calendar.enabled = true;
+
+      # Widget frameworks for the desktop and lock screen. Placement is
+      # per-monitor and set in Settings -> Desktop Widgets (nothing shows
+      # until a widget is added there).
+      desktop_widgets.enabled = true;
+      lockscreen_widgets.enabled = true;
     }
     // lib.optionalAttrs osConfig.myDesktop.idle.enable {
       # Idle: lock, then blank, then suspend. (logind still handles lid
@@ -90,16 +159,9 @@
   # ghostty
   programs.ghostty.settings.theme = "noctalia";
 
-  # kate
-  home.activation.kateNoctaliaTheme =
-    lib.mkIf config.myApps.kate.enable
-      (lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        $DRY_RUN_CMD ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
-          --file "$HOME/.config/katerc" \
-          --group "UiSettings" \
-          --key "ColorScheme" \
-          "noctalia"
-      '');
+  # (Zed follows Noctalia via its own generated theme - see
+  # modules/apps-user/zed.nix. Kate's Noctalia colour-scheme sync was
+  # dropped with the move off Kate.)
 
   # qt6ct (only rewrites an existing conf; first run needs qt6ct launched once)
   home.activation.qt6ctNoctaliaTheme =

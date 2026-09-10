@@ -24,6 +24,7 @@
     ./handbrake.nix
     ./iptvnator.nix
     ./kate.nix
+    ./kdl.nix
     ./krita.nix
     ./losslesscut.nix
     ./lutris.nix

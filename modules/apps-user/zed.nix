@@ -14,16 +14,20 @@
       # Language servers/tools
       # ----------------------
       extraPackages = with pkgs; [
-        nixd
-        tombi
+        nixd                  # Nix LSP
+        tombi                 # TOML LSP
+        claude-agent-acp      # Claude Code, via the Agent Client Protocol
+        # marksman            # Markdown LSP (Kate had this) - add if wanted
+        # clang-tools         # C/C++ (clangd) (Kate had this) - add if wanted
       ];
 
       # ----------------------
-      # Extensions
+      # Extensions (auto-installed on first launch; needs network once)
       # ----------------------
       extensions = [
-        "nix"
-        "toml"
+        "nix"                 # hasit/zed-nix
+        "toml"                # zed-extensions/toml
+        "kdl"                 # elkowar/zed-kdl - syntax highlighting for niri configs
       ];
 
       # ----------------------
@@ -60,6 +64,18 @@
           };
           TOML = {
             language_servers = [ "tombi" ];
+          };
+        };
+
+        # Claude Code as an external agent (Agent panel: Cmd/Ctrl-?).
+        # The binary comes from claude-agent-acp above. Auth is a one-time
+        # "/login" in the agent thread (reuses the claude-code CLI login
+        # if you're already signed in there) - that part isn't declarative.
+        agent_servers = {
+          "Claude Code" = {
+            command = "claude-agent-acp";
+            args = [ ];
+            env = { };
           };
         };
       };

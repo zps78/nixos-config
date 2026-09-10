@@ -20,6 +20,8 @@ binds {
 
     Mod+D hotkey-overlay-title="Open Application Launcher: noctalia" { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
 
+    Mod+Shift+C hotkey-overlay-title="Clipboard History: noctalia" { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
+
     Mod+B hotkey-overlay-title="Open Web Browser: Brave" { spawn "brave" "--new-tab"; }
 
     Mod+Z hotkey-overlay-title="Open Web Browser: Zen" { spawn "zen-beta" "--new-tab"; }
