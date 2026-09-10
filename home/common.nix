@@ -66,6 +66,8 @@
       postBuild = ''
         wrapProgram $out/bin/ghostty --set-default GTK_IM_MODULE simple
       '';
+      # symlinkJoin drops meta; restore mainProgram so lib.getExe resolves.
+      meta.mainProgram = "ghostty";
     };
 
     settings = {
