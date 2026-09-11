@@ -42,6 +42,10 @@ TODO - pending decisions for Claude
 [ ] Kate -> Zed: once Zed is settled (extensions installed, /login done
     for the Claude Code agent), set myApps.kate.enable = false in
     home/users/zp.nix.
+[ ] SierraChart: once installed, give Claude the SDK include path (the
+    folder with sierrachart.h) to add a .clangd/compile_flags.txt so
+    clangd gets real completion/diagnostics on ACSIL studies, not just
+    generic C++ highlighting.
 
 Manual setup (no repo change):
 [ ] Proton Calendar: account.proton.me -> Calendars -> share/integrate

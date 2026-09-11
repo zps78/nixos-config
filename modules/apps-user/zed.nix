@@ -17,8 +17,8 @@
         nixd                  # Nix LSP
         tombi                 # TOML LSP
         claude-agent-acp      # Claude Code, via the Agent Client Protocol
+        clang-tools           # clangd, for C/C++ - also covers ACSIL (see below)
         # marksman            # Markdown LSP (Kate had this) - add if wanted
-        # clang-tools         # C/C++ (clangd) (Kate had this) - add if wanted
       ];
 
       # ----------------------
@@ -28,6 +28,7 @@
         "nix"                 # hasit/zed-nix
         "toml"                # zed-extensions/toml
         "kdl"                 # elkowar/zed-kdl - syntax highlighting for niri configs
+        "git-firefly"         # d1y/git_firefly - .gitattributes/.gitconfig/.gitignore/rebase-todo highlighting
       ];
 
       # ----------------------
@@ -65,6 +66,26 @@
           TOML = {
             language_servers = [ "tombi" ];
           };
+        };
+
+        # ACSIL (SierraChart's study/indicator API) is plain C++ against
+        # SierraChart's own sierrachart.h header - not a distinct
+        # language, so it just rides Zed's built-in C++ support +
+        # clangd above. For real completion/diagnostics against the SDK,
+        # clangd needs the SierraChart SDK include path, via a
+        # .clangd/compile_flags.txt in the study source folder (project-
+        # level, not something to declare here).
+
+        # No Zed extension exists for MQL4/MQL5 (checked the extension
+        # registry - neither is packaged; a raw tree-sitter grammar for
+        # MQL5 exists at github.com/mskelton/tree-sitter-mql5 but nobody
+        # has wrapped it as a Zed extension, and no MQL4 grammar exists
+        # at all). Approximating with C++ syntax highlighting until then
+        # - real bracket/keyword highlighting for the C-family parts,
+        # just not MQL-aware (misses `#property`, `input`/`extern`,
+        # trade functions like OrderSend/iMA as keywords).
+        file_types = {
+          "C++" = [ "mq4" "mq5" "mqh" ];
         };
 
         # Claude Code as an external agent (Agent panel: Cmd/Ctrl-?).
