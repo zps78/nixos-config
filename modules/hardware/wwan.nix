@@ -5,12 +5,15 @@
 #
 # On this unit's factory firmware the modem reports itself FCC-unlocked
 # and connects with no unlock step - ModemManager never invokes the
-# fcc-unlock script below. It's kept as a correct safety net in case a
-# firmware update ever flips that. (Lenovo's lenovo-wwan-unlock blob is
-# deliberately not used: DPR_Fcc_unlock_service faults the MHI
-# controller on this modem.)
+# fcc-unlock script below (it decides no unlock is needed once the SIM
+# reads ready, regardless of script content). It's kept as a correct
+# safety net in case a firmware update ever flips that. (Lenovo's
+# lenovo-wwan-unlock blob is deliberately not used: DPR_Fcc_unlock_service
+# faults the MHI controller on this modem.)
 #
-# --quectel-set-radio-state: https://github.com/harenber/em160r-gl-unlock
+# Unlock sequence and hardware notes (this is the exact model - ThinkPad
+# X12 Detachable Gen 2, same 1eac:100d):
+# https://github.com/harenber/em160r-gl-unlock
 { config, lib, pkgs, ... }:
 
 let
@@ -18,10 +21,18 @@ let
 
   # Runs after modem init (including after resume), only if the modem
   # reports FCC-locked. $1 is the control port, passed by ModemManager.
+  # fcc_enable's sense is inverted: 0 means the regulatory gate is OFF
+  # (unlocked). Both AT commands via mbimcli's AT passthrough, per
+  # harenber/em160r-gl-unlock - verified this parses fine as one
+  # argument despite the embedded comma (mbimcli doesn't split naively
+  # on it; tested directly against /dev/null, fails only at device-open,
+  # never at argument-parse).
   fccUnlock = pkgs.writeShellScript "1eac:100d" ''
     set -e
     DEV="''${1:-/dev/wwan0mbim0}"
-    ${lib.getExe' pkgs.libmbim "mbimcli"} -d "$DEV" -p --quectel-set-radio-state=on
+    mbimcli=${lib.getExe' pkgs.libmbim "mbimcli"}
+    "$mbimcli" -d "$DEV" -p --quectel-set-command='AT+QCFG="fcc_enable",0'
+    "$mbimcli" -d "$DEV" -p --quectel-set-command='AT+CFUN=1'
   '';
 
   # The modem can internally reset during s2idle. Reloading the MHI
