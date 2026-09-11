@@ -31,7 +31,7 @@
     # 3d modeling
     bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
     blender.enable                               = false;            # 3D Creation/Animation/Publishing System
-    f3d.enable                                   = false;            # Fast minimalist 3D viewer (VTK)
+    f3d.enable                                   = true;             # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = false;            # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     openscad.enable                              = false;            # 3D parametric model compiler
     orca-slicer.enable                           = false;            # G-code generator for 3D printers
@@ -53,14 +53,14 @@
   # wine                                         > enable feature in the host's configuration.nix
 
     # gaming
-    chiaki-ng.enable                             = true;             # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
+    chiaki-ng.enable                             = false;            # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
     lutris.enable                                = true;             # Open Source gaming platform for GNU/Linux
     moonlight.enable                             = false;            # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
     steam-extras.enable                          = true;             # protonup-qt, MangoHud, vulkan-tools
 
     # media editing
-    ardour.enable                                = true;             # Multi-track hard disk recording software
+    ardour.enable                                = false;            # Multi-track hard disk recording software
     audacity.enable                              = true;             # Sound editor with graphical UI
     easyeffects.enable                           = false;            # System-wide audio effects (EQ, compressor, limiter)
     handbrake.enable                             = true;             # Tool for converting video files and ripping DVDs
@@ -80,13 +80,13 @@
     vlc.enable                                   = false;            # Cross-platform media player and streaming server
 
     # image editors
-    gimp.enable                                  = true;             # GNU Image Manipulation Program
+    gimp.enable                                  = false;            # GNU Image Manipulation Program
     darktable.enable                             = false;            # Virtual lighttable and darkroom for photographers
     krita.enable                                 = false;            # Free and open source painting application
 
     # web browsers
     brave.enable                                 = true;             # Privacy-oriented browser for Desktop and Laptop computers
-    firefox.enable                               = true;             # Web browser built from Firefox source tree
+    firefox.enable                               = false;            # Web browser built from Firefox source tree
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
 
