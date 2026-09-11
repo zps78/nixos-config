@@ -5,9 +5,8 @@
 # application/vnd.kdl so anything can claim a default handler for them.
 #
 # Editor-side pieces live elsewhere:
-#   - Kate katepart syntax highlighting -> kate.nix (gated on myApps.kate)
-#   - Zed "kdl" extension               -> zed.nix  (gated on myApps.zed)
-#   - default application for .kdl       -> home/mime.nix
+#   - Zed "kdl" extension           -> zed.nix (gated on myApps.zed)
+#   - default application for .kdl  -> home/mime.nix
 { pkgs, lib, ... }:
 
 {

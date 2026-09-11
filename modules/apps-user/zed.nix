@@ -88,15 +88,27 @@
           "C++" = [ "mq4" "mq5" "mqh" ];
         };
 
-        # Claude Code as an external agent (Agent panel: Cmd/Ctrl-?).
-        # The binary comes from claude-agent-acp above. Auth is a one-time
-        # "/login" in the agent thread (reuses the claude-code CLI login
-        # if you're already signed in there) - that part isn't declarative.
+        # Two independent Claude agents in the Agent panel (Cmd/Ctrl-?):
+        #  - "Claude Code": our own entry, pinned to the claude-agent-acp
+        #    package above - reproducible, no network needed to fetch it.
+        #  - "claude-acp": Zed's own "ACP Registry" entry (its Finish
+        #    Setup screen offers to "Install" this) - Zed fetches and
+        #    manages its own copy at runtime, outside Nix. Declared here
+        #    too so every user gets it pre-wired instead of having to
+        #    click through Finish Setup.
+        # Both need "type" now - Zed 1.19 flagged the old command-only
+        # form as outdated and rewrote it to this schema on its own.
+        # Auth is a one-time "/login" per agent, not declarative - each
+        # reuses the claude-code CLI login if you're already signed in.
         agent_servers = {
           "Claude Code" = {
+            type = "custom";
             command = "claude-agent-acp";
             args = [ ];
             env = { };
+          };
+          "claude-acp" = {
+            type = "registry";
           };
         };
       };

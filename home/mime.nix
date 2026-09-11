@@ -12,7 +12,6 @@ let
   dolphin = "org.kde.dolphin.desktop";
   ark = "org.kde.ark.desktop";
   darktable = "org.darktable.darktable.desktop";
-  kate = "org.kde.kate.desktop";
   zed = "dev.zed.Zed.desktop";
   zen = "zen-beta.desktop";
   office = "onlyoffice-desktopeditors.desktop";
@@ -64,16 +63,9 @@ in
 
       # ----- text / code -----
 
-      # Zed is preferred when enabled; Kate is the fallback so a user on
-      # neither keeps a KDE default and the two never define the same key.
       (lib.mkIf app.zed.enable (forEach zed [
         "text/plain" "text/markdown" "text/x-nix" "text/xml"
         "application/toml" "application/vnd.kdl"
-      ]))
-
-      (lib.mkIf (app.kate.enable && !app.zed.enable) (forEach kate [
-        "text/plain" "text/markdown" "text/x-nix" "text/xml"
-        "application/vnd.kdl"
       ]))
 
       # ----- web -----

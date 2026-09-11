@@ -19,14 +19,6 @@ sudo nixos-rebuild switch --flake .#kuro
 IPTVnator playlist
   http://iptv-org.github.io/iptv/index.m3u
 
-Kate
-  Settings
-    Configure Kate
-      Session
-        Load last used session
-      Projects
-        Restore open projects
-
 -:6:-
 TODO - pending decisions for Claude
 
@@ -39,9 +31,6 @@ TODO - pending decisions for Claude
       - wallpaper-depth / bongo-cat
 [ ] desktop + lockscreen widgets: frameworks are enabled but empty.
     Decide a layout (per-monitor x/y) or keep placing them in the GUI.
-[ ] Kate -> Zed: once Zed is settled (extensions installed, /login done
-    for the Claude Code agent), set myApps.kate.enable = false in
-    home/users/zp.nix.
 [ ] SierraChart: once installed, give Claude the SDK include path (the
     folder with sierrachart.h) to add a .clangd/compile_flags.txt so
     clangd gets real completion/diagnostics on ACSIL studies, not just
