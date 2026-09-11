@@ -1,4 +1,4 @@
-# ../../hosts/krugerrand/configuration.nix # VRF9-HZFL-9XPR-K4CB
+# ../../hosts/krugerrand/configuration.nix
 { pkgs, ... }:
 
 {
@@ -22,7 +22,7 @@
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
-  myDesktop.primaryUser                         = "zp";
+  myDesktop.primaryUser                          = "zp";
 
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host
@@ -32,7 +32,7 @@
     keyboard.layout                              = "pt";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
     keyboard.secondary.layout                    = null;                       # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "hybrid";                   # choose from: "hybrid" "nvidia" "amd" "intel"
-    ramGB                                        = 64;                         # installed RAM (GB)
+    ramGB                                        = 64;                         # this host's actual installed RAM (GB)
   };
 
   myNetwork = {
@@ -99,7 +99,7 @@
 #   HandleLidSwitchDocked                        = "ignore";
   };
 
-  # Libinput - disabled because kde overrides it
+  # Libinput - unused on niri (its own input.kdl handles this); would apply under kde/gnome
 # services.libinput.enable                       = true;
 # services.libinput.touchpad.naturalScrolling    = true;
 # services.libinput.mouse.naturalScrolling       = true;

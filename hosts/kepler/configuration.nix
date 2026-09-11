@@ -22,7 +22,7 @@
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
-  myDesktop.primaryUser                         = "sc";
+  myDesktop.primaryUser                          = "sc";
 
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host
@@ -65,7 +65,7 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     steam.enable                                 = true;
-    wine.enable                                  = true;
+    wine.enable                                  = false;
   };
 
   # Users
@@ -99,7 +99,7 @@
 #   HandleLidSwitchDocked                        = "ignore";
   };
 
-  # Libinput - disabled because kde overrides it
+  # Libinput - unused on niri (its own input.kdl handles this); would apply under kde/gnome
 # services.libinput.enable                       = true;
 # services.libinput.touchpad.naturalScrolling    = true;
 # services.libinput.mouse.naturalScrolling       = true;

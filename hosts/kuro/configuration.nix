@@ -1,5 +1,5 @@
 # ../../hosts/kuro/configuration.nix
-{ pkgs,... }:
+{ pkgs, ... }:
 
 {
   # Import modules
@@ -22,7 +22,8 @@
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
-  myDesktop.primaryUser                         = "zp";
+  myDesktop.primaryUser                          = "zp";
+  myDesktop.idle.enable                          = true;                       # headless appliance (dummy plug, SimHub via Wine) - never idle/suspend
 
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host
@@ -99,7 +100,7 @@
 #   HandleLidSwitchDocked                        = "ignore";
   };
 
-  # Libinput - disabled because kde overrides it
+  # Libinput - unused on niri (its own input.kdl handles this); would apply under kde/gnome
 # services.libinput.enable                       = true;
 # services.libinput.touchpad.naturalScrolling    = true;
 # services.libinput.mouse.naturalScrolling       = true;

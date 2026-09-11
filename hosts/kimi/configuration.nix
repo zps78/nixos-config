@@ -22,7 +22,7 @@
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
-  myDesktop.primaryUser                         = "gt";
+  myDesktop.primaryUser                          = "gt";
   myDesktop.idle.enable                          = false;                      # headless appliance (dummy plug, SimHub via Wine) - never idle/suspend
 
   myHardware = {
@@ -100,7 +100,7 @@
 #   HandleLidSwitchDocked                        = "ignore";
   };
 
-  # Libinput - disabled because kde overrides it
+  # Libinput - unused on niri (its own input.kdl handles this); would apply under kde/gnome
 # services.libinput.enable                       = true;
 # services.libinput.touchpad.naturalScrolling    = true;
 # services.libinput.mouse.naturalScrolling       = true;

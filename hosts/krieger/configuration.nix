@@ -22,7 +22,7 @@
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
-  myDesktop.primaryUser                         = "bb";
+  myDesktop.primaryUser                          = "bb";
   myDesktop.idle.enable                          = false;                      # workstation: no idle lock/suspend (sunshine, renders)
 
   myHardware = {
@@ -100,18 +100,18 @@
 #   HandleLidSwitchDocked                        = "ignore";
   };
 
-  # Libinput - disabled because kde overrides it
+  # Libinput - unused on niri (its own input.kdl handles this); would apply under kde/gnome
 # services.libinput.enable                       = true;
 # services.libinput.touchpad.naturalScrolling    = true;
 # services.libinput.mouse.naturalScrolling       = true;
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      openldap = prev.openldap.overrideAttrs (old: {
-        doCheck = false;
-      });
-    })
-  ];
+#  nixpkgs.overlays = [
+#    (final: prev: {
+#      openldap = prev.openldap.overrideAttrs (old: {
+#        doCheck = false;
+#      });
+#    })
+#  ];
 
   # System packages
 #  environment.systemPackages                     = with pkgs; [

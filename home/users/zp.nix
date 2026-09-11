@@ -57,7 +57,6 @@
     lutris.enable                                = false;            # Open Source gaming platform for GNU/Linux
     moonlight.enable                             = true;             # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
-    steam-extras.enable                          = false;            # protonup-qt, MangoHud, vulkan-tools
 
     # media editing
     ardour.enable                                = false;            # Multi-track hard disk recording software

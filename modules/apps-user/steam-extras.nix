@@ -1,13 +1,13 @@
 # ../../modules/apps-user/steam-extras.nix
 #
 # User-space companions to the system `myFeatures.steam` feature.
-{ config, lib, pkgs, ... }:
+# Automatic on any host with Steam enabled - not a separate per-user
+# opt-in, since if Steam's on you want Proton management + the overlay
+# + Vulkan diagnostics with it. No `myApps.steam-extras.enable` option.
+{ lib, pkgs, osConfig, ... }:
 
 {
-  options.myApps.steam-extras.enable =
-    lib.mkEnableOption "Steam extras (Proton manager, overlay, Vulkan tools)";
-
-  config = lib.mkIf config.myApps.steam-extras.enable {
+  config = lib.mkIf osConfig.myFeatures.steam.enable {
     home.packages = with pkgs; [
       protonup-qt   # manage GE-Proton / custom Proton builds
       mangohud      # performance overlay
