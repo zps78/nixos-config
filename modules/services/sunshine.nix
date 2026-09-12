@@ -19,10 +19,13 @@
     # Provides the uinput device + udev rule for virtual input capture.
     hardware.uinput.enable = true;
 
-    # Virtual input capture needs the host's user in "input" - follows
-    # this option automatically instead of a manually-toggled group
-    # entry in each host's configuration.nix.
-    users.users.${config.myDesktop.primaryUser}.extraGroups = [ "input" ];
+    # /dev/uinput's udev rule (from hardware.uinput.enable) sets
+    # GROUP="uinput" - NOT "input" (a different, unrelated group; that
+    # earlier assumption was wrong and left virtual mouse/keyboard/gamepad
+    # creation permission-denied even with a fresh login session). Follows
+    # primaryUser automatically instead of a manually-toggled group entry
+    # in each host's configuration.nix.
+    users.users.${config.myDesktop.primaryUser}.extraGroups = [ "uinput" ];
 
     services.sunshine = {
       enable = true;
