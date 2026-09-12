@@ -34,12 +34,11 @@
     # ------------------------------------------------------------
     # User access to libvirt
     # ------------------------------------------------------------
-    # IMPORTANT:
-    # Do NOT hardcode users here in scalable setups.
-    # Assign this per-host or per-user module.
-    #
-    # Example (in host config):
-    #   users.users.zp.extraGroups = lib.mkAfter [ "libvirtd" ];
+    # Follows myDesktop.primaryUser (the per-host "who uses this
+    # machine" indirection) rather than a manually-toggled group entry
+    # in each host's configuration.nix - not a hardcoded username, still
+    # varies correctly per host.
+    users.users.${config.myDesktop.primaryUser}.extraGroups = [ "libvirtd" ];
 
     # ------------------------------------------------------------
     # Packages for VM management tools

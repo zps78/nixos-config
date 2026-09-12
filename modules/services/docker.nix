@@ -21,6 +21,10 @@
     lib.mkEnableOption "Docker container host";
 
   config = lib.mkIf config.myServices.docker.enable {
+    # Follows myDesktop.primaryUser instead of a manually-toggled group
+    # entry in each host's configuration.nix.
+    users.users.${config.myDesktop.primaryUser}.extraGroups = [ "docker" ];
+
     virtualisation.docker = {
 
       # Enable Docker daemon

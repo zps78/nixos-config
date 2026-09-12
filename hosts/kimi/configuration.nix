@@ -44,11 +44,11 @@
     battery.enable                               = false;                      # battery support
     brother-ads-4300n.enable                     = true;                       # Brother ADS-4300N network document scanner
     brother-hl-l8230cdw.enable                   = true;                       # Brother HL-L8230CDW network color laser printer
-    docker.enable                                = false;                      # remmeber to add user to group docker below
-    libvirt.enable                               = false;                      # remmeber to add user to group libvirtd below
+    docker.enable                                = false;                      # group membership auto-follows via modules/services/docker.nix
+    libvirt.enable                               = false;                      # group membership auto-follows via modules/services/libvirt.nix
     ssh.enable                                   = true;
     ssh.passwordAuth                             = true;                       # keep disabled for security
-    sunshine.enable                              = true;                       # remmeber to add user to group input below
+    sunshine.enable                              = true;                       # group membership auto-follows via modules/services/sunshine.nix
   };
 
   myShares = {
@@ -78,9 +78,6 @@
                                                    "audio"
                                                    "video"
                                                    "render"
-                                                   "input"                     # enable for sunshine
-#                                                  "libvirtd"                  # enable for libvirt
-#                                                  "docker"                    # enable for docker
     ];
   };
 
