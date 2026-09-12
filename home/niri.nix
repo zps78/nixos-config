@@ -282,7 +282,7 @@
     "niri/config.kdl".source                      = ../dotfiles/niri/config.kdl;
     "niri/cursor.kdl".source                      = ../dotfiles/niri/cursor.kdl;
     "niri/decorations.kdl".source                 = ../dotfiles/niri/decorations.kdl;
-    "niri/input.kdl".source                       = ../dotfiles/niri/input.kdl;
+    "niri/input.kdl".source                       = ../hosts/${osConfig.networking.hostName}/niri/input.kdl;
     "niri/layout.kdl".source                      = ../dotfiles/niri/layout.kdl;
     "niri/spawn-at-startup.kdl".source            = ../dotfiles/niri/spawn-at-startup.kdl;
     "niri/window-rules.kdl".source                = ../dotfiles/niri/window-rules.kdl;
