@@ -1,39 +1,35 @@
 // ../../hosts/krieger/niri/output.kdl
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://niri-wm.github.io/niri/Configuration:-Outputs
-// Remember to enable the node by removing the "/-" prefix!
-// Disabled for now: niri auto-detects mode/scale/position until this
-// host's displays are configured (krieger is multi-monitor).
-/-output "eDP-1" {
-    // Uncomment this line to disable this output.
-    // off
+// krieger is a desktop tower (no built-in eDP panel) - two identical
+// Lenovo LT2223pwC 1920x1080 monitors, distinguished only by serial in
+// the connector name. Positions inverted from niri's auto-assignment
+// per report of L<>R being swapped - flip back if this guessed wrong.
+//
+// Run `niri msg outputs` (with NIRI_SOCKET set - not exported over a
+// plain ssh session, see systemctl --user show-environment) to see the
+// live connector/serial mapping if hardware ever changes.
 
-    // Resolution and, optionally, refresh rate of the output.
-    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
-    // If the refresh rate is omitted, niri will pick the highest refresh rate
-    // for the resolution.
-    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
-    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "2560x1600@60.001"
-
-    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
-    scale 1.2
-
-    // Transform allows to rotate the output counter-clockwise, valid values are:
-    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+// VN-506623 - now on the right.
+output "DP-2" {
+    mode "1920x1080@59.934"
+    scale 1
     transform "normal"
+    position x=1920 y=0
+}
 
-    // Position of the output in the global coordinate space.
-    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
-    // The cursor can only move between directly adjacent outputs.
-    // Output scale and rotation has to be taken into account for positioning:
-    // outputs are sized in logical, or scaled, pixels.
-    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
-    // so to put another output directly adjacent to it on the right, set its x to 1920.
-    // If the position is unset or results in an overlap, the output is instead placed
-    // automatically.
+// VN-983223 - now on the left.
+output "DP-3" {
+    mode "1920x1080@59.934"
+    scale 1
+    transform "normal"
     position x=0 y=0
 }
+
+// HDMI dummy plug for Sunshine (always-on render target so niri has an
+// active output even with no monitor attached) - not connected yet.
+// Once it is, add its real connector name here (`niri msg outputs`),
+// and note it won't need a Logical position overlapping the two above
+// unless you want it to mirror rather than extend.
+// output "HDMI-A-1" {
+//     mode "1920x1080@60"
+//     scale 1
+// }
