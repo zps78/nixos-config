@@ -17,8 +17,7 @@
   # Networking
   networking.hostName                            = "kimi";
   networking.interfaces = {                                                    # set WOL for wired interfaces
-    enp4s0.wakeOnLan.enable                      = true;                       # atlantis nic
-    enp5s0.wakeOnLan.enable                      = true;                       # intel nic
+    eno2.wakeOnLan.enable                        = true;                       # kimi's only wired nic
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
