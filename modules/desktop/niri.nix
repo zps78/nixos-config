@@ -48,6 +48,19 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     };
   };
 
+  # services.displayManager.autoLogin is the generic NixOS knob (set per
+  # host in configuration.nix), but noctalia-greeter's module never reads
+  # it - it only configures the greeter itself (services.greetd.settings.
+  # default_session), so autoLogin.enable has silently been a no-op.
+  # Bridge it to greetd's actual autologin mechanism: an
+  # `initial_session` skips the greeter entirely and launches straight
+  # into niri for that user, same binary a manual login would run.
+  services.greetd.settings.initial_session =
+    lib.mkIf config.services.displayManager.autoLogin.enable {
+      command = "${lib.getExe' config.programs.niri.package "niri-session"}";
+      user = config.services.displayManager.autoLogin.user;
+    };
+
   # Writable handoff dir: hook writes it as ${user}, greeter reads it.
   systemd.tmpfiles.rules = [
     "d ${greeterWallpaperDir} 0755 ${user} users - -"
