@@ -54,7 +54,7 @@
 
     # gaming
     chiaki-ng.enable                             = false;            # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
-    lutris.enable                                = true;             # Open Source gaming platform for GNU/Linux
+    lutris.enable                                = false;            # Open Source gaming platform for GNU/Linux - removed, games kept via Bottles directly
     moonlight.enable                             = false;            # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
 
