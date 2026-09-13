@@ -20,13 +20,13 @@
 
     # GTK
     adw-gtk3                             # Unofficial GTK 3 port of libadwaita
+    gnome-calculator                     # GNOME's calculator - themes natively, unlike kcalc did
 
     # KDE
     kdePackages.ark                      # File archiver by KDE
     kdePackages.dolphin                  # File manager by KDE
     kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
     kdePackages.gwenview                 # Image viewer by KDE
-    kdePackages.kcalc                    # Calculator offering everything a scientific calculator does, and more
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
     kdePackages.okular                   # KDE document viewer
     # partitionmanager lives in modules/system/packages.nix, not here - it
