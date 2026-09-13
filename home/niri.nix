@@ -186,6 +186,15 @@
     "org/gnome/desktop/wm/preferences" = {
       button-layout = ":";
     };
+
+    # GTK fonts - previously undeclared, so each host had drifted to
+    # whatever got set on it historically (kuro: DejaVu; krieger: Noto
+    # Sans/Hack). Standardising on kuro's set here.
+    "org/gnome/desktop/interface" = {
+      font-name = "DejaVu Sans 12";
+      document-font-name = "DejaVu Serif 11";
+      monospace-font-name = "DejaVu Sans Mono 12";
+    };
   };
 
   # Hide KDE System Settings from menus (not used on niri).
