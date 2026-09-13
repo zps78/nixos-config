@@ -28,9 +28,8 @@
     # Optimises system performance while games run.
     programs.gamemode.enable = true;
 
-    # Steam's own Proton/Steam Linux Runtime is pressure-vessel-based, so
-    # it hits the same NixOS-specific missing-ldconfig issue documented in
-    # wine.nix - fix applies independently of whether wine.nix is enabled.
-    services.envfs.enable = true;
+    # Note: Steam's own Proton/Steam Linux Runtime is pressure-vessel-
+    # based and needs the envfs fix, but that's just enabled
+    # unconditionally in modules/system/common.nix (see there for why).
   };
 }

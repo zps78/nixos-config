@@ -27,6 +27,20 @@
   };
 
   ############################################################
+  # Populate /bin and /usr/bin (ALL hosts)
+  ############################################################
+  #
+  # Same class of problem as nix-ld above: NixOS has no /sbin/ldconfig,
+  # /usr/bin/env, /bin/sh etc. at their traditional FHS paths, which
+  # breaks third-party tooling that hardcodes them (Valve's
+  # pressure-vessel container bootstrap for Steam/Bottles/Lutris's
+  # Proton runtimes; AppImages; installer scripts with a #!/bin/sh
+  # shebang). envfs is a tiny (~1MB) FUSE mount that resolves those
+  # lookups on demand from the calling process's own PATH - negligible
+  # footprint, so just on everywhere rather than tracked per-feature.
+  services.envfs.enable = true;
+
+  ############################################################
   # Nix core system behavior (ALL hosts)
   ############################################################
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
