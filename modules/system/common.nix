@@ -55,6 +55,23 @@
     "L+ /usr/sbin - - - - /usr/bin"
   ];
 
+  # Third layer of the same bug, confirmed by directly reproducing a
+  # pressure-vessel launch with debug output captured to a file: NixOS
+  # never generates an ld.so.cache anywhere (by design - Nix binaries
+  # carry full RPATHs, so there's nothing to cache), but pressure-
+  # vessel's capsule-capture-libs step hard-requires an openable
+  # ld.so.cache at BOTH of these paths for its host-library probing and
+  # aborts the whole container bootstrap if either is missing:
+  #   ldconfig: Can't open cache file /etc/ld.so.cache: No such file...
+  #   capsule-capture-libs: error: open "/var/cache/ldconfig/ld.so.cache"...
+  # Generating a real (if NixOS-irrelevant) cache at both locations is
+  # enough to satisfy the check.
+  system.activationScripts.ldSoCacheForContainers = ''
+    mkdir -p /var/cache/ldconfig
+    ${pkgs.glibc.bin}/bin/ldconfig -C /etc/ld.so.cache
+    ${pkgs.glibc.bin}/bin/ldconfig -C /var/cache/ldconfig/ld.so.cache
+  '';
+
   ############################################################
   # Nix core system behavior (ALL hosts)
   ############################################################
