@@ -17,5 +17,16 @@
       wineWow64Packages.staging
       winetricks
     ];
+
+    # UMU/Proton launches (Bottles, Lutris, etc.) fail silently during
+    # pressure-vessel's container bootstrap: NixOS has no /sbin/ldconfig
+    # or /usr/bin/ldconfig (only /run/current-system/sw/bin/ldconfig),
+    # and pressure-vessel hardcodes those FHS paths to probe host library
+    # architecture. envfs dynamically populates /bin and /usr/bin with
+    # whatever's actually on PATH - NixOS's standard fix for exactly this
+    # class of "third-party binary assumes FHS paths" issue. Also set in
+    # steam.nix, since Steam's own Proton runtime hits the identical bug
+    # independently of wine/Bottles.
+    services.envfs.enable = true;
   };
 }

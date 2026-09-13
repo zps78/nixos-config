@@ -97,15 +97,6 @@
 #   HandleLidSwitchDocked                        = "ignore";
   };
 
-  # Bottles/UMU-launched games fail silently at the pressure-vessel
-  # container bootstrap stage: NixOS has no /sbin/ldconfig or
-  # /usr/bin/ldconfig (only /run/current-system/sw/bin/ldconfig), and
-  # pressure-vessel hardcodes those traditional FHS paths to probe host
-  # library architecture. envfs dynamically populates /bin and /usr/bin
-  # with whatever's actually on PATH, which is exactly NixOS's standard
-  # fix for this class of "third-party binary assumes FHS paths" issue.
-  services.envfs.enable                          = true;
-
   # Libinput - unused on niri (its own input.kdl handles this); would apply under kde/gnome
 # services.libinput.enable                       = true;
 # services.libinput.touchpad.naturalScrolling    = true;
