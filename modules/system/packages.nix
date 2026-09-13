@@ -50,6 +50,17 @@
     rclone         # Sync files to and from cloud storage
     yazi           # Blazing fast terminal file manager (async I/O)
 
+    # KDE Partition Manager - the one GUI exception in this file. Its
+    # kpmcore backend ships a polkit action (org.kde.kpmcore.externalcommand
+    # .init) that polkitd only ever discovers via environment.systemPackages
+    # - home-manager's home.packages lives in a separate per-user profile
+    # polkitd never scans, so from there the app shows an empty device list
+    # and every button disabled (confirmed: kpmcore's own policy file was
+    # correctly present in the package, just invisible to the system
+    # daemon - "Action ... is not registered"). Has to be system-level to
+    # actually work, regardless of desktop stack.
+    kdePackages.partitionmanager
+
     # development
     git-lfs        # Git extension for large files
     gnumake        # Build automation tool

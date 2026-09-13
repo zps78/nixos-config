@@ -28,7 +28,9 @@
     kdePackages.gwenview                 # Image viewer by KDE
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
     kdePackages.okular                   # KDE document viewer
-    kdePackages.partitionmanager         # Manage disk devices, partitions and file systems
+    # partitionmanager lives in modules/system/packages.nix, not here - it
+    # needs to be a system package for its polkit action to be visible at
+    # all (see the comment there).
 
     # qt6ct patched (from the AUR qt6ct-kde package) so it reads KDE
     # color schemes / KF6 config - lets Noctalia theme Qt/KDE apps
