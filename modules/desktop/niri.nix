@@ -119,5 +119,19 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     # Wayland session, not GPU-specific: applies to every host.
     NIXOS_OZONE_WL = "1";      # Chromium / Electron
     MOZ_ENABLE_WAYLAND = "1";  # Firefox
+
+    # Qt apps launched from a login shell (e.g. via ghostty) end up with
+    # QT_QPA_PLATFORMTHEME=qt6ct somewhere in their own startup path, but
+    # apps spawned by systemd --user services - e.g. anything launched
+    # through Noctalia's own launcher, since Noctalia itself runs as
+    # noctalia.service - never see it: `systemctl --user show-environment`
+    # doesn't include it, only environment.sessionVariables (a NixOS/PAM-
+    # level mechanism) reliably reaches that environment block. Without
+    # it, Qt/KDE apps (e.g. KDE Partition Manager) fall back to a default
+    # platform theme - confirmed as the cause of KDE Partition Manager
+    # showing untheme'd and with every action greyed out when launched
+    # from Noctalia specifically (its KAuth/polkit integration depends on
+    # proper KDE platform-theme detection, not just colors).
+    QT_QPA_PLATFORMTHEME = "qt6ct";
   };
 }
