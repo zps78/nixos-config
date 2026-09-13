@@ -16,11 +16,11 @@
 
   home.packages = with pkgs; [
     # CLI
-    oh-my-posh                           # Prompt theme engine (see programs.bash below)
+    oh-my-posh                           # Prompt theme engine for any shell (see programs.bash below)
 
     # GTK
     adw-gtk3                             # Unofficial GTK 3 port of libadwaita
-    gnome-calculator                     # GNOME's calculator - themes natively, unlike kcalc did
+    gnome-calculator                     # Application that solves mathematical equations and is suitable as a default application in a Desktop environment (themes natively, unlike kcalc did)
 
     # KDE
     kdePackages.ark                      # File archiver by KDE
