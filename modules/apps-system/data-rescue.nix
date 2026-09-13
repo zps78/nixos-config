@@ -20,9 +20,6 @@
       ddrutility    # analyse disk damage / recovery cases
       testdisk      # partition recovery + file undelete
 
-      # Partitioning (GUI)
-      gparted
-
       # Filesystem tools not in the base set
       ntfs3g        # NTFS read/write + ntfsfix / ntfsclone
       btrfs-progs   # Btrfs recovery + inspection
