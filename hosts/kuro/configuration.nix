@@ -105,6 +105,7 @@
   # System packages
   environment.systemPackages                     = with pkgs; [
     claude-code
+    xournalpp                                     # Stylus note-taking / PDF annotation - kuro has a digitizer (was on the app list pre-restructure, fell out of the migration)
   ];
 
   # System state version
