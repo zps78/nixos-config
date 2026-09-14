@@ -30,8 +30,8 @@
     fingerprint.enable                           = false;                      # enable fingerprint on this host
     wwan.enable                                  = false;                      # enable wwan mhi driver and install modem manager
 
-    keyboard.layout                              = "us";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
-    keyboard.secondary.layout                    = "pt";                       # secondary keyboard layout (not available on tty)
+    keyboard.layout                              = "pt";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
+    keyboard.secondary.layout                    = "us";                       # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "nvidia";                   # choose from: "hybrid" "nvidia" "amd" "intel"
     ramGB                                        = 128;                        # this host's actual installed RAM (GB)
   };
