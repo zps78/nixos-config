@@ -24,6 +24,10 @@ in
         settings = {
           # Auto-enable nix-installed extensions.
           "extensions.autoDisableScopes" = 0;
+
+          # Stop the "translate this page?" popup from offering itself
+          # unprompted - the icon stays in the URL bar for manual use.
+          "browser.translations.automaticallyPopup" = false;
         };
 
         extensions = {
