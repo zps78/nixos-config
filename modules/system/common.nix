@@ -1,5 +1,5 @@
 # ../../modules/system/common.nix
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   ############################################################
@@ -83,6 +83,17 @@
     dates = "weekly";
     options = "--delete-older-than 30d";
   };
+
+  # NixOS's nix.gc module sets Persistent=true by default on the
+  # generated timer: if a host is off during its scheduled weekly
+  # window, GC fires immediately on the very next boot instead of
+  # waiting for the next weekly slot - a bad moment for it, competing
+  # for disk I/O right as a user starts doing things. Confirmed doing
+  # exactly this on krieger (timer's own LAST-fire timestamp was 6
+  # seconds after boot) while a game install was starting, deleting
+  # several old bottles/wine store paths at the same time. Waiting for
+  # the next real weekly slot instead avoids that ambush.
+  systemd.timers.nix-gc.timerConfig.Persistent = lib.mkForce false;
 
   ############################################################
   # Allow redistributable firmware (Wi-Fi, GPU, CPU microcode, etc.)
