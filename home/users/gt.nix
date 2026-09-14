@@ -42,7 +42,7 @@
     zed.enable                                   = true;             # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
 
     # office and productivity
-    office.enable                                = false;            # Office suite that combines text, spreadsheet and presentation editors
+    office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors
     proton-pass.enable                           = false;            # Desktop application for Proton Pass
     telegram.enable                              = false;            # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
