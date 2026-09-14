@@ -44,6 +44,7 @@
     # office and productivity
     office.enable                                = false;            # Office suite that combines text, spreadsheet and presentation editors
     xournalpp.enable                             = false;            # Xournal++ is a handwriting Notetaking software with PDF annotation support
+    pdfarranger.enable                           = false;            # Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface
     proton-pass.enable                           = false;            # Desktop application for Proton Pass
     telegram.enable                              = false;            # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client

@@ -34,6 +34,7 @@
     ./office.nix
     ./openscad.nix
     ./orca-slicer.nix
+    ./pdfarranger.nix
     ./plex.nix
     ./plex-tui.nix
     ./proton-pass.nix
