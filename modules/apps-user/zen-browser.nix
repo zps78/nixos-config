@@ -47,6 +47,12 @@ in
     programs.zen-browser = {
       enable = true;
 
+      # Blocks Google's "Sign in with Google" One Tap widget SDK - see
+      # firefox.nix for the full rationale (same pref, same reasoning).
+      policies.WebsiteFilter = {
+        Block = [ "https://accounts.google.com/gsi/*" ];
+      };
+
       profiles.default = {
         settings = prefs;
 

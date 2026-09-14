@@ -41,6 +41,17 @@ in
         AppAutoUpdate                 = false;
         BackgroundAppUpdate           = false;
 
+        # Blocks Google's "Sign in with Google" One Tap widget SDK -
+        # the unprompted popup that shows up on unrelated sites (news
+        # sites etc.) that embed it. Narrowly scoped to /gsi/* (the
+        # widget's own path), so it doesn't touch the older/classic
+        # Google OAuth redirect flow - only sites using this specific
+        # SDK's button will also stop working, not Google sign-in
+        # generally.
+        WebsiteFilter = {
+          Block = [ "https://accounts.google.com/gsi/*" ];
+        };
+
         # Feature Disabling
         DisableBuiltinPDFViewer       = true;
         DisableFeedbackCommands       = true;
