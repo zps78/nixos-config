@@ -21,6 +21,16 @@
     enp5s0.wakeOnLan.enable                      = true;                       # intel nic
   };
 
+  # Fleet SSH access - dedicated key for reaching the rest of the fleet
+  # (kepler/kimi/krugerrand/kuro/karma). See home/users/bb.nix for the
+  # SSH client config that uses this, and secrets/secrets.nix for
+  # recipients.
+  age.secrets.krieger-fleet-key = {
+    file  = ../../secrets/krieger-fleet-key.age;
+    owner = "bb";
+    mode  = "0400";
+  };
+
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
   myDesktop.primaryUser                          = "bb";
   myDesktop.idle.enable                          = false;                      # workstation: no idle lock/suspend (sunshine, renders)
@@ -48,7 +58,10 @@
     docker.enable                                = true;                       # group membership auto-follows via modules/services/docker.nix
     libvirt.enable                               = false;                      # group membership auto-follows via modules/services/libvirt.nix
     ssh.enable                                   = true;
-    ssh.passwordAuth                             = true;                       # keep disabled for security
+    ssh.passwordAuth                             = false;                      # keep disabled for security
+    ssh.authorizedKeys                           = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF0omZkhZ//fafpUbFHlcFQyKY8UHIbaCzbD8PAkBsMv kuro-fleet-access"
+    ];
     sunshine.enable                              = true;                       # group membership auto-follows via modules/services/sunshine.nix
   };
 

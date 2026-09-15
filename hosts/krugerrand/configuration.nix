@@ -48,7 +48,11 @@
     docker.enable                                = false;                      # group membership auto-follows via modules/services/docker.nix
     libvirt.enable                               = false;                      # group membership auto-follows via modules/services/libvirt.nix
     ssh.enable                                   = true;
-    ssh.passwordAuth                             = true;                       # keep disabled for security
+    ssh.passwordAuth                             = false;                      # keep disabled for security
+    ssh.authorizedKeys                           = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF0omZkhZ//fafpUbFHlcFQyKY8UHIbaCzbD8PAkBsMv kuro-fleet-access"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcJBPOuOuYb9il98skTZJPWS8xIBgeiCAIcNWE9G6Pe krieger-fleet-access"
+    ];
     sunshine.enable                              = false;                      # group membership auto-follows via modules/services/sunshine.nix
   };
 

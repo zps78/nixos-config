@@ -35,9 +35,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, agenix, ... }:
     let
       system = "x86_64-linux";
 
@@ -62,6 +67,7 @@
               ./hosts/${hostname}/configuration.nix
               home-manager.nixosModules.home-manager
               noctalia-greeter.nixosModules.default
+              agenix.nixosModules.default
               {
                 nixpkgs.hostPlatform = system;
                 nixpkgs.config.allowUnfree = true;

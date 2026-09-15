@@ -113,6 +113,50 @@
   # waydroid        # -> import waydroid.nix in the host's configuration.nix
   ];
 
+  ############################################################
+  # Fleet SSH access (krieger only - bb.nix is only used there)
+  ############################################################
+  #
+  # krieger-fleet-key is a dedicated keypair (not any personal key) for
+  # reaching the rest of the fleet - see secrets/secrets.nix. Its
+  # private half is agenix-encrypted, decrypted only on krieger at
+  # activation via age.secrets.krieger-fleet-key in
+  # hosts/krieger/configuration.nix. Public halves are plain-text,
+  # committed, and added to each target's authorized_keys.
+  #
+  programs.ssh = {
+    enable = true;
+    settings = {
+      kepler = {
+        User = "sc";
+        IdentityFile = "/run/agenix/krieger-fleet-key";
+        IdentitiesOnly = true;
+      };
+      kimi = {
+        User = "gt";
+        IdentityFile = "/run/agenix/krieger-fleet-key";
+        IdentitiesOnly = true;
+      };
+      krugerrand = {
+        User = "zp";
+        IdentityFile = "/run/agenix/krieger-fleet-key";
+        IdentitiesOnly = true;
+      };
+      kuro = {
+        User = "zp";
+        IdentityFile = "/run/agenix/krieger-fleet-key";
+        IdentitiesOnly = true;
+      };
+      # karma isn't part of this flake (Unraid) - its authorized_keys
+      # is managed by hand over SSH, not by nix.
+      karma = {
+        User = "root";
+        IdentityFile = "/run/agenix/krieger-fleet-key";
+        IdentitiesOnly = true;
+      };
+    };
+  };
+
   # ----------------------
   # Optional: autostart scripts or custom config can go here
   # ----------------------

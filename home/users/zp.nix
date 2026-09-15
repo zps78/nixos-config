@@ -113,6 +113,51 @@
   # waydroid        # -> import waydroid.nix in the host's configuration.nix
   ];
 
+  ############################################################
+  # Fleet SSH access (kuro only - zp.nix is also used by krugerrand,
+  # which doesn't get this)
+  ############################################################
+  #
+  # kuro-fleet-key is a dedicated keypair (not the personal GitHub/karma
+  # key) for reaching the rest of the fleet - see secrets/secrets.nix.
+  # Its private half is agenix-encrypted, decrypted only on kuro at
+  # activation via age.secrets.kuro-fleet-key in
+  # hosts/kuro/configuration.nix. Public halves are plain-text,
+  # committed, and added to each target's authorized_keys.
+  #
+  programs.ssh = lib.mkIf (osConfig.networking.hostName == "kuro") {
+    enable = true;
+    settings = {
+      kepler = {
+        User = "sc";
+        IdentityFile = "/run/agenix/kuro-fleet-key";
+        IdentitiesOnly = true;
+      };
+      kimi = {
+        User = "gt";
+        IdentityFile = "/run/agenix/kuro-fleet-key";
+        IdentitiesOnly = true;
+      };
+      krugerrand = {
+        User = "zp";
+        IdentityFile = "/run/agenix/kuro-fleet-key";
+        IdentitiesOnly = true;
+      };
+      krieger = {
+        User = "bb";
+        IdentityFile = "/run/agenix/kuro-fleet-key";
+        IdentitiesOnly = true;
+      };
+      # karma isn't part of this flake (Unraid) - its authorized_keys
+      # is managed by hand over SSH, not by nix.
+      karma = {
+        User = "root";
+        IdentityFile = "/run/agenix/kuro-fleet-key";
+        IdentitiesOnly = true;
+      };
+    };
+  };
+
   # ----------------------
   # Optional: autostart scripts or custom config can go here
   # ----------------------
