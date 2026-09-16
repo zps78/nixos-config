@@ -52,12 +52,15 @@ window-rule {
 
 // xwayland-satellite doesn't handle X11 apps that request absolute screen
 // positioning well (documented niri limitation) - small centered dialogs
-// hit this and can collapse to ~1px tall (seen with Inno Setup's "Select
-// Setup Language" installer popup via Bottles/UMU/Proton - looks like a
-// thin horizontal line where the dialog should be). "steam_app_default"
-// is the generic app-id XWayland assigns to Proton/Steam/UMU windows;
-// min-height is a floor only, so real game windows are unaffected.
+// hit this and can collapse to ~1px tall OR ~1px wide (seen both ways:
+// Inno Setup's "Select Setup Language" popup collapsed to a thin
+// horizontal line via Bottles/UMU/Proton; a DODI installer's "Setup"
+// window collapsed to a thin vertical sliver via Lutris/UMU/GE-Proton -
+// same underlying bug, different axis). "steam_app_default" is the
+// generic app-id XWayland assigns to Proton/Steam/UMU windows; these are
+// floors only, so real game windows are unaffected.
 window-rule {
     match app-id=r#"^steam_app_default$"#
     min-height 200
+    min-width 200
 }
