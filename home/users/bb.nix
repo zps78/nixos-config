@@ -126,7 +126,27 @@
   #
   programs.ssh = {
     enable = true;
+
+    # home-manager's enableDefaultConfig (on by default) is slated for
+    # removal - this is its own documented migration snippet, copied
+    # verbatim, so switching it off is a pure no-op rather than a
+    # behavior change.
+    enableDefaultConfig = false;
+
     settings = {
+      "*" = {
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
+      };
+
       kepler = {
         User = "sc";
         IdentityFile = "/run/agenix/krieger-fleet-key";
