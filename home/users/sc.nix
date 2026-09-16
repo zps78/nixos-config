@@ -38,7 +38,7 @@
 
     # programming
     godot.enable                                 = true;             # Free and Open Source 2D and 3D game engine
-    vscodium.enable                              = true;            # VS Code without MS branding/telemetry/licensing
+    vscodium.enable                              = true;             # VS Code without MS branding/telemetry/licensing
     zed.enable                                   = true;             # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
 
     # office and productivity
