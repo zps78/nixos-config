@@ -48,6 +48,7 @@
     proton-pass.enable                           = false;            # Desktop application for Proton Pass
     telegram.enable                              = false;            # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
+    winapps.enable                               = true;             # Seamless Windows apps (RDP into karma's Office VM)
 
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
