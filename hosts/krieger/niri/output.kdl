@@ -25,11 +25,18 @@ output "DP-3" {
 }
 
 // HDMI dummy plug for Sunshine (always-on render target so niri has an
-// active output even with no monitor attached) - not connected yet.
-// Once it is, add its real connector name here (`niri msg outputs`),
-// and note it won't need a Logical position overlapping the two above
-// unless you want it to mirror rather than extend.
-// output "HDMI-A-1" {
-//     mode "1920x1080@60"
-//     scale 1
-// }
+// active output even with no monitor attached). Arrived and connected
+// - identifies itself as "sisel muhendislik 8K1080P@144Hz" (a generic
+// EDID-emulator dummy plug, not a real display - the odd vendor string
+// and implausibly wide mode list are the tell). Positioned to the
+// right of both real monitors (matches niri's own auto-assignment,
+// pinned explicitly rather than relied on) so it extends rather than
+// mirrors. 1920x1080@60 chosen deliberately over the plug's fancier
+// modes (up to 4K/144Hz) - a safe, conservative default for remote
+// streaming bandwidth; bump it if Sunshine's own stream quality
+// settings want to drive a higher output mode.
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    scale 1
+    position x=3840 y=0
+}
