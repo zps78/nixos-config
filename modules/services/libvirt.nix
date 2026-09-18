@@ -17,9 +17,10 @@
       qemu = {
         runAsRoot = false;
 
-        # Enables TPM / UEFI / modern VM features if needed
+        # Enables TPM for modern VM features if needed. UEFI/OVMF images
+        # are bundled by QEMU itself now - no separate enable needed
+        # (nixpkgs removed virtualisation.libvirtd.qemu.ovmf).
         swtpm.enable = true;
-        ovmf.enable = true;
       };
     };
 
