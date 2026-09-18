@@ -103,6 +103,23 @@
           suspend      = { timeout = 1800; action = "lock_and_suspend"; enabled = true; };
         };
       };
+    }
+    // lib.optionalAttrs (osConfig.networking.hostName == "krieger") {
+      # Keep the bar off the HDMI dummy plug (Sunshine's always-on capture
+      # target, see hosts/krieger/niri/output.kdl) - it's never meant to be
+      # looked at directly, and the bar/clock/etc. showing up in the
+      # Moonlight stream looks broken. "enabled" isn't an overridable
+      # per-monitor field (confirmed against Noctalia's own bar docs), so
+      # this fakes invisibility instead: no widgets, transparent, and no
+      # reserved compositor space.
+      bar.default.monitor."HDMI-A-1" = {
+        match               = "HDMI-A-1";
+        background_opacity  = 0.0;
+        reserve_space       = false;
+        start               = [ ];
+        center              = [ ];
+        end                 = [ ];
+      };
     };
   };
 

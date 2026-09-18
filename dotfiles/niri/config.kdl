@@ -18,6 +18,8 @@ environment {
 }
 
 hotkey-overlay {
-    // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
-    // skip-at-startup
+    // Disabled: on krieger this was showing up in Moonlight/Sunshine
+    // streams from the HDMI dummy plug (new-output-connect also triggers
+    // it, not just niri's own startup) - fine to skip everywhere.
+    skip-at-startup
 }

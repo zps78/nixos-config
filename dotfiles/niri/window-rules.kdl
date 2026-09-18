@@ -65,6 +65,21 @@ window-rule {
     min-width 200
 }
 
+// krieger only in practice (HDMI-A-1 only exists there, the Sunshine
+// dummy plug - see hosts/krieger/niri/output.kdl) - Steam Big Picture,
+// launched via Moonlight/Sunshine, was opening on whatever output niri
+// last had focused (a real monitor, not the dummy plug being streamed)
+// and tiled at half-width instead of fullscreen. open-on-output pins it
+// correctly regardless of prior focus (more robust than trying to focus
+// the right output before launch, which sunshine's apps.json prep-cmd
+// also does as a second line of defense). Title-matched, not app-id, so
+// this doesn't force-fullscreen the regular Steam client window too.
+window-rule {
+    match app-id=r#"^steam$"# title=r#"^Steam Big Picture Mode$"#
+    open-on-output "HDMI-A-1"
+    open-fullscreen true
+}
+
 // WinApps (FreeRDP RemoteApp/RAIL) windows: same underlying clash as
 // steam_app_default above (xwayland-satellite + absolute-positioned X11
 // windows). Tried open-floating first - made it worse, reproducibly
