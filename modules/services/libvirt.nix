@@ -38,8 +38,11 @@
     # Follows myDesktop.primaryUser (the per-host "who uses this
     # machine" indirection) rather than a manually-toggled group entry
     # in each host's configuration.nix - not a hardcoded username, still
-    # varies correctly per host.
-    users.users.${config.myDesktop.primaryUser}.extraGroups = [ "libvirtd" ];
+    # varies correctly per host. "kvm" is required alongside "libvirtd" -
+    # WinApps' own waCheckGroupMembership hard-requires both (confirmed
+    # via its source), even though QEMU/KVM itself doesn't strictly need
+    # it on NixOS (/dev/kvm access is otherwise udev-managed).
+    users.users.${config.myDesktop.primaryUser}.extraGroups = [ "libvirtd" "kvm" ];
 
     # ------------------------------------------------------------
     # Packages for VM management tools
