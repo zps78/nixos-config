@@ -64,3 +64,18 @@ window-rule {
     min-height 200
     min-width 200
 }
+
+// WinApps (FreeRDP RemoteApp/RAIL) windows are server-positioned - Windows
+// itself dictates their exact placement, since it's really rendering a
+// specific Windows app window over RDP. Forcing them into niri's tiling
+// layout fights that (xwayland-satellite + RAIL absolute positioning is
+// the same underlying clash as the steam_app_default rule above), causing
+// rendering glitches and misaligned clicks. Floating avoids the fight.
+// "Microsoft Excel" confirmed via `niri msg windows`; add further
+// entries here as other WinApps apps (cmd, explorer, etc.) get used and
+// hit the same issue - their app-ids are each app's FULL_NAME, set via
+// winapps' own /wm-class flag.
+window-rule {
+    match app-id=r#"^Microsoft Excel$"#
+    open-floating true
+}
