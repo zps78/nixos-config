@@ -69,8 +69,18 @@ in
       ]))
 
       # ----- web -----
-
-      (lib.mkIf app.zen-browser.enable (forEach zen [
+      # Falls back through whichever browser is actually enabled, rather
+      # than hardcoding one - a user with e.g. zen-browser disabled (bb
+      # on krieger, stripped down for gaming/streaming) still ends up
+      # with a real default instead of no association at all, which is
+      # what happened here before this fell back to nothing.
+      (let
+        defaultBrowser =
+          if      app.zen-browser.enable then zen
+          else if app.brave.enable       then "brave-browser.desktop"
+          else if app.firefox.enable     then "firefox.desktop"
+          else null;
+      in lib.mkIf (defaultBrowser != null) (forEach defaultBrowser [
         "text/html" "x-scheme-handler/http" "x-scheme-handler/https"
         "x-scheme-handler/about" "x-scheme-handler/unknown"
       ]))

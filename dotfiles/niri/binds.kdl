@@ -22,9 +22,12 @@ binds {
 
     Mod+Shift+C hotkey-overlay-title="Clipboard History: noctalia" { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
 
-    Mod+B hotkey-overlay-title="Open Web Browser: Brave" { spawn "brave" "--new-tab"; }
+    // Whatever mime.nix set as this user's real default browser (zen ->
+    // brave -> firefox fallback chain - see home/mime.nix), not a
+    // specific hardcoded program.
+    Mod+B hotkey-overlay-title="Open Default Web Browser" { spawn-sh "xdg-open http://"; }
 
-    Mod+Z hotkey-overlay-title="Open Web Browser: Zen" { spawn "zen-beta" "--new-tab"; }
+    Mod+Z hotkey-overlay-title="Open Zed" { spawn "zed"; }
 
     Mod+Alt+L hotkey-overlay-title="Lock the Screen: noctalia" { spawn "noctalia" "msg" "session" "lock"; }
 
