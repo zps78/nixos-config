@@ -110,6 +110,11 @@
           hostname = "krieger";
           users = [
             (makeUser "bb" ./home/users/bb.nix)
+            # Personal/password-protected account, reusing zp.nix as-is
+            # (already used on kuro/krugerrand) - not autoLogin's target,
+            # reached via a real greetd login. bb stays the gaming/
+            # streaming autoLogin persona.
+            (makeUser "zp" ./home/users/zp.nix)
           ];
         };
 

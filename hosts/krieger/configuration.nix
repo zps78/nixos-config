@@ -129,6 +129,23 @@
     ];
   };
 
+  # Personal/admin account, password-protected (no autoLogin entry below
+  # names it, so it's reached via a real greetd login) - same groups zp
+  # already has on kuro/krugerrand. Reuses home/users/zp.nix as-is; its
+  # fleet-ssh-key block is gated to hostName == "kuro" so it's a no-op
+  # here, same as it already is on krugerrand.
+  users.users.zp = {
+    isNormalUser                                 = true;
+    description                                  = "zp";
+    extraGroups = [
+                                                   "wheel"
+                                                   "networkmanager"
+                                                   "audio"
+                                                   "video"
+                                                   "render"
+    ];
+  };
+
   # Display manager - auto login
   services.displayManager.autoLogin = {
     enable                                       = true;

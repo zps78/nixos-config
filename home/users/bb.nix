@@ -31,7 +31,7 @@
     # 3d modeling
     bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
     blender.enable                               = false;            # 3D Creation/Animation/Publishing System
-    f3d.enable                                   = true;             # Fast minimalist 3D viewer (VTK)
+    f3d.enable                                   = false;            # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = false;            # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     openscad.enable                              = false;            # 3D parametric model compiler
     orca-slicer.enable                           = false;            # G-code generator for 3D printers
@@ -39,45 +39,45 @@
     # programming
     godot.enable                                 = false;            # Free and Open Source 2D and 3D game engine
     vscodium.enable                              = false;            # VS Code without MS branding/telemetry/licensing
-    zed.enable                                   = true;             # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
+    zed.enable                                   = false;            # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
 
     # office and productivity
-    office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors
-    xournalpp.enable                             = true;             # Xournal++ is a handwriting Notetaking software with PDF annotation support
-    pdfarranger.enable                           = true;             # Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface
+    office.enable                                = false;            # Office suite that combines text, spreadsheet and presentation editors
+    xournalpp.enable                             = false;            # Xournal++ is a handwriting Notetaking software with PDF annotation support
+    pdfarranger.enable                           = false;            # Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface
     proton-pass.enable                           = false;            # Desktop application for Proton Pass
     telegram.enable                              = false;            # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
-    winapps.enable                               = true;             # Seamless Windows apps (RDP into karma's Office VM)
+    winapps.enable                               = false;            # Seamless Windows apps (RDP into karma's Office VM) - moved to zp on this host
 
     # Emulation / virtualization
-    bottles.enable                               = true;             # Easy-to-use wineprefix manager
+    bottles.enable                               = true;             # Easy-to-use wineprefix manager (Red Dead Redemption, Return of the Obra Dinn)
   # libvirt                                      > enable service in the host's configuration.nix
   # wine                                         > enable feature in the host's configuration.nix
 
     # gaming
     chiaki-ng.enable                             = false;            # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
     lutris.enable                                = true;             # Open Source gaming platform for GNU/Linux
-    moonlight.enable                             = false;            # Play your PC games on almost any device
+    moonlight.enable                             = false;            # Play your PC games on almost any device - bb is the stream host, not a client
   # steam                                        > enable feature in the host's configuration.nix
 
     # media editing
     ardour.enable                                = false;            # Multi-track hard disk recording software
-    audacity.enable                              = true;             # Sound editor with graphical UI
+    audacity.enable                              = false;            # Sound editor with graphical UI
     easyeffects.enable                           = false;            # System-wide audio effects (EQ, compressor, limiter)
-    handbrake.enable                             = true;             # Tool for converting video files and ripping DVDs
-    losslesscut.enable                           = true;             # Swiss army knife of lossless video/audio editing
-    mkvtoolnix.enable                            = true;             # Cross-platform tools for Matroska
+    handbrake.enable                             = false;            # Tool for converting video files and ripping DVDs
+    losslesscut.enable                           = false;            # Swiss army knife of lossless video/audio editing
+    mkvtoolnix.enable                            = false;            # Cross-platform tools for Matroska
     obs-studio.enable                            = true;             # Free and open source software for video recording and live streaming
 
     # media players
-    cava.enable                                  = true;             # Console audio visualizer (ALSA/PipeWire)
+    cava.enable                                  = false;            # Console audio visualizer (ALSA/PipeWire)
     iptvnator.enable                             = false;            # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = false;            # Open Source YouTube app for privacy
-    mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
-    plex-tui.enable                              = true;             # Terminal Plex client for browsing and watching media
+    mpv.enable                                   = false;            # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
+    plex-tui.enable                              = false;            # Terminal Plex client for browsing and watching media
     plex.enable                                  = false;            # Media library streaming server
-    spotatui.enable                              = true;             # Fully standalone Spotify client for the terminal
+    spotatui.enable                              = false;            # Fully standalone Spotify client for the terminal
     spotify.enable                               = false;            # Play music from the Spotify music service
     vlc.enable                                   = false;            # Cross-platform media player and streaming server
 
@@ -89,7 +89,7 @@
     # web browsers
     brave.enable                                 = true;             # Privacy-oriented browser for Desktop and Laptop computers
     firefox.enable                               = false;            # Web browser built from Firefox source tree
-    zen-browser.enable                           = true;             # Privacy-focused internet browser
+    zen-browser.enable                           = false;            # Privacy-focused internet browser
   };
 
   programs.git = {
