@@ -37,7 +37,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   # Display / login manager
   ############################################################
 
-  programs.noctalia-greeter = {
+  services.displayManager.noctalia-greeter = {
     enable = true;
     settings = {
       appearance.scheme = "Synced";
