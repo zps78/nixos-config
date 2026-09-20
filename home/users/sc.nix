@@ -31,7 +31,7 @@
     # 3d modeling
     bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
     blender.enable                               = true;             # 3D Creation/Animation/Publishing System
-    f3d.enable                                   = false;            # Fast minimalist 3D viewer (VTK)
+    f3d.enable                                   = true;             # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = true;             # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     openscad.enable                              = false;            # 3D parametric model compiler
     orca-slicer.enable                           = true;             # G-code generator for 3D printers
@@ -65,7 +65,7 @@
     ardour.enable                                = true;             # Multi-track hard disk recording software
     audacity.enable                              = true;             # Sound editor with graphical UI
     easyeffects.enable                           = true;             # System-wide audio effects (EQ, compressor, limiter)
-    handbrake.enable                             = false;            # Tool for converting video files and ripping DVDs
+    handbrake.enable                             = true;             # Tool for converting video files and ripping DVDs
     losslesscut.enable                           = true;             # Swiss army knife of lossless video/audio editing
     mkvtoolnix.enable                            = false;            # Cross-platform tools for Matroska
     obs-studio.enable                            = true;             # Free and open source software for video recording and live streaming

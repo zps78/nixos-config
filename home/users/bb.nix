@@ -31,7 +31,7 @@
     # 3d modeling
     bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
     blender.enable                               = false;            # 3D Creation/Animation/Publishing System
-    f3d.enable                                   = false;            # Fast minimalist 3D viewer (VTK)
+    f3d.enable                                   = true;             # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = false;            # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     openscad.enable                              = false;            # 3D parametric model compiler
     orca-slicer.enable                           = false;            # G-code generator for 3D printers
@@ -39,7 +39,7 @@
     # programming
     godot.enable                                 = false;            # Free and Open Source 2D and 3D game engine
     vscodium.enable                              = false;            # VS Code without MS branding/telemetry/licensing
-    zed.enable                                   = false;            # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
+    zed.enable                                   = true;             # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
 
     # office and productivity
     office.enable                                = false;            # Office suite that combines text, spreadsheet and presentation editors
@@ -51,7 +51,7 @@
     winapps.enable                               = false;            # Seamless Windows apps (RDP into karma's Office VM) - moved to zp on this host
 
     # Emulation / virtualization
-    bottles.enable                               = true;             # Easy-to-use wineprefix manager (Red Dead Redemption, Return of the Obra Dinn)
+    bottles.enable                               = true;             # Easy-to-use wineprefix manager
   # libvirt                                      > enable service in the host's configuration.nix
   # wine                                         > enable feature in the host's configuration.nix
 
@@ -87,9 +87,9 @@
     krita.enable                                 = false;            # Free and open source painting application
 
     # web browsers
-    brave.enable                                 = true;             # Privacy-oriented browser for Desktop and Laptop computers
+    brave.enable                                 = false;            # Privacy-oriented browser for Desktop and Laptop computers
     firefox.enable                               = false;            # Web browser built from Firefox source tree
-    zen-browser.enable                           = false;            # Privacy-focused internet browser
+    zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
 
   programs.git = {
