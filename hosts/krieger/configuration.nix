@@ -87,6 +87,7 @@
 
   myServices = {
     battery.enable                               = false;                      # battery support
+    battery.tlp.enable                           = false;                      # TLP: low-power profile and no turbo on battery
     brother-ads-4300n.enable                     = true;                       # Brother ADS-4300N network document scanner
     brother-hl-l8230cdw.enable                   = true;                       # Brother HL-L8230CDW network color laser printer
     docker.enable                                = true;                       # group membership auto-follows via modules/services/docker.nix
