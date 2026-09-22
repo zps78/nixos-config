@@ -1,37 +1,61 @@
 // ../../hosts/kuro/niri/output.kdl
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://niri-wm.github.io/niri/Configuration:-Outputs
-// Remember to uncomment the node by removing "/-"!
-  output "eDP-1" {
-    // Uncomment this line to disable this output.
-    // off
+// kuro is a ThinkPad X12 Detachable Gen 2 docked to a Lenovo Thunderbolt
+// 4 Dock with a "TriCreate" 3-monitor arm kit. All 3 external monitors
+// are real DisplayPort connectors carried as DP Multi-Stream Transport
+// over the single Thunderbolt cable - confirmed via card1-DP-6/8/9 all
+// showing "connected" with no udl/evdi module involved anywhere, i.e.
+// this was never USB-video/driver territory. An earlier diagnosis on
+// this file blamed a driverless Silicon Motion USB-video chip for the
+// 3rd (Left) output never showing up - that was wrong. The real cause
+// was a bad dock cable preventing full MST negotiation; a good cable
+// plus a cold boot brought all three DP streams up cleanly.
+//
+// Internal panel (eDP-1) stays defined below for undocked use, but
+// niri only drives outputs that are actually connected, so this
+// doesn't force it on while docked.
+//
+// Lid-close not suspending while docked is expected systemd-logind
+// behavior (HandleLidSwitchDocked defaults to "ignore" when unset),
+// not a bug - see hosts/kuro/configuration.nix if that default is ever
+// worth overriding.
+//
+// Run `niri msg outputs` (with NIRI_SOCKET set - not exported over a
+// plain ssh session, see systemctl --user show-environment) to see the
+// live connector/serial mapping if the dock or cable ever changes;
+// connector names (DP-6, DP-8, DP-9 etc.) can shift across reconnects
+// even though the monitors themselves are the same.
 
-    // Resolution and, optionally, refresh rate of the output.
-    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
-    // If the refresh rate is omitted, niri will pick the highest refresh rate
-    // for the resolution.
-    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
-    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+output "eDP-1" {
     mode "1920x1280@60.001"
-
-    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
     scale 1.0
-
-    // Transform allows to rotate the output counter-clockwise, valid values are:
-    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
     transform "normal"
-
-    // Position of the output in the global coordinate space.
-    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
-    // The cursor can only move between directly adjacent outputs.
-    // Output scale and rotation has to be taken into account for positioning:
-    // outputs are sized in logical, or scaled, pixels.
-    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
-    // so to put another output directly adjacent to it on the right, set its x to 1920.
-    // If the position is unset or results in an overlap, the output is instead placed
-    // automatically.
     position x=0 y=0
+}
+
+// "RTK TriCreate-L" - Left arm of the 3-monitor kit. Positioned after
+// eDP-1's own slot (not at x=0) because eDP-1 stays "connected" at the
+// DRM level even with the lid closed/docked - confirmed via
+// /sys/class/drm/card1-eDP-1/status still reading "connected" while
+// docked - so x=0 y=0 is never actually free to reuse.
+output "DP-9" {
+    mode "1920x1080@60.004"
+    scale 1.0
+    transform "normal"
+    position x=1920 y=0
+}
+
+// "PNP(TCK) TriCreate-M" - Middle arm of the 3-monitor kit.
+output "DP-6" {
+    mode "1920x1080@60.004"
+    scale 1.0
+    transform "normal"
+    position x=3840 y=0
+}
+
+// "PNP(TCK) TriCreate-R" - Right arm of the 3-monitor kit.
+output "DP-8" {
+    mode "1920x1080@60.004"
+    scale 1.0
+    transform "normal"
+    position x=5760 y=0
 }
