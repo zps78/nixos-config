@@ -10,6 +10,15 @@
 // was a bad dock cable preventing full MST negotiation; a good cable
 // plus a cold boot brought all three DP streams up cleanly.
 //
+// Matched by each output's full descriptive name (make/model/serial),
+// not by connector (DP-6/8/9) - confirmed live that connector numbers
+// reshuffle across sleep/wake and reconnect cycles (seen going from
+// DP-9/6/8 to DP-12/7/11 across one dock reconnect), which caused a
+// real one-time failure: only 2 of 3 externals came up on first wake
+// after docking, all 3 came up only after a logout+wake re-init.
+// Matching by name survives that reshuffling instead of depending on
+// niri restarting to paper over it.
+//
 // Internal panel (eDP-1) stays defined below for undocked use, but
 // niri only drives outputs that are actually connected, so this
 // doesn't force it on while docked.
@@ -20,10 +29,8 @@
 // worth overriding.
 //
 // Run `niri msg outputs` (with NIRI_SOCKET set - not exported over a
-// plain ssh session, see systemctl --user show-environment) to see the
-// live connector/serial mapping if the dock or cable ever changes;
-// connector names (DP-6, DP-8, DP-9 etc.) can shift across reconnects
-// even though the monitors themselves are the same.
+// plain ssh session, see systemctl --user show-environment) to see
+// the live connector/name mapping if the dock or cable ever changes.
 
 output "eDP-1" {
     mode "1920x1280@60.001"
@@ -32,28 +39,28 @@ output "eDP-1" {
     position x=0 y=0
 }
 
-// "RTK TriCreate-L" - Left arm of the 3-monitor kit. Positioned after
-// eDP-1's own slot (not at x=0) because eDP-1 stays "connected" at the
-// DRM level even with the lid closed/docked - confirmed via
+// Left arm of the 3-monitor kit. Positioned after eDP-1's own slot
+// (not at x=0) because eDP-1 stays "connected" at the DRM level even
+// with the lid closed/docked - confirmed via
 // /sys/class/drm/card1-eDP-1/status still reading "connected" while
 // docked - so x=0 y=0 is never actually free to reuse.
-output "DP-9" {
+output "Invalid Vendor Codename - RTK TriCreate-L T3-DP250813" {
     mode "1920x1080@60.004"
     scale 1.0
     transform "normal"
     position x=1920 y=0
 }
 
-// "PNP(TCK) TriCreate-M" - Middle arm of the 3-monitor kit.
-output "DP-6" {
+// Middle arm of the 3-monitor kit.
+output "PNP(TCK) TriCreate-M T3-HDMI250813" {
     mode "1920x1080@60.004"
     scale 1.0
     transform "normal"
     position x=3840 y=0
 }
 
-// "PNP(TCK) TriCreate-R" - Right arm of the 3-monitor kit.
-output "DP-8" {
+// Right arm of the 3-monitor kit.
+output "PNP(TCK) TriCreate-R T3-HDMI250813" {
     mode "1920x1080@60.004"
     scale 1.0
     transform "normal"
