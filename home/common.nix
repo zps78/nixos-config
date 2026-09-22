@@ -24,7 +24,6 @@
 
     # KDE
     kdePackages.ark                      # File archiver by KDE
-    kdePackages.dolphin                  # File manager by KDE
     kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
     kdePackages.gwenview                 # Image viewer by KDE
     kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats

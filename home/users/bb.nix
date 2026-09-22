@@ -51,9 +51,6 @@
     thunderbird.enable                           = false;            # Full-featured e-mail client
     winapps.enable                               = false;            # Seamless Windows apps (RDP into karma's Office VM)
 
-    # file managers
-    nautilus.enable                              = false;            # GNOME Files - alongside Dolphin, not replacing it
-
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
   # libvirt                                      > enable service in the host's configuration.nix

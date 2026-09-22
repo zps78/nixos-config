@@ -6,6 +6,19 @@
 
 {
   # ===========================================================================
+  # Applications gated to niri specifically
+  # ===========================================================================
+  #
+  # Nautilus is niri's file manager (Dolphin was dropped from common.nix -
+  # NFS/network browsing works better here). Enabled here rather than as a
+  # per-user myApps.nautilus.enable toggle so every niri host gets it
+  # automatically without each user file repeating the same choice, and so
+  # a future gnome/kde-stack host doesn't get it piled on top of its own
+  # native file manager.
+
+  myApps.nautilus.enable = true;
+
+  # ===========================================================================
   # Noctalia (bar / shell / theme generator)
   # ===========================================================================
 

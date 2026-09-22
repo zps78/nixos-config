@@ -9,7 +9,7 @@ let
   app = config.myApps;
 
   gwenview = "org.kde.gwenview.desktop";
-  dolphin = "org.kde.dolphin.desktop";
+  nautilus = "org.gnome.Nautilus.desktop";
   ark = "org.kde.ark.desktop";
   darktable = "org.darktable.darktable.desktop";
   zed = "dev.zed.Zed.desktop";
@@ -42,14 +42,20 @@ in
         "application/x-cbt"              = "okularApplication_comicbook.desktop";
         "application/x-cb7"              = "okularApplication_comicbook.desktop";
 
-        "inode/directory"               = dolphin;
-
         "application/zip"                = ark;
         "application/x-tar"              = ark;
         "application/x-compressed-tar"   = ark;
         "application/x-7z-compressed"    = ark;
         "application/vnd.rar"            = ark;
       }
+
+      # ----- file manager -----
+      # Not in the unconditional block above - nautilus is niri-gated
+      # (home/niri.nix), not always installed like the KDE app set.
+
+      (lib.mkIf app.nautilus.enable {
+        "inode/directory" = nautilus;
+      })
 
       # ----- RAW photographs -----
 
