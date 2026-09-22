@@ -27,7 +27,7 @@ binds {
     // specific hardcoded program.
     Mod+B hotkey-overlay-title="Open Default Web Browser" { spawn-sh "xdg-open http://"; }
 
-    Mod+Z hotkey-overlay-title="Open Zed" { spawn "zed"; }
+    Mod+Z hotkey-overlay-title="Open Zed" { spawn "zeditor"; }
 
     Mod+Alt+L hotkey-overlay-title="Lock the Screen: noctalia" { spawn "noctalia" "msg" "session" "lock"; }
 
