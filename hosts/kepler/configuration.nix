@@ -68,6 +68,7 @@
 
   myFeatures = {
     android.enable                               = true;                       # ADB, scrcpy, APK tools
+    claude-desktop.enable                        = false;                      # Anthropic's Claude Desktop app
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     steam.enable                                 = true;
