@@ -51,9 +51,6 @@
     thunderbird.enable                           = false;            # Full-featured e-mail client
     winapps.enable                               = true;             # Seamless Windows apps (RDP into karma's Office VM)
 
-    # KDE apps
-    kde.enable                                   = true;             # Ark, Okular, Gwenview (+ qt6ct theming) - not dolphin, see modules/apps-user/kde.nix
-
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
   # libvirt                                      > enable service in the host's configuration.nix

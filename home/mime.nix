@@ -2,15 +2,21 @@
 #
 # Default-application associations. App-specific blocks are gated on the
 # matching myApps.*.enable so a user who hasn't enabled an app never gets
-# a default handler pointing at a missing .desktop file.
-{ config, lib, ... }:
+# a default handler pointing at a missing .desktop file. The GNOME-
+# ecosystem block below is gated on osConfig.myDesktop.stack instead,
+# since those apps (home/niri.nix) have no myApps.*.enable of their own -
+# always-on for every niri host, not something meant to vary per user.
+{ config, lib, osConfig, ... }:
 
 let
   app = config.myApps;
+  isNiri = osConfig.myDesktop.stack == "niri";
 
-  gwenview = "org.kde.gwenview.desktop";
+  loupe = "org.gnome.Loupe.desktop";
+  evince = "org.gnome.Evince.desktop";
+  foliate = "com.github.johnfactotum.Foliate.desktop";
+  fileRoller = "org.gnome.FileRoller.desktop";
   nautilus = "org.gnome.Nautilus.desktop";
-  ark = "org.kde.ark.desktop";
   darktable = "org.darktable.darktable.desktop";
   zed = "dev.zed.Zed.desktop";
   zen = "zen-beta.desktop";
@@ -26,30 +32,37 @@ in
 
     defaultApplications = lib.mkMerge [
 
-      # ----- KDE app set -----
-      # kde.nix is a toggle now (was unconditional in common.nix before
-      # dolphin/nautilus split it out), so this needs the same gating as
-      # every other app-specific block below.
+      # ----- GNOME-ecosystem app set (niri only) -----
+      # Replaces the old dolphin-era KDE set. evince covers pdf plus every
+      # comic-book format okular did (and more: djvu, postscript, xps) -
+      # but drops epub/mobi entirely, hence foliate picking those up
+      # separately. Verified each app's real MimeType coverage against its
+      # own .desktop file rather than assuming.
 
-      (lib.mkIf app.kde.enable (forEach gwenview [
+      (lib.mkIf isNiri (forEach loupe [
         "image/jpeg" "image/png" "image/gif" "image/webp" "image/avif"
-        "image/heif" "image/bmp" "image/tiff" "image/svg+xml" "image/jxl"
+        "image/heic" "image/bmp" "image/tiff" "image/svg+xml" "image/jxl"
       ]))
 
-      (lib.mkIf app.kde.enable {
-        "application/pdf"                = "okularApplication_pdf.desktop";
-        "application/epub+zip"           = "okularApplication_epub.desktop";
-        "application/x-mobipocket-ebook" = "okularApplication_mobi.desktop";
-        "application/x-cbz"              = "okularApplication_comicbook.desktop";
-        "application/x-cbr"              = "okularApplication_comicbook.desktop";
-        "application/x-cbt"              = "okularApplication_comicbook.desktop";
-        "application/x-cb7"              = "okularApplication_comicbook.desktop";
+      (lib.mkIf isNiri {
+        "application/pdf"                    = evince;
+        "application/x-cbz"                  = evince;
+        "application/x-cbr"                  = evince;
+        "application/x-cbt"                  = evince;
+        "application/x-cb7"                  = evince;
+        "image/vnd.djvu"                     = evince;
+        "application/postscript"             = evince;
+        "application/oxps"                   = evince;
 
-        "application/zip"                = ark;
-        "application/x-tar"              = ark;
-        "application/x-compressed-tar"   = ark;
-        "application/x-7z-compressed"    = ark;
-        "application/vnd.rar"            = ark;
+        "application/epub+zip"               = foliate;
+        "application/x-mobipocket-ebook"     = foliate;
+        "application/vnd.amazon.mobi8-ebook" = foliate;
+
+        "application/zip"                    = fileRoller;
+        "application/x-tar"                  = fileRoller;
+        "application/x-compressed-tar"       = fileRoller;
+        "application/x-7z-compressed"        = fileRoller;
+        "application/vnd.rar"                = fileRoller;
       })
 
       # ----- file manager -----
