@@ -9,19 +9,22 @@
 // niri itself supports driving outputs across two separate GPUs this
 // way (confirmed via niri-wm/niri#550 on GitHub).
 //
-// As of 2026-09-22 (initial dock connection): Left and the internal
-// panel show a clean image. Middle shows visible graphical artifacts.
-// Right shows no image at all. Most likely a bad/marginal cable or
-// connector on this specific TriCreate kit - kuro hit an almost
-// identical symptom that turned out to be a bad dock cable, fixed by
-// swapping it. Worth re-testing after a cable check/reseat and a cold
-// boot with everything connected before trusting Middle/Right here.
+// Matched by each output's full descriptive name (make/model/serial),
+// not by connector (DP-6/7/8) - confirmed those connector numbers
+// actually swap which physical arm they're attached to across reboots
+// (Left went DP-6 -> DP-8, Middle went DP-8 -> DP-6, between the
+// first dock connection and a later reboot), while the descriptive
+// name stayed tied to the correct physical arm both times. Matching
+// this way survives that reshuffling.
+//
+// 2026-09-22 initial connection: Middle had graphical artifacts and
+// Right showed no image at all - both resolved after a reboot with
+// everything connected, matching the bad-cable pattern kuro hit on
+// the same style of kit. All 4 outputs confirmed clean after that.
 //
 // Run `niri msg outputs` (with NIRI_SOCKET set - not exported over a
-// plain ssh session, see systemctl --user show-environment) to see the
-// live connector/serial mapping if the dock or cable ever changes;
-// connector names (DP-6, DP-7, DP-8 etc.) can shift across reconnects
-// even though the monitors themselves are the same.
+// plain ssh session, see systemctl --user show-environment) to see
+// the live connector/name mapping if the dock or cable ever changes.
 
 output "eDP-1" {
     mode "2560x1600@60.001"
@@ -30,28 +33,24 @@ output "eDP-1" {
     position x=0 y=0
 }
 
-// "RTK TriCreate-L" - Left arm of the 3-monitor kit. Clean image.
-output "DP-6" {
+// Left arm of the 3-monitor kit.
+output "Invalid Vendor Codename - RTK TriCreate-L T3-DP250813" {
     mode "1920x1080@60.004"
     scale 1.0
     transform "normal"
     position x=2134 y=0
 }
 
-// "PNP(TCK) TriCreate-M" - Middle arm. Showing graphical artifacts as
-// of the initial connection - likely cable/connector related, not
-// this config.
-output "DP-8" {
+// Middle arm of the 3-monitor kit.
+output "PNP(TCK) TriCreate-M T3-HDMI250813" {
     mode "1920x1080@60.004"
     scale 1.0
     transform "normal"
     position x=4054 y=0
 }
 
-// "PNP(TCK) TriCreate-R" - Right arm. Not producing an image as of the
-// initial connection - likely cable/connector related, not this
-// config.
-output "DP-7" {
+// Right arm of the 3-monitor kit.
+output "PNP(TCK) TriCreate-R T3-HDMI250813" {
     mode "1920x1080@60.004"
     scale 1.0
     transform "normal"
