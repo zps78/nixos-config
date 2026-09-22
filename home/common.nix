@@ -1,8 +1,8 @@
 # ../../home/common.nix
 #
-# Shared home config for every user: shell, terminal, the KDE app set,
-# mime associations and a baseline of GUI tools. Desktop-agnostic - the
-# niri/Noctalia-specific bits live in ./niri.nix.
+# Shared home config for every user: shell, terminal, mime associations
+# and a baseline of GUI tools. Desktop-agnostic - the niri/Noctalia-
+# specific bits (including its GNOME app set) live in ./niri.nix.
 { pkgs, ... }:
 
 {
@@ -26,7 +26,6 @@
     meld                                 # Visual diff and merge tool
     pinta                                # Drawing/editing program modeled after Paint.NET
     qdirstat                             # Graphical disk usage analyzer
-    usbimager                            # Minimal GUI to write compressed disk images to USB
   ];
 
   # ===========================================================================

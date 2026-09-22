@@ -24,9 +24,10 @@
   # myApps.*.enable toggles for any of these - always-on for every niri
   # host, matching nautilus above, not something meant to vary per user.
   home.packages = with pkgs; [
-    loupe        # Image viewer - replaces gwenview, same GTK4/libadwaita family as nautilus itself
-    file-roller  # Archive manager - replaces ark, what nautilus's own compress/extract actions are built around ("roller" isn't a real package - this is almost certainly what was meant)
-    foliate      # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
+    loupe               # Image viewer - replaces gwenview, same GTK4/libadwaita family as nautilus itself
+    file-roller         # Archive manager - replaces ark, what nautilus's own compress/extract actions are built around ("roller" isn't a real package - this is almost certainly what was meant)
+    foliate             # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
+    gnome-disk-utility  # Disks/partition manager + USB image writer - replaces both KDE Partition Manager and usbimager. Ships no polkit .policy of its own (unlike gparted/partitionmanager) - it talks to udisks2's own already-registered system actions, so no special system-level placement needed like those did.
 
     # qt6ct patched (from the AUR qt6ct-kde package) so it reads KDE
     # color schemes / KF6 config - lets Noctalia theme Qt/KDE apps
