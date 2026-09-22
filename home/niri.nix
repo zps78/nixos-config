@@ -4,6 +4,73 @@
 # in ./common.nix. Imported only when osConfig.myDesktop.stack == "niri".
 { lib, pkgs, config, osConfig, ... }:
 
+let
+  # Adwaita's folder icons are blue (#438de6/#62a0ea/#a4caee/#afd4ff/
+  # #c0d5ea) - clashes with the rest of the theme. No mature "dynamic"
+  # option exists anywhere in the ecosystem for icon-theme-level accent
+  # colors (checked: Noctalia's own theming and tools like Gradience/
+  # Matugen only reach GTK CSS/widget chrome, not icon SVG assets), and
+  # the one third-party script found for it (recolors Yaru to Noctalia's
+  # colors) is an unmaintained single-author project that also assumes
+  # FHS paths Yaru doesn't live at on NixOS. This is the durable
+  # alternative: a small icon theme that Inherits=Adwaita (the standard
+  # freedesktop fallback mechanism - anything not overridden here just
+  # falls through to real Adwaita) and only replaces the folder icons,
+  # recoloured to Adwaita's own existing neutral greys - the same
+  # #77767b/#9a9996/#aeadab/#c0bfbc already used for folder-remote.svg's
+  # badge in the real theme, not invented shades, so it stays visually
+  # consistent with Adwaita itself. All 9 folder variants (documents,
+  # download, music, pictures, videos, publicshare, templates, remote,
+  # drag-accept) plus folder-open use the exact same 5 blues - confirmed
+  # by checking each file - so one substitution list covers all of them.
+  adwaitaGreyFolders = pkgs.runCommand "adwaita-grey-folders" { } ''
+    mkdir -p $out/share/icons/Adwaita-Grey-Folders/scalable/{places,status}
+
+    recolor() {
+      sed \
+        -e 's/#438de6/#77767b/g' \
+        -e 's/#62a0ea/#9a9996/g' \
+        -e 's/#a4caee/#9a9996/g' \
+        -e 's/#afd4ff/#c0bfbc/g' \
+        -e 's/#c0d5ea/#aeadab/g' \
+        "$1" > "$2"
+    }
+
+    for f in folder folder-documents folder-download folder-music \
+             folder-pictures folder-videos folder-publicshare \
+             folder-templates folder-remote folder-drag-accept; do
+      recolor \
+        "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/places/$f.svg" \
+        "$out/share/icons/Adwaita-Grey-Folders/scalable/places/$f.svg"
+    done
+
+    recolor \
+      "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/status/folder-open.svg" \
+      "$out/share/icons/Adwaita-Grey-Folders/scalable/status/folder-open.svg"
+
+    cat > $out/share/icons/Adwaita-Grey-Folders/index.theme << 'EOF'
+[Icon Theme]
+Name=Adwaita-Grey-Folders
+Comment=Adwaita with grey, not blue, folder icons
+Inherits=Adwaita
+Directories=scalable/places,scalable/status
+
+[scalable/places]
+Size=128
+Type=Scalable
+MinSize=8
+MaxSize=512
+Context=Places
+
+[scalable/status]
+Size=128
+Type=Scalable
+MinSize=8
+MaxSize=512
+Context=Status
+EOF
+  '';
+in
 {
   # ===========================================================================
   # Applications gated to niri specifically
@@ -41,6 +108,7 @@
     evince               # ships the GNOME/freedesktop .thumbnailer for PDFs, also the default PDF/comic-book/djvu/postscript/xps viewer
     ffmpegthumbnailer    # ships the GNOME/freedesktop .thumbnailer for video
     adwaita-icon-theme   # generic MIME icons (zip, xlsx, etc.) for GTK apps
+    adwaitaGreyFolders   # Adwaita-Grey-Folders icon theme (defined above) - set active via dconf org/gnome/desktop/interface icon-theme below
     loupe                # Image viewer - replaces gwenview, same GTK4/libadwaita family as nautilus itself
     file-roller          # Archive manager - replaces ark, what nautilus's own compress/extract actions are built around ("roller" isn't a real package - this is almost certainly what was meant)
     foliate              # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
@@ -265,6 +333,13 @@
       font-name = "DejaVu Sans 12";
       document-font-name = "DejaVu Serif 11";
       monospace-font-name = "DejaVu Sans Mono 12";
+
+      # Adwaita-Grey-Folders (defined above) - Inherits=Adwaita, so
+      # everything except the folder icons is unchanged real Adwaita.
+      # gtk.iconTheme wasn't used for this (gtk.enable is false -
+      # Noctalia manages GTK theming its own way, didn't want to risk
+      # that module's other side effects for one icon theme setting).
+      icon-theme = "Adwaita-Grey-Folders";
     };
   };
 
