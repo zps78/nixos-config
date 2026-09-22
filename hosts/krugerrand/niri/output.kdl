@@ -17,10 +17,15 @@
 // name stayed tied to the correct physical arm both times. Matching
 // this way survives that reshuffling.
 //
-// 2026-09-22 initial connection: Middle had graphical artifacts and
-// Right showed no image at all - both resolved after a reboot with
-// everything connected, matching the bad-cable pattern kuro hit on
-// the same style of kit. All 4 outputs confirmed clean after that.
+// 2026-09-22: both external screens (Left and Middle) show graphical
+// artifacts after login, Right never shows an image at all, internal
+// stays clean. Unlike kuro's bad-cable case (one dead link, others
+// fine), this pattern - two streams corrupted, one failing to link,
+// on a single MST chain - looks more like a marginal/insufficient
+// link than one bad connector. Krugerrand's own dock cable hasn't
+// been swapped/tested yet (only kuro's was). Not a config issue -
+// niri's requested modes are unaffected by this, it's happening
+// below that layer.
 //
 // Run `niri msg outputs` (with NIRI_SOCKET set - not exported over a
 // plain ssh session, see systemctl --user show-environment) to see
