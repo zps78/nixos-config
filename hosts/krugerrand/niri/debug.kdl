@@ -1,0 +1,13 @@
+// ../../hosts/krugerrand/niri/debug.kdl
+// krugerrand-only: hybrid Intel/NVIDIA setups with the compositor
+// rendering on Intel while NVIDIA drives DP-MST outputs are known to
+// corrupt those external outputs - see niri-wm/niri#4492, unresolved
+// upstream as of 2026-09. This debug flag is the documented
+// workaround; trades a bit of extra input lag on the external
+// monitors for no corruption. Confirmed needed here: swapping the
+// dock cable and dropping to 2 of the 3 external streams did not fix
+// the artifacts, matching the issue's own symptom description.
+
+debug {
+    wait-for-frame-completion-before-queueing
+}

@@ -307,6 +307,7 @@
     "niri/binds.kdl".source                       = ../dotfiles/niri/binds.kdl;
     "niri/config.kdl".source                      = ../dotfiles/niri/config.kdl;
     "niri/cursor.kdl".source                      = ../dotfiles/niri/cursor.kdl;
+    "niri/debug.kdl".source                       = ../hosts/${osConfig.networking.hostName}/niri/debug.kdl;
     "niri/decorations.kdl".source                 = ../dotfiles/niri/decorations.kdl;
     "niri/input.kdl".source                       = ../hosts/${osConfig.networking.hostName}/niri/input.kdl;
     "niri/layout.kdl".source                      = ../dotfiles/niri/layout.kdl;

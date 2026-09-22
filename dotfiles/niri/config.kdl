@@ -1,6 +1,7 @@
 include "animations.kdl"
 include "binds.kdl"
 include "cursor.kdl"
+include "debug.kdl"
 include "decorations.kdl"
 include "input.kdl"
 include "layout.kdl"

@@ -1,0 +1,3 @@
+// ../../hosts/kuro/niri/debug.kdl
+// No debug settings needed on this host. Intel-only GPU, no hybrid
+// Intel/NVIDIA DP-MST corruption issue (see krugerrand's debug.kdl).

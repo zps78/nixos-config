@@ -1,0 +1,3 @@
+// ../../hosts/kepler/niri/debug.kdl
+// No debug settings needed on this host. No hybrid Intel/NVIDIA
+// DP-MST corruption issue (see krugerrand's debug.kdl).
