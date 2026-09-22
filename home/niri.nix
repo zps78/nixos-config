@@ -19,12 +19,22 @@ let
   # recoloured to Adwaita's own existing neutral greys - the same
   # #77767b/#9a9996/#aeadab/#c0bfbc already used for folder-remote.svg's
   # badge in the real theme, not invented shades, so it stays visually
-  # consistent with Adwaita itself. All 9 folder variants (documents,
-  # download, music, pictures, videos, publicshare, templates, remote,
-  # drag-accept) plus folder-open use the exact same 5 blues - confirmed
-  # by checking each file - so one substitution list covers all of them.
+  # consistent with Adwaita itself. Found every file in the whole theme
+  # using this palette via a real grep, not filename-guessing (missed
+  # user-desktop.svg the first pass that way - "Desktop" isn't named
+  # "folder-desktop", easy to miss). Covers every folder-equivalent
+  # shown in Nautilus's places sidebar: the 9 folder-*.svg variants,
+  # folder-open, user-desktop, user-home, user-bookmarks, and the
+  # generic inode-directory mimetype icon - all confirmed to use only
+  # this same simple 5-color palette. network-workgroup.svg also
+  # matched the grep but is a much more complex multi-tone illustration
+  # (14 colors, several different blues) that doesn't map onto this
+  # substitution cleanly - left untouched rather than risk a
+  # half-recolored, broken-looking icon. devices/phone.svg, devices/
+  # computer.svg, and the text-html/application-x-addon mimetype icons
+  # also matched but aren't folders at all - out of scope, left alone.
   adwaitaGreyFolders = pkgs.runCommand "adwaita-grey-folders" { } ''
-    mkdir -p $out/share/icons/Adwaita-Grey-Folders/scalable/{places,status}
+    mkdir -p $out/share/icons/Adwaita-Grey-Folders/scalable/{places,status,mimetypes}
 
     recolor() {
       sed \
@@ -38,7 +48,8 @@ let
 
     for f in folder folder-documents folder-download folder-music \
              folder-pictures folder-videos folder-publicshare \
-             folder-templates folder-remote folder-drag-accept; do
+             folder-templates folder-remote folder-drag-accept \
+             user-desktop user-home user-bookmarks; do
       recolor \
         "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/places/$f.svg" \
         "$out/share/icons/Adwaita-Grey-Folders/scalable/places/$f.svg"
@@ -48,12 +59,16 @@ let
       "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/status/folder-open.svg" \
       "$out/share/icons/Adwaita-Grey-Folders/scalable/status/folder-open.svg"
 
+    recolor \
+      "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/mimetypes/inode-directory.svg" \
+      "$out/share/icons/Adwaita-Grey-Folders/scalable/mimetypes/inode-directory.svg"
+
     cat > $out/share/icons/Adwaita-Grey-Folders/index.theme << 'EOF'
 [Icon Theme]
 Name=Adwaita-Grey-Folders
 Comment=Adwaita with grey, not blue, folder icons
 Inherits=Adwaita
-Directories=scalable/places,scalable/status
+Directories=scalable/places,scalable/status,scalable/mimetypes
 
 [scalable/places]
 Size=128
@@ -68,6 +83,13 @@ Type=Scalable
 MinSize=8
 MaxSize=512
 Context=Status
+
+[scalable/mimetypes]
+Size=128
+Type=Scalable
+MinSize=8
+MaxSize=512
+Context=MimeTypes
 EOF
   '';
 in
