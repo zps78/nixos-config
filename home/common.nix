@@ -25,7 +25,6 @@
     # Other GUI
     meld                                 # Visual diff and merge tool
     pinta                                # Drawing/editing program modeled after Paint.NET
-    qdirstat                             # Graphical disk usage analyzer
   ];
 
   # ===========================================================================
