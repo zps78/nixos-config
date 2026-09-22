@@ -4,28 +4,6 @@
 # in ./common.nix. Imported only when osConfig.myDesktop.stack == "niri".
 { lib, pkgs, config, osConfig, ... }:
 
-let
-  # 3mf files are zip archives with a slicer-rendered PNG already
-  # embedded inside (Orca/Bambu Studio's own export, not something this
-  # script renders) - extracting it works regardless of how the model
-  # itself is structured, unlike f3d's Assimp-based render which fails
-  # on real Bambu multi-plate exports (see f3d.nix). Tries the core-3MF-
-  # spec path first, falls back to Orca/Bambu's own plate_1.png
-  # convention. Confirmed against a real file: both this extraction and
-  # its fallback path produce a correct PNG where f3d produces nothing.
-  threeMfThumbnailer = pkgs.writeShellApplication {
-    name = "3mf-thumbnailer";
-    runtimeInputs = [ pkgs.unzip ];
-    text = ''
-      input="$1"
-      output="$2"
-      if ! unzip -p "$input" "Metadata/thumbnail.png" > "$output" 2>/dev/null || [ ! -s "$output" ]; then
-        unzip -p "$input" "Metadata/plate_1.png" > "$output" 2>/dev/null || true
-      fi
-      [ -s "$output" ]
-    '';
-  };
-in
 {
   # ===========================================================================
   # Applications gated to niri specifically
@@ -50,14 +28,14 @@ in
   # only installs adw-gtk3 (a GTK3 *widget style* port of libadwaita,
   # not an icon theme) - adwaita-icon-theme below fixes that, matching
   # adw-gtk3's own aesthetic rather than pulling in a mismatched theme
-  # like Papirus. 3D model thumbnails (stl/obj/ply/gltf/step/...) come
-  # from f3d (modules/apps-user/f3d.nix, f3d.enable is true for every
-  # current niri user) - it ships real .thumbnailer files covering all
-  # of that. 3mf is handled separately below: f3d's own assimp-based
-  # 3mf thumbnailer is genuinely broken on real slicer exports (Assimp
-  # fails to parse how Bambu Studio structures multi-object/multi-plate
-  # files - confirmed against a real file, not assumed), stripped from
-  # its MimeType in f3d.nix so it doesn't compete with this one.
+  # like Papirus. 3D model thumbnails (stl/obj/ply/gltf/3mf/step/...)
+  # come from f3d (modules/apps-user/f3d.nix, f3d.enable is true for
+  # every current niri user) - it ships real .thumbnailer files
+  # covering all of that. 3mf specifically is currently broken there
+  # (a real regression, not a permanent limitation, see f3d.nix for the
+  # full story) - left as-is rather than patched around for now, with a
+  # working fallback parked in f3d-3mf-thumbnailer-backup.nix if it
+  # doesn't get fixed upstream in a reasonable time.
   home.packages = with pkgs; [
     nautilus
     evince               # ships the GNOME/freedesktop .thumbnailer for PDFs, also the default PDF/comic-book/djvu/postscript/xps viewer
@@ -68,7 +46,6 @@ in
     foliate              # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
     baobab               # Disk usage analyzer - replaces qdirstat (Qt widget app). Simpler than qdirstat (no cleanup actions/bulk-select), but that's fine for how it's actually used - quick visual check, not active cleanup
     gnome-disk-utility   # Disks/partition manager + USB image writer - replaces both KDE Partition Manager and usbimager. Ships no polkit .policy of its own (unlike gparted/partitionmanager) - it talks to udisks2's own already-registered system actions, so no special system-level placement needed like those did.
-    threeMfThumbnailer
 
     # qt6ct patched (from the AUR qt6ct-kde package) so it reads KDE
     # color schemes / KF6 config - lets Noctalia theme Qt/KDE apps
@@ -81,12 +58,6 @@ in
       ];
     }))
   ];
-
-  xdg.dataFile."thumbnailers/3mf.thumbnailer".text = ''
-    [Thumbnailer Entry]
-    Exec=${threeMfThumbnailer}/bin/3mf-thumbnailer %i %o
-    MimeType=application/vnd.ms-3mfdocument;model/3mf;
-  '';
 
   # ===========================================================================
   # Noctalia (bar / shell / theme generator)
