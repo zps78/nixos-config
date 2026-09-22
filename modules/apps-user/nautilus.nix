@@ -19,29 +19,16 @@
 # adwaita-icon-theme below fixes that, and matches adw-gtk3's own
 # aesthetic rather than pulling in a mismatched theme like Papirus.
 #
-# 3mf (Bambu Studio/Orca Slicer project files) has no thumbnailer
-# anywhere - not a KDE or GNOME default, and no nixpkgs package
-# provides one. It doesn't need one: a .3mf is a zip archive and Orca
-# already embeds a rendered PNG preview inside it at a known path, so
-# extracting it is enough - no actual 3D rendering needed. Tries the
-# core-3MF-spec path first, falls back to Orca's own plate_1.png
-# convention (confirmed via https://danb.me/blog/3mf-gnome-thumbnails/).
+# 3D model thumbnails (stl/obj/ply/gltf/3mf/step/...) come from f3d
+# (modules/apps-user/f3d.nix), which ships real .thumbnailer files
+# covering all of that - true for every current niri user (f3d.enable
+# is true in every home/users/*.nix). A custom extraction-based 3mf
+# thumbnailer used to live here too, before f3d's own coverage was
+# noticed - dropped to avoid two thumbnailers registered for the same
+# model/3mf mime type, and f3d's is a real render of current content
+# rather than whatever was embedded at export time.
 { config, pkgs, lib, ... }:
 
-let
-  threeMfThumbnailer = pkgs.writeShellApplication {
-    name = "3mf-thumbnailer";
-    runtimeInputs = [ pkgs.unzip ];
-    text = ''
-      input="$1"
-      output="$2"
-      if ! unzip -p "$input" "Metadata/thumbnail.png" > "$output" 2>/dev/null || [ ! -s "$output" ]; then
-        unzip -p "$input" "Metadata/plate_1.png" > "$output" 2>/dev/null || true
-      fi
-      [ -s "$output" ]
-    '';
-  };
-in
 {
   options.myApps.nautilus.enable =
     lib.mkEnableOption "Nautilus (GNOME Files)";
@@ -52,13 +39,6 @@ in
       evince               # ships the GNOME/freedesktop .thumbnailer for PDFs
       ffmpegthumbnailer    # ships the GNOME/freedesktop .thumbnailer for video
       adwaita-icon-theme   # generic MIME icons (zip, xlsx, etc.) for GTK apps
-      threeMfThumbnailer
     ];
-
-    xdg.dataFile."thumbnailers/3mf.thumbnailer".text = ''
-      [Thumbnailer Entry]
-      Exec=${threeMfThumbnailer}/bin/3mf-thumbnailer %i %o
-      MimeType=application/vnd.ms-3mfdocument;model/3mf;
-    '';
   };
 }
