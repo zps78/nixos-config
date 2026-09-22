@@ -9,28 +9,40 @@
   # Applications gated to niri specifically
   # ===========================================================================
   #
-  # Nautilus is niri's file manager (Dolphin was dropped from common.nix -
-  # NFS/network browsing works better here). Imported directly rather than
-  # as a per-user myApps.nautilus.enable toggle so every niri host gets it
-  # automatically without each user file repeating the same choice, and so
-  # a future gnome/kde-stack host doesn't get it piled on top of its own
-  # native file manager.
-
-  imports = [
-    ../modules/apps-user/nautilus.nix
-  ];
-
-  # GNOME-ecosystem apps replacing the dolphin-era KDE set (evince and
-  # ffmpegthumbnailer already live in nautilus.nix - added there for their
-  # thumbnailers, they double as the default PDF/video apps too). No
-  # myApps.*.enable toggles for any of these - always-on for every niri
-  # host, matching nautilus above, not something meant to vary per user.
+  # No myApps.*.enable toggles for any of these - always-on for every niri
+  # host, not something meant to vary per user. A future gnome/kde-stack
+  # host doesn't get any of this piled on top of its own native apps,
+  # since this whole file only imports on osConfig.myDesktop.stack == "niri".
+  #
+  # Nautilus (GNOME Files) is niri's file manager - Dolphin was dropped
+  # from common.nix, NFS/network browsing works better here. Thumbnails
+  # are NOT covered by common.nix's kdePackages.ffmpegthumbs /
+  # kdegraphics-thumbnailers - those are KDE's own KIO ThumbnailCreator
+  # plugins, a KDE-specific plugin ABI Dolphin loads directly, not the
+  # freedesktop.org .thumbnailer files GNOME/Nautilus's GIO thumbnailing
+  # actually reads (confirmed: PDFs had no thumbnail in Nautilus despite
+  # working fine in Dolphin) - evince and ffmpegthumbnailer below ship
+  # the real .thumbnailer files for PDFs and video respectively, and
+  # double as the default PDF/video apps too. Same root cause for
+  # zip/xlsx showing generic icons instead of proper ones: common.nix
+  # only installs adw-gtk3 (a GTK3 *widget style* port of libadwaita,
+  # not an icon theme) - adwaita-icon-theme below fixes that, matching
+  # adw-gtk3's own aesthetic rather than pulling in a mismatched theme
+  # like Papirus. 3D model thumbnails (stl/obj/ply/gltf/3mf/step/...)
+  # come from f3d (modules/apps-user/f3d.nix, f3d.enable is true for
+  # every current niri user) - it ships real .thumbnailer files
+  # covering all of that, including model/3mf, which is why there's no
+  # separate 3mf-specific thumbnailer here.
   home.packages = with pkgs; [
-    loupe               # Image viewer - replaces gwenview, same GTK4/libadwaita family as nautilus itself
-    file-roller         # Archive manager - replaces ark, what nautilus's own compress/extract actions are built around ("roller" isn't a real package - this is almost certainly what was meant)
-    foliate             # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
-    baobab              # Disk usage analyzer - replaces qdirstat (Qt widget app). Simpler than qdirstat (no cleanup actions/bulk-select), but that's fine for how it's actually used - quick visual check, not active cleanup
-    gnome-disk-utility  # Disks/partition manager + USB image writer - replaces both KDE Partition Manager and usbimager. Ships no polkit .policy of its own (unlike gparted/partitionmanager) - it talks to udisks2's own already-registered system actions, so no special system-level placement needed like those did.
+    nautilus
+    evince               # ships the GNOME/freedesktop .thumbnailer for PDFs, also the default PDF/comic-book/djvu/postscript/xps viewer
+    ffmpegthumbnailer    # ships the GNOME/freedesktop .thumbnailer for video
+    adwaita-icon-theme   # generic MIME icons (zip, xlsx, etc.) for GTK apps
+    loupe                # Image viewer - replaces gwenview, same GTK4/libadwaita family as nautilus itself
+    file-roller          # Archive manager - replaces ark, what nautilus's own compress/extract actions are built around ("roller" isn't a real package - this is almost certainly what was meant)
+    foliate              # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
+    baobab               # Disk usage analyzer - replaces qdirstat (Qt widget app). Simpler than qdirstat (no cleanup actions/bulk-select), but that's fine for how it's actually used - quick visual check, not active cleanup
+    gnome-disk-utility   # Disks/partition manager + USB image writer - replaces both KDE Partition Manager and usbimager. Ships no polkit .policy of its own (unlike gparted/partitionmanager) - it talks to udisks2's own already-registered system actions, so no special system-level placement needed like those did.
 
     # qt6ct patched (from the AUR qt6ct-kde package) so it reads KDE
     # color schemes / KF6 config - lets Noctalia theme Qt/KDE apps
