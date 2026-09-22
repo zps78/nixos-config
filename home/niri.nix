@@ -10,13 +10,15 @@
   # ===========================================================================
   #
   # Nautilus is niri's file manager (Dolphin was dropped from common.nix -
-  # NFS/network browsing works better here). Enabled here rather than as a
-  # per-user myApps.nautilus.enable toggle so every niri host gets it
+  # NFS/network browsing works better here). Imported directly rather than
+  # as a per-user myApps.nautilus.enable toggle so every niri host gets it
   # automatically without each user file repeating the same choice, and so
   # a future gnome/kde-stack host doesn't get it piled on top of its own
   # native file manager.
 
-  myApps.nautilus.enable = true;
+  imports = [
+    ../modules/apps-user/nautilus.nix
+  ];
 
   # GNOME-ecosystem apps replacing the dolphin-era KDE set (evince and
   # ffmpegthumbnailer already live in nautilus.nix - added there for their

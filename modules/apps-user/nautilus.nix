@@ -27,18 +27,18 @@
 # noticed - dropped to avoid two thumbnailers registered for the same
 # model/3mf mime type, and f3d's is a real render of current content
 # rather than whatever was embedded at export time.
-{ config, pkgs, lib, ... }:
+#
+# No myApps.nautilus.enable toggle - imported directly by home/niri.nix
+# (not apps-user/default.nix), same as loupe/file-roller/foliate/
+# gnome-disk-utility/baobab there: always-on for every niri host, not
+# something meant to vary per user.
+{ pkgs, ... }:
 
 {
-  options.myApps.nautilus.enable =
-    lib.mkEnableOption "Nautilus (GNOME Files)";
-
-  config = lib.mkIf config.myApps.nautilus.enable {
-    home.packages = with pkgs; [
-      nautilus
-      evince               # ships the GNOME/freedesktop .thumbnailer for PDFs
-      ffmpegthumbnailer    # ships the GNOME/freedesktop .thumbnailer for video
-      adwaita-icon-theme   # generic MIME icons (zip, xlsx, etc.) for GTK apps
-    ];
-  };
+  home.packages = with pkgs; [
+    nautilus
+    evince               # ships the GNOME/freedesktop .thumbnailer for PDFs
+    ffmpegthumbnailer    # ships the GNOME/freedesktop .thumbnailer for video
+    adwaita-icon-theme   # generic MIME icons (zip, xlsx, etc.) for GTK apps
+  ];
 }

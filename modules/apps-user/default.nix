@@ -31,7 +31,6 @@
     ./mkvtoolnix.nix
     ./moonlight.nix
     ./mpv.nix
-    ./nautilus.nix
     ./obs-studio.nix
     ./office.nix
     ./openscad.nix

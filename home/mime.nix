@@ -63,14 +63,8 @@ in
         "application/x-compressed-tar"       = fileRoller;
         "application/x-7z-compressed"        = fileRoller;
         "application/vnd.rar"                = fileRoller;
-      })
 
-      # ----- file manager -----
-      # Not in the unconditional block above - nautilus is niri-gated
-      # (home/niri.nix), not always installed like the KDE app set.
-
-      (lib.mkIf app.nautilus.enable {
-        "inode/directory" = nautilus;
+        "inode/directory"                    = nautilus;
       })
 
       # ----- RAW photographs -----
