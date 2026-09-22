@@ -1,37 +1,59 @@
 // ../../hosts/krugerrand/niri/output.kdl
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://niri-wm.github.io/niri/Configuration:-Outputs
-// Remember to uncomment the node by removing "/-"!
-  output "eDP-1" {
-    // Uncomment this line to disable this output.
-    // off
+// krugerrand is docked to the same Lenovo Thunderbolt 4 Dock + "TriCreate"
+// 3-monitor arm kit as kuro, but unlike kuro it can drive all 4 outputs
+// (3 external + internal) at once: the dock's 3 arms are wired to the
+// NVIDIA dGPU (card0-DP-6/7/8), completely separate from the internal
+// panel on the Intel iGPU (card1-eDP-1). Confirmed live via
+// /sys/class/drm/card*-*/status while docked - all 4 connected
+// simultaneously, no pipe-count ceiling like kuro's iGPU-only setup.
+// niri itself supports driving outputs across two separate GPUs this
+// way (confirmed via niri-wm/niri#550 on GitHub).
+//
+// As of 2026-09-22 (initial dock connection): Left and the internal
+// panel show a clean image. Middle shows visible graphical artifacts.
+// Right shows no image at all. Most likely a bad/marginal cable or
+// connector on this specific TriCreate kit - kuro hit an almost
+// identical symptom that turned out to be a bad dock cable, fixed by
+// swapping it. Worth re-testing after a cable check/reseat and a cold
+// boot with everything connected before trusting Middle/Right here.
+//
+// Run `niri msg outputs` (with NIRI_SOCKET set - not exported over a
+// plain ssh session, see systemctl --user show-environment) to see the
+// live connector/serial mapping if the dock or cable ever changes;
+// connector names (DP-6, DP-7, DP-8 etc.) can shift across reconnects
+// even though the monitors themselves are the same.
 
-    // Resolution and, optionally, refresh rate of the output.
-    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
-    // If the refresh rate is omitted, niri will pick the highest refresh rate
-    // for the resolution.
-    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
-    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+output "eDP-1" {
     mode "2560x1600@60.001"
-
-    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
     scale 1.2
-
-    // Transform allows to rotate the output counter-clockwise, valid values are:
-    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
     transform "normal"
-
-    // Position of the output in the global coordinate space.
-    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
-    // The cursor can only move between directly adjacent outputs.
-    // Output scale and rotation has to be taken into account for positioning:
-    // outputs are sized in logical, or scaled, pixels.
-    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
-    // so to put another output directly adjacent to it on the right, set its x to 1920.
-    // If the position is unset or results in an overlap, the output is instead placed
-    // automatically.
     position x=0 y=0
+}
+
+// "RTK TriCreate-L" - Left arm of the 3-monitor kit. Clean image.
+output "DP-6" {
+    mode "1920x1080@60.004"
+    scale 1.0
+    transform "normal"
+    position x=2134 y=0
+}
+
+// "PNP(TCK) TriCreate-M" - Middle arm. Showing graphical artifacts as
+// of the initial connection - likely cable/connector related, not
+// this config.
+output "DP-8" {
+    mode "1920x1080@60.004"
+    scale 1.0
+    transform "normal"
+    position x=4054 y=0
+}
+
+// "PNP(TCK) TriCreate-R" - Right arm. Not producing an image as of the
+// initial connection - likely cable/connector related, not this
+// config.
+output "DP-7" {
+    mode "1920x1080@60.004"
+    scale 1.0
+    transform "normal"
+    position x=5974 y=0
 }
