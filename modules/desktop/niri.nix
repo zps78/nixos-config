@@ -113,6 +113,16 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     "share/thumbnailers"
   ];
 
+  # RAW camera photo thumbnails/previews in Nautilus (and any other GTK
+  # app) via a real gdk-pixbuf loader, not a freedesktop .thumbnailer -
+  # this is the same mechanism that already makes jpeg/png "just work",
+  # just extended to camera RAW formats. Has to go through this NixOS
+  # module option specifically: gdk-pixbuf only reads loaders from
+  # GDK_PIXBUF_MODULE_FILE, and packages installed via home-manager's
+  # home.packages don't trigger regenerating that cache - only
+  # environment.systemPackages (or this option) does.
+  programs.gdk-pixbuf.modulePackages = [ pkgs.libopenraw ];
+
   environment.sessionVariables = {
     XDG_SESSION_DESKTOP = "niri";
 

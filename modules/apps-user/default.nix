@@ -24,6 +24,7 @@
     ./godot.nix
     ./handbrake.nix
     ./iptvnator.nix
+    ./kde.nix
     ./kdl.nix
     ./krita.nix
     ./losslesscut.nix

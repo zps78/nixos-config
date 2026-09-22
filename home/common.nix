@@ -22,26 +22,6 @@
     adw-gtk3                             # Unofficial GTK 3 port of libadwaita
     gnome-calculator                     # Application that solves mathematical equations and is suitable as a default application in a Desktop environment (themes natively, unlike kcalc did)
 
-    # KDE
-    kdePackages.ark                      # File archiver by KDE
-    kdePackages.ffmpegthumbs             # FFmpeg-based thumbnail creator for video files
-    kdePackages.gwenview                 # Image viewer by KDE
-    kdePackages.kdegraphics-thumbnailers # Thumbnailers for various graphics file formats
-    kdePackages.okular                   # KDE document viewer
-    # partitionmanager lives in modules/system/packages.nix, not here - it
-    # needs to be a system package for its polkit action to be visible at
-    # all (see the comment there).
-
-    # qt6ct patched (from the AUR qt6ct-kde package) so it reads KDE
-    # color schemes / KF6 config - lets Noctalia theme Qt/KDE apps
-    # through ~/.config/qt6ct. Patch vendored to avoid an eval-time
-    # fetch from aur.archlinux.org.
-    (kdePackages.qt6ct.overrideAttrs (oldAttrs: {
-      patches = (oldAttrs.patches or []) ++ [
-        ./patches/qt6ct-noctalia-theming.patch
-      ];
-    }))
-
     # Other GUI
     meld                                 # Visual diff and merge tool
     pinta                                # Drawing/editing program modeled after Paint.NET

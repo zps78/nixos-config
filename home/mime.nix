@@ -26,14 +26,17 @@ in
 
     defaultApplications = lib.mkMerge [
 
-      # ----- always available (unconditional KDE app set in common.nix) -----
+      # ----- KDE app set -----
+      # kde.nix is a toggle now (was unconditional in common.nix before
+      # dolphin/nautilus split it out), so this needs the same gating as
+      # every other app-specific block below.
 
-      (forEach gwenview [
+      (lib.mkIf app.kde.enable (forEach gwenview [
         "image/jpeg" "image/png" "image/gif" "image/webp" "image/avif"
         "image/heif" "image/bmp" "image/tiff" "image/svg+xml" "image/jxl"
-      ])
+      ]))
 
-      {
+      (lib.mkIf app.kde.enable {
         "application/pdf"                = "okularApplication_pdf.desktop";
         "application/epub+zip"           = "okularApplication_epub.desktop";
         "application/x-mobipocket-ebook" = "okularApplication_mobi.desktop";
@@ -47,7 +50,7 @@ in
         "application/x-compressed-tar"   = ark;
         "application/x-7z-compressed"    = ark;
         "application/vnd.rar"            = ark;
-      }
+      })
 
       # ----- file manager -----
       # Not in the unconditional block above - nautilus is niri-gated
