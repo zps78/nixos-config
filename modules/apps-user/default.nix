@@ -13,6 +13,7 @@
     ./brave.nix
     ./cava.nix
     ./chiaki-ng.nix
+    ./claude-code.nix
     ./darktable.nix
     ./easyeffects.nix
     ./f3d.nix

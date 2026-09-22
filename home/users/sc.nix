@@ -38,6 +38,7 @@
 
     # programming
     godot.enable                                 = true;             # Free and Open Source 2D and 3D game engine
+    claude-code.enable                           = true;             # Claude Code CLI
     vscodium.enable                              = true;             # VS Code without MS branding/telemetry/licensing
     zed.enable                                   = true;             # High-performance, multiplayer code editor from the creators of Atom and Tree-sitter
 

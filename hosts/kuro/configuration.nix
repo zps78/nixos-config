@@ -78,6 +78,7 @@
 
   myFeatures = {
     android.enable                               = true;                       # ADB, scrcpy, APK tools
+    claude-desktop.enable                        = true;                       # Anthropic's Claude Desktop app
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     steam.enable                                 = false;
@@ -118,9 +119,9 @@
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-  environment.systemPackages                     = with pkgs; [
-    claude-code
-  ];
+# environment.systemPackages                     = with pkgs; [
+#
+# ];
 
   # System state version
   system.stateVersion                            = "25.11";
