@@ -66,4 +66,28 @@ lib.mkIf (config.myDesktop.stack == "gnome") {
   # option specifically, home-manager's home.packages doesn't trigger
   # regenerating GDK_PIXBUF_MODULE_FILE.
   programs.gdk-pixbuf.modulePackages = [ pkgs.libopenraw ];
+
+  ############################################################
+  # Wallpaper-derived theming (GNOME only - niri already has this via
+  # Noctalia's own template engine, see dotfiles/noctalia/templates.toml
+  # and home/niri.nix; running Stylix there too would just mean two
+  # systems fighting over the same app configs)
+  ############################################################
+  #
+  # stylix.base16Scheme deliberately left unset - Stylix then generates
+  # a color scheme from stylix.image itself (a genetic-algorithm-based
+  # extraction) rather than using a hand-picked palette. Unlike
+  # Noctalia's live hook (pick a wallpaper in the GUI, theme
+  # regenerates instantly, no rebuild), this is build-time/declarative:
+  # changing the wallpaper here means changing this path and running
+  # nixos-rebuild switch, not just picking a new background in GNOME
+  # Settings.
+  #
+  # No target-by-target exclusions (e.g. GTK icon theme) - unlike
+  # niri's Adwaita-Grey-Folders, which existed specifically to fix a
+  # blue-folder visual clash in niri's own theming, not something GNOME
+  # has, so there's nothing here for Stylix's icon target to fight.
+  stylix.enable = true;
+  stylix.polarity = "dark";
+  stylix.image = ../../wallpapers/wallpaper-zp.jpg;
 }

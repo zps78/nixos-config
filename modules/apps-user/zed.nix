@@ -1,5 +1,5 @@
 # ../../modules/apps-user/zed.nix
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig, ... }:
 
 {
   options.myApps.zed.enable =
@@ -39,17 +39,6 @@
         hard_tabs = false;
 
         format_on_save = "on";
-
-        # Follow Noctalia's theme. Noctalia's "zed" template regenerates
-        # ~/.config/zed/themes/noctalia.json on every wallpaper/theme
-        # change; "mode = system" tracks its light/dark switch via the
-        # xdg-desktop-portal color-scheme. Swap to the "* Transparent"
-        # variants for a translucent editor.
-        theme = {
-          mode = "system";
-          light = "Noctalia Light";
-          dark = "Noctalia Dark";
-        };
 
         git_panel = {
           tree_view = true;
@@ -110,6 +99,21 @@
           "claude-acp" = {
             type = "registry";
           };
+        };
+      }
+      # Follow Noctalia's theme (niri only). Noctalia's "zed" template
+      # regenerates ~/.config/zed/themes/noctalia.json on every
+      # wallpaper/theme change; "mode = system" tracks its light/dark
+      # switch via the xdg-desktop-portal color-scheme. Swap to the
+      # "* Transparent" variants for a translucent editor. On GNOME,
+      # Stylix's own zed target sets this instead (it sets a plain
+      # string, not this attrset - the two are mutually exclusive, not
+      # mergeable, hence gating rather than always including both).
+      // lib.optionalAttrs (osConfig.myDesktop.stack == "niri") {
+        theme = {
+          mode = "system";
+          light = "Noctalia Light";
+          dark = "Noctalia Dark";
         };
       };
     };

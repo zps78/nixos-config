@@ -31,7 +31,7 @@
     mode  = "0400";
   };
 
-  myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
+  myDesktop.stack                                = "gnome";                    # choose from: "gnome" "kde" "niri"
   myDesktop.primaryUser                          = "zp";
   myDesktop.idle.enable                          = true;                       # laptop
 

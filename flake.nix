@@ -50,9 +50,14 @@
       url = "github:nmcbride/claude-desktop-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, agenix, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, agenix, stylix, ... }:
     let
       system = "x86_64-linux";
 
@@ -78,6 +83,7 @@
               home-manager.nixosModules.home-manager
               noctalia-greeter.nixosModules.default
               agenix.nixosModules.default
+              stylix.nixosModules.stylix
               {
                 nixpkgs.hostPlatform = system;
                 nixpkgs.config.allowUnfree = true;
