@@ -47,6 +47,12 @@ lib.mkIf (config.myDesktop.stack == "gnome") {
   environment.systemPackages = with pkgs; [
     gnome-tweaks
     gnome-extension-manager
+
+    # dconf's cursor-theme (Bibata-Modern-Ice) carries over from niri
+    # regardless of stack - without the package actually installed here
+    # too (niri.nix has its own copy), GTK/Mutter can't resolve it and
+    # falls back to a blank placeholder glyph instead of a real cursor.
+    bibata-cursors
   ];
 
   # Makes system-package-shipped .thumbnailer files (glycin-thumbnailer,
