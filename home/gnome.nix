@@ -44,4 +44,16 @@
     meld          # Visual diff and merge tool
     pinta         # Drawing/editing program modeled after Paint.NET
   ];
+
+  # Pure-Wayland setup (GNOME on Wayland, same as niri) with no X11
+  # session at all. Stylix's xresources target (only exists at this
+  # home-manager level, not the NixOS system level - see
+  # modules/desktop/gnome.nix) tries to reload via `xrdb` during
+  # activation regardless of session type, which fails hard ("Can't
+  # open display ':0'") and aborts the WHOLE home-manager activation,
+  # not just that one target - confirmed via a live failed switch.
+  # x11 disabled for the same reason (X-specific root-window settings,
+  # meaningless with no X server running).
+  stylix.targets.xresources.enable = false;
+  stylix.targets.x11.enable = false;
 }

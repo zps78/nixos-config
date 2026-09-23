@@ -87,6 +87,8 @@ lib.mkIf (config.myDesktop.stack == "gnome") {
   # niri's Adwaita-Grey-Folders, which existed specifically to fix a
   # blue-folder visual clash in niri's own theming, not something GNOME
   # has, so there's nothing here for Stylix's icon target to fight.
+  # (xresources/x11 targets are disabled too, but only exist at the
+  # home-manager level, not here - see home/gnome.nix.)
   stylix.enable = true;
   stylix.polarity = "dark";
   stylix.image = ../../wallpapers/wallpaper-zp.jpg;
