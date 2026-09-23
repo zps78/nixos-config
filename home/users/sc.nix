@@ -20,6 +20,9 @@
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
     ../niri.nix
+  ]
+  ++ lib.optionals (osConfig.myDesktop.stack == "gnome") [
+    ../gnome.nix
   ];
 
   ############################################################

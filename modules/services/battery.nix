@@ -27,7 +27,14 @@
 
     # TLP replaces power-profiles-daemon (the two conflict), so hosts that
     # enable it get AC/battery switching without a manual profile toggle.
+    # GNOME's own module turns power-profiles-daemon on by default
+    # (services.power-profiles-daemon.enable = mkDefault true, for its
+    # Settings power panel) - a plain `false` here outranks that default
+    # and wins, which is what surfaced this: it was never actually
+    # exercised until a GNOME host enabled TLP too.
     (lib.mkIf config.myServices.battery.tlp.enable {
+      services.power-profiles-daemon.enable = false;
+
       services.tlp = {
         enable = true;
         settings = {

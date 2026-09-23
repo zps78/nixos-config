@@ -5,66 +5,7 @@
 { lib, pkgs, config, osConfig, ... }:
 
 let
-
-  adwaitaGreyFolders = pkgs.runCommand "adwaita-grey-folders" { } ''
-    mkdir -p $out/share/icons/Adwaita-Grey-Folders/scalable/{places,status,mimetypes}
-
-    recolor() {
-      sed \
-        -e 's/#438de6/#77767b/g' \
-        -e 's/#62a0ea/#9a9996/g' \
-        -e 's/#a4caee/#9a9996/g' \
-        -e 's/#afd4ff/#c0bfbc/g' \
-        -e 's/#c0d5ea/#aeadab/g' \
-        "$1" > "$2"
-    }
-
-    for f in folder folder-documents folder-download folder-music \
-             folder-pictures folder-videos folder-publicshare \
-             folder-templates folder-remote folder-drag-accept \
-             user-desktop user-home user-bookmarks; do
-      recolor \
-        "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/places/$f.svg" \
-        "$out/share/icons/Adwaita-Grey-Folders/scalable/places/$f.svg"
-    done
-
-    recolor \
-      "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/status/folder-open.svg" \
-      "$out/share/icons/Adwaita-Grey-Folders/scalable/status/folder-open.svg"
-
-    recolor \
-      "${pkgs.adwaita-icon-theme}/share/icons/Adwaita/scalable/mimetypes/inode-directory.svg" \
-      "$out/share/icons/Adwaita-Grey-Folders/scalable/mimetypes/inode-directory.svg"
-
-    cat > $out/share/icons/Adwaita-Grey-Folders/index.theme << 'EOF'
-[Icon Theme]
-Name=Adwaita-Grey-Folders
-Comment=Adwaita with grey, not blue, folder icons
-Inherits=Adwaita
-Directories=scalable/places,scalable/status,scalable/mimetypes
-
-[scalable/places]
-Size=128
-Type=Scalable
-MinSize=8
-MaxSize=512
-Context=Places
-
-[scalable/status]
-Size=128
-Type=Scalable
-MinSize=8
-MaxSize=512
-Context=Status
-
-[scalable/mimetypes]
-Size=128
-Type=Scalable
-MinSize=8
-MaxSize=512
-Context=MimeTypes
-EOF
-  '';
+  adwaitaGreyFolders = pkgs.callPackage ./lib/adwaita-grey-folders.nix { };
 in
 {
   # ===========================================================================
@@ -73,13 +14,13 @@ in
 
   home.packages = with pkgs; [
     nautilus
-    evince               # ships the GNOME/freedesktop .thumbnailer for PDFs, also the default PDF/comic-book/djvu/postscript/xps viewer
+    papers               # ships the GNOME/freedesktop .thumbnailer for PDFs, also the default PDF/comic-book/djvu viewer - GTK4/libadwaita, evince's successor, but drops postscript/eps/dvi/xps support evince had (see home/mime.nix)
     ffmpegthumbnailer    # ships the GNOME/freedesktop .thumbnailer for video
     adwaita-icon-theme   # generic MIME icons (zip, xlsx, etc.) for GTK apps
     adwaitaGreyFolders   # Adwaita-Grey-Folders icon theme (defined above) - set active via dconf org/gnome/desktop/interface icon-theme below
     loupe                # Image viewer - replaces gwenview, same GTK4/libadwaita family as nautilus itself
     file-roller          # Archive manager - replaces ark, what nautilus's own compress/extract actions are built around ("roller" isn't a real package - this is almost certainly what was meant)
-    foliate              # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
+    foliate              # E-book reader (epub/mobi/azw3) - papers doesn't cover these, same gap evince had before it
     baobab               # Disk usage analyzer - replaces qdirstat (Qt widget app). Simpler than qdirstat (no cleanup actions/bulk-select), but that's fine for how it's actually used - quick visual check, not active cleanup
     gnome-disk-utility   # Disks/partition manager + USB image writer - replaces both KDE Partition Manager and usbimager. Ships no polkit .policy of its own (unlike gparted/partitionmanager) - it talks to udisks2's own already-registered system actions, so no special system-level placement needed like those did.
     gnome-calculator     # Application that solves mathematical equations and is suitable as a default application in a Desktop environment (themes natively, unlike kcalc did)
