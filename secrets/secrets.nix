@@ -19,11 +19,11 @@ let
   kuro-host =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINlcP3tG5CnreduapzH9Oh5O2Yo+FM+t7tJU3gneIF79";
 
-  krieger-host =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMiY9PNYhJG9MeeoElGGTpqiX+4Y5CtHPSJJ3TRExTH";
+  krugerrand-host =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOYeT9OzYyi14AVhZrs4b6hXjxi/FBPDb4nSK0lgI8ah";
 
 in
 {
   "kuro-fleet-key.age".publicKeys = [ zp-personal kuro-host ];
-  "krieger-fleet-key.age".publicKeys = [ zp-personal krieger-host ];
+  "krugerrand-fleet-key.age".publicKeys = [ zp-personal krugerrand-host ];
 }

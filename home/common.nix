@@ -20,11 +20,6 @@
 
     # GTK
     adw-gtk3                             # Unofficial GTK 3 port of libadwaita
-    gnome-calculator                     # Application that solves mathematical equations and is suitable as a default application in a Desktop environment (themes natively, unlike kcalc did)
-
-    # Other GUI
-    meld                                 # Visual diff and merge tool
-    pinta                                # Drawing/editing program modeled after Paint.NET
   ];
 
   # ===========================================================================

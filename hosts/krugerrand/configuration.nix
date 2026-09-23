@@ -21,6 +21,16 @@
 #   enp5s0.wakeOnLan.enable                      = true;                       # intel nic
   };
 
+  # Fleet SSH access - dedicated key for reaching the rest of the fleet
+  # (kepler/kimi/kuro/krieger/karma). See home/users/zp.nix for the SSH
+  # client config that uses this, and secrets/secrets.nix for
+  # recipients.
+  age.secrets.krugerrand-fleet-key = {
+    file  = ../../secrets/krugerrand-fleet-key.age;
+    owner = "zp";
+    mode  = "0400";
+  };
+
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
   myDesktop.primaryUser                          = "zp";
   myDesktop.idle.enable                          = true;                       # laptop
@@ -53,7 +63,6 @@
     ssh.passwordAuth                             = false;                      # keep disabled for security
     ssh.authorizedKeys                           = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF0omZkhZ//fafpUbFHlcFQyKY8UHIbaCzbD8PAkBsMv kuro-fleet-access"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcJBPOuOuYb9il98skTZJPWS8xIBgeiCAIcNWE9G6Pe krieger-fleet-access"
     ];
     sunshine.enable                              = false;                      # group membership auto-follows via modules/services/sunshine.nix
   };

@@ -116,69 +116,89 @@
   ];
 
   ############################################################
-  # Fleet SSH access (kuro only - zp.nix is also used by krugerrand,
-  # which doesn't get this)
+  # Fleet SSH access (kuro + krugerrand - the two admin machines;
+  # zp.nix is also used by kepler/kimi as a leaf-only target, which
+  # don't get this)
   ############################################################
   #
-  # kuro-fleet-key is a dedicated keypair (not the personal GitHub/karma
-  # key) for reaching the rest of the fleet - see secrets/secrets.nix.
-  # Its private half is agenix-encrypted, decrypted only on kuro at
-  # activation via age.secrets.kuro-fleet-key in
-  # hosts/kuro/configuration.nix. Public halves are plain-text,
-  # committed, and added to each target's authorized_keys.
+  # kuro-fleet-key / krugerrand-fleet-key are dedicated keypairs (not
+  # the personal GitHub/karma key), one per admin machine, for reaching
+  # the rest of the fleet - see secrets/secrets.nix. Each private half
+  # is agenix-encrypted, decrypted only on its own host at activation
+  # via age.secrets.<host>-fleet-key in that host's configuration.nix.
+  # Public halves are plain-text, committed, and added to each target's
+  # authorized_keys. krieger used to be the second admin machine
+  # (krieger-fleet-key) but was demoted to a leaf once it got
+  # autologin enabled - a lower-trust boot state we didn't want holding
+  # fleet-wide SSH reach - and krugerrand took its place instead.
   #
-  programs.ssh = lib.mkIf (osConfig.networking.hostName == "kuro") {
-    enable = true;
+  programs.ssh = lib.mkIf
+    (builtins.elem osConfig.networking.hostName [ "kuro" "krugerrand" ])
+    (let
+      identityFile =
+        "/run/agenix/${osConfig.networking.hostName}-fleet-key";
+    in {
+      enable = true;
 
-    # home-manager's enableDefaultConfig (on by default) is slated for
-    # removal - this is its own documented migration snippet, copied
-    # verbatim, so switching it off is a pure no-op rather than a
-    # behavior change.
-    enableDefaultConfig = false;
+      # home-manager's enableDefaultConfig (on by default) is slated for
+      # removal - this is its own documented migration snippet, copied
+      # verbatim, so switching it off is a pure no-op rather than a
+      # behavior change.
+      enableDefaultConfig = false;
 
-    settings = {
-      "*" = {
-        ForwardAgent = false;
-        AddKeysToAgent = "no";
-        Compression = false;
-        ServerAliveInterval = 0;
-        ServerAliveCountMax = 3;
-        HashKnownHosts = false;
-        UserKnownHostsFile = "~/.ssh/known_hosts";
-        ControlMaster = "no";
-        ControlPath = "~/.ssh/master-%r@%n:%p";
-        ControlPersist = "no";
-      };
+      settings = {
+        "*" = {
+          ForwardAgent = false;
+          AddKeysToAgent = "no";
+          Compression = false;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
+        };
 
-      kepler = {
-        User = "sc";
-        IdentityFile = "/run/agenix/kuro-fleet-key";
-        IdentitiesOnly = true;
+        kepler = {
+          User = "sc";
+          IdentityFile = identityFile;
+          IdentitiesOnly = true;
+        };
+        kimi = {
+          User = "gt";
+          IdentityFile = identityFile;
+          IdentitiesOnly = true;
+        };
+        krieger = {
+          User = "bb";
+          IdentityFile = identityFile;
+          IdentitiesOnly = true;
+        };
+        # karma isn't part of this flake (Unraid) - its authorized_keys
+        # is managed by hand over SSH, not by nix.
+        karma = {
+          User = "root";
+          IdentityFile = identityFile;
+          IdentitiesOnly = true;
+        };
+      }
+      # Each admin machine also reaches the other one, not itself.
+      // lib.optionalAttrs (osConfig.networking.hostName == "kuro") {
+        krugerrand = {
+          User = "zp";
+          IdentityFile = identityFile;
+          IdentitiesOnly = true;
+        };
+      }
+      // lib.optionalAttrs (osConfig.networking.hostName == "krugerrand") {
+        kuro = {
+          User = "zp";
+          IdentityFile = identityFile;
+          IdentitiesOnly = true;
+        };
       };
-      kimi = {
-        User = "gt";
-        IdentityFile = "/run/agenix/kuro-fleet-key";
-        IdentitiesOnly = true;
-      };
-      krugerrand = {
-        User = "zp";
-        IdentityFile = "/run/agenix/kuro-fleet-key";
-        IdentitiesOnly = true;
-      };
-      krieger = {
-        User = "bb";
-        IdentityFile = "/run/agenix/kuro-fleet-key";
-        IdentitiesOnly = true;
-      };
-      # karma isn't part of this flake (Unraid) - its authorized_keys
-      # is managed by hand over SSH, not by nix.
-      karma = {
-        User = "root";
-        IdentityFile = "/run/agenix/kuro-fleet-key";
-        IdentitiesOnly = true;
-      };
-    };
-  };
+    });
 
   # ----------------------
   # Optional: autostart scripts or custom config can go here

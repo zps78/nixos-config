@@ -5,34 +5,7 @@
 { lib, pkgs, config, osConfig, ... }:
 
 let
-  # Adwaita's folder icons are blue (#438de6/#62a0ea/#a4caee/#afd4ff/
-  # #c0d5ea) - clashes with the rest of the theme. No mature "dynamic"
-  # option exists anywhere in the ecosystem for icon-theme-level accent
-  # colors (checked: Noctalia's own theming and tools like Gradience/
-  # Matugen only reach GTK CSS/widget chrome, not icon SVG assets), and
-  # the one third-party script found for it (recolors Yaru to Noctalia's
-  # colors) is an unmaintained single-author project that also assumes
-  # FHS paths Yaru doesn't live at on NixOS. This is the durable
-  # alternative: a small icon theme that Inherits=Adwaita (the standard
-  # freedesktop fallback mechanism - anything not overridden here just
-  # falls through to real Adwaita) and only replaces the folder icons,
-  # recoloured to Adwaita's own existing neutral greys - the same
-  # #77767b/#9a9996/#aeadab/#c0bfbc already used for folder-remote.svg's
-  # badge in the real theme, not invented shades, so it stays visually
-  # consistent with Adwaita itself. Found every file in the whole theme
-  # using this palette via a real grep, not filename-guessing (missed
-  # user-desktop.svg the first pass that way - "Desktop" isn't named
-  # "folder-desktop", easy to miss). Covers every folder-equivalent
-  # shown in Nautilus's places sidebar: the 9 folder-*.svg variants,
-  # folder-open, user-desktop, user-home, user-bookmarks, and the
-  # generic inode-directory mimetype icon - all confirmed to use only
-  # this same simple 5-color palette. network-workgroup.svg also
-  # matched the grep but is a much more complex multi-tone illustration
-  # (14 colors, several different blues) that doesn't map onto this
-  # substitution cleanly - left untouched rather than risk a
-  # half-recolored, broken-looking icon. devices/phone.svg, devices/
-  # computer.svg, and the text-html/application-x-addon mimetype icons
-  # also matched but aren't folders at all - out of scope, left alone.
+
   adwaitaGreyFolders = pkgs.runCommand "adwaita-grey-folders" { } ''
     mkdir -p $out/share/icons/Adwaita-Grey-Folders/scalable/{places,status,mimetypes}
 
@@ -97,34 +70,7 @@ in
   # ===========================================================================
   # Applications gated to niri specifically
   # ===========================================================================
-  #
-  # No myApps.*.enable toggles for any of these - always-on for every niri
-  # host, not something meant to vary per user. A future gnome/kde-stack
-  # host doesn't get any of this piled on top of its own native apps,
-  # since this whole file only imports on osConfig.myDesktop.stack == "niri".
-  #
-  # Nautilus (GNOME Files) is niri's file manager - Dolphin was dropped
-  # from common.nix, NFS/network browsing works better here. Thumbnails
-  # are NOT covered by common.nix's kdePackages.ffmpegthumbs /
-  # kdegraphics-thumbnailers - those are KDE's own KIO ThumbnailCreator
-  # plugins, a KDE-specific plugin ABI Dolphin loads directly, not the
-  # freedesktop.org .thumbnailer files GNOME/Nautilus's GIO thumbnailing
-  # actually reads (confirmed: PDFs had no thumbnail in Nautilus despite
-  # working fine in Dolphin) - evince and ffmpegthumbnailer below ship
-  # the real .thumbnailer files for PDFs and video respectively, and
-  # double as the default PDF/video apps too. Same root cause for
-  # zip/xlsx showing generic icons instead of proper ones: common.nix
-  # only installs adw-gtk3 (a GTK3 *widget style* port of libadwaita,
-  # not an icon theme) - adwaita-icon-theme below fixes that, matching
-  # adw-gtk3's own aesthetic rather than pulling in a mismatched theme
-  # like Papirus. 3D model thumbnails (stl/obj/ply/gltf/3mf/step/...)
-  # come from f3d (modules/apps-user/f3d.nix, f3d.enable is true for
-  # every current niri user) - it ships real .thumbnailer files
-  # covering all of that. 3mf specifically is currently broken there
-  # (a real regression, not a permanent limitation, see f3d.nix for the
-  # full story) - left as-is rather than patched around for now, with a
-  # working fallback parked in f3d-3mf-thumbnailer-backup.nix if it
-  # doesn't get fixed upstream in a reasonable time.
+
   home.packages = with pkgs; [
     nautilus
     evince               # ships the GNOME/freedesktop .thumbnailer for PDFs, also the default PDF/comic-book/djvu/postscript/xps viewer
@@ -136,6 +82,9 @@ in
     foliate              # E-book reader (epub/mobi/azw3) - evince dropped these when it replaced okular for PDF
     baobab               # Disk usage analyzer - replaces qdirstat (Qt widget app). Simpler than qdirstat (no cleanup actions/bulk-select), but that's fine for how it's actually used - quick visual check, not active cleanup
     gnome-disk-utility   # Disks/partition manager + USB image writer - replaces both KDE Partition Manager and usbimager. Ships no polkit .policy of its own (unlike gparted/partitionmanager) - it talks to udisks2's own already-registered system actions, so no special system-level placement needed like those did.
+    gnome-calculator     # Application that solves mathematical equations and is suitable as a default application in a Desktop environment (themes natively, unlike kcalc did)
+    meld                 # Visual diff and merge tool
+    pinta                # Drawing/editing program modeled after Paint.NET
 
     # qt6ct patched (from the AUR qt6ct-kde package) so it reads KDE
     # color schemes / KF6 config - lets Noctalia theme Qt/KDE apps

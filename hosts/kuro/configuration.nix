@@ -62,7 +62,7 @@
     ssh.enable                                   = true;
     ssh.passwordAuth                             = false;                      # keep disabled for security
     ssh.authorizedKeys                           = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcJBPOuOuYb9il98skTZJPWS8xIBgeiCAIcNWE9G6Pe krieger-fleet-access"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILsHK3x6UPpNqhnV0t+MMdMb1iuy1xDLBfFk1UL4TMa9 krugerrand-fleet-access"
     ];
     sunshine.enable                              = false;                      # group membership auto-follows via modules/services/sunshine.nix
   };

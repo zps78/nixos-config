@@ -21,16 +21,6 @@
     enp5s0.wakeOnLan.enable                      = true;                       # intel nic
   };
 
-  # Fleet SSH access - dedicated key for reaching the rest of the fleet
-  # (kepler/kimi/krugerrand/kuro/karma). See home/users/bb.nix for the
-  # SSH client config that uses this, and secrets/secrets.nix for
-  # recipients.
-  age.secrets.krieger-fleet-key = {
-    file  = ../../secrets/krieger-fleet-key.age;
-    owner = "bb";
-    mode  = "0400";
-  };
-
   # enp4s0 ("Atlantis") is a Marvell/Aquantia AQC111 5GbE NIC (atlantic
   # driver) - previously unusable for Sunshine streaming. This chip has
   # a well-documented, longstanding Linux driver quirk: the kernel's own
@@ -96,6 +86,7 @@
     ssh.passwordAuth                             = false;                      # keep disabled for security
     ssh.authorizedKeys                           = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF0omZkhZ//fafpUbFHlcFQyKY8UHIbaCzbD8PAkBsMv kuro-fleet-access"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILsHK3x6UPpNqhnV0t+MMdMb1iuy1xDLBfFk1UL4TMa9 krugerrand-fleet-access"
     ];
     sunshine.enable                              = true;                       # group membership auto-follows via modules/services/sunshine.nix
   };

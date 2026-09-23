@@ -48,13 +48,6 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     };
   };
 
-  # services.displayManager.autoLogin is the generic NixOS knob (set per
-  # host in configuration.nix), but noctalia-greeter's module never reads
-  # it - it only configures the greeter itself (services.greetd.settings.
-  # default_session), so autoLogin.enable has silently been a no-op.
-  # Bridge it to greetd's actual autologin mechanism: an
-  # `initial_session` skips the greeter entirely and launches straight
-  # into niri for that user, same binary a manual login would run.
   services.greetd.settings.initial_session =
     lib.mkIf config.services.displayManager.autoLogin.enable {
       command = "${lib.getExe' config.programs.niri.package "niri-session"}";
@@ -134,14 +127,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     # QT_QPA_PLATFORMTHEME=qt6ct somewhere in their own startup path, but
     # apps spawned by systemd --user services - e.g. anything launched
     # through Noctalia's own launcher, since Noctalia itself runs as
-    # noctalia.service - never see it: `systemctl --user show-environment`
-    # doesn't include it, only environment.sessionVariables (a NixOS/PAM-
-    # level mechanism) reliably reaches that environment block. Without
-    # it, Qt/KDE apps (e.g. KDE Partition Manager) fall back to a default
-    # platform theme - confirmed as the cause of KDE Partition Manager
-    # showing untheme'd and with every action greyed out when launched
-    # from Noctalia specifically (its KAuth/polkit integration depends on
-    # proper KDE platform-theme detection, not just colors).
+    # noctalia.service - never see it
     QT_QPA_PLATFORMTHEME = "qt6ct";
   };
 }
