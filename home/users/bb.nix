@@ -78,10 +78,10 @@
     cava.enable                                  = false;            # Console audio visualizer (ALSA/PipeWire)
     iptvnator.enable                             = false;            # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = false;            # Open Source YouTube app for privacy
-    mpv.enable                                   = false;            # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
-    plex-tui.enable                              = false;            # Terminal Plex client for browsing and watching media
+    mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
+    plex-tui.enable                              = true;             # Terminal Plex client for browsing and watching media
     plex.enable                                  = false;            # Media library streaming server
-    spotatui.enable                              = false;            # Fully standalone Spotify client for the terminal
+    spotatui.enable                              = true;             # Fully standalone Spotify client for the terminal
     spotify.enable                               = false;            # Play music from the Spotify music service
     vlc.enable                                   = false;            # Cross-platform media player and streaming server
 

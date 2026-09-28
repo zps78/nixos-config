@@ -143,9 +143,9 @@
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-#  environment.systemPackages                     = with pkgs; [
+# environment.systemPackages                     = with pkgs; [
 #
-#  ];
+# ];
 
   # System state version
   system.stateVersion                            = "25.11";

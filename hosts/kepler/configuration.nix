@@ -43,7 +43,8 @@
 
   myServices = {
     battery.enable                               = true;                       # battery support
-    battery.tlp.enable                           = false;                      # TLP: low-power profile and no turbo on battery
+    battery.tlp.enable                           = true;                       # TLP: low-power profile and no turbo on battery
+#   battery.tlp.usbDenylist                      = [ "06cb:00bd" "8087:0033" ];  # fingerprint reader, Bluetooth
     brother-ads-4300n.enable                     = true;                       # Brother ADS-4300N network document scanner
     brother-hl-l8230cdw.enable                   = true;                       # Brother HL-L8230CDW network color laser printer
     docker.enable                                = false;                      # group membership auto-follows via modules/services/docker.nix
@@ -72,7 +73,7 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     steam.enable                                 = true;
-    wine.enable                                  = false;
+    wine.enable                                  = true;
   };
 
   # Users
@@ -109,9 +110,9 @@
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-#  environment.systemPackages                     = with pkgs; [
+# environment.systemPackages                     = with pkgs; [
 #
-#  ];
+# ];
 
   # System state version
   system.stateVersion                            = "25.11";

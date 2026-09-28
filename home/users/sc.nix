@@ -52,7 +52,7 @@
     proton-pass.enable                           = true;             # Desktop application for Proton Pass
     telegram.enable                              = true;             # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
-    winapps.enable                               = true;             # Seamless Windows apps (RDP into karma's Office VM)
+    winapps.enable                               = false;            # Seamless Windows apps (RDP into karma's Office VM)
 
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
@@ -71,15 +71,15 @@
     easyeffects.enable                           = true;             # System-wide audio effects (EQ, compressor, limiter)
     handbrake.enable                             = true;             # Tool for converting video files and ripping DVDs
     losslesscut.enable                           = true;             # Swiss army knife of lossless video/audio editing
-    mkvtoolnix.enable                            = false;            # Cross-platform tools for Matroska
+    mkvtoolnix.enable                            = true;             # Cross-platform tools for Matroska
     obs-studio.enable                            = true;             # Free and open source software for video recording and live streaming
 
     # media players
     cava.enable                                  = true;             # Console audio visualizer (ALSA/PipeWire)
-    iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
+    iptvnator.enable                             = false;            # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = true;             # Open Source YouTube app for privacy
     mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
-    plex-tui.enable                              = true;             # Terminal Plex client for browsing and watching media
+    plex-tui.enable                              = false;            # Terminal Plex client for browsing and watching media
     plex.enable                                  = true;             # Media library streaming server
     spotatui.enable                              = true;             # Fully standalone Spotify client for the terminal
     spotify.enable                               = true;             # Play music from the Spotify music service
@@ -92,7 +92,7 @@
 
     # web browsers
     brave.enable                                 = true;             # Privacy-oriented browser for Desktop and Laptop computers
-    firefox.enable                               = true;             # Web browser built from Firefox source tree
+    firefox.enable                               = false;             # Web browser built from Firefox source tree
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
 

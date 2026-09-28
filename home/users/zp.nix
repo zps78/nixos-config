@@ -76,7 +76,7 @@
 
     # media players
     cava.enable                                  = true;             # Console audio visualizer (ALSA/PipeWire)
-    iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
+    iptvnator.enable                             = false;            # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = true;             # Open Source YouTube app for privacy
     mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
     plex-tui.enable                              = true;             # Terminal Plex client for browsing and watching media
@@ -92,7 +92,7 @@
 
     # web browsers
     brave.enable                                 = true;             # Privacy-oriented browser for Desktop and Laptop computers
-    firefox.enable                               = true;             # Web browser built from Firefox source tree
+    firefox.enable                               = false;            # Web browser built from Firefox source tree
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
 

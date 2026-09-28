@@ -75,8 +75,8 @@
     obs-studio.enable                            = false;            # Free and open source software for video recording and live streaming
 
     # media players
-    cava.enable                                  = true;             # Console audio visualizer (ALSA/PipeWire)
-    iptvnator.enable                             = true;             # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
+    cava.enable                                  = false;            # Console audio visualizer (ALSA/PipeWire)
+    iptvnator.enable                             = false;            # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
     freetube.enable                              = false;            # Open Source YouTube app for privacy
     mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
     plex-tui.enable                              = true;             # Terminal Plex client for browsing and watching media

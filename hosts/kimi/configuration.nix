@@ -29,8 +29,8 @@
     fingerprint.enable                           = false;                      # enable fingerprint on this host
     wwan.enable                                  = false;                      # enable wwan mhi driver and install modem manager
 
-    keyboard.layout                              = "us";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
-    keyboard.secondary.layout                    = "pt";                       # secondary keyboard layout (not available on tty)
+    keyboard.layout                              = "pt";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")
+    keyboard.secondary.layout                    = "us";                       # secondary keyboard layout (not available on tty)
     gpuVendor                                    = "intel";                    # choose from: "hybrid" "nvidia" "amd" "intel"
     ramGB                                        = 16;                         # this host's actual installed RAM (GB)
   };
@@ -66,7 +66,7 @@
   };
 
   myFeatures = {
-    android.enable                               = true;                       # ADB, scrcpy, APK tools
+    android.enable                               = false;                      # ADB, scrcpy, APK tools
     claude-desktop.enable                        = false;                      # Anthropic's Claude Desktop app
     data-rescue.enable                           = false;
     kde-connect.enable                           = false;
@@ -108,9 +108,9 @@
 # services.libinput.mouse.naturalScrolling       = true;
 
   # System packages
-#  environment.systemPackages                     = with pkgs; [
+# environment.systemPackages                     = with pkgs; [
 #
-#  ];
+# ];
 
   # System state version
   system.stateVersion                            = "25.11";
