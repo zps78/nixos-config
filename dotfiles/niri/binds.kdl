@@ -32,6 +32,11 @@ binds {
 
     Mod+Z hotkey-overlay-title="Open Zed" { spawn "zeditor"; }
 
+    // ThinkPad X12's Copilot key. wev shows it arrives as a
+    // Super_L+Shift_L+XF86Assistant chord (hardware-level, not a real Shift
+    // press), so the bind needs Mod+Shift to match, not bare XF86Assistant.
+    Mod+Shift+XF86Assistant hotkey-overlay-title="Open Claude Desktop" { spawn "claude-desktop"; }
+
     Mod+Alt+L hotkey-overlay-title="Lock the Screen: noctalia" { spawn "noctalia" "msg" "session" "lock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
