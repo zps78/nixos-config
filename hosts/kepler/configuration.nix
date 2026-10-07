@@ -73,6 +73,7 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     steam.enable                                 = true;
+    waydroid.enable                              = false;
     wine.enable                                  = true;
   };
 
