@@ -54,6 +54,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILsHK3x6UPpNqhnV0t+MMdMb1iuy1xDLBfFk1UL4TMa9 krugerrand-fleet-access"
     ];
     sunshine.enable                              = true;                       # group membership auto-follows via modules/services/sunshine.nix
+    waydroid.enable                              = false;
   };
 
   myShares = {
@@ -71,7 +72,6 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = false;
     steam.enable                                 = false;
-    waydroid.enable                              = false;
     wine.enable                                  = true;
   };
 

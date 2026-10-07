@@ -65,6 +65,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF0omZkhZ//fafpUbFHlcFQyKY8UHIbaCzbD8PAkBsMv kuro-fleet-access"
     ];
     sunshine.enable                              = false;                      # group membership auto-follows via modules/services/sunshine.nix
+    waydroid.enable                              = false;
   };
 
   myShares = {
@@ -82,7 +83,6 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     steam.enable                                 = false;
-    waydroid.enable                              = false;
     wine.enable                                  = true;
   };
 
