@@ -13,9 +13,22 @@
 #      so it only ever runs once per host.
 #   2. waydroid_script extras (microG by default) - patches them into the
 #      already-running container. Needs an actual Waydroid *session* (not
-#      just the container), so it's a user-level service, with a narrowly
-#      scoped passwordless sudo rule for exactly the installer script (not
-#      for waydroid_script in general).
+#      just the container), so detecting "time to run" has to live in a
+#      user-level service - but the actual work runs as a genuine
+#      system-level service (waydroid-extras-install, root, PID1-managed),
+#      triggered on demand via a narrowly scoped passwordless sudo rule for
+#      exactly `systemctl start --wait` on that one unit. This split isn't
+#      just tidiness: an earlier version had the user service `sudo exec`
+#      the installer script directly, and that broke in two different ways
+#      under real testing (a stray root-owned process the user systemd
+#      instance couldn't kill from its cgroup - "Operation not permitted" -
+#      on one run, and a silent no-op with zero markers written despite a
+#      reported clean exit on another), both consistent with the same root
+#      cause: a process escalated to root via sudo sitting in a cgroup
+#      that's owned and tracked by the *user's* systemd instance, which
+#      structurally can't manage it. Running the work as a real system
+#      service under root's own systemd instance from the start removes
+#      that mismatch entirely.
 { config, inputs, lib, pkgs, ... }:
 
 let
@@ -86,6 +99,31 @@ in
   config = lib.mkIf cfg.enable {
     virtualisation.waydroid.enable = true;
 
+    # Real system-level service doing the actual extras install - root,
+    # under PID1's own systemd instance, so its cgroup/process tracking is
+    # self-consistent (see the top-of-file comment for why that matters).
+    # Never wantedBy anything - it only ever runs when explicitly started
+    # (by the user-level waydroid-extras service below, or manually), since
+    # it needs an actual Waydroid session, not just the container. No
+    # RemainAfterExit: it has to be re-runnable (each run just re-checks
+    # the per-extra markers) so that adding a new extra to cfg.extras later
+    # and re-triggering it picks the new one up instead of being short-
+    # circuited by "already ran once this boot".
+    systemd.services.waydroid-extras-install = lib.mkIf (cfg.extras != [ ]) {
+      description = "Install configured Waydroid extras (microG, etc.)";
+      # waydroid_script shells out to plain `waydroid` (e.g. to restart the
+      # container after copying an extra's files in) without a full path -
+      # needs this or every extra "installs" its files fine and then fails
+      # right after with FileNotFoundError: 'waydroid', since NixOS system
+      # services otherwise get a minimal PATH that skips
+      # /run/current-system/sw/bin.
+      path = [ config.virtualisation.waydroid.package ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = installExtrasScript;
+      };
+    };
+
     # Root-level and system-wide (not per-user), since `waydroid init` only
     # needs root + network, not a logged-in session. Pulled in as a
     # dependency of upstream's waydroid-container.service (itself
@@ -108,19 +146,21 @@ in
       };
     };
 
+    # Narrowly scoped to exactly this one systemctl invocation on exactly
+    # this one unit - not a general "run systemctl as root" grant.
     security.sudo.extraRules = lib.mkIf (cfg.extras != [ ]) [
       {
         users = [ config.myDesktop.primaryUser ];
         commands = [
           {
-            command = "${installExtrasScript}";
+            command = "${pkgs.systemd}/bin/systemctl start --wait waydroid-extras-install.service";
             options = [ "NOPASSWD" ];
           }
         ];
       }
     ];
 
-    # User-level (not system-level) because it has to wait for a Waydroid
+    # User-level, but only as a trigger - it has to wait for a Waydroid
     # *session* - which only exists once someone's logged into the
     # graphical session and either opened a Waydroid app or run
     # `waydroid session start` themselves - not merely for
@@ -128,17 +168,19 @@ in
     # you nothing about session state. Polls rather than hooking a
     # specific event, since nothing emits a clean "session started"
     # signal to wait on; gives up after 2 minutes so a host where nobody
-    # ever starts a session doesn't spin forever every login.
+    # ever starts a session doesn't spin forever every login. The actual
+    # install work happens in waydroid-extras-install.service above, not
+    # here (see top-of-file comment for why).
     systemd.user.services.waydroid-extras = lib.mkIf (cfg.extras != [ ]) {
-      description = "Install configured Waydroid extras (microG, etc.) once a session is up";
+      description = "Trigger Waydroid extras install once a session is up";
       wantedBy = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = pkgs.writeShellScript "waydroid-extras-wait-and-install" ''
+        ExecStart = pkgs.writeShellScript "waydroid-extras-wait-and-trigger" ''
           for i in $(seq 1 24); do
             if ${pkgs.waydroid}/bin/waydroid status 2>/dev/null | grep -qE "^Session:[[:space:]]*RUNNING"; then
-              exec /run/wrappers/bin/sudo ${installExtrasScript}
+              exec /run/wrappers/bin/sudo ${pkgs.systemd}/bin/systemctl start --wait waydroid-extras-install.service
             fi
             sleep 5
           done
