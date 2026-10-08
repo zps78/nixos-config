@@ -55,6 +55,11 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    waydroid-script = {
+      url = "github:casualsnek/waydroid_script";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, agenix, stylix, ... }:

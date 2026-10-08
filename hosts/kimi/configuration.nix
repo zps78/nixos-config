@@ -55,6 +55,7 @@
     ];
     sunshine.enable                              = true;                       # group membership auto-follows via modules/services/sunshine.nix
     waydroid.enable                              = false;
+    waydroid.extras                              = [ "microg" "widevine" "libhoudini" ]; # Intel CPU -> libhoudini, not libndk
   };
 
   myShares = {
