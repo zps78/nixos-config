@@ -60,6 +60,15 @@
       url = "github:casualsnek/waydroid_script";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Plain source, not a flake (no flake.nix upstream) - built via
+    # rustPlatform.buildRustPackage in modules/services/waydroid.nix. Replaces
+    # waydroid_script's own "magisk" extra, whose upstream APK is permanently
+    # dead (see the comment there for the full story).
+    waydroidsu = {
+      url = "github:mistrmochov/WaydroidSU";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, agenix, stylix, ... }:

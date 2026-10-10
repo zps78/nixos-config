@@ -45,6 +45,38 @@ let
 
   markerDir = "/var/lib/waydroid-extras";
 
+  # waydroid_script's own "magisk" extra downloads a build of the old
+  # "Magisk Delta" from a static GitHub mirror (mistrmochov/magiskdeltaorig,
+  # frozen since Jan 2024) that still carries its original maintainer's
+  # (HuskyDG) hardcoded startup update-check URL. That maintainer's entire
+  # GitHub account is gone now (confirmed: 404 on the account itself, not
+  # just the one file), so every launch hits a dead URL, gets a 404, and the
+  # app's own code calls System.exit(0) on that failure - a permanent
+  # crash-loop, not fixable from this end. WaydroidSU (`wsu`) is a separate,
+  # actively fork-maintained project by a different dev, built specifically
+  # to work around Waydroid's constraints (official Zygisk doesn't work
+  # under Waydroid's LXC/shared-kernel model, so they reimplemented it as
+  # ReZygisk inside their own Magisk fork). It's packaged here from plain
+  # source (no upstream flake) rather than wired into the extras pipeline
+  # above, because its install flow needs a real interactive step - tapping
+  # the Magisk stub inside the running Android session to upgrade it to the
+  # full manager, between `wsu install` and `wsu setup` - that can't be
+  # scripted and marker-guarded the way the file-copy extras above can.
+  wsuPkg = pkgs.rustPlatform.buildRustPackage {
+    pname = "wsu";
+    version = "unstable-2025-09-26";
+    src = inputs.waydroidsu;
+    cargoLock.lockFile = "${inputs.waydroidsu}/Cargo.lock";
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.dbus pkgs.openssl pkgs.systemd pkgs.libcap pkgs.xz pkgs.bzip2 ];
+    meta = {
+      description = "CLI Magisk manager/installer for Waydroid";
+      homepage = "https://github.com/mistrmochov/WaydroidSU";
+      license = lib.licenses.gpl3Plus;
+      mainProgram = "wsu";
+    };
+  };
+
   # Root-owned: for each configured extra not yet marked done, run
   # waydroid_script's installer once and drop a marker so it's never
   # re-run on subsequent boots/logins (the container's overlay persists
@@ -94,10 +126,22 @@ in
         way.
       '';
     };
+
+    magisk.enable = lib.mkEnableOption ''
+      the `wsu` CLI (WaydroidSU) for Magisk root on Waydroid, in place of
+      waydroid_script's own "magisk" extra - see the comment above wsuPkg for
+      why that one is permanently broken. This only installs `wsu` as a
+      system package; it's an interactive tool you run yourself
+      (`sudo wsu install`, then tap the Magisk stub inside the running
+      session to upgrade it to the full manager, then `sudo wsu setup`), not
+      something auto-run at boot/login like the extras above
+    '';
   };
 
   config = lib.mkIf cfg.enable {
     virtualisation.waydroid.enable = true;
+
+    environment.systemPackages = lib.mkIf cfg.magisk.enable [ wsuPkg ];
 
     # Real system-level service doing the actual extras install - root,
     # under PID1's own systemd instance, so its cgroup/process tracking is
@@ -130,6 +174,14 @@ in
     # wantedBy multi-user.target) and ordered before it, so the container
     # never tries to start against a not-yet-downloaded image; guarded by
     # ConditionPathExists so it's a no-op on every boot after the first.
+    # Restart=on-failure because network-online.target is a looser
+    # guarantee than it sounds - confirmed in testing: NetworkManager
+    # reported "online" before DNS was actually resolvable yet on a cold
+    # boot, failing the OTA channel fetch with EAI_NONAME. Since this is a
+    # oneshot with no retry by default, that one race would otherwise
+    # leave Waydroid permanently uninitialized until someone noticed and
+    # restarted it by hand - not acceptable for a host that's supposed to
+    # self-provision unattended.
     systemd.services.waydroid-init = {
       description = "Initialize Waydroid system image (one-time)";
       before = [ "waydroid-container.service" ];
@@ -138,11 +190,15 @@ in
       wants = [ "network-online.target" ];
       unitConfig = {
         ConditionPathExists = "!${initMarker}";
+        StartLimitIntervalSec = 600;
+        StartLimitBurst = 10;
       };
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStart = "${config.virtualisation.waydroid.package}/bin/waydroid init -s ${cfg.systemType}";
+        Restart = "on-failure";
+        RestartSec = 15;
       };
     };
 

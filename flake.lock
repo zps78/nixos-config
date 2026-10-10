@@ -382,6 +382,7 @@
         "plex-tui": "plex-tui",
         "stylix": "stylix",
         "waydroid-script": "waydroid-script",
+        "waydroidsu": "waydroidsu",
         "winapps": "winapps",
         "zen-browser": "zen-browser"
       }
@@ -547,6 +548,22 @@
       "original": {
         "owner": "casualsnek",
         "repo": "waydroid_script",
+        "type": "github"
+      }
+    },
+    "waydroidsu": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758914750,
+        "narHash": "sha256-ICC/lTUSUpeg/RZOfLJzplt3aQBXlNg1ng8yANGVMgA=",
+        "owner": "mistrmochov",
+        "repo": "WaydroidSU",
+        "rev": "b5e66aa79c3d8c101de857f4161e89de94d5eda1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mistrmochov",
+        "repo": "WaydroidSU",
         "type": "github"
       }
     },

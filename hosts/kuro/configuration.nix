@@ -66,7 +66,8 @@
     ];
     sunshine.enable                              = false;                      # group membership auto-follows via modules/services/sunshine.nix
     waydroid.enable                              = true;
-    waydroid.extras                              = [ "microg" "widevine" "libhoudini" "magisk" ]; # Intel CPU -> libhoudini, not libndk; magisk for Play Integrity Fix
+    waydroid.extras                              = [ "microg" "widevine" "libhoudini" ]; # Intel CPU -> libhoudini, not libndk
+    waydroid.magisk.enable                       = true;                    # wsu CLI (WaydroidSU) for root; waydroid_script's own magisk extra is permanently dead upstream
   };
 
   myShares = {

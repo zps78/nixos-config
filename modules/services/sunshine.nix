@@ -27,6 +27,25 @@
     # in each host's configuration.nix.
     users.users.${config.myDesktop.primaryUser}.extraGroups = [ "uinput" ];
 
+    # /dev/uhid is a separate kernel device from /dev/uinput above - Sunshine
+    # uses it specifically for virtual *gamepad* emulation (uinput covers
+    # mouse/keyboard), and hardware.uinput.enable doesn't touch it at all.
+    # Without this, Sunshine's own log shows it failing outright: "create
+    # libvirtualhid gamepad: failed to open /dev/uhid: Permission denied" -
+    # meaning controller input through Moonlight never actually works.
+    # Reuses the same "uinput" group rather than inventing a new one, since
+    # primaryUser is already in it for the reason above.
+    services.udev.extraRules = ''
+      KERNEL=="uhid", MODE="0660", GROUP="uinput"
+    '';
+
+    # Requests the CPU performance governor (and other optimizations) while
+    # a game is running. Without it, Proton games silently fail to apply
+    # this at all: "gamemodeauto: dlopen failed - libgamemode.so: cannot
+    # open shared object file" spams the log on every launch because the
+    # library the game is trying to dlopen was never installed.
+    programs.gamemode.enable = true;
+
     services.sunshine = {
       enable = true;
       autoStart = true;
