@@ -30,10 +30,13 @@ in
     enable = lib.mkEnableOption "FreeCAD";
 
     aiAddons.enable = lib.mkEnableOption ''
-      AI addons for FreeCAD: GPT4FreeCAD (structured-geometry generation,
-      no extra setup) and freecad-mcp (lets Claude Desktop/Code drive a live
-      FreeCAD session). Linked declaratively into FreeCAD's version-tagged
-      Mod directory instead of via FreeCAD's own Addon Manager.
+      freecad-mcp, which lets Claude Desktop/Code drive a live FreeCAD
+      session - billed as normal usage under your existing Claude
+      subscription, no separate API key. (GPT4FreeCAD was considered too,
+      but it talks to providers via a separate, pay-per-token API key
+      rather than through Claude Desktop/Code, so it was dropped.) Linked
+      declaratively into FreeCAD's version-tagged Mod directory instead of
+      via FreeCAD's own Addon Manager.
 
       After rebuilding: restart FreeCAD, select the "MCP Addon" workbench,
       click "Start RPC Server", then add this to claude_desktop_config.json
@@ -51,10 +54,6 @@ in
     ] ++ lib.optional cfg.aiAddons.enable freecad-mcp-server;
 
     home.file = lib.mkIf cfg.aiAddons.enable {
-      "${modDir}/GPT4FreeCAD" = {
-        source = inputs.gpt4freecad;
-        recursive = true;
-      };
       "${modDir}/FreeCADMCP" = {
         source = "${inputs.freecad-mcp}/addon/FreeCADMCP";
         recursive = true;

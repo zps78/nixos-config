@@ -70,17 +70,11 @@
       flake = false;
     };
 
-    # FreeCAD AI addons - both plain sources (no flake.nix upstream), linked
-    # into ~/.local/share/FreeCAD/Mod in modules/apps-user/freecad.nix instead
-    # of going through FreeCAD's own (imperative, git-clone-based) Addon
-    # Manager.
-    gpt4freecad = {
-      url = "github:revhappy/GPT4FreeCAD";
-      flake = false;
-    };
-
-    # Only addon/FreeCADMCP is used from this source; the freecad-mcp CLI
-    # (the MCP server launched by Claude, not the in-FreeCAD addon) is built
+    # Plain source (no flake.nix upstream), linked into FreeCAD's Mod
+    # directory in modules/apps-user/freecad.nix instead of going through
+    # FreeCAD's own (imperative, git-clone-based) Addon Manager. Only
+    # addon/FreeCADMCP is used from this source; the freecad-mcp CLI (the MCP
+    # server launched by Claude, not the in-FreeCAD addon) is built
     # separately as a Python application in the same module.
     freecad-mcp = {
       url = "github:neka-nat/freecad-mcp";
