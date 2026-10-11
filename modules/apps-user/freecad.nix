@@ -18,6 +18,12 @@ let
     # No tests here - the suite expects a live FreeCAD RPC connection.
     doCheck = false;
   };
+
+  # FreeCAD >=1.0 keeps its user data (and Mod/) under a version-tagged dir,
+  # e.g. ~/.local/share/FreeCAD/v1-1 for 1.1.x - NOT the unversioned
+  # ~/.local/share/FreeCAD/Mod path docs/READMEs assume. Derived from the
+  # package version so a FreeCAD bump doesn't silently break the addon links.
+  modDir = ".local/share/FreeCAD/v${lib.replaceStrings ["."] ["-"] (lib.versions.majorMinor pkgs.freecad.version)}/Mod";
 in
 {
   options.myApps.freecad = {
@@ -26,8 +32,8 @@ in
     aiAddons.enable = lib.mkEnableOption ''
       AI addons for FreeCAD: GPT4FreeCAD (structured-geometry generation,
       no extra setup) and freecad-mcp (lets Claude Desktop/Code drive a live
-      FreeCAD session). Linked declaratively into ~/.local/share/FreeCAD/Mod
-      instead of via FreeCAD's own Addon Manager.
+      FreeCAD session). Linked declaratively into FreeCAD's version-tagged
+      Mod directory instead of via FreeCAD's own Addon Manager.
 
       After rebuilding: restart FreeCAD, select the "MCP Addon" workbench,
       click "Start RPC Server", then add this to claude_desktop_config.json
@@ -45,11 +51,11 @@ in
     ] ++ lib.optional cfg.aiAddons.enable freecad-mcp-server;
 
     home.file = lib.mkIf cfg.aiAddons.enable {
-      ".local/share/FreeCAD/Mod/GPT4FreeCAD" = {
+      "${modDir}/GPT4FreeCAD" = {
         source = inputs.gpt4freecad;
         recursive = true;
       };
-      ".local/share/FreeCAD/Mod/FreeCADMCP" = {
+      "${modDir}/FreeCADMCP" = {
         source = "${inputs.freecad-mcp}/addon/FreeCADMCP";
         recursive = true;
       };
