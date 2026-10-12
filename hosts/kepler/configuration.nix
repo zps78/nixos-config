@@ -48,6 +48,7 @@
     brother-ads-4300n.enable                     = true;                       # Brother ADS-4300N network document scanner
     brother-hl-l8230cdw.enable                   = true;                       # Brother HL-L8230CDW network color laser printer
     docker.enable                                = false;                      # group membership auto-follows via modules/services/docker.nix
+    aiStack.enable                               = false;                      # Ollama + Open WebUI + ComfyUI, GPU-accelerated (docker)
     libvirt.enable                               = false;                      # group membership auto-follows via modules/services/libvirt.nix
     ssh.enable                                   = true;
     ssh.passwordAuth                             = false;                      # keep disabled for security

@@ -1,6 +1,7 @@
 # ../../modules/services/default.nix
 {
   imports = [
+    ./ai-stack.nix
     ./avahi.nix
     ./battery.nix
     ./brother-ads-4300n.nix
