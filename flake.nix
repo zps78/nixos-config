@@ -80,6 +80,18 @@
       url = "github:neka-nat/freecad-mcp";
       flake = false;
     };
+
+    # Separate FreeCAD AI addon - natural-language -> parametric feature tree,
+    # not MCP/tool-calling. Zero third-party Python deps (stdlib urllib/json
+    # only), so no packaging needed; just the repo itself linked into Mod/.
+    # Supports pay-per-token cloud providers (Gemini/OpenAI/Anthropic/Grok/
+    # OpenRouter), but also a no-key "Ollama / LM Studio" provider that talks
+    # straight to a local OpenAI-compatible server - see
+    # modules/apps-user/freecad.nix for which one this config points at.
+    gpt4freecad = {
+      url = "github:revhappy/GPT4FreeCAD";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, noctalia, noctalia-greeter, agenix, stylix, ... }:

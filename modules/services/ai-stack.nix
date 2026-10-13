@@ -60,11 +60,16 @@ in
     };
 
     virtualisation.oci-containers.containers = {
-      # LLM serving. No port published to the host - only open-webui talks
-      # to it, over the ai-stack network, by container name.
+      # LLM serving. Published only on krieger's own Tailscale address (its
+      # ollama API has no auth of its own) so other machines on the tailnet
+      # - namely kuro's GPT4FreeCAD addon, see modules/apps-user/freecad.nix
+      # - can reach it as http://krieger:11434, without exposing it on the
+      # LAN too. open-webui still reaches it over the ai-stack network, by
+      # container name, regardless of this.
       ollama = {
         image = "ollama/ollama:latest";
         volumes = [ "${dataDir}/ollama:/root/.ollama" ];
+        ports = [ "100.101.102.33:11434:11434" ];
         extraOptions = gpuOptions ++ [ "--network=ai-stack" ];
       };
 

@@ -29,19 +29,33 @@ in
   options.myApps.freecad = {
     enable = lib.mkEnableOption "FreeCAD";
 
-    aiAddons.enable = lib.mkEnableOption ''
+    mcp.enable = lib.mkEnableOption ''
       freecad-mcp, which lets Claude Desktop/Code drive a live FreeCAD
       session - billed as normal usage under your existing Claude
-      subscription, no separate API key. (GPT4FreeCAD was considered too,
-      but it talks to providers via a separate, pay-per-token API key
-      rather than through Claude Desktop/Code, so it was dropped.) Linked
-      declaratively into FreeCAD's version-tagged Mod directory instead of
-      via FreeCAD's own Addon Manager.
+      subscription, no separate API key. Linked declaratively into
+      FreeCAD's version-tagged Mod directory instead of via FreeCAD's own
+      Addon Manager.
 
       After rebuilding: restart FreeCAD, select the "MCP Addon" workbench,
       click "Start RPC Server", then add this to claude_desktop_config.json
       (not managed here - Claude Desktop owns and rewrites that file):
         "freecad": { "command": "freecad-mcp", "args": [] }
+    '';
+
+    gpt4freecad.enable = lib.mkEnableOption ''
+      GPT4FreeCAD, a separate addon that turns a natural-language prompt
+      into a parametric feature tree (not MCP/tool-calling, so it's not a
+      substitute for the mcp.enable workflow above - a different way
+      in). Zero third-party Python deps, so just the repo linked into
+      Mod/ like FreeCADMCP above.
+
+      It defaults to Google Gemini, which needs a paid API key entered in
+      its Settings panel. To use it for free instead, switch its
+      "Provider" dropdown to "Ollama / LM Studio" and point the Server URL
+      at krieger's ollama container (see myServices.aiStack in
+      modules/services/ai-stack.nix): http://krieger:11434 - this is the
+      distinction that got GPT4FreeCAD dropped from this config
+      previously, so it's worth restating up front this time.
     '';
   };
 
@@ -51,13 +65,21 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       freecad
-    ] ++ lib.optional cfg.aiAddons.enable freecad-mcp-server;
+    ] ++ lib.optional cfg.mcp.enable freecad-mcp-server;
 
-    home.file = lib.mkIf cfg.aiAddons.enable {
-      "${modDir}/FreeCADMCP" = {
-        source = "${inputs.freecad-mcp}/addon/FreeCADMCP";
-        recursive = true;
-      };
-    };
+    home.file = lib.mkMerge [
+      (lib.mkIf cfg.mcp.enable {
+        "${modDir}/FreeCADMCP" = {
+          source = "${inputs.freecad-mcp}/addon/FreeCADMCP";
+          recursive = true;
+        };
+      })
+      (lib.mkIf cfg.gpt4freecad.enable {
+        "${modDir}/GPT4FreeCAD" = {
+          source = inputs.gpt4freecad;
+          recursive = true;
+        };
+      })
+    ];
   };
 }

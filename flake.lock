@@ -250,6 +250,22 @@
         "type": "gitlab"
       }
     },
+    "gpt4freecad": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786168325,
+        "narHash": "sha256-kT69V7hH8F9mh7J/IiFn5jEFqGfBLf0uydacxjAdX4s=",
+        "owner": "revhappy",
+        "repo": "GPT4FreeCAD",
+        "rev": "3e48c5c12a79774147ca2a92cc29b987f0104cf4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "revhappy",
+        "repo": "GPT4FreeCAD",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -392,6 +408,7 @@
         "claude-desktop": "claude-desktop",
         "firefox-addons": "firefox-addons",
         "freecad-mcp": "freecad-mcp",
+        "gpt4freecad": "gpt4freecad",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "noctalia": "noctalia",
