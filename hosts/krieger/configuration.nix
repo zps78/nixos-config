@@ -108,6 +108,7 @@
     claude-desktop.enable                        = false;                      # Anthropic's Claude Desktop app
     data-rescue.enable                           = true;
     kde-connect.enable                           = false;
+    proxmark3.enable                             = false;                      # Proxmark3 RFID/NFC tooling (Iceman client, udev rule)
     steam.enable                                 = true;
     wine.enable                                  = true;
   };

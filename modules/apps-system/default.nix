@@ -10,6 +10,7 @@
     ./claude-desktop.nix
     ./data-rescue.nix
     ./kde-connect.nix
+    ./proxmark3.nix
     ./steam.nix
     ./wine.nix
   ];
