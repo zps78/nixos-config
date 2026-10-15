@@ -37,7 +37,7 @@
     f3d.enable                                   = true;             # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = true;             # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     freecad.mcp.enable                           = true;             # freecad-mcp, see modules/apps-user/freecad.nix for the manual Claude Desktop config step
-    freecad.gpt4freecad.enable                   = true;             # GPT4FreeCAD addon, point it at krieger's ollama (see modules/apps-user/freecad.nix)
+    freecad.gpt4freecad.enable                   = false;            # GPT4FreeCAD addon, point it at krieger's ollama (see modules/apps-user/freecad.nix)
     openscad.enable                              = false;            # 3D parametric model compiler
     orca-slicer.enable                           = true;             # G-code generator for 3D printers
 
