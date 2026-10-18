@@ -82,6 +82,7 @@
 
   myFeatures = {
     android.enable                               = true;                       # ADB, scrcpy, APK tools
+    citizen-card.enable                          = true;                       # Portuguese Citizen Card eID (reader + Autenticacao.Gov)
     claude-desktop.enable                        = true;                       # Anthropic's Claude Desktop app
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;

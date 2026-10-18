@@ -7,6 +7,7 @@
 {
   imports = [
     ./android.nix
+    ./citizen-card.nix
     ./claude-desktop.nix
     ./data-rescue.nix
     ./kde-connect.nix
