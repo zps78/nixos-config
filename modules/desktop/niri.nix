@@ -20,6 +20,37 @@ let
         -blur 0x10 -fill '#000000' -colorize 30% \
         png:$out
     '';
+
+  # .3mf project files are just zip archives; extract whichever embedded
+  # thumbnail path the common slicers actually ship (PrusaSlicer/
+  # OrcaSlicer/SuperSlicer use Metadata/thumbnail.png; BambuStudio/
+  # OrcaSlicer multi-plate projects use Metadata/plate_N.png). model/3mf
+  # is already a registered mime-type (shared-mime-info ships the glob),
+  # so this is the only piece missing for Nautilus previews.
+  threeMfThumbnailer = pkgs.runCommand "3mf-thumbnailer" { } ''
+    mkdir -p $out/bin $out/share/thumbnailers
+
+    cat > $out/bin/3mf-thumbnailer <<'SCRIPT'
+    #!/bin/sh
+    set -e
+    in="$1"
+    out="$2"
+    for path in Metadata/thumbnail.png Metadata/plate_1.png Metadata/plate_no_light_1.png; do
+      if ${pkgs.unzip}/bin/unzip -p "$in" "$path" > "$out" 2>/dev/null && [ -s "$out" ]; then
+        exit 0
+      fi
+    done
+    exit 1
+    SCRIPT
+    chmod +x $out/bin/3mf-thumbnailer
+
+    cat > $out/share/thumbnailers/3mf.thumbnailer <<'ENTRY'
+    [Thumbnailer Entry]
+    TryExec=3mf-thumbnailer
+    Exec=3mf-thumbnailer %i %o
+    MimeType=model/3mf;
+    ENTRY
+  '';
 in
 lib.mkIf (config.myDesktop.stack == "niri") {
   ############################################################
@@ -100,6 +131,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
   environment.systemPackages = with pkgs; [
     xwayland-satellite       # Xwayland outside your Wayland compositor
     bibata-cursors
+    threeMfThumbnailer       # .3mf (3D print project) thumbnails in Nautilus
   ];
 
   environment.pathsToLink = [
