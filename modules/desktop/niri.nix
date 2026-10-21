@@ -27,11 +27,17 @@ let
   # OrcaSlicer multi-plate projects use Metadata/plate_N.png). model/3mf
   # is already a registered mime-type (shared-mime-info ships the glob),
   # so this is the only piece missing for Nautilus previews.
+  #
+  # Shebang must be an absolute /nix/store path, NOT /bin/sh: GNOME's
+  # thumbnail factory runs external .thumbnailer executables inside a
+  # bwrap sandbox that explicitly ro-binds /nix/store but never /bin, so
+  # /bin/sh silently fails to resolve there even though it works fine
+  # when the script is run directly outside that sandbox.
   threeMfThumbnailer = pkgs.runCommand "3mf-thumbnailer" { } ''
     mkdir -p $out/bin $out/share/thumbnailers
 
     cat > $out/bin/3mf-thumbnailer <<'SCRIPT'
-    #!/bin/sh
+    #!${pkgs.runtimeShell}
     set -e
     in="$1"
     out="$2"
