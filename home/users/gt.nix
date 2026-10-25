@@ -23,6 +23,7 @@
   ]
   ++ lib.optionals (osConfig.myDesktop.stack == "gnome") [
     ../gnome.nix
+    ./gt/gnome-keybinds.nix
   ];
 
   ############################################################

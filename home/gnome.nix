@@ -31,8 +31,11 @@
 { pkgs, ... }:
 
 {
+  # Keybindings are NOT imported here - they're per-user
+  # (home/users/<name>/gnome-keybinds.nix, same split as niri's
+  # per-user binds.kdl), pulled in directly from each home/users/<name>.nix
+  # alongside this file.
   imports = [
-    ./gnome-keybinds.nix
     ./gnome-paperwm.nix
     ./gnome-blur-my-shell.nix
   ];

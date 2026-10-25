@@ -67,7 +67,8 @@ in
         # Start typing in niri's Overview to filter / launch.
         niri_overview_type_to_launch_enabled = true;
 
-        # Built-in clipboard manager (keybind in dotfiles/niri/binds.kdl).
+        # Built-in clipboard manager (keybind in this user's niri/binds.kdl,
+        # see home/users/<name>/niri/binds.kdl).
         clipboard_enabled = true;
 
         # Alt-Tab in most-recently-used order, not layout order.
@@ -345,7 +346,7 @@ in
 
   xdg.configFile = {
     "niri/animations.kdl".source                  = ../dotfiles/niri/animations.kdl;
-    "niri/binds.kdl".source                       = ../dotfiles/niri/binds.kdl;
+    "niri/binds.kdl".source                       = ./users/${config.home.username}/niri/binds.kdl;
     "niri/config.kdl".source                      = ../dotfiles/niri/config.kdl;
     "niri/cursor.kdl".source                      = ../dotfiles/niri/cursor.kdl;
     "niri/debug.kdl".source                       = ../hosts/${osConfig.networking.hostName}/niri/debug.kdl;

@@ -1,3 +1,10 @@
+// ../../home/users/gt/niri/binds.kdl
+//
+// gt's personal niri keybinds. Seeded from the formerly-shared
+// dotfiles/niri/binds.kdl (now removed) - edit freely, this no
+// longer affects other users. Wired per-user in home/niri.nix,
+// same pattern as the per-host input.kdl/output.kdl.
+
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
