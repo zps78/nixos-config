@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/bmo">
+        <glob pattern="*.bmo"/>
+        <comment>Bookmap orders file</comment>
+    </mime-type>
+    <mime-type type="application/bmf">
+        <glob pattern="*.bmf"/>
+        <comment>Bookmap feed file</comment>
+    </mime-type>
+    <mime-type type="application/bmw">
+        <glob pattern="*.bmw"/>
+        <comment>Bookmap workspace file</comment>
+    </mime-type>
+</mime-info>

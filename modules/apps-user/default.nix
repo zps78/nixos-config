@@ -9,6 +9,7 @@
     ./audacity.nix
     ./bambu-studio.nix
     ./blender.nix
+    ./bookmap
     ./bottles.nix
     ./brave.nix
     ./cava.nix
@@ -39,6 +40,7 @@
     ./plex.nix
     ./plex-tui.nix
     ./proton-pass.nix
+    ./sierrachart.nix
     ./spotatui.nix
     ./spotify.nix
     ./steam-extras.nix

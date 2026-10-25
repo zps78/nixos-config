@@ -1,0 +1,12 @@
+{
+  "beta": {
+    "version": "8.0.0_b6_beta",
+    "url": "https://dl.bookmap.com/desktop-installer/?major=8&minor1=0&minor2=0&build=6&architecture_suffix=&suffix=_beta&user_extension=tar.gz",
+    "hash": "sha256-zdDsVrEwX5clehugmraLS5qlWLC4OkFnBL7duIcD0yQ="
+  },
+  "production": {
+    "version": "7.9.0_b12",
+    "url": "https://dl.bookmap.com/desktop-installer/?major=7&minor1=9&minor2=0&build=12&architecture_suffix=&suffix=&user_extension=tar.gz",
+    "hash": "sha256-6WVjNOY5NwLfdhiFuS6bsAViTAoRWs25XPsvi02yyU8="
+  }
+}

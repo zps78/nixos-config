@@ -57,6 +57,11 @@
     thunderbird.enable                           = false;            # Full-featured e-mail client
     winapps.enable                               = true;             # Seamless Windows apps (RDP into karma's Office VM)
 
+    # trading (on every host that mounts the trading share)
+    bookmap.enable                               = osConfig.myShares.nfs-trading.enable; # Order flow / market depth trading platform (native, FHS)
+    bookmap.channel                              = "beta";           # channel to seed a fresh install from; updates happen in-app afterwards
+    sierrachart.enable                           = osConfig.myShares.nfs-trading.enable; # Trading and charting platform (Wine)
+
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
   # libvirt                                      > enable service in the host's configuration.nix

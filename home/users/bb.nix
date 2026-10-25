@@ -57,6 +57,10 @@
     thunderbird.enable                           = false;            # Full-featured e-mail client
     winapps.enable                               = false;            # Seamless Windows apps (RDP into karma's Office VM)
 
+    # trading
+    bookmap.enable                               = false;            # Order flow / market depth trading platform (native, FHS)
+    sierrachart.enable                           = false;            # Trading and charting platform (Wine)
+
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
   # libvirt                                      > enable service in the host's configuration.nix
