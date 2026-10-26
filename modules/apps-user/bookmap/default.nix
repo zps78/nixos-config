@@ -38,6 +38,17 @@ let
     '';
   };
 
+  desktopItem = pkgs.makeDesktopItem {
+    name = "bookmap";
+    desktopName = "Bookmap${lib.optionalString (cfg.channel != "production") " (${cfg.channel})"}";
+    genericName = "Order flow trading platform";
+    exec = "bookmap %u";
+    icon = "bookmap";
+    categories = [ "Office" "Finance" ];
+    mimeTypes = [ "application/bmo" "application/bmf" "application/bmw" ];
+    startupWMClass = "velox-ib-Main";
+  };
+
   bookmap = pkgs.buildFHSEnv {
     pname = "bookmap";
     inherit (source) version;
@@ -95,16 +106,9 @@ in
     # and mime package into ~/.local/share on every launch, which would
     # shadow this entry in the launcher. Owning both paths as read-only HM
     # symlinks makes its write fail harmlessly ("Failed to register file
-    # extensions").
-    xdg.desktopEntries.bookmap = {
-      name = "Bookmap${lib.optionalString (cfg.channel != "production") " (${cfg.channel})"}";
-      genericName = "Order flow trading platform";
-      exec = "bookmap %u";
-      icon = "bookmap";
-      categories = [ "Office" "Finance" ];
-      mimeType = [ "application/bmo" "application/bmf" "application/bmw" ];
-      settings.StartupWMClass = "velox-ib-Main";
-    };
+    # extensions"). Not xdg.desktopEntries: that installs into the profile,
+    # which ~/.local/share/applications still overrides.
+    xdg.dataFile."applications/bookmap.desktop".source = "${desktopItem}/share/applications/bookmap.desktop";
     xdg.dataFile."mime/packages/bookmap-types.xml".source = ./bookmap-types.xml;
   };
 }
