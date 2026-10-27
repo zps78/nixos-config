@@ -29,6 +29,7 @@
     ./krita.nix
     ./losslesscut.nix
     ./lutris.nix
+    ./minecraft.nix
     ./mkvtoolnix.nix
     ./moonlight.nix
     ./mpv.nix

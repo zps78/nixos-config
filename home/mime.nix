@@ -26,6 +26,12 @@ let
   office = "onlyoffice-desktopeditors.desktop";
   mpv = "mpv.desktop";
   iptvnator = "iptvnator.desktop";
+  # f3d's MimeType coverage is split across one .desktop file per plugin
+  # (all Name=F3D, but distinct ids) rather than one f3d.desktop claiming
+  # everything - confirmed against its installed share/applications/.
+  f3dAssimp = "f3d-plugin-assimp.desktop"; # 3mf (+fbx/dae/dxf/off/x)
+  f3dNative = "f3d-plugin-native.desktop"; # stl (+obj/ply/gltf/vtk/...)
+  f3dOcct = "f3d-plugin-occt.desktop"; # step/brep/iges
 
   forEach = handler: types: lib.genAttrs types (_: handler);
 in
@@ -157,6 +163,20 @@ in
         "application/x-mpegurl" "application/vnd.apple.mpegurl"
         "audio/mpegurl" "audio/x-mpegurl"
       ]))
+
+      # ----- 3D models -----
+      # bambu-studio's .desktop also claims these (plus obj/amf/its own
+      # bambustudio:// scheme, left to it since f3d has no equivalent),
+      # but f3d is the preferred viewer for anything that's just a model
+      # to look at rather than something headed for the printer.
+
+      (lib.mkIf app.f3d.enable {
+        "model/3mf"                      = f3dAssimp;
+        "application/vnd.ms-3mfdocument" = f3dAssimp;
+        "model/stl"                      = f3dNative;
+        "model/step"                     = f3dOcct;
+        "application/vnd.step"           = f3dOcct;
+      })
     ];
   };
 }

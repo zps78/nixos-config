@@ -69,6 +69,7 @@
     # gaming
     chiaki-ng.enable                             = false;            # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
     lutris.enable                                = false;            # Open Source gaming platform for GNU/Linux
+    minecraft.enable                             = false;            # via Prism Launcher - mod/instance management, Microsoft account login
     moonlight.enable                             = false;            # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
 
