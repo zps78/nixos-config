@@ -69,7 +69,7 @@
     # gaming
     chiaki-ng.enable                             = true;             # Next-Generation of Chiaki (the open-source remote play client for PlayStation)
     lutris.enable                                = true;             # Open Source gaming platform for GNU/Linux
-    minecraft.enable                             = false;            # via Prism Launcher - mod/instance management, Microsoft account login
+    minecraft.enable                             = true;             # via Prism Launcher - mod/instance management, Microsoft account login
     moonlight.enable                             = true;             # Play your PC games on almost any device
   # steam                                        > enable feature in the host's configuration.nix
 
@@ -85,11 +85,11 @@
     # media players
     cava.enable                                  = true;             # Console audio visualizer (ALSA/PipeWire)
     iptvnator.enable                             = false;            # Cross-platform IPTV player application with support for m3u/m3u8 playlists, favorites, TV guide, and TV archive/catchup
-    freetube.enable                              = true;             # Open Source YouTube app for privacy
+    freetube.enable                              = false;            # Open Source YouTube app for privacy
     mpv.enable                                   = true;             # General-purpose media player, fork of MPlayer and mplayer2 ( + uosc + thumbfast )
     plex-tui.enable                              = false;            # Terminal Plex client for browsing and watching media
     plex.enable                                  = true;             # Media library streaming server
-    spotatui.enable                              = true;             # Fully standalone Spotify client for the terminal
+    spotatui.enable                              = false;            # Fully standalone Spotify client for the terminal
     spotify.enable                               = true;             # Play music from the Spotify music service
     vlc.enable                                   = false;            # Cross-platform media player and streaming server
 
@@ -118,7 +118,7 @@
   home.packages = with pkgs; [
 
  ## Remote access
-    remmina
+  # remmina
   # sunshine        # -> import sunshine.nix in the host's configuration.nix
   # teamviewer
 
