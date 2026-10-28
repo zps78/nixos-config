@@ -58,7 +58,8 @@ in
     # if a value here doesn't take, it's been overridden in the GUI and
     # needs resetting there.
     #
-    settings = {
+    settings = let
+      settingsBase = {
       shell = {
         # Native themed polkit agent (replaces polkit-gnome). Needed for
         # the greeter appearance-sync prompt among other things.
@@ -86,6 +87,16 @@ in
           prefix = "calc";
           global = true;
         };
+
+        # No close button on panel surfaces; no shell open/close animation.
+        show_close_buttons = false;
+        animation.enabled = false;
+
+        # Auto-sync the greeter's appearance with the live theme.
+        greeter_sync.auto_sync = true;
+
+        # Re-use the last screenshot region instead of re-selecting.
+        screenshot.remember_last_region = true;
       };
 
       # Blur + tint drawn behind Noctalia's own panels / launcher.
@@ -109,8 +120,19 @@ in
         address = "Maia, Porto, Portugal";
       };
 
-      # Force dark; palette still follows the wallpaper.
-      theme.mode = "dark";
+      # Force dark; palette follows the wallpaper (vibrant extraction),
+      # with Gruvbox/Oxocarbon as the fallback palette when source isn't
+      # "wallpaper".
+      theme = {
+        mode = "dark";
+        source = "wallpaper";
+        wallpaper_scheme = "vibrant";
+        builtin = "Gruvbox";
+        community_palette = "Oxocarbon";
+      };
+
+      # Lock screen fade transition.
+      lockscreen.transition = [ "fade" ];
 
       # Open-Meteo, no API key. Coordinates from [location].
       weather.enabled = true;
@@ -126,20 +148,37 @@ in
       # until a widget is added there).
       desktop_widgets.enabled = true;
       lockscreen_widgets.enabled = true;
-    }
-    // lib.optionalAttrs osConfig.myDesktop.idle.enable {
-      # Idle: lock, then blank, then suspend. (logind still handles lid
-      # close; lockscreen.lock_before_suspend handles lock-on-suspend.)
-      idle = {
-        behavior_order = [ "lock" "screen-off" "suspend" ];
-        behavior = {
-          lock         = { timeout = 600;  action = "lock";             enabled = true; };
-          "screen-off" = { timeout = 660;  action = "screen_off";       enabled = true; };
-          suspend      = { timeout = 1800; action = "lock_and_suspend"; enabled = true; };
-        };
+
+      # Topbar clock: weekday/date + time on one line.
+      widget.clock.format = "{:%a %d %b - %H:%M}";
+
+      # Topbar layout.
+      bar.default = {
+        start  = [ "launcher" "workspaces" "clipboard" ];
+        center = [ "clock" "notifications" ];
+        end    = [ "network" "tray" "volume" "brightness" "battery" "session" ];
       };
-    }
-    // lib.optionalAttrs (osConfig.networking.hostName == "krieger") {
+      };
+    in
+    # lib.recursiveUpdate (not //) so the per-host blocks below merge into
+    # nested keys like `bar.default` instead of clobbering them wholesale -
+    # `//` only merges top-level attrs, and both this settings set and the
+    # krieger block below set `bar`.
+      lib.recursiveUpdate
+        (lib.recursiveUpdate settingsBase
+          (lib.optionalAttrs osConfig.myDesktop.idle.enable {
+            # Idle: lock, then blank, then suspend. (logind still handles lid
+            # close; lockscreen.lock_before_suspend handles lock-on-suspend.)
+            idle = {
+              behavior_order = [ "lock" "screen-off" "suspend" ];
+              behavior = {
+                lock         = { timeout = 300;  action = "lock";             enabled = true; };
+                "screen-off" = { timeout = 600;  action = "screen_off";       enabled = true; };
+                suspend      = { timeout = 1800; action = "lock_and_suspend"; enabled = true; };
+              };
+            };
+          }))
+        (lib.optionalAttrs (osConfig.networking.hostName == "krieger") {
       # Keep the bar off the HDMI dummy plug (Sunshine's always-on capture
       # target, see hosts/krieger/niri/output.kdl) - it's never meant to be
       # looked at directly, and the bar/clock/etc. showing up in the
@@ -155,7 +194,7 @@ in
         center              = [ ];
         end                 = [ ];
       };
-    };
+    });
   };
 
   # While >1 output is connected (docked / external displays), inhibit
