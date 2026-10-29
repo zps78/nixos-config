@@ -43,9 +43,26 @@
       # group policy docs, not guessed.
       BraveWalletDisabled = true;
 
+      # BAT/ads/tipping - not used. Same "XDisabled" naming as Wallet
+      # above, corroborated by Brave's own GitHub test infrastructure.
+      BraveRewardsDisabled = true;
+
       # Leo AI chat sidebar - not used. Confirmed via a real Linux
       # managed-policy report (not guessed).
       BraveAIChatEnabled = false;
+
+      # Built-in IPFS support - not used.
+      IPFSEnabled = false;
+
+      # Brave's own paid VPN add-on - not used (Proton VPN instead, if
+      # anything).
+      BraveVPNDisabled = true;
+
+      # Content feed on the new-tab page - not used.
+      BraveNewsDisabled = true;
+
+      # Built-in video conferencing (Jitsi-based) - not used.
+      BraveTalkDisabled = true;
     };
   };
 }
