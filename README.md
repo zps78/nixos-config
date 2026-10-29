@@ -37,8 +37,11 @@ TODO - pending decisions for Claude
     generic C++ highlighting.
 
 Manual setup (no repo change):
-[ ] Proton Calendar: account.proton.me -> Calendars -> share/integrate
-    for a CalDAV URL + app password, then Noctalia Settings -> Services
-    -> Calendar -> Add Account -> CalDAV. Credentials go to gnome-keyring.
+[ ] Proton Calendar: Proton has no CalDAV (confirmed 2026-10-29, despite
+    what this note used to say - do not retry that path). Instead: in
+    Proton Calendar, open the calendar -> Share -> Share with anyone ->
+    create a link; then Noctalia Settings -> Calendar -> Add Account ->
+    ICS URL -> paste that link. No credentials needed, read-only, syncs
+    on Noctalia's own refresh_minutes interval.
 [ ] After rebuild to noctalia 5.1: check `systemctl --user status
     noctalia` and eyeball the bar for shifted runtime defaults.

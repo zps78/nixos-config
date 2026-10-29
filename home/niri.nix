@@ -137,10 +137,11 @@ in
       # Open-Meteo, no API key. Coordinates from [location].
       weather.enabled = true;
 
-      # Month grid + control-center calendar tab. Proton Calendar event
-      # sync is added at runtime: Settings -> Services -> Calendar ->
-      # Add Account -> CalDAV (URL + app password from Proton's web
-      # settings; credentials land in gnome-keyring, not this repo).
+      # Month grid + control-center calendar tab. Proton Calendar has no
+      # CalDAV; event sync is added at runtime instead: in Proton
+      # Calendar, Share -> Share with anyone -> create a link, then
+      # Noctalia Settings -> Calendar -> Add Account -> ICS URL -> paste
+      # it. No credentials needed (read-only), so nothing to keep here.
       calendar.enabled = true;
 
       # Widget frameworks for the desktop and lock screen. Placement is
