@@ -47,21 +47,5 @@
       # managed-policy report (not guessed).
       BraveAIChatEnabled = false;
     };
-
-    # Writable placeholder for Noctalia's "chromium-based" community
-    # template (see home/niri.nix theme.templates.community_ids): it
-    # needs a real mutable file here to rewrite on every palette change,
-    # not a nix-store symlink like the policy file above. `f` (not `f+`)
-    # so a rebuild doesn't clobber the rendered color. Separate filename
-    # from nixos.json above - Chromium merges every *.json in this
-    # directory, so the two coexist without conflict.
-    systemd.tmpfiles.settings."10-noctalia-brave-theme" = {
-      "/etc/brave/policies/managed/noctalia-color.json".f = {
-        user = config.myDesktop.primaryUser;
-        group = "users";
-        mode = "0644";
-        argument = "{}";
-      };
-    };
   };
 }
