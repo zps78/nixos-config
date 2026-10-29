@@ -21,11 +21,6 @@
   boot.plymouth.enable = true;
 
   # ----------------------------
-  # Init system (modern boot chain)
-  # ----------------------------
-  boot.initrd.systemd.enable = true;
-
-  # ----------------------------
   # Kernel selection
   # ----------------------------
   # mkDefault so a host can pin an older kernel (nvidia / regression).
