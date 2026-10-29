@@ -81,6 +81,7 @@
 
   myFeatures = {
     android.enable                               = true;                       # ADB, scrcpy, APK tools
+    brave-policies.enable                        = true;                       # Brave managed policy JSON: block Google GSI, no translate offer, no password save, no telemetry
     citizen-card.enable                          = false;                      # Portuguese Citizen Card eID (reader + Autenticacao.Gov)
     claude-desktop.enable                        = false;                      # Anthropic's Claude Desktop app
     data-rescue.enable                           = false;

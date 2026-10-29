@@ -7,6 +7,7 @@
 {
   imports = [
     ./android.nix
+    ./brave-policies.nix
     ./citizen-card.nix
     ./claude-desktop.nix
     ./data-rescue.nix
