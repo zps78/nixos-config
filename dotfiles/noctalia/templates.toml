@@ -20,7 +20,7 @@ enable_community_templates = true
 community_ids = [
     "bat",
     "blender",
-    "brave",
+    "chromium-based",
     "darktable",
     "fastfetch",
     "fzf",
@@ -33,6 +33,13 @@ community_ids = [
 ]
 # dropped: "discord" (not in config), "vscode" (using VSCodium; needs the
 # NoctaliaTheme extension installed to have any effect)
+# swapped "brave" -> "chromium-based" 2026-10-29: the per-browser "brave"
+# template needs python3 (not installed) and a one-time manual
+# brave://extensions "load unpacked" step; "chromium-based" instead sets
+# the BrowserThemeColor managed policy directly (see
+# modules/apps-system/brave-policies.nix for the writable placeholder
+# file it needs) - no extension, no python3, auto-refreshes running
+# browsers. Toolbar/frame/tabs only, not full in-page theming.
 
 [theme.templates.user.oh_my_posh]
 input_path = "templates/oh-my-posh.json"

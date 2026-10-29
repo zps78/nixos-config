@@ -159,19 +159,6 @@ in
         center = [ "clock" "notifications" ];
         end    = [ "network" "tray" "volume" "brightness" "battery" "session" ];
       };
-
-      # Community template: recolors Brave's toolbar/frame/tabs/NTP via
-      # the BrowserThemeColor Chromium policy (writes
-      # /etc/brave/policies/managed/noctalia-color.json - the writable
-      # placeholder for that file is declared in
-      # modules/apps-system/brave-policies.nix, since it has to be a
-      # real mutable file, not a nix-store symlink, for Noctalia to
-      # rewrite it on every palette change). Toolbar/frame colors only -
-      # does not recolor web page content or Brave's own settings UI.
-      theme.templates = {
-        enable_community_templates = true;
-        community_ids = [ "chromium-based" ];
-      };
       };
     in
     # lib.recursiveUpdate (not //) so the per-host blocks below merge into
