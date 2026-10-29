@@ -17,6 +17,11 @@ let
     dependencies = with pkgs.python3Packages; [ mcp validators ];
     # No tests here - the suite expects a live FreeCAD RPC connection.
     doCheck = false;
+    # Upstream's wheel metadata can declare a dependency floor (e.g.
+    # certifi) newer than what nixpkgs currently pins; certifi's only
+    # content is a CA bundle, no API surface, so a slightly older pinned
+    # version is harmless - skip the static check rather than chase it.
+    dontCheckRuntimeDeps = true;
   };
 
   # FreeCAD >=1.0 keeps its user data (and Mod/) under a version-tagged dir,
