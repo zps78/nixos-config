@@ -152,10 +152,16 @@ in
       # Topbar clock: weekday/date + time on one line.
       widget.clock.format = "{:%a %d %b - %H:%M}";
 
-      # Topbar layout.
+      # Plugins (both from the built-in "community" source, no extra
+      # [[plugins.source]] needed): a keybind cheatsheet panel and a
+      # pomodoro timer.
+      plugins.enabled = [ "kenn/keybind-cheatsheet" "thepunkoff/pomodoro" ];
+
+      # Topbar layout. "widget" = pomodoro's bar widget (its manifest's
+      # own [[widget]] id); "keybinds" = keybind-cheatsheet's bar widget.
       bar.default = {
-        start  = [ "launcher" "workspaces" "clipboard" ];
-        center = [ "clock" "notifications" ];
+        start  = [ "launcher" "workspaces" "keybinds" ];
+        center = [ "widget" "clock" "notifications" ];
         end    = [ "network" "tray" "volume" "brightness" "battery" "session" ];
       };
       };
