@@ -43,5 +43,29 @@ Manual setup (no repo change):
     create a link; then Noctalia Settings -> Calendar -> Add Account ->
     ICS URL -> paste that link. No credentials needed, read-only, syncs
     on Noctalia's own refresh_minutes interval.
+[ ] Brave Browser: per-profile GUI toggles, no managed policy or
+    programs.brave option exists for any of these (confirmed 2026-10-30)
+    - redo on each user's own profile after a fresh Brave install:
+      - GTK theme: brave://settings/appearance -> theme -> GTK. Gives
+        exact-match theming with other GTK apps (literal paint), unlike
+        the BrowserThemeColor policy approach (tried and reverted - only
+        seeds Chromium's own theme generator, can't match exactly).
+      - uBlock Origin: brave://settings/extensions/v2 -> toggle it on.
+        Google pulled MV2 extensions from the Chrome Web Store (Aug
+        2026); Brave self-hosts uBlock Origin there instead - full
+        version, not the gimped MV3 "Lite". Brave Shields alone misses
+        some popups (e.g. on 1337x) that uBlock catches.
+      - Vertical tabs: right-click a tab -> Show vertical tabs (or
+        brave://settings/appearance). Native Chromium feature.
+      - Backspace = back (like Zen): brave://settings/system/shortcuts
+        -> rebind Back to Backspace. Chrome removed this by default
+        years ago; Brave's custom shortcuts page can restore it.
+      - Remote Torrent Adder extension: open its Options page, point it
+        at karma's qBittorrent WebUI (LAN host/port, no SSL - see
+        Sonarr/Radarr's download client config for the current value),
+        enter credentials, enable Link Catching so it auto-intercepts
+        magnet/torrent links instead of requiring a manual right-click
+        each time. Connection details live in the extension's own
+        storage, not something a policy file can set.
 [ ] After rebuild to noctalia 5.1: check `systemctl --user status
     noctalia` and eyeball the bar for shifted runtime defaults.
