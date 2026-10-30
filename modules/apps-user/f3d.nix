@@ -23,8 +23,20 @@
 # around commits 4dbcc00/b19961d for the full story), so whichever one
 # "wins" is arbitrary rather than guaranteed to be the one that works.
 # Stripped from f3d's thumbnailer's MimeType below so there's only one
-# handler. f3d's other thumbnailers (stl/obj/ply/gltf/step/...) are
-# untouched and still work fine.
+# handler.
+#
+# Separate regression, found 2026-10-30: f3d 4.0.0's built-in
+# "thumbnail" config (--config=thumbnail, used by every *.thumbnailer
+# file here, including stl/obj/ply/gltf/step/...) now defaults to
+# --no-background=true, rendering an RGBA PNG with a fully transparent
+# background instead of the old solid #333333 fill - GNOME Files shows
+# that as a checkerboard. Confirmed by diffing a real cached thumbnail
+# (TrueColorAlpha, corner pixel srgba(0,0,0,0)) against a fresh render
+# with --no-background=false appended (TrueColor, corner #333333 - f3d's
+# own documented --background-color default). The CLI flag's own global
+# default is still false; only the "thumbnail" config preset changed.
+# Append --no-background=false to every thumbnailer's Exec line to
+# restore the old solid-background look.
 { config, pkgs, lib, ... }:
 
 {
@@ -39,6 +51,8 @@
       (f3d.overrideAttrs (oldAttrs: {
         postInstall = (oldAttrs.postInstall or "") + ''
           sed -i 's/;model\/3mf$//' $out/share/thumbnailers/f3d-plugin-assimp.thumbnailer
+          sed -i 's/--resolution=%s,%s %i/--resolution=%s,%s --no-background=false %i/' \
+            $out/share/thumbnailers/*.thumbnailer
         '';
       }))
     ];
