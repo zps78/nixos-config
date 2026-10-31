@@ -6,6 +6,7 @@
 
 let
   adwaitaGreyFolders = pkgs.callPackage ./lib/adwaita-grey-folders.nix { };
+  wallpapersDir = builtins.path { path = ../wallpapers; name = "wallpapers"; };
 in
 {
   # ===========================================================================
@@ -231,6 +232,19 @@ in
       done
     '';
   };
+
+  # Noctalia's wallpaper picker scans this folder. Seed it with the repo's
+  # own wallpapers/ set on every rebuild, copying (not symlinking) so the
+  # folder stays a normal writable directory the user/Noctalia can also
+  # add to directly - only fills in files that are missing, never
+  # overwrites or deletes, so local additions and re-picks survive.
+  home.activation.seedWallpapers = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p "$HOME/Pictures/wallpapers"
+    for f in ${wallpapersDir}/*; do
+      dest="$HOME/Pictures/wallpapers/$(basename "$f")"
+      [ -e "$dest" ] || $DRY_RUN_CMD cp $VERBOSE_ARG "$f" "$dest"
+    done
+  '';
 
   # ===========================================================================
   # App <-> Noctalia theme wiring
