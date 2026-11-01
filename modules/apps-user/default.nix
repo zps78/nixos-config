@@ -41,6 +41,7 @@
     ./plex.nix
     ./plex-tui.nix
     ./proton-pass.nix
+    ./remmina.nix
     ./sierrachart.nix
     ./spotatui.nix
     ./spotify.nix

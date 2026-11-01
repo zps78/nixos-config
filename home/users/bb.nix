@@ -56,10 +56,11 @@
     telegram.enable                              = false;            # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
     winapps.enable                               = false;            # Seamless Windows apps (RDP into karma's Office VM)
+    remmina.enable                               = false;            # Remote desktop client (RDP/VNC/SSH/SPICE)
 
-    # trading
-    bookmap.enable                               = false;            # Order flow / market depth trading platform (native, FHS)
-    sierrachart.enable                           = false;            # Trading and charting platform (Wine)
+    # trading (on every host that mounts the trading share)
+    bookmap.enable                               = osConfig.myShares.nfs-trading.enable; # Order flow / market depth trading platform (native, FHS)
+    sierrachart.enable                           = osConfig.myShares.nfs-trading.enable; # Trading and charting platform (Wine)
 
     # Emulation / virtualization
     bottles.enable                               = true;             # Easy-to-use wineprefix manager
@@ -118,7 +119,6 @@
   home.packages = with pkgs; [
 
  ## Remote access
-    remmina
   # sunshine        # -> import sunshine.nix in the host's configuration.nix
   # teamviewer
 
