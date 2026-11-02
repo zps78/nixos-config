@@ -53,10 +53,10 @@
     xournalpp.enable                             = true;             # Xournal++ is a handwriting Notetaking software with PDF annotation support
     pdfarranger.enable                           = true;             # Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface
     proton-pass.enable                           = true;             # Desktop application for Proton Pass
+    remmina.enable                               = true;             # Remote desktop client (RDP/VNC/SSH/SPICE)
     telegram.enable                              = true;             # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
     winapps.enable                               = true;             # Seamless Windows apps (RDP into karma's Office VM)
-    remmina.enable                               = true;             # Remote desktop client (RDP/VNC/SSH/SPICE)
 
     # trading (on every host that mounts the trading share)
     bookmap.enable                               = osConfig.myShares.nfs-trading.enable; # Order flow / market depth trading platform (native, FHS)

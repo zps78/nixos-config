@@ -33,14 +33,14 @@
   myApps = {
 
     # 3d modeling
-    bambu-studio.enable                          = false;            # PC Software for BambuLab's 3D printers
+    bambu-studio.enable                          = true;             # PC Software for BambuLab's 3D printers
     blender.enable                               = true;             # 3D Creation/Animation/Publishing System
     f3d.enable                                   = true;             # Fast minimalist 3D viewer (VTK)
     freecad.enable                               = true;             # General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler
     freecad.mcp.enable                           = true;             # freecad-mcp, see modules/apps-user/freecad.nix for the manual Claude Desktop config step
     freecad.gpt4freecad.enable                   = false;            # GPT4FreeCAD addon, point it at krieger's ollama (see modules/apps-user/freecad.nix)
-    openscad.enable                              = false;            # 3D parametric model compiler
-    orca-slicer.enable                           = true;             # G-code generator for 3D printers
+    openscad.enable                              = true;             # 3D parametric model compiler
+    orca-slicer.enable                           = false;            # G-code generator for 3D printers
 
     # programming
     godot.enable                                 = true;             # Free and Open Source 2D and 3D game engine
@@ -53,10 +53,10 @@
     xournalpp.enable                             = true;             # Xournal++ is a handwriting Notetaking software with PDF annotation support
     pdfarranger.enable                           = true;             # Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface
     proton-pass.enable                           = true;             # Desktop application for Proton Pass
+    remmina.enable                               = false;            # Remote desktop client (RDP/VNC/SSH/SPICE)
     telegram.enable                              = true;             # Telegram Desktop messaging app
     thunderbird.enable                           = false;            # Full-featured e-mail client
     winapps.enable                               = false;            # Seamless Windows apps (RDP into karma's Office VM)
-    remmina.enable                               = false;            # Remote desktop client (RDP/VNC/SSH/SPICE)
 
     # trading (on every host that mounts the trading share)
     bookmap.enable                               = osConfig.myShares.nfs-trading.enable; # Order flow / market depth trading platform (native, FHS)
