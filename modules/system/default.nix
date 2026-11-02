@@ -7,5 +7,6 @@
     ./localization.nix
     ./memory.nix
     ./packages.nix
+    ./remote-builders.nix
   ];
 }

@@ -21,6 +21,16 @@
 #   enp5s0.wakeOnLan.enable                      = true;                       # intel nic
   };
 
+  # Outbound key to reach krieger as a distributed-build client (nix-daemon
+  # runs as root, so owned by root here rather than the zp-owned pattern
+  # kuro/krugerrand use - there's no interactive admin use for this one).
+  # See modules/system/remote-builders.nix and secrets/secrets.nix.
+  age.secrets.kepler-fleet-key = {
+    file  = ../../secrets/kepler-fleet-key.age;
+    owner = "root";
+    mode  = "0400";
+  };
+
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
   myDesktop.primaryUser                          = "sc";
   myDesktop.idle.enable                          = true;                       # laptop
@@ -78,6 +88,7 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     proxmark3.enable                             = false;                      # Proxmark3 RFID/NFC tooling (Iceman client, udev rule)
+    remoteBuilder.enable                         = true;                       # use krieger as a distributed-build machine when it's awake
     steam.enable                                 = true;
     wine.enable                                  = true;
   };

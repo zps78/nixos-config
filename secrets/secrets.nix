@@ -22,8 +22,20 @@ let
   krugerrand-host =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOYeT9OzYyi14AVhZrs4b6hXjxi/FBPDb4nSK0lgI8ah";
 
+  kepler-host =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHzwlSF4o8N4UqASKAJUbAW8ZKtAFr1POrzKuUQWYS8t";
+
+  kimi-host =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQ3asT1lYai02B7wvOGaGUugjYU4dTDF4nAXzDN+XQe";
+
 in
 {
   "kuro-fleet-key.age".publicKeys = [ zp-personal kuro-host ];
   "krugerrand-fleet-key.age".publicKeys = [ zp-personal krugerrand-host ];
+
+  # kepler/kimi previously had no outbound fleet SSH identity at all
+  # (leaf-only targets) - added so they can reach krieger as a
+  # distributed-build client (see modules/system/remote-builders.nix).
+  "kepler-fleet-key.age".publicKeys = [ zp-personal kepler-host ];
+  "kimi-fleet-key.age".publicKeys = [ zp-personal kimi-host ];
 }
