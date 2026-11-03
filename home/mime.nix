@@ -36,7 +36,13 @@ let
   forEach = handler: types: lib.genAttrs types (_: handler);
 in
 {
-  xdg.mimeApps = {
+  options.myApps.defaultBrowser = lib.mkOption {
+    type = lib.types.nullOr (lib.types.enum [ "brave" "zen-browser" "firefox" ]);
+    default = null;
+    description = "Browser for http(s)/html links; null falls back to the first enabled one (zen-browser, brave, firefox).";
+  };
+
+  config.xdg.mimeApps = {
     enable = true;
 
     defaultApplications = lib.mkMerge [
@@ -96,17 +102,23 @@ in
       ]))
 
       # ----- web -----
-      # Falls back through whichever browser is actually enabled, rather
-      # than hardcoding one - a user with e.g. brave disabled still ends
-      # up with a real default instead of no association at all, which
-      # is what happened here before this fell back to nothing. Brave
-      # is checked first so it wins as the default on every host that
-      # has it enabled, even where zen-browser is also installed.
+      # myApps.defaultBrowser picks one explicitly. Left null, this falls
+      # back through whichever browser is actually enabled, rather than
+      # hardcoding one - a user with e.g. brave disabled still ends up
+      # with a real default instead of no association at all. In the
+      # fallback Zen is checked first, so it wins on every host that
+      # has it enabled, even where brave is also installed.
       (let
+        desktopFile = {
+          brave       = "brave-browser.desktop";
+          zen-browser = zen;
+          firefox     = "firefox.desktop";
+        };
         defaultBrowser =
-          if      app.brave.enable       then "brave-browser.desktop"
-          else if app.zen-browser.enable then zen
-          else if app.firefox.enable     then "firefox.desktop"
+          if      app.defaultBrowser != null then desktopFile.${app.defaultBrowser}
+          else if app.zen-browser.enable     then desktopFile.zen-browser
+          else if app.brave.enable           then desktopFile.brave
+          else if app.firefox.enable         then desktopFile.firefox
           else null;
       in lib.mkIf (defaultBrowser != null) (forEach defaultBrowser [
         "text/html" "x-scheme-handler/http" "x-scheme-handler/https"
