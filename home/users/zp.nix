@@ -113,6 +113,7 @@
   # on first start if it isn't installed yet.
   programs.noctalia.settings.plugins.enabled = [
     "kenn/keybind-cheatsheet"
+    "thepunkoff/pomodoro"
   ];
 
   programs.git = {
