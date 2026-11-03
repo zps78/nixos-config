@@ -28,8 +28,11 @@ community_ids = [
     "telegram",
     "yazi",
     "zed",
-    "zen-browser",
 ]
+# dropped: "zen-browser" - its apply.sh post-hook rewrites user.js and
+# userChrome.css, which Home Manager owns (read-only), so it failed on every
+# theme change. Same CSS is rendered by the zen_browser_* user templates
+# below instead; the @import lines are in home/niri.nix.
 # dropped: "discord" (not in config), "vscode" (using VSCodium; needs the
 # NoctaliaTheme extension installed to have any effect)
 # dropped: "brave" (needs python3, not installed, plus a one-time manual
@@ -50,3 +53,14 @@ output_path = "$XDG_CONFIG_HOME/oh-my-posh/quick-term.json"
 # the noctalia-greeter login screen matches the lock screen.
 [theme.templates.user.greeter_wallpaper]
 post_hook = "bash '{{ config_dir }}/hooks/greeter-blur.sh' '{{ image }}' '{{ colors.surface.default.hex }}' '{{ mode }}'"
+
+# Zen Browser colors - the community template's CSS, without its apply.sh
+# hook (see the "zen-browser" note above). Files are pinned from upstream in
+# home/niri.nix; Zen @imports these outputs from userChrome/userContent.
+[theme.templates.user.zen_browser_chrome]
+input_path = "templates/zen-userChrome.css"
+output_path = "$XDG_CACHE_HOME/noctalia/zen-browser/zen-userChrome.css"
+
+[theme.templates.user.zen_browser_content]
+input_path = "templates/zen-userContent.css"
+output_path = "$XDG_CACHE_HOME/noctalia/zen-browser/zen-userContent.css"

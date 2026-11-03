@@ -265,6 +265,20 @@ in
   # ghostty
   programs.ghostty.settings.theme = "noctalia";
 
+  # Zen: Noctalia renders the zen_browser_* user templates (see
+  # dotfiles/noctalia/templates.toml) into ~/.cache/noctalia/zen-browser/;
+  # the profile just @imports them. @import has to come before any other
+  # rule, hence mkBefore. toolkit.legacyUserProfileCustomizations.stylesheets
+  # is already set by the zen module once userChrome is non-empty.
+  programs.zen-browser.profiles.default = lib.mkIf config.myApps.zen-browser.enable {
+    userChrome = lib.mkBefore ''
+      @import "${config.xdg.cacheHome}/noctalia/zen-browser/zen-userChrome.css";
+    '';
+    userContent = lib.mkBefore ''
+      @import "${config.xdg.cacheHome}/noctalia/zen-browser/zen-userContent.css";
+    '';
+  };
+
   # (Zed follows Noctalia via its own generated theme - see
   # modules/apps-user/zed.nix. Kate's Noctalia colour-scheme sync was
   # dropped with the move off Kate.)
@@ -413,5 +427,16 @@ in
 
     "noctalia/templates.toml".source              = ../dotfiles/noctalia/templates.toml;
     "noctalia/templates/oh-my-posh.json".source   = ../dotfiles/noctalia/templates/oh-my-posh.json;
+
+    # Zen Browser templates, pinned from github:noctalia-dev/community-templates
+    # (zen-browser/) - bump the rev and both hashes together.
+    "noctalia/templates/zen-userChrome.css".source = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/noctalia-dev/community-templates/75dfd0b449e11dc2d6cc1eca96ff4681d07d9c79/zen-browser/zen-userChrome.css";
+      hash = "sha256-ruDrwSsVCU0yDDRtNJ5A8dsTIKuLbVeKyZSabm8CbUA=";
+    };
+    "noctalia/templates/zen-userContent.css".source = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/noctalia-dev/community-templates/75dfd0b449e11dc2d6cc1eca96ff4681d07d9c79/zen-browser/zen-userContent.css";
+      hash = "sha256-dMlYPj9WgFZw64Bh0r7sE3n/StfMy8FCNhyQmZSG9BI=";
+    };
   };
 }
