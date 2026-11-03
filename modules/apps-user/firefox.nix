@@ -36,6 +36,9 @@ in
         };
       };
 
+      # ff2mpv extension -> mpv
+      nativeMessagingHosts = [ pkgs.ff2mpv-rust ];
+
       policies = {
         # Updates & Background Services
         AppAutoUpdate                 = false;

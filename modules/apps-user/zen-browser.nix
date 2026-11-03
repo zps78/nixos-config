@@ -49,6 +49,9 @@ in
 
       # Blocks Google's "Sign in with Google" One Tap widget SDK - see
       # firefox.nix for the full rationale (same pref, same reasoning).
+      # ff2mpv extension -> mpv
+      nativeMessagingHosts = [ pkgs.ff2mpv-rust ];
+
       policies.WebsiteFilter = {
         Block = [ "https://accounts.google.com/gsi/*" ];
       };

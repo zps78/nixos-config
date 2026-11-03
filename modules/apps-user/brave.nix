@@ -1,5 +1,5 @@
 # ../../modules/apps-user/brave.nix
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   options.myApps.brave.enable =
@@ -17,6 +17,9 @@
       # magnet: protocol handler, and needs its own WebUI host/port/
       # credentials entered in its Options page - that's extension
       # storage, not something this file or a policy can set.)
+      # ff2mpv extension -> mpv
+      nativeMessagingHosts = [ pkgs.ff2mpv-rust ];
+
       extensions = [
         "mnjggcdmjocbbbhaepdhchncahnbgone"  # SponsorBlock
         "neebplgakaahbhdphmkckjjcegoiijjo"  # Keepa
@@ -25,6 +28,9 @@
         "lmjnegcaeklhafolokijcfjliaokphfk"  # Video DownloadHelper
         "mdjildafknihdffpkfmmpnpoiajfjnjd"  # Consent-O-Matic
         "oabphaconndgibllomdcjbfdghcmenci"  # Remote Torrent Adder
+        "enamippconapkdmgfgjchkhakpfinmaj"  # DeArrow
+        "ephjcajbkgplkjmelpglennepbpmdpjg"  # ff2mpv
+        "jmmjjcddjldjdjgckdiokhfokccdnekc"  # Sonarr/Radarr/Lidarr autosearch
       ];
     };
   };
