@@ -106,16 +106,6 @@
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
 
-  # Noctalia plugins enabled by default (niri hosts). Enabling one in the GUI
-  # only writes ~/.local/state/noctalia/settings.toml, and that list kept
-  # going missing after rebuilds - declared here it's part of config.toml's
-  # baseline instead. Noctalia fetches the plugin from its community source
-  # on first start if it isn't installed yet.
-  programs.noctalia.settings.plugins.enabled = [
-    "kenn/keybind-cheatsheet"
-    "thepunkoff/pomodoro"
-  ];
-
   programs.git = {
     enable = true;
     settings = {

@@ -151,14 +151,28 @@ in
       desktop_widgets.enabled = true;
       lockscreen_widgets.enabled = true;
 
+      # Community plugins. Enabling one in the GUI only writes
+      # ~/.local/state/noctalia/settings.toml, and that list kept going
+      # missing after rebuilds - declared here it's part of config.toml's
+      # baseline instead. Noctalia fetches a plugin from its community
+      # source on first start if it isn't installed yet.
+      plugins.enabled = [
+        "kenn/keybind-cheatsheet"
+        "thepunkoff/pomodoro"
+      ];
+
       # Topbar clock: weekday/date + time on one line.
       widget.clock.format = "{:%a %d %b - %H:%M}";
 
+      # Bar widgets from the plugins above.
+      widget.keybinds.type = "kenn/keybind-cheatsheet:keybinds";
+      widget.pomodoro.type = "thepunkoff/pomodoro:widget";
+
       # Topbar layout.
       bar.default = {
-        start  = [ "launcher" "workspaces" "clipboard" ];
-        center = [ "clock" "notifications" ];
-        end    = [ "network" "tray" "volume" "brightness" "battery" "session" ];
+        start  = [ "launcher" "workspaces" "keybinds" ];
+        center = [ "pomodoro" "clock" "notifications" ];
+        end    = [ "caffeine" "network" "tray" "volume" "brightness" "battery" "session" ];
       };
       };
     in
