@@ -3,7 +3,8 @@
 
 {
   options.myApps.pdfarranger.enable =
-    lib.mkEnableOption "PDF Arranger";
+    # on for every user unless a user file turns it off
+    lib.mkEnableOption "PDF Arranger" // { default = true; };
 
   # ----------------------
   # Packages

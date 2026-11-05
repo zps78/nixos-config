@@ -191,5 +191,14 @@ in
         "application/vnd.step"           = f3dOcct;
       })
     ];
+
+    # Extra "Open With" entries next to the default. A .desktop file's own
+    # MimeType only lands it in the full app list; GTK/Nautilus offer an
+    # app up front only once it's an added association.
+    associations.added = lib.mkMerge [
+      (lib.mkIf app.pdfarranger.enable {
+        "application/pdf" = [ "com.github.jeromerobert.pdfarranger.desktop" ];
+      })
+    ];
   };
 }
