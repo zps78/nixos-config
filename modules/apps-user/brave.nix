@@ -33,5 +33,17 @@
         "jmmjjcddjldjdjgckdiokhfokccdnekc"  # Sonarr/Radarr/Lidarr autosearch
       ];
     };
+
+    # The package ships a second, NoDisplay copy of its desktop entry
+    # (com.brave.Browser.desktop, kept for the XDG portal app id) with the
+    # same MimeType list, so Brave showed up twice in "Open With". Drop the
+    # copy's associations; brave-browser.desktop keeps them.
+    xdg.mimeApps.associations.removed = lib.genAttrs [
+      "application/pdf" "application/rdf+xml" "application/rss+xml"
+      "application/xhtml+xml" "application/xhtml_xml" "application/xml"
+      "image/gif" "image/jpeg" "image/png" "image/webp"
+      "text/html" "text/xml"
+      "x-scheme-handler/http" "x-scheme-handler/https" "x-scheme-handler/chromium"
+    ] (_: [ "com.brave.Browser.desktop" ]);
   };
 }

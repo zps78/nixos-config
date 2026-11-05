@@ -92,6 +92,8 @@ lib.mkIf (config.myDesktop.stack == "gnome") {
     # too (niri.nix has its own copy), GTK/Mutter can't resolve it and
     # falls back to a blank placeholder glyph instead of a real cursor.
     bibata-cursors
+
+    nautilus-python # Python Nautilus extensions (e.g. myApps.pdfarranger's menu item)
   ] ++ [ threeMfThumbnailer ]; # .3mf (3D print project) thumbnails in Nautilus
 
   # Makes system-package-shipped .thumbnailer files (glycin-thumbnailer,

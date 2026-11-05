@@ -138,10 +138,12 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     xwayland-satellite       # Xwayland outside your Wayland compositor
     bibata-cursors
     threeMfThumbnailer       # .3mf (3D print project) thumbnails in Nautilus
+    nautilus-python          # Python Nautilus extensions (e.g. myApps.pdfarranger's menu item)
   ];
 
   environment.pathsToLink = [
     "share/thumbnailers"
+    "/share/nautilus-python/extensions"
   ];
 
   # RAW camera photo thumbnails/previews in Nautilus (and any other GTK
@@ -167,5 +169,9 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     # through Noctalia's own launcher, since Noctalia itself runs as
     # noctalia.service - never see it
     QT_QPA_PLATFORMTHEME = "qt6ct";
+
+    # nixpkgs' nautilus only loads extensions from this dir; the GNOME
+    # module sets the same thing, niri has to do it itself.
+    NAUTILUS_4_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
   };
 }
