@@ -38,6 +38,7 @@
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host
     fingerprint.enable                           = true;                       # enable fingerprint on this host
+    memtest.enable                               = false;                      # MemTest86+ entry in the systemd-boot menu
     wwan.enable                                  = true;                       # enable wwan mhi driver and install modem manager
 
     keyboard.layout                              = "pt";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")

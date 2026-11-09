@@ -62,6 +62,7 @@
   myHardware = {
     bluetooth.enable                             = true;                       # enable bluetooth on this host
     fingerprint.enable                           = false;                      # enable fingerprint on this host
+    memtest.enable                               = true;                       # MemTest86+ in the boot menu (chasing the 2026-11 freezes under encode load)
     wwan.enable                                  = false;                      # enable wwan mhi driver and install modem manager
 
     keyboard.layout                              = "pt";                       # keyboard layout for X11/Wayland and console ("pt" "us" "gb")

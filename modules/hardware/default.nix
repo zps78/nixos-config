@@ -11,6 +11,7 @@
     ./gpu-intel.nix
     ./gpu-nvidia.nix
     ./keyboard.nix
+    ./memtest.nix
     ./wwan.nix
   ];
 
