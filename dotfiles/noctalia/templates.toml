@@ -20,15 +20,23 @@ enable_community_templates = true
 community_ids = [
     "bat",
     "blender",
+    "claude-code",
     "darktable",
     "fastfetch",
     "fzf",
     "gimp",
+    "lazydocker",
+    "obs",
+    "prismlauncher",
     "steam",
     "telegram",
     "yazi",
     "zed",
 ]
+# claude-code, obs, prismlauncher: only write a theme file - pick it once
+# in the app (Claude Code /config, OBS Settings -> Appearance, Prism
+# Settings). lazydocker's apply.sh points ~/.config/lazydocker/config.yml
+# at the theme - fine while Home Manager doesn't own that file.
 # dropped: "zen-browser" - its apply.sh post-hook rewrites user.js and
 # userChrome.css, which Home Manager owns (read-only), so it failed on every
 # theme change. Same CSS is rendered by the zen_browser_* user templates
