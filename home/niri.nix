@@ -134,6 +134,11 @@ in
         community_palette = "Oxocarbon";
       };
 
+      # Default wallpaper for every output (seeded into ~/Pictures/wallpapers
+      # from the repo's wallpapers/ by home.activation.seedWallpapers below).
+      # Picking another in the GUI saves to settings.toml and wins over this.
+      wallpaper.default.path = "${config.home.homeDirectory}/Pictures/wallpapers/big-sur-6.jpg";
+
       # Lock screen fade transition.
       lockscreen.transition = [ "fade" ];
 
