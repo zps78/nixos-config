@@ -98,6 +98,8 @@ in
 
         # Re-use the last screenshot region instead of re-selecting.
         screenshot.remember_last_region = true;
+        # Save to ~/Screenshots (Noctalia expands ~ and creates it on first use).
+        screenshot.directory = "~/Screenshots";
       };
 
       # Blur + tint drawn behind Noctalia's own panels / launcher.
