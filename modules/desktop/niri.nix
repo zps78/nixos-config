@@ -139,7 +139,14 @@ lib.mkIf (config.myDesktop.stack == "niri") {
     bibata-cursors
     threeMfThumbnailer       # .3mf (3D print project) thumbnails in Nautilus
     nautilus-python          # Python Nautilus extensions (e.g. myApps.pdfarranger's menu item)
+    slurp                    # region picker for Noctalia's screen_recorder plugin
   ];
+
+  # gpu-screen-recorder for Noctalia's screen_recorder bar button
+  # (home/niri.nix). The setcap gsr-kms-server wrapper lets the "focused
+  # monitor" source record without a prompt; the default "portal" source
+  # goes through xdg-desktop-portal-gnome's ScreenCast picker instead.
+  programs.gpu-screen-recorder.enable = true;
 
   environment.pathsToLink = [
     "share/thumbnailers"

@@ -159,6 +159,7 @@ in
       plugins.enabled = [
         "kenn/keybind-cheatsheet"
         "thepunkoff/pomodoro"
+        "noctalia/screen_recorder"     # needs gpu-screen-recorder + slurp (modules/desktop/niri.nix)
       ];
 
       # Topbar clock: weekday/date + time on one line.
@@ -167,12 +168,21 @@ in
       # Bar widgets from the plugins above.
       widget.keybinds.type = "kenn/keybind-cheatsheet:keybinds";
       widget.pomodoro.type = "thepunkoff/pomodoro:widget";
+      # Left click: start/stop recording (saved to ~/Videos/Recordings).
+      widget.recorder.type = "noctalia/screen_recorder:recorder";
+      # HEVC: every niri host hw-encodes it (kuro Meteor Lake, krieger
+      # RTX 4060 Ti, kimi UHD 630, kepler 680M); AV1 isn't on kimi/kepler.
+      # AAC over Opus so recordings play on phones/WhatsApp/editors.
+      plugin_settings."noctalia/screen_recorder" = {
+        video_codec = "hevc";
+        audio_codec = "aac";
+      };
 
       # Topbar layout.
       bar.default = {
         start  = [ "launcher" "workspaces" "keybinds" ];
         center = [ "pomodoro" "clock" "notifications" ];
-        end    = [ "caffeine" "network" "tray" "volume" "brightness" "battery" "session" ];
+        end    = [ "recorder" "caffeine" "network" "tray" "volume" "brightness" "battery" "session" ];
       };
       };
     in
