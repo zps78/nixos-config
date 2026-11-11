@@ -168,7 +168,7 @@ lib.mkIf (config.myDesktop.stack == "niri") {
 
     # Wayland session, not GPU-specific: applies to every host.
     NIXOS_OZONE_WL = "1";      # Chromium / Electron
-    MOZ_ENABLE_WAYLAND = "1";  # Firefox
+    MOZ_ENABLE_WAYLAND = "1";  # Zen (Firefox-based)
 
     # Qt apps launched from a login shell (e.g. via ghostty) end up with
     # QT_QPA_PLATFORMTHEME=qt6ct somewhere in their own startup path, but

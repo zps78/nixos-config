@@ -16,7 +16,7 @@
   config = lib.mkIf config.myFeatures.brave-policies.enable {
     environment.etc."brave/policies/managed/nixos.json".text = builtins.toJSON {
       # Block Google's "Sign in with Google" One Tap widget SDK - same
-      # URL/reasoning as firefox.nix / zen-browser.nix's WebsiteFilter.
+      # URL/reasoning as zen-browser.nix's WebsiteFilter.
       URLBlocklist = [ "accounts.google.com/gsi/*" ];
 
       # No "translate this page?" popup. Chromium only exposes an
@@ -63,6 +63,22 @@
 
       # Built-in video conferencing (Jitsi-based) - not used.
       BraveTalkDisabled = true;
+
+      # Matching zen-browser.nix (carried over from the old firefox.nix):
+
+      # PDFs open in the desktop PDF app (home/mime.nix), not a tab.
+      AlwaysOpenPdfExternally = true;
+
+      # Save downloads straight to ~/Downloads without asking.
+      # ${home_dir} is Chromium's own policy variable, expanded per user.
+      DownloadDirectory = "\${home_dir}/Downloads";
+      PromptForDownloadLocation = false;
+
+      # No "make Brave your default browser" nag (home/mime.nix decides).
+      DefaultBrowserSettingEnabled = false;
+
+      # No browser sync (Brave Sync chain) - same as Zen's account off.
+      SyncDisabled = true;
     };
   };
 }

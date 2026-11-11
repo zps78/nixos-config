@@ -5,7 +5,7 @@
 #
 #   import ./browser-extensions.nix firefoxAddons.firefox-addons
 #
-# firefox.nix and zen-browser.nix consume this directly (rycee
+# zen-browser.nix consumes this directly (rycee
 # firefox-addons packages). brave.nix uses Chrome Web Store IDs and keeps
 # its own list in sync by hand.
 

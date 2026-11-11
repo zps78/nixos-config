@@ -101,7 +101,6 @@
 
     # web browsers
     brave.enable                                 = true;             # Privacy-oriented browser for Desktop and Laptop computers
-    firefox.enable                               = false;            # Web browser built from Firefox source tree
     zen-browser.enable                           = true;             # Privacy-focused internet browser
   };
 

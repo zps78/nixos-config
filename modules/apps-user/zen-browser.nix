@@ -47,13 +47,104 @@ in
     programs.zen-browser = {
       enable = true;
 
-      # Blocks Google's "Sign in with Google" One Tap widget SDK - see
-      # firefox.nix for the full rationale (same pref, same reasoning).
       # ff2mpv extension -> mpv
       nativeMessagingHosts = [ pkgs.ff2mpv-rust ];
 
-      policies.WebsiteFilter = {
-        Block = [ "https://accounts.google.com/gsi/*" ];
+      # UI translations: English + European Portuguese.
+      languagePacks = [ "en-US" "pt-PT" ];
+
+      # Firefox enterprise policies (Zen honours the same policies.json).
+      # Carried over from the old firefox.nix when Firefox was dropped.
+      policies = {
+        # Blocks Google's "Sign in with Google" One Tap widget SDK - the
+        # unprompted popup on unrelated sites that embed it. Scoped to
+        # /gsi/* (the widget's own path), so classic Google OAuth sign-in
+        # still works; only sites using this specific SDK's button break.
+        WebsiteFilter = {
+          Block = [ "https://accounts.google.com/gsi/*" ];
+        };
+
+        # Updates come from nix - no in-app updater or background updates.
+        AppAutoUpdate                 = false;
+        BackgroundAppUpdate           = false;
+
+        # Telemetry / studies / Mozilla account+sync off (the prefs below
+        # cover some of this; the policies lock it all down).
+        DisableTelemetry              = true;
+        DisableFirefoxStudies         = true;
+        DisableFirefoxAccounts        = true;
+        DisableFeedbackCommands       = true;
+        DisablePocket                 = true;
+
+        # PDFs open in the desktop PDF app (home/mime.nix), not a tab.
+        DisableBuiltinPDFViewer       = true;
+
+        # Misc features not used.
+        DisableFirefoxScreenshots     = true;
+        DisableForgetButton           = true;
+        DisableMasterPasswordCreation = true;
+        DisableProfileImport          = true;
+        DisableProfileRefresh         = true;
+        DisableSetDesktopBackground   = true;
+        DisableFormHistory            = true;
+        PasswordManagerEnabled        = false;  # Proton Pass instead
+        OfferToSaveLogins             = false;
+
+        # No recommendation / onboarding / "what's new" nags.
+        UserMessaging = {
+          ExtensionRecommendations    = false;
+          FeatureRecommendations      = false;
+          UrlbarInterventions         = false;
+          SkipOnboarding              = true;
+          MoreFromMozilla             = false;
+          FirefoxLabs                 = false;
+        };
+
+        # Address-bar suggestions from Mozilla's servers / sponsors off.
+        FirefoxSuggest = {
+          WebSuggestions              = false;
+          SponsoredSuggestions        = false;
+          ImproveSuggest              = false;
+          Locked                      = true;
+        };
+        FirefoxHome = {
+          Search                      = true;
+          TopSites                    = true;
+          SponsoredTopSites           = false;
+          Highlights                  = false;
+          Pocket                      = false;
+          Stories                     = false;
+          SponsoredPocket             = false;
+          SponsoredStories            = false;
+          Snippets                    = false;
+          Locked                      = false;
+        };
+
+        # Stronger tracking protection: cryptominers, fingerprinters and
+        # email trackers on top of the default lists. Not locked, so a
+        # broken site can still be allowed from the shield icon.
+        EnableTrackingProtection = {
+          Value                       = true;
+          Locked                      = false;
+          Cryptomining                = true;
+          Fingerprinting              = true;
+          EmailTracking               = true;
+          SuspectedFingerprinting     = true;
+          BaselineExceptions          = true;
+          ConvenienceExceptions       = true;
+        };
+
+        BlockAboutConfig              = false;
+        BlockAboutProfiles            = true;
+        BlockAboutSupport             = false;
+
+        DisplayMenuBar                = "never";
+        DontCheckDefaultBrowser       = true;
+        HardwareAcceleration          = true;
+
+        # Save downloads straight to ~/Downloads.
+        DefaultDownloadDirectory      = "${config.home.homeDirectory}/Downloads";
+        PromptForDownloadLocation     = false;
       };
 
       profiles.default = {

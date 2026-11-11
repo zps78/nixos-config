@@ -37,9 +37,9 @@ let
 in
 {
   options.myApps.defaultBrowser = lib.mkOption {
-    type = lib.types.nullOr (lib.types.enum [ "brave" "zen-browser" "firefox" ]);
+    type = lib.types.nullOr (lib.types.enum [ "brave" "zen-browser" ]);
     default = null;
-    description = "Browser for http(s)/html links; null falls back to the first enabled one (zen-browser, brave, firefox).";
+    description = "Browser for http(s)/html links; null falls back to the first enabled one (zen-browser, then brave).";
   };
 
   config.xdg.mimeApps = {
@@ -112,13 +112,11 @@ in
         desktopFile = {
           brave       = "brave-browser.desktop";
           zen-browser = zen;
-          firefox     = "firefox.desktop";
         };
         defaultBrowser =
           if      app.defaultBrowser != null then desktopFile.${app.defaultBrowser}
           else if app.zen-browser.enable     then desktopFile.zen-browser
           else if app.brave.enable           then desktopFile.brave
-          else if app.firefox.enable         then desktopFile.firefox
           else null;
       in lib.mkIf (defaultBrowser != null) (forEach defaultBrowser [
         "text/html" "x-scheme-handler/http" "x-scheme-handler/https"

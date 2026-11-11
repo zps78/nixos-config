@@ -18,7 +18,6 @@
     ./darktable.nix
     ./easyeffects.nix
     ./f3d.nix
-    ./firefox.nix
     ./freecad.nix
     ./freetube.nix
     ./gimp.nix
