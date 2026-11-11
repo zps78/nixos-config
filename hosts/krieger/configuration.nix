@@ -55,6 +55,13 @@
     }
   ];
 
+  # Bad RAM cell: MemTest86+ (BIOS defaults, DDR4-2133, 2 passes / 13h,
+  # 2026-11-11) found one stuck bit at 0x2387f4240, nothing else. Keep the
+  # kernel off that 4K page until the faulty DIMM is replaced (Corsair RMA),
+  # then drop this. Physical address is tied to the current DIMM layout and
+  # memory settings - re-run MemTest86+ and update it if sticks are moved.
+  boot.kernelParams                              = [ "memmap=4K$0x2387f4000" ];
+
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
   myDesktop.primaryUser                          = "bb";
   myDesktop.idle.enable                          = false;                      # workstation: no idle lock/suspend (sunshine, renders)
