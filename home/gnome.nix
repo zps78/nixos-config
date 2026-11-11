@@ -59,4 +59,19 @@
   # meaningless with no X server running).
   stylix.targets.xresources.enable = false;
   stylix.targets.x11.enable = false;
+
+  # No Qt apps in the GNOME setup (all GTK), and Stylix's qt target only
+  # supports the qtct platform - on GNOME it warns ("platform gnome
+  # unsupported") and does nothing useful. Off, nothing lost.
+  stylix.targets.qt.enable = false;
+
+  # Tell Stylix which Zen profile to theme (zen-browser.nix only defines
+  # profiles.default). Set here, not in zen-browser.nix: the stylix.*
+  # home-manager options only exist where Stylix is on (GNOME hosts), so
+  # setting it in the shared module would break the niri hosts.
+  stylix.targets.zen-browser.profileNames = [ "default" ];
+
+  # rofi isn't used; Stylix's rofi target still sets the renamed
+  # programs.rofi.font and triggers a rename warning on every eval.
+  stylix.targets.rofi.enable = false;
 }
