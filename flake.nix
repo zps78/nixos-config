@@ -61,15 +61,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Plain source, not a flake (no flake.nix upstream) - built via
-    # rustPlatform.buildRustPackage in modules/services/waydroid.nix. Replaces
-    # waydroid_script's own "magisk" extra, whose upstream APK is permanently
-    # dead (see the comment there for the full story).
-    waydroidsu = {
-      url = "github:mistrmochov/WaydroidSU";
-      flake = false;
-    };
-
     # Plain source (no flake.nix upstream), linked into FreeCAD's Mod
     # directory in modules/apps-user/freecad.nix instead of going through
     # FreeCAD's own (imperative, git-clone-based) Addon Manager. Only
