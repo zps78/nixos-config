@@ -149,6 +149,7 @@
           hostname = "krieger";
           users = [
             (makeUser "bb" ./home/users/bb.nix)
+            (makeUser "steam" ./home/users/steam.nix)   # krieger only: unprivileged autologin/Sunshine session
           ];
         };
 

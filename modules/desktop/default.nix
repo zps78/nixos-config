@@ -1,5 +1,5 @@
 # ../../modules/desktop/default.nix
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
   imports = [
@@ -20,6 +20,21 @@
     description = ''
       The main login user on this host. Owns per-user runtime state that
       the system side needs to hand off (e.g. the greeter wallpaper cache).
+    '';
+  };
+
+  options.myDesktop.sessionUser = lib.mkOption {
+    type = lib.types.str;
+    default = config.myDesktop.primaryUser;
+    defaultText = lib.literalExpression "config.myDesktop.primaryUser";
+    description = ''
+      The user whose graphical session runs on this host's screen (the
+      autologin / Sunshine user). Defaults to primaryUser. Set it apart
+      when the desktop should belong to an unprivileged account - e.g.
+      krieger's "steam" user, while primaryUser stays the admin account
+      that gets SSH keys, docker, libvirt and remote-builder access.
+      Owns the session-side state: the greeter wallpaper hand-off and
+      Sunshine's virtual input devices.
     '';
   };
 

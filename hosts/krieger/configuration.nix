@@ -1,5 +1,5 @@
 # ../../hosts/krieger/configuration.nix
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # Import modules
@@ -119,6 +119,26 @@
   };
 
   # Users
+  #
+  # bb   - admin: SSH (fleet keys), wheel, docker (aiStack), remote builds.
+  #        No longer the autologin user.
+  # steam - the screen/Sunshine/Steam session. Deliberately unprivileged
+  #        (no wheel, no docker - docker is root-equivalent), so a paired
+  #        Moonlight client gets a gaming desktop, not the machine. No
+  #        password: autologin only, can't sudo. uinput for Sunshine comes
+  #        from modules/services/sunshine.nix via sessionUser.
+  myDesktop.sessionUser                          = "steam";
+
+  users.users.steam = {
+    isNormalUser                                 = true;
+    description                                  = "Steam / Sunshine session";
+    extraGroups = [
+                                                   "audio"
+                                                   "video"
+                                                   "render"
+    ];
+  };
+
   users.users.bb = {
     isNormalUser                                 = true;
     description                                  = "bb";
@@ -134,7 +154,7 @@
   # Display manager - auto login
   services.displayManager.autoLogin = {
     enable                                       = true;
-    user                                         = "bb";
+    user                                         = config.myDesktop.sessionUser;
   };
 
   # Prevent idle suspend (desktop / remote / gaming stability)

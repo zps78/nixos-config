@@ -23,9 +23,10 @@
     # GROUP="uinput" - NOT "input" (a different, unrelated group; that
     # earlier assumption was wrong and left virtual mouse/keyboard/gamepad
     # creation permission-denied even with a fresh login session). Follows
-    # primaryUser automatically instead of a manually-toggled group entry
-    # in each host's configuration.nix.
-    users.users.${config.myDesktop.primaryUser}.extraGroups = [ "uinput" ];
+    # sessionUser (the account whose session Sunshine runs in; defaults to
+    # primaryUser) instead of a manually-toggled group entry in each
+    # host's configuration.nix.
+    users.users.${config.myDesktop.sessionUser}.extraGroups = [ "uinput" ];
 
     # /dev/uhid is a separate kernel device from /dev/uinput above - Sunshine
     # uses it specifically for virtual *gamepad* emulation (uinput covers
@@ -34,7 +35,7 @@
     # libvirtualhid gamepad: failed to open /dev/uhid: Permission denied" -
     # meaning controller input through Moonlight never actually works.
     # Reuses the same "uinput" group rather than inventing a new one, since
-    # primaryUser is already in it for the reason above.
+    # sessionUser is already in it for the reason above.
     services.udev.extraRules = ''
       KERNEL=="uhid", MODE="0660", GROUP="uinput"
     '';
