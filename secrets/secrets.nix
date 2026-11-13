@@ -28,6 +28,9 @@ let
   kimi-host =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQ3asT1lYai02B7wvOGaGUugjYU4dTDF4nAXzDN+XQe";
 
+  krieger-host =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMiY9PNYhJG9MeeoElGGTpqiX+4Y5CtHPSJJ3TRExTH";
+
 in
 {
   "kuro-fleet-key.age".publicKeys = [ zp-personal kuro-host ];
@@ -38,4 +41,11 @@ in
   # distributed-build client (see modules/system/remote-builders.nix).
   "kepler-fleet-key.age".publicKeys = [ zp-personal kepler-host ];
   "kimi-fleet-key.age".publicKeys = [ zp-personal kimi-host ];
+
+  # Home router MAC, used by modules/networking/tailscale.nix to detect
+  # the home LAN. Kept out of the public repo because a router MAC is
+  # often the Wi-Fi BSSID (or one off), which Wi-Fi location databases
+  # map to a physical address. Every Tailscale host needs it.
+  "home-gateway-mac.age".publicKeys =
+    [ zp-personal kuro-host krugerrand-host kepler-host kimi-host krieger-host ];
 }
