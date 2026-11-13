@@ -53,6 +53,8 @@
       # CAP_SYS_ADMIN: needed for input device / virtual input capture.
       capSysAdmin = true;
 
+      # (see security.wrappers.sunshine below for CAP_SYS_NICE)
+
       # Opens the streaming + discovery ports (derived from the configured
       # port) and installs sunshine's own udev rules.
       openFirewall = true;
@@ -70,5 +72,16 @@
       package = lib.mkIf (builtins.elem config.myHardware.gpuVendor [ "nvidia" "hybrid" ])
         (pkgs.sunshine.override { cudaSupport = true; });
     };
+
+    # Upstream's capSysAdmin wrapper grants only cap_sys_admin. Sunshine
+    # also asks the GPU for a high-priority EGL context, which needs
+    # CAP_SYS_NICE - without it every stream start logs "EGL: context
+    # priority set to HIGH but CAP_SYS_NICE capability is missing" and the
+    # capture/encode context competes with the game at normal priority.
+    # The NixOS wrapper raises its permitted caps into the ambient set, so
+    # Sunshine ends up with both effective (same as cap_sys_admin today).
+    security.wrappers.sunshine.capabilities =
+      lib.mkIf config.services.sunshine.capSysAdmin
+        (lib.mkForce "cap_sys_admin,cap_sys_nice+p");
   };
 }
