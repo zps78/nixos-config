@@ -128,6 +128,20 @@
     in {
       nixosConfigurations = {
 
+        # Fleet installer ISO (installer/iso.nix) - same nixpkgs as the hosts.
+        #   nix build .#nixosConfigurations.installer.config.system.build.isoImage
+        installer = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
+            ./installer/iso.nix
+            {
+              nixpkgs.hostPlatform = system;
+              nixpkgs.config.allowUnfree = true;
+            }
+          ];
+        };
+
         kepler = mkHost {
           hostname = "kepler";
           users = [
