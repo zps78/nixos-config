@@ -7,6 +7,7 @@
     ./gnome.nix
     ./kde.nix
     ./niri.nix
+    ./steam-gamescope.nix
   ];
 
   options.myDesktop.stack = lib.mkOption {

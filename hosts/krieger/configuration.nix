@@ -129,6 +129,18 @@
   #        from modules/services/sunshine.nix via sessionUser.
   myDesktop.sessionUser                          = "steam";
 
+  # steam's autologin session is Steam Big Picture in gamescope (no
+  # desktop), on the HDMI dummy plug Sunshine captures - DP-2/DP-3 stay
+  # dark in this mode. Mode matches hosts/krieger/niri/output.kdl.
+  # Exiting Steam drops back to the greeter (bb can log into niri there).
+  myDesktop.steamGamescope = {
+    enable                                       = true;
+    output                                       = "HDMI-A-1";
+    width                                        = 1920;
+    height                                       = 1080;
+    refresh                                      = 60;
+  };
+
   users.users.steam = {
     isNormalUser                                 = true;
     description                                  = "Steam / Sunshine session";

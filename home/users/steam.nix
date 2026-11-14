@@ -12,12 +12,13 @@
   home.homeDirectory                             = "/home/steam";
   home.stateVersion                              = "25.11";
 
+  # No niri/Noctalia: this account's session is Steam in gamescope
+  # (myDesktop.steamGamescope on krieger). Noctalia's user service hangs
+  # off graphical-session.target and would just crash-loop without a
+  # compositor it can talk to.
   imports = [
     ../../modules/apps-user
     ../common.nix
-  ]
-  ++ lib.optionals (osConfig.myDesktop.stack == "niri") [
-    ../niri.nix
   ];
 
   myApps = {
