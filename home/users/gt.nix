@@ -8,7 +8,7 @@
 
   home.username                                  = "gt";
   home.homeDirectory                             = "/home/gt";
-  home.stateVersion                              = "25.11";          # match your NixOS version
+  home.stateVersion                              = "25.11";          # release this home was first set up with - never bump on upgrades
 
   ############################################################
   # Imports (user environment composition)

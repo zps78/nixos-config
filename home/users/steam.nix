@@ -10,7 +10,7 @@
 {
   home.username                                  = "steam";
   home.homeDirectory                             = "/home/steam";
-  home.stateVersion                              = "25.11";
+  home.stateVersion                              = "25.11";          # release this home was first set up with - never bump on upgrades
 
   # No niri/Noctalia: this account's session is Steam in gamescope
   # (myDesktop.steamGamescope on krieger). Noctalia's user service hangs
