@@ -193,6 +193,18 @@
           IdentityFile = identityFile;
           IdentitiesOnly = true;
         };
+        # t470p runs Windows 11 IoT LTSC, not this flake - Windows'
+        # OpenSSH server, key-only, with the kuro + krugerrand fleet keys
+        # in administrators_authorized_keys (set up by the install kit's
+        # post-install.ps1). Deliberately not on the tailnet (it's a
+        # machine we don't control, and fleet hosts accept Tailscale
+        # SSH), so it's only reachable on the home LAN.
+        t470p = {
+          HostName = "192.168.1.167";
+          User = "Joana";
+          IdentityFile = identityFile;
+          IdentitiesOnly = true;
+        };
       }
       # Each admin machine also reaches the other one, not itself.
       // lib.optionalAttrs (osConfig.networking.hostName == "kuro") {
