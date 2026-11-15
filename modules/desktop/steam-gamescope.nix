@@ -85,6 +85,12 @@ in
       before = [ "graphical-session.target" ];
       wants = [ "graphical-session-pre.target" ];
       after = [ "graphical-session-pre.target" ];
+      # User units get a minimal PATH (coreutils/grep/sed/systemd), but the
+      # steam-gamescope script calls `gamescope` and `steam` by name - without
+      # this it dies with "gamescope: command not found" (exit 127) and greetd
+      # drops back to the greeter. Same order as a login shell: setcap/suid
+      # wrappers first, then the user's home-manager profile, then system.
+      path = [ "/run/wrappers" "/etc/profiles/per-user/%u" "/run/current-system/sw" ];
       serviceConfig = {
         Type = "simple";
         ExecStart = "/run/current-system/sw/bin/steam-gamescope";
