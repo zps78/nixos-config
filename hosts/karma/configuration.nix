@@ -187,6 +187,14 @@ in
     renderDevice                                 = "/dev/dri/by-path/pci-0000:0b:00.0-render"; # 4060 Ti - stays put when the T1000 arrives
   };
 
+  # Sunshine's web UI rejects requests from origins it doesn't know (CSRF
+  # protection) - list every URL it is opened by: the Sunshine NIC and the
+  # Tailscale name. (krieger had the same error; there it was hand-edited.)
+  services.sunshine.settings.csrf_allowed_origins = builtins.concatStringsSep "," [
+    "https://${streamIp}:47990"
+    "https://${hostName}:47990"
+  ];
+
   ############################################################
   # Users
   ############################################################
