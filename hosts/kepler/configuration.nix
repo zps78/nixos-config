@@ -89,7 +89,7 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     proxmark3.enable                             = false;                      # Proxmark3 RFID/NFC tooling (Iceman client, udev rule)
-    remoteBuilder.enable                         = true;                       # use krieger as a distributed-build machine when it's awake
+    remoteBuilder.enable                         = true;                       # offload big builds to karma (always-on 5950X); local fallback
     steam.enable                                 = true;
     wine.enable                                  = true;
   };

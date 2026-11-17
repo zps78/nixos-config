@@ -69,6 +69,11 @@ in
 
   networking.networkmanager.settings.main.no-auto-default = "*";               # no stray DHCP "Wired connection N" profiles
 
+  # SSH on the LAN as well - a fallback for when Tailscale itself is down
+  # (the fleet default is Tailscale-only). Main NIC only: the Sunshine NIC
+  # stays closed. Still key-only (myServices.ssh.passwordAuth = false).
+  networking.firewall.interfaces.enp4s0.allowedTCPPorts = [ 22 ];
+
   networking.networkmanager.ensureProfiles.profiles = {
     lan = {
       connection = { id = "lan"; type = "ethernet"; interface-name = "enp4s0"; autoconnect = true; };
