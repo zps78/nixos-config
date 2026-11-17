@@ -12,10 +12,13 @@
 #               logind session for steam on its own VT (gamescope needs an
 #               active seat0 session to become DRM master) and runs Steam
 #               Big Picture in gamescope on the dummy-plug output.
-#   afterwards  on disconnect, prep-cmd "undo" (re)arms a timer; if nobody
+#   afterwards  on disconnect (seen in Sunshine's log by a watcher - Sunshine
+#               has no disconnect hook) a timer is (re)armed; if nobody
 #               reconnects within idleStop, gamescope + Steam are stopped
-#               and the screen goes back to the text console. Quitting
-#               Steam (Exit / Switch to Desktop) ends the session at once.
+#               and the screen goes back to the text console. A reconnect
+#               (Moonlight "resume") cancels it, or restarts the session if
+#               it was already stopped. Quitting the app in Moonlight
+#               (prep-cmd "undo") or Exit in Steam ends it at once.
 #
 # steam may start/stop/restart exactly these two units and nothing else
 # (polkit rule below) - it stays an unprivileged account.
@@ -37,13 +40,13 @@ let
     export PATH=${lib.makeBinPath [ pkgs.systemd pkgs.procps pkgs.coreutils ]}
     case "$1" in
       start)
-        # Reconnect within the grace period: cancel the pending stop.
+        # App launch (Sunshine prep-cmd "do").
         systemctl --no-ask-password stop ${idleTimer} || true
         systemctl --no-ask-password start ${unit}
         # Hold the stream back until Steam's UI is up, so Moonlight doesn't
-        # open on the bare console. Give up waiting after a minute (the
-        # stream then just starts on whatever is on screen).
-        for _ in $(seq 60); do
+        # open on the bare console. Give up waiting after 2 minutes (first
+        # launch self-updates Steam; the stream then starts anyway).
+        for _ in $(seq 120); do
           if pgrep -u ${user} -x steamwebhelper >/dev/null; then
             sleep 3
             exit 0
@@ -51,17 +54,41 @@ let
           sleep 1
         done
         ;;
+      resume)
+        # A client (re)connected - Sunshine does NOT re-run prep-cmd "do"
+        # on resume, so make sure the session is (still/again) running.
+        systemctl --no-ask-password stop ${idleTimer} || true
+        systemctl --no-ask-password is-active -q ${unit} \
+          || systemctl --no-ask-password start ${unit}
+        ;;
       stop-later)
+        # Last client disconnected: grace period before stopping.
         systemctl --no-ask-password restart ${idleTimer}
         ;;
       stop)
+        # App quit in Moonlight (prep-cmd "undo"): stop now.
+        systemctl --no-ask-password stop ${idleTimer} || true
         systemctl --no-ask-password stop ${unit}
         ;;
       *)
-        echo "usage: $0 start|stop-later|stop" >&2
+        echo "usage: $0 start|resume|stop-later|stop" >&2
         exit 2
         ;;
     esac
+  '';
+
+  # Sunshine has no disconnect hook - prep-cmd "undo" only runs when the
+  # app is quit, and a plain disconnect leaves the app "running" for a
+  # later resume. So follow Sunshine's own log and react to its
+  # CLIENT CONNECTED / CLIENT DISCONNECTED lines.
+  watch = pkgs.writeShellScript "sunshine-session-watch" ''
+    export PATH=${lib.makeBinPath [ pkgs.systemd pkgs.coreutils ]}
+    journalctl --user -f -n 0 -o cat -t sunshine | while IFS= read -r line; do
+      case "$line" in
+        *"CLIENT DISCONNECTED"*) ${ctl} stop-later ;;
+        *"CLIENT CONNECTED"*)    ${ctl} resume ;;
+      esac
+    done
   '';
 
   # Steam's "Switch to Desktop" calls steamos-session-select (a SteamOS
@@ -226,11 +253,26 @@ in
       unitConfig.ConditionUser = user;
     };
 
+    systemd.user.services.sunshine-session-watch = {
+      description = "Stop/resume the Steam gamescope session on Moonlight disconnect/connect";
+      wantedBy = [ "default.target" ];
+      after = [ "sunshine.service" ];
+      unitConfig.ConditionUser = user;
+      serviceConfig = {
+        ExecStart = "${watch}";
+        Restart = "always";
+        RestartSec = "5s";
+      };
+    };
+
     services.sunshine = {
       settings = {
         sunshine_name = config.networking.hostName;
         capture = "kms";
         encoder = "nvenc";
+        # Capture the dummy plug gamescope draws on - not the first
+        # connected output (DP-2, the console monitor, on karma).
+        output_name = cfg.output;
       } // lib.optionalAttrs (cfg.renderDevice != null) {
         adapter_name = cfg.renderDevice;
       };
@@ -241,7 +283,7 @@ in
           name = "Steam Big Picture";
           image-path = "steam.png";
           prep-cmd = [
-            { do = "${ctl} start"; undo = "${ctl} stop-later"; }
+            { do = "${ctl} start"; undo = "${ctl} stop"; }
           ];
         }
       ];
