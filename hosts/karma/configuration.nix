@@ -21,6 +21,7 @@ let
   streamIp = "192.168.1.7";      # Intel I211 (enp5s0): Sunshine only
   gateway = "192.168.1.1";
   streamTable = "100";           # policy-routing table for streamIp
+  steamUid = "1001";             # pinned below; used by the routing rule
 in
 {
   imports = [
@@ -98,6 +99,12 @@ in
         route2                                   = "192.168.1.0/24";
         route2_options                           = "table=${streamTable}";
         routing-rule1                            = "priority 100 from ${streamIp} table ${streamTable}";
+        # Sunshine's video/audio UDP goes out from a socket bound to
+        # 0.0.0.0, so "from streamIp" alone wouldn't catch it - the kernel
+        # would pick the Aquantia and .6. Everything the steam user sends to
+        # the LAN uses this NIC instead (ahead of the Tailscale home-LAN
+        # rule at 5200). Internet/tailnet traffic keeps the normal routing.
+        routing-rule2                            = "priority 101 to 192.168.1.0/24 uidrange ${steamUid}-${steamUid} table ${streamTable}";
       };
       ipv6.method                                = "disabled";                 # Sunshine stays IPv4 on this NIC
     };
@@ -152,12 +159,32 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHtfmTdbElBJm6tYaO//5GFJPgmx7Tt2LASqbnt3VGYR kepler-fleet-access"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC/cGfUQTEWXEsxhFFyf0sZAYDQ8GNvCJUVfZ/qUr/hH kimi-fleet-access"
     ];
-    sunshine.enable                              = false;                      # TODO phase 0b: headless, on-demand session (see TODO below)
+    sunshine.enable                              = true;                       # group membership auto-follows via modules/services/sunshine.nix
+    sunshine.interfaces                          = [ "enp5s0" ];               # Intel NIC only (+ tailscale0, trusted fleet-wide)
     waydroid.enable                              = false;
   };
 
   myFeatures = {
-    steam.enable                                 = true;                       # Steam itself; launched in gamescope on demand (phase 0b)
+    steam.enable                                 = true;                       # Steam itself; launched in gamescope on demand (below)
+  };
+
+  ############################################################
+  # Game streaming - headless, on demand
+  ############################################################
+  #
+  # Moonlight: add the host by streamIp (.7), not by discovery - Sunshine's
+  # ports are only open on the Intel NIC. Pick "Steam Big Picture": Steam
+  # starts in gamescope on the dummy plug (a few seconds), and stops 3 min
+  # after the last disconnect. See modules/desktop/steam-on-demand.nix.
+  # Sunshine web UI (first-time login/pairing): https://${streamIp}:47990
+
+  myDesktop.steamOnDemand = {
+    enable                                       = true;
+    output                                       = "HDMI-A-1";                 # dummy plug on the 4060 Ti (DP-2 = console monitor)
+    width                                        = 1920;
+    height                                       = 1080;
+    refresh                                      = 60;
+    renderDevice                                 = "/dev/dri/by-path/pci-0000:0b:00.0-render"; # 4060 Ti - stays put when the T1000 arrives
   };
 
   ############################################################
@@ -185,6 +212,7 @@ in
 
   users.users.steam = {
     isNormalUser                                 = true;
+    uid                                          = 1001;                       # pinned: routing rule + unit ordering use it (= what the install assigned)
     description                                  = "Steam / Sunshine session";
     extraGroups = [
                                                    "audio"
@@ -214,11 +242,7 @@ in
   # TODO (next phases)
   ############################################################
   #
-  # 0b  Headless on-demand gaming: steam lingering with PipeWire +
-  #     Sunshine; Sunshine's prep-cmd starts a system steam-gamescope
-  #     unit on its own tty (polkit lets steam start/stop only that unit),
-  #     stops it ~3 min after disconnect. Sunshine ports opened only on
-  #     enp5s0 (+ tailscale0). Dummy plug on the 4060 Ti.
+  # 0b  (done, above) Steam library on the SA500 once it moves over.
   # 0c  Web UI: Cockpit (+ zfs/files/machines plugins), Scrutiny, Beszel,
   #     Homepage, Komodo.
   # 1+  ssd-home -> Steam library; Immich/personal NVMe mirror; services;

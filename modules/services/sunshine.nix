@@ -12,10 +12,31 @@
 { config, lib, pkgs, ... }:
 
 {
-  options.myServices.sunshine.enable =
-    lib.mkEnableOption "Sunshine host";
+  options.myServices.sunshine = {
+    enable = lib.mkEnableOption "Sunshine host";
+
+    interfaces = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "enp5s0" ];
+      description = ''
+        Open Sunshine's ports only on these network interfaces (plus
+        tailscale0, which the fleet already trusts). Empty = open them on
+        every interface, the upstream default (krieger).
+      '';
+    };
+  };
 
   config = lib.mkIf config.myServices.sunshine.enable {
+    # Per-interface firewall instead of upstream's global openFirewall.
+    # Same ports upstream derives from the base port (47989 by default):
+    # TCP -5/0/+1/+21, UDP +9/+10/+11/+13/+21.
+    networking.firewall.interfaces = lib.genAttrs config.myServices.sunshine.interfaces (_:
+      let base = config.services.sunshine.settings.port; in {
+        allowedTCPPorts = map (o: base + o) [ (-5) 0 1 21 ];
+        allowedUDPPorts = map (o: base + o) [ 9 10 11 13 21 ];
+      });
+
     # Provides the uinput device + udev rule for virtual input capture.
     hardware.uinput.enable = true;
 
@@ -57,8 +78,9 @@
       # (see security.wrappers.sunshine below for CAP_SYS_NICE)
 
       # Opens the streaming + discovery ports (derived from the configured
-      # port) and installs sunshine's own udev rules.
-      openFirewall = true;
+      # port) on every interface - unless myServices.sunshine.interfaces
+      # narrows them down (see above).
+      openFirewall = config.myServices.sunshine.interfaces == [ ];
 
       # nixpkgs' sunshine build is CUDA-less by default, so NVENC fails
       # at runtime with "Cannot load libcuda.so.1" and silently falls

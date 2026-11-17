@@ -8,6 +8,7 @@
     ./kde.nix
     ./niri.nix
     ./steam-gamescope.nix
+    ./steam-on-demand.nix
   ];
 
   options.myDesktop.stack = lib.mkOption {
