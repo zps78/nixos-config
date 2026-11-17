@@ -277,9 +277,16 @@ in
         sunshine_name = config.networking.hostName;
         capture = "kms";
         encoder = "nvenc";
-        # Capture the dummy plug gamescope draws on - not the first
-        # connected output (DP-2, the console monitor, on karma).
-        output_name = cfg.output;
+        # Capture monitor 0. Sunshine's KMS "monitor index" counts the
+        # *planes that currently hold a framebuffer*, not connectors, and a
+        # connector name like "HDMI-A-1" is translated to an index once, at
+        # startup - while the console is still lit on every output (DP-2=0,
+        # HDMI-A-1=1 on karma). During a stream gamescope drives only
+        # cfg.output and switches the other outputs off, so the one plane
+        # with a framebuffer - Steam on the dummy plug - is index 0; index
+        # 1 is empty and the stream is black ("Couldn't get drm fb for
+        # plane [0]"). Read from sunshine 2026.914 src/platform/linux/kmsgrab.cpp.
+        output_name = "0";
       } // lib.optionalAttrs (cfg.renderDevice != null) {
         adapter_name = cfg.renderDevice;
       };
