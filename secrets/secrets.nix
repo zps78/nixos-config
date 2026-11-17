@@ -31,6 +31,12 @@ let
   krieger-host =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMiY9PNYhJG9MeeoElGGTpqiX+4Y5CtHPSJJ3TRExTH";
 
+  # The new NAS (hosts/karma), generated on its first boot 2026-11-17 while
+  # it still runs as karma-n5. Kept through the phase-6 rename to karma
+  # (same machine, same key) - the Unraid karma never had an agenix key.
+  karma-host =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBB72h4g0dyQd7htr5pKHO+0eYIS4ZFg4x9FjxDD0Ltk";
+
 in
 {
   "kuro-fleet-key.age".publicKeys = [ zp-personal kuro-host ];
@@ -47,5 +53,5 @@ in
   # often the Wi-Fi BSSID (or one off), which Wi-Fi location databases
   # map to a physical address. Every Tailscale host needs it.
   "home-gateway-mac.age".publicKeys =
-    [ zp-personal kuro-host krugerrand-host kepler-host kimi-host krieger-host ];
+    [ zp-personal kuro-host krugerrand-host kepler-host kimi-host krieger-host karma-host ];
 }
