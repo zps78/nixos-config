@@ -154,6 +154,13 @@ in
       # Output resolution/refresh (-W/-H/-r) and the game render size
       # (-w/-h) both match the dummy plug's mode, so nothing is scaled.
       args = [
+        # Always composite into the primary plane. Without this gamescope
+        # scans Steam/games out directly on an overlay plane, leaving the
+        # plane Sunshine's KMS capture reads empty ("Couldn't get drm fb
+        # for plane [0]") - black stream with working audio. Known since
+        # Sunshine 2026.906 (LizardByte/Sunshine#5839, bazzite#5828).
+        # Costs one composite pass per frame - negligible on the 4060 Ti.
+        "--force-composition"
         "--prefer-output" cfg.output
         "-W" (toString cfg.width) "-H" (toString cfg.height)
         "-w" (toString cfg.width) "-h" (toString cfg.height)
