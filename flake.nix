@@ -142,6 +142,16 @@
           ];
         };
 
+        # NAS + game-streaming server (Jonsbo N5, krieger's old internals).
+        # Headless; see hosts/karma/configuration.nix and INSTALL.md.
+        karma = mkHost {
+          hostname = "karma";
+          users = [
+            (makeUser "dh" ./home/users/dh.nix)          # admin ("dharma"), lean server profile
+            (makeUser "steam" ./home/users/steam.nix)    # unprivileged Sunshine/Steam session
+          ];
+        };
+
         kepler = mkHost {
           hostname = "kepler";
           users = [

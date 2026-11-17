@@ -11,7 +11,10 @@
   ];
 
   options.myDesktop.stack = lib.mkOption {
-    type = lib.types.enum [ "gnome" "kde" "niri" ];
+    # "none": headless host (karma) - no compositor, greeter or desktop
+    # session; the console is a plain getty. The myDesktop.* options
+    # below still exist, since shared modules key users off them.
+    type = lib.types.enum [ "gnome" "kde" "niri" "none" ];
     default = "niri";
     description = "Which desktop stack to enable for this host.";
   };

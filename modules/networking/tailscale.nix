@@ -47,15 +47,29 @@ let
   '';
 in
 {
-  options.myNetwork.tailscale.enable =
-    lib.mkEnableOption "Tailscale";
+  options.myNetwork.tailscale = {
+    enable = lib.mkEnableOption "Tailscale";
+
+    advertiseRoutes = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "192.168.1.0/24" ];
+      description = ''
+        Subnets this host advertises to the tailnet (subnet router - the
+        home LAN from karma). Non-empty also turns on IP forwarding. The
+        route still has to be approved once in the Tailscale admin console.
+      '';
+    };
+  };
 
   config = lib.mkIf config.myNetwork.tailscale.enable {
     services.tailscale = {
       enable = true;
 
-      # Needed for --accept-routes to behave properly (subnet routes).
-      useRoutingFeatures = "client";
+      # "client" is needed for --accept-routes to behave properly (subnet
+      # routes); a subnet router additionally needs forwarding ("both").
+      useRoutingFeatures =
+        if config.myNetwork.tailscale.advertiseRoutes == [ ] then "client" else "both";
 
       # Only applied automatically when authKeyFile is set; otherwise run
       # `tailscale up` with these flags once, by hand.
@@ -63,7 +77,9 @@ in
         "--accept-dns"
         "--accept-routes"
         "--ssh"
-      ];
+      ]
+      ++ lib.optional (config.myNetwork.tailscale.advertiseRoutes != [ ])
+        "--advertise-routes=${lib.concatStringsSep "," config.myNetwork.tailscale.advertiseRoutes}";
 
       # Opens the WireGuard listen port (UDP 41641) for the daemon.
       openFirewall = true;
