@@ -4,11 +4,15 @@
     ./ai-stack.nix
     ./avahi.nix
     ./battery.nix
+    ./beszel.nix
     ./brother-ads-4300n.nix
     ./brother-hl-l8230cdw.nix
+    ./cockpit.nix
     ./docker.nix
     ./gvfs.nix
+    ./homepage.nix
     ./libvirt.nix
+    ./scrutiny.nix
     ./ssh.nix
     ./sunshine.nix
     ./waydroid.nix

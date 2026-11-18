@@ -217,6 +217,62 @@ in
   ];
 
   ############################################################
+  # Web UIs - day-to-day operation (phase 0c)
+  ############################################################
+  #
+  # All native NixOS services, LAN NIC + Tailscale only (never the Sunshine
+  # NIC). Operate here, configure in the repo. Links use lanIp, which also
+  # works away from home through the tailnet's home-subnet route.
+  #   Cockpit  https://<lanIp>:9090   (dh's password; + ZFS, Files)
+  #   Scrutiny http://<lanIp>:8087    (SMART health)
+  #   Beszel   http://<lanIp>:8090    (metrics; admin account on first visit)
+  #   Homepage http://<lanIp>:8082    (start page)
+
+  myServices.cockpit = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+    origins                                      = [ "https://${lanIp}:9090" "https://${hostName}:9090" ];
+  };
+
+  myServices.scrutiny = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+  };
+
+  myServices.beszel = {
+    hub.enable                                   = true;
+    hub.interfaces                               = [ "enp4s0" ];
+    agentKey                                     = null;                       # step 2: the hub's public key from "Add system"
+  };
+
+  myServices.homepage = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+    hosts                                        = [ lanIp hostName ];
+  };
+
+  services.homepage-dashboard = {
+    settings = {
+      title                                      = hostName;
+      headerStyle                                = "clean";
+      layout.System = { style = "row"; columns = 4; };
+    };
+    widgets = [
+      { resources = { cpu = true; memory = true; disk = [ "/" "/home" ]; cputemp = true; uptime = true; }; }
+    ];
+    services = [
+      {
+        System = [
+          { Cockpit  = { href = "https://${lanIp}:9090";    icon = "cockpit.png";  description = "System, logs, services, ZFS, files"; }; }
+          { Scrutiny = { href = "http://${lanIp}:8087";     icon = "scrutiny.png"; description = "Disk health (SMART)"; }; }
+          { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
+          { Sunshine = { href = "https://${streamIp}:47990"; icon = "sunshine.png"; description = "Game streaming (pairing)"; }; }
+        ];
+      }
+    ];
+  };
+
+  ############################################################
   # Users
   ############################################################
   #
