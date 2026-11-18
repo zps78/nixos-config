@@ -258,7 +258,9 @@ in
       layout.System = { style = "row"; columns = 4; };
     };
     widgets = [
-      { resources = { cpu = true; memory = true; disk = [ "/" "/home" ]; cputemp = true; uptime = true; }; }
+      # Disk "/" only: every rpool dataset shares the pool's free space, and
+      # Homepage's sandbox (ProtectHome) can't see /home anyway.
+      { resources = { cpu = true; memory = true; disk = [ "/" ]; cputemp = true; uptime = true; }; }
     ];
     services = [
       {
