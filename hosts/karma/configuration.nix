@@ -147,6 +147,14 @@ in
     extraPools                                   = [ ];                        # phase 2: personal NVMe mirror; phase 6: disk1..disk5 (after a first manual import)
   };
 
+  # Undo net for the OS disk's real state: /home, /var, /srv/appdata
+  # (rpool/safe and children). rpool/local (/, /nix, docker) is rebuildable
+  # and deliberately not snapshotted. More datasets join as drives arrive.
+  myStorage.snapshots = {
+    enable                                       = true;
+    datasets."rpool/safe".tier                   = "important";                # 24 hourly, 30 daily, 3 monthly
+  };
+
   ############################################################
   # Network services
   ############################################################
