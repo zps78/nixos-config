@@ -242,7 +242,7 @@ in
   myServices.beszel = {
     hub.enable                                   = true;
     hub.interfaces                               = [ "enp4s0" ];
-    agentKey                                     = null;                       # step 2: the hub's public key from "Add system"
+    agentKey                                     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOKJPfX6Upo7KwsaYYueltDi8mYb/MdUKVfm4TcpLzkP"; # hub's public key ("Add system"; system entry: 127.0.0.1:45876)
   };
 
   myServices.homepage = {
