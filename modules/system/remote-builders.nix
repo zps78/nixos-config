@@ -50,7 +50,11 @@ in
         system = "x86_64-linux";
         sshUser = builder.user;
         sshKey = "/run/agenix/${config.networking.hostName}-fleet-key";
-        maxJobs = 16;
+        # 8 jobs x 8 threads (cores, set on the builder below) = up to 64
+        # compiler processes: still 2x the 5950X's 32 threads, so the CPU
+        # stays saturated, without the 16 x 32 that OOM'd karma on
+        # 2026-11-18 (C++ builds next to a HandBrake encode).
+        maxJobs = 8;
         speedFactor = 2;
         supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
         inherit (builder) publicHostKey;
@@ -60,6 +64,25 @@ in
     # Server side: the builder itself, trusting its user to submit builds.
     (lib.mkIf (config.networking.hostName == builder.host) {
       nix.settings.trusted-users = [ builder.user ];
+
+      # The builder is also the NAS/streaming box, so builds must never
+      # starve its services. 2026-11-18: offloaded C++ builds (16 jobs, each
+      # with all 32 threads) plus a HandBrake encode ran karma out of memory;
+      # the OOM killer took the steam/dh session buses, PipeWire and
+      # Sunshine. Now:
+      nix.settings = {
+        cores = 8;          # threads per build job
+        max-jobs = 8;       # the builder's own (local) parallel builds
+      };
+
+      # All builds run inside nix-daemon's cgroup: cap that, so memory
+      # pressure throttles builds first (MemoryHigh) and, at the hard
+      # limit, the kernel kills a *build* - never a service or session.
+      # Percent of physical RAM: 64 GB now, 128 GB after the RMA.
+      systemd.services.nix-daemon.serviceConfig = {
+        MemoryHigh = "60%";
+        MemoryMax = "70%";
+      };
     })
   ];
 }
