@@ -70,6 +70,17 @@ in
 
   networking.networkmanager.settings.main.no-auto-default = "*";               # no stray DHCP "Wired connection N" profiles
 
+  # Wake-on-LAN (magic packet) on both NICs, armed at every shutdown - same
+  # as krieger. Set twice on purpose: the link setting (udev, applies as the
+  # NIC appears) and in each NetworkManager profile below (so NM doesn't
+  # reset it when it takes the device). Needs in BIOS: ErP Ready = Disabled,
+  # Power On By PCI-E = Enabled. Wake from the LAN, e.g. from old karma:
+  # magic packet to 50:eb:f6:ea:9b:3a (Aquantia) or :39 (Intel).
+  networking.interfaces = {
+    enp4s0.wakeOnLan.enable                      = true;                       # Aquantia
+    enp5s0.wakeOnLan.enable                      = true;                       # Intel
+  };
+
   # SSH on the LAN as well - a fallback for when Tailscale itself is down
   # (the fleet default is Tailscale-only). Main NIC only: the Sunshine NIC
   # stays closed. Still key-only (myServices.ssh.passwordAuth = false).
@@ -78,6 +89,7 @@ in
   networking.networkmanager.ensureProfiles.profiles = {
     lan = {
       connection = { id = "lan"; type = "ethernet"; interface-name = "enp4s0"; autoconnect = true; };
+      ethernet.wake-on-lan                       = 64;                         # NM flag value for "magic" (keyfiles store the number)
       ipv4 = {
         method                                   = "manual";
         address1                                 = "${lanIp}/24,${gateway}";
@@ -89,6 +101,7 @@ in
 
     stream = {
       connection = { id = "stream"; type = "ethernet"; interface-name = "enp5s0"; autoconnect = true; };
+      ethernet.wake-on-lan                       = 64;                         # magic packet
       ipv4 = {
         method                                   = "manual";
         address1                                 = "${streamIp}/24";
