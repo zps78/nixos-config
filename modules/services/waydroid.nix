@@ -34,7 +34,7 @@
 let
   cfg = config.myServices.waydroid;
 
-  waydroidScriptPkg = inputs.waydroid-script.packages.${pkgs.system}.default;
+  waydroidScriptPkg = inputs.waydroid-script.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
   # Dropped by `waydroid init` itself inside the (root-owned) data dir as
   # part of unpacking the system image - present iff init has already

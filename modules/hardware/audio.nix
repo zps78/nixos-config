@@ -18,7 +18,6 @@
 
     wireplumber.enable = true;
 
-    jack.enable = true;
   };
 
   # PipeWire's default quantum (floating 32-2048, 1024 default) is right
