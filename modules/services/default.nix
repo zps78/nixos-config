@@ -16,5 +16,6 @@
     ./ssh.nix
     ./sunshine.nix
     ./waydroid.nix
+    ./wol-web.nix
   ];
 }

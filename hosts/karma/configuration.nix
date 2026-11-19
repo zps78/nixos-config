@@ -227,6 +227,7 @@ in
   #   Scrutiny http://<lanIp>:8087    (SMART health)
   #   Beszel   http://<lanIp>:8090    (metrics; admin account on first visit)
   #   Homepage http://<lanIp>:8082    (start page)
+  #   wol-web  http://<lanIp>:8089    (one-click wake: /wake/<name>)
 
   myServices.cockpit = {
     enable                                       = true;
@@ -251,6 +252,18 @@ in
     hosts                                        = [ lanIp hostName ];
   };
 
+  # Replaces GPTWOL on the Unraid karma (whose /wake needs a login, so a
+  # Homepage tile couldn't wake anything). Sent from the LAN NIC.
+  myServices.wolWeb = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+    sourceAddress                                = lanIp;
+    machines = {
+      kimi                                       = "98:fa:9b:01:58:9b";   # eno2
+      karma-unraid                               = "6c:1f:f7:29:b5:4d";   # old karma eth0 (WoL g)
+    };
+  };
+
   services.homepage-dashboard = {
     settings = {
       title                                      = hostName;
@@ -269,6 +282,12 @@ in
           { Scrutiny = { href = "http://${lanIp}:8087";     icon = "scrutiny.png"; description = "Disk health (SMART)"; }; }
           { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
           { Sunshine = { href = "https://${streamIp}:47990"; icon = "sunshine.png"; description = "Game streaming (pairing)"; }; }
+        ];
+      }
+      {
+        Wake = [
+          { kimi           = { href = "http://${lanIp}:8089/wake/kimi";         icon = "nixos.png";  description = "Wake-on-LAN";  ping = "100.101.102.34"; }; }
+          { "karma-unraid" = { href = "http://${lanIp}:8089/wake/karma-unraid"; icon = "unraid.png"; description = "Wake-on-LAN (old karma)"; ping = "192.168.1.5"; }; }
         ];
       }
     ];
