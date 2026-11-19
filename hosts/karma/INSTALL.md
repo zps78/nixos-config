@@ -60,7 +60,9 @@ nixos-install --flake github:zps78/nixos-config#karma
 #   ^ asks for a root password at the end: set one. Root can't log in over
 #     SSH (PermitRootLogin no); it's the emergency key for the console
 #     (monitor + keyboard on the box) when SSH/the network is broken.
-nixos-enter --root /mnt -c 'passwd dh'        # dh's sudo password
+nixos-enter --root /mnt -c 'passwd zp'        # zp's sudo password - only needed
+#   if the host key is new (reinstall): zp-password.age can't be decrypted
+#   until the new key is added to secrets/secrets.nix and rekeyed (step 4)
 ```
 
 Before rebooting, compare against the detected hardware:
@@ -80,7 +82,7 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
 
 ## 4. First boot
 
-- Console: plain getty on tty1 (no desktop); log in as dh, or root in an
+- Console: plain getty on tty1 (no desktop); log in as zp, or root in an
   emergency. SSH is closed on the LAN (fleet design: SSH over Tailscale
   only), so the first step happens at the console:
 - `sudo tailscale up --accept-dns --accept-routes --ssh --qr` -> scan,
@@ -88,13 +90,13 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
   cutover). The flags must be typed here: the config's extraUpFlags are
   only applied automatically with an authKeyFile, which karma doesn't use.
   (On the pt console layout, mind the dashes - a typo gives "too many
-  non-flag arguments".) From then on: `ssh dh@karma-n5`.
-- Working copy of the config, as dh (same place as on the other hosts):
+  non-flag arguments".) From then on: `ssh zp@karma-n5`.
+- Working copy of the config, as zp (same place as on the other hosts):
   `git clone https://github.com/zps78/nixos-config.git ~/nixos-config`
   Rebuild: `cd ~/nixos-config && git pull && sudo nixos-rebuild switch --flake .#karma`
 - agenix: add the new host key to `secrets/secrets.nix` as `karma-host`
   (from `/etc/ssh/ssh_host_ed25519_key.pub`), add it to
-  `home-gateway-mac.age`'s recipients, `agenix -r`, rebuild.
+  `home-gateway-mac.age`'s and `zp-password.age`'s recipients, `agenix -r`, rebuild.
 - Check: `zpool status rpool`, `nvidia-smi` (both GPUs listed),
   `ip rule` (shows `from 192.168.1.7 lookup 100`),
   `ip route show table 100`.

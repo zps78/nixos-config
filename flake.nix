@@ -152,7 +152,6 @@
           hostname = "karma";
           users = [
             (makeUser "zp" [ ./home/profiles/server.nix ])   # admin: SSH, wheel, docker - lean
-            (makeUser "dh" ./home/users/dh.nix)              # TRANSITION: previous admin, removed after the switch
             (makeUser "steam" ./home/users/steam.nix)    # unprivileged Sunshine/Steam session
           ];
         };

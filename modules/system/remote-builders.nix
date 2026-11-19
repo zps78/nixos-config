@@ -63,9 +63,7 @@ in
 
     # Server side: the builder itself, trusting its user to submit builds.
     (lib.mkIf (config.networking.hostName == builder.host) {
-      # TRANSITION: "dh" too, until every client has been rebuilt once -
-      # until then their /etc/nix/machines still connects as dh.
-      nix.settings.trusted-users = [ builder.user "dh" ];
+      nix.settings.trusted-users = [ builder.user ];
 
       # The builder is also the NAS/streaming box, so builds must never
       # starve its services. 2026-11-18: offloaded C++ builds (16 jobs, each

@@ -300,10 +300,6 @@ in
   # zp    - admin: SSH (fleet keys), wheel, docker. Lean home profile
   #         (home/profiles/server.nix). Password from agenix
   #         (secrets/zp-password.age), the same one on every host.
-  # dh    - TRANSITION: the previous admin, kept (wheel + fleet keys) as a
-  #         fallback until zp's sudo is confirmed AND every remote-build
-  #         client has been rebuilt to connect as zp (modules/system/
-  #         remote-builders.nix); then removed.
   # steam - Sunshine/Steam/gamescope. Unprivileged: no wheel, no docker,
   #         no password. Same role as on krieger.
   # media - UID 99 / GID 100 ("users"), matching Unraid's nobody:users.
@@ -317,17 +313,6 @@ in
     isNormalUser                                 = true;
     description                                  = "zp";
     hashedPasswordFile                           = config.age.secrets.zp-password.path;
-    extraGroups = [
-                                                   "wheel"
-                                                   "networkmanager"
-                                                   "users"
-    ];
-  };
-
-  users.users.dh = {
-    isNormalUser                                 = true;
-    description                                  = "dh";
-    openssh.authorizedKeys.keys                  = config.myServices.ssh.authorizedKeys;   # TRANSITION fallback
     extraGroups = [
                                                    "wheel"
                                                    "networkmanager"
