@@ -1,5 +1,5 @@
 # ../../hosts/kimi/configuration.nix
-{ ... }:
+{ config, ... }:
 
 {
   # Import modules
@@ -31,7 +31,8 @@
   };
 
   myDesktop.stack                                = "niri";                     # choose from: "gnome" "kde" "niri"
-  myDesktop.primaryUser                          = "gt";
+  myDesktop.primaryUser                          = "zp";                       # admin: SSH, wheel - no autologin
+  myDesktop.sessionUser                          = "gt";                       # autologin + Sunshine (niri session owner)
   myDesktop.idle.enable                          = false;                      # headless appliance (dummy plug, SimHub via Wine) - never idle/suspend
 
   myHardware = {
@@ -93,9 +94,28 @@
   };
 
   # Users
+  #
+  # zp - admin: SSH (fleet keys via myServices.ssh), wheel. Password from
+  #      agenix (secrets/zp-password.age), the same one on every host.
+  # gt - the autologin/Sunshine session. TRANSITION: still wheel and still
+  #      takes the fleet keys, as a fallback until zp's sudo is confirmed;
+  #      then both go and gt is unprivileged (like krieger's steam).
+  age.secrets.zp-password.file                   = ../../secrets/zp-password.age;
+
+  users.users.zp = {
+    isNormalUser                                 = true;
+    description                                  = "zp";
+    hashedPasswordFile                           = config.age.secrets.zp-password.path;
+    extraGroups = [
+                                                   "wheel"
+                                                   "networkmanager"
+    ];
+  };
+
   users.users.gt = {
     isNormalUser                                 = true;
     description                                  = "gt";
+    openssh.authorizedKeys.keys                  = config.myServices.ssh.authorizedKeys;   # TRANSITION fallback
     extraGroups = [
                                                    "wheel"
                                                    "networkmanager"
@@ -108,7 +128,7 @@
   # Display manager - auto login
   services.displayManager.autoLogin = {
     enable                                       = true;
-    user                                         = "gt";
+    user                                         = config.myDesktop.sessionUser;
   };
 
   # Prevent idle suspend (desktop / remote / gaming stability)

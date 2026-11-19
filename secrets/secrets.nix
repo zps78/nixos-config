@@ -52,6 +52,13 @@ in
   # the home LAN. Kept out of the public repo because a router MAC is
   # often the Wi-Fi BSSID (or one off), which Wi-Fi location databases
   # map to a physical address. Every Tailscale host needs it.
+  # zp's login/sudo password, as a yescrypt hash (users.users.zp.
+  # hashedPasswordFile) - one password for zp on every host that uses it.
+  # Create/change it from secrets/:
+  #   mkpasswd -m yescrypt | nix run github:ryantm/agenix -- -e zp-password.age
+  "zp-password.age".publicKeys =
+    [ zp-personal kuro-host krugerrand-host kimi-host karma-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host krieger-host karma-host ];
 }

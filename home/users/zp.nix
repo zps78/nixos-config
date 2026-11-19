@@ -177,7 +177,7 @@
           IdentitiesOnly = true;
         };
         kimi = {
-          User = "gt";
+          User = "zp";
           IdentityFile = identityFile;
           IdentitiesOnly = true;
         };

@@ -89,12 +89,16 @@
     let
       system = "x86_64-linux";
 
-      makeUser = userName: userFile: {
+      # makeUser "zp" ./home/users/zp.nix                     - one file
+      # makeUser "zp" [ ./home/profiles/server.nix ]          - or a list
+      # The username/home directory are set here, so a profile can be
+      # shared by any account (user files may still set them; same value).
+      makeUser = userName: userFiles: {
         home-manager.users.${userName} = {
-          imports = [
-            noctalia.homeModules.default
-            (import userFile)
-          ];
+          imports = [ noctalia.homeModules.default ]
+            ++ map import (nixpkgs.lib.toList userFiles);
+          home.username      = userName;
+          home.homeDirectory = "/home/${userName}";
         };
       };
 
@@ -162,10 +166,8 @@
         kimi = mkHost {
           hostname = "kimi";
           users = [
-            (makeUser "gt" ./home/users/gt.nix)
-
-            # easy to add later
-            # (makeUser "john" ./home/john.nix)
+            (makeUser "zp" [ ./home/profiles/server.nix ])   # admin: SSH, wheel - lean, no desktop apps
+            (makeUser "gt" ./home/users/gt.nix)              # autologin/Sunshine session
           ];
         };
 
