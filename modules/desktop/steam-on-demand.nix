@@ -251,7 +251,7 @@ in
 
     # Upstream hangs Sunshine off graphical-session.target, which never
     # exists here. Start it with the lingering user manager instead - for
-    # the session user only (dh's SSH logins would otherwise start one too).
+    # the session user only (the admin's SSH logins would otherwise start one too).
     systemd.user.services.sunshine = {
       wantedBy = lib.mkForce [ "default.target" ];
       partOf = lib.mkForce [ ];

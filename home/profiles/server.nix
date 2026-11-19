@@ -2,8 +2,8 @@
 #
 # Lean profile for an admin account on a machine whose desktop (if any)
 # belongs to someone else: shell and CLI basics only, no desktop apps.
-# Used by zp on kimi (whose session is gt's); karma's dh moves onto it
-# when dh becomes zp. Username/home come from makeUser in flake.nix.
+# Used by zp on kimi (whose session is gt's) and on karma (headless).
+# Username/home come from makeUser in flake.nix.
 { pkgs, lib, ... }:
 
 {

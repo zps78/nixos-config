@@ -43,7 +43,7 @@ in
   networking.hostId                              = "7d2b4492";                 # ZFS: random, fixed for this host's lifetime
 
   myDesktop.stack                                = "none";                     # headless
-  myDesktop.primaryUser                          = "dh";                       # admin: SSH, wheel, docker
+  myDesktop.primaryUser                          = "zp";                       # admin: SSH, wheel, docker
   myDesktop.sessionUser                          = "steam";                    # Sunshine/Steam session owner (unprivileged)
 
   ############################################################
@@ -223,7 +223,7 @@ in
   # All native NixOS services, LAN NIC + Tailscale only (never the Sunshine
   # NIC). Operate here, configure in the repo. Links use lanIp, which also
   # works away from home through the tailnet's home-subnet route.
-  #   Cockpit  https://<lanIp>:9090   (dh's password; + ZFS, Files)
+  #   Cockpit  https://<lanIp>:9090   (zp's password; + ZFS, Files)
   #   Scrutiny http://<lanIp>:8087    (SMART health)
   #   Beszel   http://<lanIp>:8090    (metrics; admin account on first visit)
   #   Homepage http://<lanIp>:8082    (start page)
@@ -297,8 +297,13 @@ in
   # Users
   ############################################################
   #
-  # dh    - admin ("dharma"): SSH (fleet keys), wheel, docker. Lean home profile
-  #         (home/users/dh.nix), not krieger's workstation apps.
+  # zp    - admin: SSH (fleet keys), wheel, docker. Lean home profile
+  #         (home/profiles/server.nix). Password from agenix
+  #         (secrets/zp-password.age), the same one on every host.
+  # dh    - TRANSITION: the previous admin, kept (wheel + fleet keys) as a
+  #         fallback until zp's sudo is confirmed AND every remote-build
+  #         client has been rebuilt to connect as zp (modules/system/
+  #         remote-builders.nix); then removed.
   # steam - Sunshine/Steam/gamescope. Unprivileged: no wheel, no docker,
   #         no password. Same role as on krieger.
   # media - UID 99 / GID 100 ("users"), matching Unraid's nobody:users.
@@ -306,9 +311,23 @@ in
   #         with PUID=99 PGID=100, so nothing is re-owned in the move.
   #         (NixOS's own "nobody" is 65534 - deliberately not reused.)
 
+  age.secrets.zp-password.file                   = ../../secrets/zp-password.age;
+
+  users.users.zp = {
+    isNormalUser                                 = true;
+    description                                  = "zp";
+    hashedPasswordFile                           = config.age.secrets.zp-password.path;
+    extraGroups = [
+                                                   "wheel"
+                                                   "networkmanager"
+                                                   "users"
+    ];
+  };
+
   users.users.dh = {
     isNormalUser                                 = true;
     description                                  = "dh";
+    openssh.authorizedKeys.keys                  = config.myServices.ssh.authorizedKeys;   # TRANSITION fallback
     extraGroups = [
                                                    "wheel"
                                                    "networkmanager"

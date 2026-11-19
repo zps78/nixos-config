@@ -13,7 +13,7 @@
 # SSH host key).
 #
 # Reached by its Tailscale (MagicDNS) name: the LAN firewall keeps port 22
-# closed by fleet design. Connects as the builder's primaryUser (dh on
+# closed by fleet design. Connects as the builder's primaryUser (zp on
 # karma, see hosts/karma/configuration.nix ssh.authorizedKeys) using each
 # client's own <hostname>-fleet-key, the same per-host outbound identity
 # used for admin SSH (see home/users/zp.nix and secrets/secrets.nix).
@@ -28,7 +28,7 @@
 let
   builder = {
     host = "karma-n5";   # phase 6: "karma"
-    user = "dh";
+    user = "zp";
     # base64 -w0 of the builder's /etc/ssh/ssh_host_ed25519_key.pub - lets
     # root connect without an interactive known-hosts prompt on first use.
     # Same key as karma-host in secrets/secrets.nix; re-derive if it changes.
@@ -63,12 +63,14 @@ in
 
     # Server side: the builder itself, trusting its user to submit builds.
     (lib.mkIf (config.networking.hostName == builder.host) {
-      nix.settings.trusted-users = [ builder.user ];
+      # TRANSITION: "dh" too, until every client has been rebuilt once -
+      # until then their /etc/nix/machines still connects as dh.
+      nix.settings.trusted-users = [ builder.user "dh" ];
 
       # The builder is also the NAS/streaming box, so builds must never
       # starve its services. 2026-11-18: offloaded C++ builds (16 jobs, each
       # with all 32 threads) plus a HandBrake encode ran karma out of memory;
-      # the OOM killer took the steam/dh session buses, PipeWire and
+      # the OOM killer took the steam/admin session buses, PipeWire and
       # Sunshine. Now:
       nix.settings = {
         cores = 8;          # threads per build job
