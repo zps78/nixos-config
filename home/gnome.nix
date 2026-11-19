@@ -38,6 +38,7 @@
   imports = [
     ./gnome-paperwm.nix
     ./gnome-blur-my-shell.nix
+    ./gnome-caffeine.nix
   ];
 
   home.packages = with pkgs; [
