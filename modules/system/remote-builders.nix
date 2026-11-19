@@ -47,7 +47,7 @@ in
 
       nix.buildMachines = [{
         hostName = builder.host;
-        system = "x86_64-linux";
+        systems = [ "x86_64-linux" "i686-linux" ];   # i686: 32-bit graphics drivers (hardware.graphics.enable32Bit) - native on x86_64
         sshUser = builder.user;
         sshKey = "/run/agenix/${config.networking.hostName}-fleet-key";
         # 8 jobs x 8 threads (cores, set on the builder below) = up to 64
