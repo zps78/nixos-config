@@ -257,6 +257,22 @@ in
       wants = lib.mkForce [ "pipewire.service" ];
       after = lib.mkForce [ "pipewire.service" "pipewire-pulse.service" ];
       unitConfig.ConditionUser = user;
+      # The lingering user manager starts Sunshine ~2 s before the NVIDIA
+      # driver is up at boot (nvidia-drm, the GPU's render node and the
+      # console framebuffer appear after it). Sunshine probes its encoder
+      # once at startup and, if that fails ("Fatal: Unable to find display
+      # or encoder during startup"), never retries - no streaming until it
+      # is restarted. Seen 2026-11-20. Wait for the render node and fb0,
+      # then let the driver settle; give up after 2 minutes and start
+      # anyway (a restart can still fix it).
+      serviceConfig.ExecStartPre = "${pkgs.writeShellScript "sunshine-wait-gpu" ''
+        for _ in $(${pkgs.coreutils}/bin/seq 120); do
+          [ -e ${if cfg.renderDevice != null then cfg.renderDevice else "/dev/dri/renderD128"} ] && [ -e /dev/fb0 ] && break
+          ${pkgs.coreutils}/bin/sleep 1
+        done
+        ${pkgs.coreutils}/bin/sleep 5
+      ''}";
+      serviceConfig.TimeoutStartSec = "3min";
     };
 
     systemd.user.services.sunshine-session-watch = {
