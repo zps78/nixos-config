@@ -10,10 +10,8 @@
 # old internals, moving into the Jonsbo N5.
 #
 # OS disk: Samsung 990 Pro 1TB in M.2_1 (CPU lanes)
-#   (labels say "karma": written at install, before the name was
-#   kraken - they're on the disk, so they stay)
-#   p1  "karma-esp"  1 GiB  vfat  -> /boot
-#   p2  "karma-zfs"  rest   ZFS pool "rpool"
+#   p1  "kraken-esp"  1 GiB  vfat  -> /boot
+#   p2  "kraken-zfs"  rest   ZFS pool "rpool"
 #
 # rpool datasets (all mountpoint=legacy, mounted below):
 #   rpool/local/*  rebuildable - never snapshotted or backed up
@@ -63,7 +61,7 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-partlabel/karma-esp";
+    device = "/dev/disk/by-partlabel/kraken-esp";
     fsType = "vfat";
     options = [ "fmask=0077" "dmask=0077" ];
   };

@@ -1,8 +1,7 @@
 # kraken - install (phase 0)
 
 (Named `karma` and then `karma-n5` during the build; `kraken` since
-2026-11-20. The partition labels below keep `karma-*` - they're what
-the installed disk has, and `hardware-configuration.nix` matches them.)
+2026-11-20.)
 
 Fresh NixOS on the Samsung 990 Pro (M.2_1), still in krieger's case,
 with nothing from the Unraid karma attached. The layout matches
@@ -19,10 +18,10 @@ DISK=/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_1TB_XXXXXXXXXXXXXXX
 
 wipefs -a "$DISK"
 sgdisk --zap-all "$DISK"
-sgdisk -n1:1M:+1G -t1:EF00 -c1:karma-esp "$DISK"
-sgdisk -n2:0:0    -t2:BF00 -c2:karma-zfs "$DISK"
+sgdisk -n1:1M:+1G -t1:EF00 -c1:kraken-esp "$DISK"
+sgdisk -n2:0:0    -t2:BF00 -c2:kraken-zfs "$DISK"
 partprobe "$DISK"; udevadm settle
-mkfs.vfat -F32 -n KARMA-ESP /dev/disk/by-partlabel/karma-esp
+mkfs.vfat -F32 -n KRAKEN-ESP /dev/disk/by-partlabel/kraken-esp
 ```
 
 ## 2. Root pool and datasets
@@ -33,7 +32,7 @@ zpool create -f \
   -O compression=zstd -O atime=off -O xattr=sa -O acltype=posixacl \
   -O dnodesize=auto -O normalization=formD \
   -O mountpoint=none -O canmount=off \
-  rpool /dev/disk/by-partlabel/karma-zfs
+  rpool /dev/disk/by-partlabel/kraken-zfs
 
 zfs create -o canmount=off rpool/local
 zfs create -o canmount=off rpool/safe
@@ -56,7 +55,7 @@ mkdir -p /mnt/var/lib/docker
 mount -t zfs rpool/local/docker   /mnt/var/lib/docker
 mount -t zfs rpool/safe/home      /mnt/home
 mount -t zfs rpool/safe/appdata   /mnt/srv/appdata
-mount -o fmask=0077,dmask=0077 /dev/disk/by-partlabel/karma-esp /mnt/boot
+mount -o fmask=0077,dmask=0077 /dev/disk/by-partlabel/kraken-esp /mnt/boot
 
 # Install straight from GitHub - no local clone on the target. The working
 # copy lives in the admin's home like on every other host (step 4).
