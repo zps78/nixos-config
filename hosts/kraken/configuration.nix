@@ -239,7 +239,17 @@ in
     failureUnits = [
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
+      "airvpn" "qbittorrent"
     ];
+  };
+
+  # qBittorrent behind AirVPN in a WireGuard namespace (phase-4 groundwork,
+  # TEST - not the live download client yet; karma's stays in charge).
+  # Own AirVPN device "kraken" (config in secrets/airvpn-wg.conf.age).
+  # Web UI: http://<lanIp>:8180 (LAN + Tailscale only).
+  myServices.vpnTorrent = {
+    enable                                       = true;
+    forwardedPort                                = 11557;                      # AirVPN port assigned to device "kraken"
   };
 
   myServices.cockpit = {
