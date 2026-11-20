@@ -118,6 +118,11 @@
   services.sunshine.settings = {
     csrf_allowed_origins                         = "https://192.168.1.50:47990,https://kimi:47990";
     encoder                                      = "vaapi";                    # Intel UHD 630
+    # HEVC via VAAPI crashes Sunshine as soon as a stream starts (2026.914,
+    # iHD 26.3.5: SIGABRT in FFmpeg's hw_base_encode_pick_next, 2026-11-20),
+    # though its startup encoder test passes. 1 = don't offer HEVC, so
+    # clients use H.264. Revisit after a Sunshine/FFmpeg/iHD update.
+    hevc_mode                                    = 1;
     key_rightalt_to_key_win                      = "enabled";
     address_family                               = "both";
     min_log_level                                = "info";                     # sessions, input mode, errors (warning hid them)
