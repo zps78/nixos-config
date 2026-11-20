@@ -16,6 +16,7 @@
     ./scrutiny.nix
     ./ssh.nix
     ./sunshine.nix
+    ./vpn-torrent.nix
     ./waydroid.nix
     ./wol-web.nix
   ];

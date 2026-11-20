@@ -415,6 +415,7 @@
         "noctalia-greeter": "noctalia-greeter",
         "plex-tui": "plex-tui",
         "stylix": "stylix",
+        "vpn-confinement": "vpn-confinement",
         "waydroid-script": "waydroid-script",
         "winapps": "winapps",
         "zen-browser": "zen-browser"
@@ -560,6 +561,21 @@
       "original": {
         "owner": "tinted-theming",
         "repo": "base16-zed",
+        "type": "github"
+      }
+    },
+    "vpn-confinement": {
+      "locked": {
+        "lastModified": 1794523109,
+        "narHash": "sha256-AwEm7+NWkEgyZsKLlR3a0qU/V0uIirwCuxSLpmAiufA=",
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
+        "rev": "eeab5446fdbba273905da915805db665524abda6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
         "type": "github"
       }
     },

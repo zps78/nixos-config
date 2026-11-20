@@ -41,6 +41,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Network namespaces with a WireGuard tunnel for systemd services
+    # (modules/services/vpn-torrent.nix - qBittorrent behind AirVPN).
+    vpn-confinement.url = "github:Maroka-chan/VPN-Confinement";
+
     winapps = {
       url = "github:winapps-org/winapps";
       inputs.nixpkgs.follows = "nixpkgs";

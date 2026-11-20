@@ -63,6 +63,12 @@ in
   #   nix run github:ryantm/agenix -- -d ntfy-topic.age -i ~/.ssh/id_ed25519
   "ntfy-topic.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's own AirVPN device: its WireGuard config (wg-quick format, from
+  # the AirVPN config generator) for modules/services/vpn-torrent.nix.
+  # Encrypt straight from the downloaded file, from secrets/:
+  #   nix run github:ryantm/agenix -- -e airvpn-wg.conf.age < ~/Downloads/<file>.conf
+  "airvpn-wg.conf.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }
