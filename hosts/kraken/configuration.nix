@@ -288,7 +288,12 @@ in
     };
   };
 
+  # Widget credentials (HOMEPAGE_VAR_* lines), loaded by systemd before
+  # Homepage drops to its DynamicUser - root 0400 is enough.
+  age.secrets.homepage-env.file                  = ../../secrets/homepage-env.age;
+
   services.homepage-dashboard = {
+    environmentFiles                             = [ config.age.secrets.homepage-env.path ];
     settings = {
       title                                      = hostName;
       headerStyle                                = "clean";
@@ -324,6 +329,12 @@ in
               href = "http://${lanIp}:8180"; icon = "qbittorrent.png";
               description = "Behind AirVPN (test)";
               siteMonitor = "http://192.168.15.1:8180";
+              widget = {
+                type = "qbittorrent";
+                url = "http://192.168.15.1:8180";
+                username = "{{HOMEPAGE_VAR_QBIT_USER}}";        # from secrets/homepage-env.age
+                password = "{{HOMEPAGE_VAR_QBIT_PASSWORD}}";
+              };
           }; }
           { AirVPN = {
               icon = "wireguard.png";
