@@ -231,6 +231,17 @@ in
   #   Homepage http://<lanIp>:8082    (start page)
   #   wol-web  http://<lanIp>:8089    (one-click wake: /wake/<name>)
 
+  # Push alerts to the phone (ntfy.sh, random topic in agenix) - see
+  # modules/services/alerts.nix. Beszel's thresholds use the same topic,
+  # set in its UI (Settings > Notifications).
+  myServices.alerts = {
+    enable                                       = true;
+    failureUnits = [
+      "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
+      "homepage-dashboard" "wol-web" "tailscaled" "docker"
+    ];
+  };
+
   myServices.cockpit = {
     enable                                       = true;
     interfaces                                   = [ "enp4s0" ];

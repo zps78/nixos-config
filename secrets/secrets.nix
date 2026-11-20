@@ -56,6 +56,13 @@ in
   "zp-password.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kimi-host kraken-host ];
 
+  # ntfy.sh topic for alerts (ZED, smartd, failed units - see
+  # modules/services/alerts.nix). The topic name is the only protection on
+  # ntfy.sh (whoever knows it can read and post), so it's random and kept
+  # out of the public repo. Read it with:
+  #   nix run github:ryantm/agenix -- -d ntfy-topic.age -i ~/.ssh/id_ed25519
+  "ntfy-topic.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }

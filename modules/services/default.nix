@@ -2,6 +2,7 @@
 {
   imports = [
     ./ai-stack.nix
+    ./alerts.nix
     ./avahi.nix
     ./battery.nix
     ./beszel.nix
