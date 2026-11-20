@@ -120,7 +120,7 @@
     encoder                                      = "vaapi";                    # Intel UHD 630
     key_rightalt_to_key_win                      = "enabled";
     address_family                               = "both";
-    min_log_level                                = "warning";
+    min_log_level                                = "info";                     # sessions, input mode, errors (warning hid them)
   };
 
   # Users
