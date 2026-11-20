@@ -257,7 +257,7 @@ in
     hub.enable                                   = true;
     hub.interfaces                               = [ "enp4s0" ];
     agentKey                                     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOKJPfX6Upo7KwsaYYueltDi8mYb/MdUKVfm4TcpLzkP"; # hub's public key ("Add system"; system entry: 127.0.0.1:45876)
-    rootDevice                                   = "nvme0n1";                  # 990 Pro (rpool) - / is ZFS; the agent guessed the T500's old ext4 "root" partition
+    rootDevice                                   = "nvme0n1p2";                # the rpool partition (990 Pro). Not "nvme0n1": that matched p1 = /boot. / is ZFS; unset, the agent guessed the T500's old ext4 "root" partition
   };
 
   myServices.homepage = {

@@ -43,10 +43,12 @@ in
     rootDevice = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      example = "nvme0n1";
+      example = "nvme0n1p2";
       description = ''
         Device for the root disk's I/O stats (the agent's FILESYSTEM). Set it
-        when / isn't a plain partition (ZFS) - the agent otherwise guesses,
+        when / isn't a plain partition (ZFS): name the pool's unmounted
+        partition - a whole disk matches its first mounted partition (/boot).
+        Unset, the agent guesses,
         e.g. by an unrelated partition labelled "root".
       '';
     };
