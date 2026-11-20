@@ -18,12 +18,13 @@
 
   programs.bash.enable                           = true;
 
-  # Same prompt as the desktops (home/common.nix), but from a fixed copy of
-  # the theme: there's no Noctalia here to regenerate it on theme changes.
-  # dotfiles/oh-my-posh/server.json is a snapshot of the desktops'
-  # generated quick-term.json, with user@host in the session segment so an
-  # SSH prompt shows which machine it's on. Re-snapshot it from a desktop's
-  # ~/.config/oh-my-posh/quick-term.json after a Noctalia theme change.
+  # Same prompt layout as the desktops (home/common.nix), in gruvbox dark:
+  # there's no Noctalia here to colour it. dotfiles/oh-my-posh/server.json
+  # is the Noctalia template (dotfiles/noctalia/templates/oh-my-posh.json)
+  # with each {{ colors.<role> }} turned into a palette reference (p:<role>)
+  # and a gruvbox "palette" block - swap colours there, not in the
+  # segments. Plus user@host in the session segment, so an SSH prompt
+  # shows which machine it's on.
   programs.bash.initExtra = ''
     eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config ${../../dotfiles/oh-my-posh/server.json})"
   '';

@@ -1,13 +1,25 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "palette": {
+    "primary": "#d79921",
+    "on_primary": "#282828",
+    "surface_variant": "#3c3836",
+    "on_surface_variant": "#a89984",
+    "secondary": "#458588",
+    "on_secondary": "#ebdbb2",
+    "tertiary": "#98971a",
+    "on_tertiary": "#282828",
+    "error": "#d65d0e",
+    "outline": "#928374"
+  },
   "blocks": [
     {
       "alignment": "left",
       "newline": true,
       "segments": [
         {
-          "background": "#6799e4",
-          "foreground": "#181d25",
+          "background": "p:primary",
+          "foreground": "p:on_primary",
           "options": {
             "alpine": "",
             "arch": "",
@@ -27,20 +39,20 @@
           },
           "style": "diamond",
           "leading_diamond": "╭─",
-          "template": " {{.Icon}} ",
+          "template": " {{ .Icon }} ",
           "type": "os"
         },
         {
-          "background": "#1f2733",
-          "foreground": "#afb2b6",
+          "background": "p:surface_variant",
+          "foreground": "p:on_surface_variant",
           "style": "powerline",
           "powerline_symbol": "",
-          "template": " {{.UserName}}@{{.HostName}} ",
+          "template": " {{ .UserName }}@{{ .HostName }} ",
           "type": "session"
         },
         {
-          "background": "#685cd6",
-          "foreground": "#e9f1fc",
+          "background": "p:secondary",
+          "foreground": "p:on_secondary",
           "options": {
             "style": "agnoster_short",
             "max_depth": 3,
@@ -49,20 +61,20 @@
           },
           "style": "powerline",
           "powerline_symbol": "",
-          "template": " {{.Path}} ",
+          "template": " {{ .Path }} ",
           "type": "path"
         },
         {
-          "background": "#a366cc",
-          "foreground": "#141820",
+          "background": "p:tertiary",
+          "foreground": "p:on_tertiary",
           "background_templates": [
-            "{{if or (.Working.Changed) (.Staging.Changed)}}#fd4663{{end}}",
-            "{{if and (gt .Ahead 0) (gt .Behind 0)}}#616871{{end}}",
-            "{{if gt .Ahead 0}}#6799e4{{end}}",
-            "{{if gt .Behind 0}}#6799e4{{end}}"
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:error{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:outline{{ end }}",
+            "{{ if gt .Ahead 0 }}p:primary{{ end }}",
+            "{{ if gt .Behind 0 }}p:primary{{ end }}"
           ],
           "options": {
-            "branch_template": "{{trunc 25 .Branch}}",
+            "branch_template": "{{ trunc 25 .Branch }}",
             "fetch_status": true,
             "branch_icon": " ",
             "branch_identical_icon": "",
@@ -70,7 +82,7 @@
           },
           "style": "diamond",
           "leading_diamond": "<transparent,background></>",
-          "template": " {{.HEAD}}{{if .BranchStatus}} {{.BranchStatus}}{{end}}{{if .Working.Changed}} <transparent></> <#121318> {{.Working.String}}</>{{end}}{{if .Staging.Changed}} <transparent></> <#121318> {{.Staging.String}}</>{{end}}{{if gt .StashCount 0}} <transparent></> <#121318> {{.StashCount}}</>{{end}} ",
+          "template": " {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <transparent></> <p:on_tertiary> {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <transparent></> <p:on_tertiary> {{ .Staging.String }}</>{{ end }}{{ if gt .StashCount 0 }} <transparent></> <p:on_tertiary> {{ .StashCount }}</>{{ end }} ",
           "trailing_diamond": "",
           "type": "git"
         }
@@ -81,8 +93,8 @@
       "alignment": "right",
       "segments": [
         {
-          "background": "#1f2733",
-          "foreground": "#afb2b6",
+          "background": "p:surface_variant",
+          "foreground": "p:on_surface_variant",
           "options": {
             "style": "austin",
             "always_enabled": true
@@ -90,18 +102,18 @@
           "invert_powerline": true,
           "style": "powerline",
           "powerline_symbol": "",
-          "template": "  {{.FormattedMs}} ",
+          "template": "  {{ .FormattedMs }} ",
           "type": "executiontime"
         },
         {
-          "background": "#6799e4",
-          "foreground": "#181d25",
+          "background": "p:primary",
+          "foreground": "p:on_primary",
           "options": {
             "time_format": "15:04:05"
           },
           "invert_powerline": true,
           "style": "diamond",
-          "template": "  {{.CurrentDate | date .Format}} ",
+          "template": "  {{ .CurrentDate | date .Format }} ",
           "trailing_diamond": "",
           "type": "time"
         }
@@ -113,9 +125,9 @@
       "newline": true,
       "segments": [
         {
-          "foreground": "#6799e4",
+          "foreground": "p:primary",
           "style": "plain",
-          "template": "╰─ {{if .Root}}#{{else}}${{end}}",
+          "template": "╰─ {{ if .Root }}#{{else}}${{end}}",
           "type": "text"
         }
       ],
