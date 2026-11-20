@@ -293,6 +293,7 @@ in
       title                                      = hostName;
       headerStyle                                = "clean";
       layout.System = { style = "row"; columns = 4; };
+      layout.Downloads = { style = "row"; columns = 2; };
     };
     widgets = [
       # Disk "/" only: every rpool dataset shares the pool's free space, and
@@ -312,6 +313,33 @@ in
         Wake = [
           { kimi           = { href = "http://${lanIp}:8089/wake/kimi";         icon = "nixos.png";  description = "Wake-on-LAN";  ping = "kimi"; }; }
           { "karma-unraid" = { href = "http://${lanIp}:8089/wake/karma-unraid"; icon = "unraid.png"; description = "Wake-on-LAN (old karma)"; ping = "192.168.1.5"; }; }
+        ];
+      }
+      {
+        # VPN test (myServices.vpnTorrent) - not the live download client yet.
+        # Homepage runs on the host, so it reaches qBittorrent at the
+        # namespace's own address (192.168.15.1), not through the LAN mapping.
+        Downloads = [
+          { qBittorrent = {
+              href = "http://${lanIp}:8180"; icon = "qbittorrent.png";
+              description = "Behind AirVPN (test)";
+              siteMonitor = "http://192.168.15.1:8180";
+          }; }
+          { AirVPN = {
+              icon = "wireguard.png";
+              description = "WireGuard tunnel of the qBittorrent namespace";
+              widget = {
+                type = "customapi";
+                url = "http://127.0.0.1:8188/status.json";
+                refreshInterval = 60000;
+                mappings = [
+                  { field = "status";     label = "Tunnel"; }
+                  { field = "exit_where"; label = "Exit"; }
+                  { field = "handshake";  label = "Handshake"; format = "relativeDate"; }
+                  { field = "rx";         label = "Received"; format = "bytes"; }
+                ];
+              };
+          }; }
         ];
       }
     ];
