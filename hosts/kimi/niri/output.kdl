@@ -10,7 +10,10 @@
 // live connector/mode list if the dummy plug is ever swapped.
 
 output "HDMI-A-2" {
-    mode "1920x1200@59.950"                     // 16:10, fills kuro's 1920x1200 screen in Moonlight
+    // Custom mode - not in the dummy plug's EDID list (1920x1200 is the
+    // nearest), but i915 + the passive plug accept it. 3:2 to match kuro's
+    // 1920x1280 screen in Moonlight. Tested live 2026-11-20 (59.964 Hz).
+    mode custom=true "1920x1280@60"
     scale 1
     transform "normal"
     position x=0 y=0
