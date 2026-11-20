@@ -15,7 +15,7 @@
 { config, lib, ... }:
 
 let
-  nasHost = "192.168.1.5";
+  nasHost = "192.168.1.5";   # the Unraid karma; becomes kraken (192.168.1.10) at the phase-6 cutover
 
   # share name -> export path on the NAS
   exports = {

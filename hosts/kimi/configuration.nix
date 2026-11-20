@@ -20,6 +20,22 @@
     eno2.wakeOnLan.enable                        = true;                       # kimi's only wired nic
   };
 
+  # Fixed LAN address, same last octet as the tailnet: 192.168.1.50 /
+  # 100.101.102.50 (kraken is .10). DNS as the router's DHCP hands out
+  # (Pi-hole on the Unraid karma, AdGuard as fallback) - revisit at the
+  # phase-6 cutover. no-auto-default: no stray DHCP "Wired connection N".
+  networking.networkmanager.settings.main.no-auto-default = "*";
+  networking.networkmanager.ensureProfiles.profiles.lan = {
+    connection = { id = "lan"; type = "ethernet"; interface-name = "eno2"; autoconnect = true; autoconnect-priority = 10; };
+    ethernet.wake-on-lan                         = 64;                         # magic packet (NM's keyfile value)
+    ipv4 = {
+      method                                     = "manual";
+      address1                                   = "192.168.1.50/24,192.168.1.1";
+      dns                                        = "192.168.1.5;94.140.14.14;";
+    };
+    ipv6.method                                  = "auto";
+  };
+
   # Outbound key to reach kraken as a distributed-build client (nix-daemon
   # runs as root, so owned by root here rather than the zp-owned pattern
   # kuro/krugerrand use - there's no interactive admin use for this one).

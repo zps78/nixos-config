@@ -100,7 +100,7 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
   (from `/etc/ssh/ssh_host_ed25519_key.pub`), add it to
   `home-gateway-mac.age`'s and `zp-password.age`'s recipients, `agenix -r`, rebuild.
 - Check: `zpool status rpool`, `nvidia-smi` (both GPUs listed),
-  `ip rule` (shows `from 192.168.1.7 lookup 100`),
+  `ip rule` (shows `from 192.168.1.11 lookup 100`),
   `ip route show table 100`.
 
 ## Later (not phase 0)
@@ -108,7 +108,10 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
 - Tailscale IP: 100.101.102.10 (set by hand in the admin console,
   2026-11-20; MagicDNS name `kraken`). Prefer the name in config - only
   modules/services/ai-stack.nix needs the literal address.
-- Phase 6 cutover: LAN IP `.5` + subnet route, optionally reuse the
+- LAN IP: 192.168.1.10 (same last octet as the Tailscale IP); Sunshine
+  NIC 192.168.1.11.
+- Phase 6 cutover: subnet route; repoint what uses 192.168.1.5 (NFS
+  `nasHost`, app clients) at kraken; optionally reuse the
   Unraid karma's
   SSH host keys (`/boot/config/ssh/` on the old box) so known_hosts and
   agenix keep working.

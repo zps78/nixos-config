@@ -14,12 +14,13 @@
 { config, pkgs, ... }:
 
 let
-  # LAN addressing. lanIp is TEMPORARY until the old Unraid karma is
-  # retired (NAS plan phase 6): then lanIp -> .5. (The name stays kraken;
-  # it was "karma-n5" until 2026-11-20.)
+  # LAN addressing. Fixed hosts use the same last octet on the LAN as on
+  # the tailnet: kraken is 192.168.1.10 / 100.101.102.10 (kimi .50); the
+  # Sunshine NIC is the next address, .11. (Named karma-n5 until
+  # 2026-11-20; LAN .6 / stream .7 until then.)
   hostName = "kraken";
-  lanIp = "192.168.1.6";         # Aquantia AQC111 (enp4s0): everything
-  streamIp = "192.168.1.7";      # Intel I211 (enp5s0): Sunshine only
+  lanIp = "192.168.1.10";        # Aquantia AQC111 (enp4s0): everything
+  streamIp = "192.168.1.11";     # Intel I211 (enp5s0): Sunshine only
   gateway = "192.168.1.1";
   streamTable = "100";           # policy-routing table for streamIp
   steamUid = "1001";             # pinned below; used by the routing rule
@@ -115,7 +116,7 @@ in
         routing-rule1                            = "priority 100 from ${streamIp} table ${streamTable}";
         # Sunshine's video/audio UDP goes out from a socket bound to
         # 0.0.0.0, so "from streamIp" alone wouldn't catch it - the kernel
-        # would pick the Aquantia and .6. Everything the steam user sends to
+        # would pick the Aquantia and lanIp. Everything the steam user sends to
         # the LAN uses this NIC instead (ahead of the Tailscale home-LAN
         # rule at 5200). Internet/tailnet traffic keeps the normal routing.
         routing-rule2                            = "priority 101 to 192.168.1.0/24 uidrange ${steamUid}-${steamUid} table ${streamTable}";
@@ -358,8 +359,9 @@ in
   #     Homepage, Komodo.
   # 1+  ssd-home -> Steam library; Immich/personal NVMe mirror; services;
   #     the array (disk1..5 import, mergerfs /mnt/user, SnapRAID), sanoid.
-  # 6   Cutover: lanIp .5, advertiseRoutes (take over from the Unraid
-  #     karma), retire the Unraid karma.
+  # 6   Cutover: advertiseRoutes (take over from the Unraid karma), point
+  #     what still uses 192.168.1.5 at kraken (modules/shares/nfs nasHost,
+  #     app clients), retire the Unraid karma. kraken keeps .10.
 
   # System state version - the release this host is first installed with.
   system.stateVersion                            = "26.11";
