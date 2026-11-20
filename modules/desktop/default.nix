@@ -7,7 +7,6 @@
     ./gnome.nix
     ./kde.nix
     ./niri.nix
-    ./steam-gamescope.nix
     ./steam-on-demand.nix
   ];
 

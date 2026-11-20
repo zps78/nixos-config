@@ -22,9 +22,7 @@
 #
 # steam may start/stop/restart exactly these two units and nothing else
 # (polkit rule below) - it stays an unprivileged account.
-#
-# Contrast with myDesktop.steamGamescope (krieger): that one makes Steam
-# the greetd autologin session. Don't enable both.
+
 { config, lib, pkgs, ... }:
 
 let
@@ -136,8 +134,6 @@ in
         message = "myDesktop.steamOnDemand needs myFeatures.steam.enable."; }
       { assertion = config.myServices.sunshine.enable;
         message = "myDesktop.steamOnDemand needs myServices.sunshine.enable."; }
-      { assertion = !config.myDesktop.steamGamescope.enable;
-        message = "myDesktop.steamOnDemand and myDesktop.steamGamescope are alternatives - enable one."; }
       { assertion = config.users.users.${user}.uid != null;
         message = "myDesktop.steamOnDemand: pin users.users.${user}.uid (used for unit ordering and routing rules)."; }
     ];
@@ -182,8 +178,11 @@ in
       wants = [ "user@${uid}.service" ];
       conflicts = [ "getty@tty${toString cfg.vt}.service" ];
 
-      # See modules/desktop/steam-gamescope.nix: the steam-gamescope script
-      # calls gamescope/steam by name.
+      # Services get a minimal PATH, but the steam-gamescope script (from
+      # programs.steam.gamescopeSession) calls `gamescope` and `steam` by
+      # name - without this it dies with "command not found" (exit 127).
+      # Same order as a login shell: setcap/suid wrappers, the user's
+      # home-manager profile, then system.
       path = [ "/run/wrappers" "/etc/profiles/per-user/${user}" "/run/current-system/sw" ];
       environment = {
         XDG_SESSION_TYPE = "wayland";
