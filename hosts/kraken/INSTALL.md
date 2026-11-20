@@ -105,8 +105,9 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
 
 ## Later (not phase 0)
 
-- Tailscale IP: 100.101.102.33 (set by hand 2026-11-20, the address
-  krieger had; MagicDNS name `kraken`).
+- Tailscale IP: 100.101.102.10 (set by hand in the admin console,
+  2026-11-20; MagicDNS name `kraken`). Prefer the name in config - only
+  modules/services/ai-stack.nix needs the literal address.
 - Phase 6 cutover: LAN IP `.5` + subnet route, optionally reuse the
   Unraid karma's
   SSH host keys (`/boot/config/ssh/` on the old box) so known_hosts and

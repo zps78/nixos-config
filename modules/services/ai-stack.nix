@@ -60,9 +60,9 @@ in
     };
 
     virtualisation.oci-containers.containers = {
-      # LLM serving. (Unused since krieger was retired; 100.101.102.33 was
-      # krieger's Tailscale address and is kraken's now, so enabling this on
-      # kraken works as-is - update the http://krieger:11434 mentions.)
+      # LLM serving. (Unused since krieger was retired. The address below is
+      # kraken's Tailscale IP, for enabling it there - update the
+      # http://krieger:11434 mentions then.)
       # Published only on the host's own Tailscale address (its
       # ollama API has no auth of its own) so other machines on the tailnet
       # - namely kuro's GPT4FreeCAD addon, see modules/apps-user/freecad.nix
@@ -72,7 +72,7 @@ in
       ollama = {
         image = "ollama/ollama:latest";
         volumes = [ "${dataDir}/ollama:/root/.ollama" ];
-        ports = [ "100.101.102.33:11434:11434" ];
+        ports = [ "100.101.102.10:11434:11434" ];
         extraOptions = gpuOptions ++ [ "--network=ai-stack" ];
       };
 
