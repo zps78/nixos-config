@@ -10,7 +10,7 @@
 // live connector/mode list if the dummy plug is ever swapped.
 
 output "HDMI-A-2" {
-    mode "1920x1080@60.000"
+    mode "1920x1200@59.950"                     // 16:10, fills kuro's 1920x1200 screen in Moonlight
     scale 1
     transform "normal"
     position x=0 y=0
