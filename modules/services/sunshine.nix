@@ -75,6 +75,14 @@
       # CAP_SYS_ADMIN: needed for input device / virtual input capture.
       capSysAdmin = true;
 
+      # Capture straight from the GPU (KMS, also needs CAP_SYS_ADMIN above)
+      # instead of auto-detecting. Since 2026.914 Sunshine tries the
+      # xdg-desktop-portal first; under niri that portal has no RemoteDesktop
+      # interface, and Sunshine hung there ("[portalgrab] RemoteDesktop
+      # CreateSession failed") without ever opening its ports - kimi was
+      # unreachable from Moonlight. kraken (gamescope) already picked KMS.
+      settings.capture = lib.mkDefault "kms";
+
       # (see security.wrappers.sunshine below for CAP_SYS_NICE)
 
       # Opens the streaming + discovery ports (derived from the configured
