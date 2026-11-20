@@ -105,7 +105,9 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
 
 ## Later (not phase 0)
 
-- Phase 6 cutover: LAN IP `.5`, Tailscale IP 100.101.102.5 + subnet
-  route, optionally reuse the Unraid karma's
+- Tailscale IP: 100.101.102.33 (set by hand 2026-11-20, the address
+  krieger had; MagicDNS name `kraken`).
+- Phase 6 cutover: LAN IP `.5` + subnet route, optionally reuse the
+  Unraid karma's
   SSH host keys (`/boot/config/ssh/` on the old box) so known_hosts and
   agenix keep working.

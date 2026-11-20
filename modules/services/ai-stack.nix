@@ -60,7 +60,10 @@ in
     };
 
     virtualisation.oci-containers.containers = {
-      # LLM serving. Published only on krieger's own Tailscale address (its
+      # LLM serving. (Unused since krieger was retired; 100.101.102.33 was
+      # krieger's Tailscale address and is kraken's now, so enabling this on
+      # kraken works as-is - update the http://krieger:11434 mentions.)
+      # Published only on the host's own Tailscale address (its
       # ollama API has no auth of its own) so other machines on the tailnet
       # - namely kuro's GPT4FreeCAD addon, see modules/apps-user/freecad.nix
       # - can reach it as http://krieger:11434, without exposing it on the
