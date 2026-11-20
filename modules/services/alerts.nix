@@ -12,7 +12,7 @@
 # and post), so it's random and lives in agenix (secrets/ntfy-topic.age),
 # read at send time - it never reaches the nix store. Subscribe to it in
 # the ntfy app; get it with
-#   nix run github:ryantm/agenix -- -d secrets/ntfy-topic.age -i ~/.ssh/id_ed25519
+#   cd secrets && nix run github:ryantm/agenix -- -d ntfy-topic.age -i ~/.ssh/id_ed25519
 #
 # Test from the host:  sudo systemctl start ntfy-test
 # By hand:             echo "body" | sudo ntfy-send "title" [priority] [tags]
