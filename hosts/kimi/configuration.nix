@@ -109,6 +109,20 @@
     wine.enable                                  = true;
   };
 
+  # Sunshine settings, declared here: once any setting is set (the module's
+  # capture = "kms"), NixOS hands Sunshine its own config file and gt's
+  # hand-edited ~/.config/sunshine/sunshine.conf is no longer read.
+  # csrf_allowed_origins: every URL the web UI is opened by, or its actions
+  # fail with "CSRF Protection Error". No output_name: with KMS capture
+  # Sunshine numbers displays (HDMI-A-2 is "Monitor 0") and kimi has one.
+  services.sunshine.settings = {
+    csrf_allowed_origins                         = "https://192.168.1.50:47990,https://kimi:47990";
+    encoder                                      = "vaapi";                    # Intel UHD 630
+    key_rightalt_to_key_win                      = "enabled";
+    address_family                               = "both";
+    min_log_level                                = "warning";
+  };
+
   # Users
   #
   # zp - admin: SSH (fleet keys via myServices.ssh), wheel. Password from
