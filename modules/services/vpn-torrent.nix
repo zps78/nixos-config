@@ -103,7 +103,7 @@ in
     systemd.services.vpn-status = {
       description = "Write the AirVPN tunnel status for Homepage";
       serviceConfig.Type = "oneshot";
-      path = with pkgs; [ iproute2 wireguard-tools curl jq coreutils ];
+      path = with pkgs; [ iproute2 wireguard-tools curl jq coreutils gawk ];
       script = ''
         out=/run/vpn-status/status.json; cache=/run/vpn-status/exit.json
         if [ -e /run/netns/${ns} ] && dump=$(ip netns exec ${ns} wg show all dump 2>/dev/null) && [ -n "$dump" ]; then
