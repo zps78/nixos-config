@@ -40,6 +40,17 @@ in
       description = "The hub's public key (shown under \"Add system\"). The agent only runs once this is set.";
     };
 
+    rootDevice = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "nvme0n1";
+      description = ''
+        Device for the root disk's I/O stats (the agent's FILESYSTEM). Set it
+        when / isn't a plain partition (ZFS) - the agent otherwise guesses,
+        e.g. by an unrelated partition labelled "root".
+      '';
+    };
+
     dockerAccess = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -64,7 +75,11 @@ in
       services.beszel.agent = {
         enable = true;
         openFirewall = false;
-        environment.KEY = cfg.agentKey;
+        environment = {
+          KEY = cfg.agentKey;
+        } // lib.optionalAttrs (cfg.rootDevice != null) {
+          FILESYSTEM = cfg.rootDevice;
+        };
       };
 
       systemd.services.beszel-agent.serviceConfig.SupplementaryGroups = lib.mkIf (!cfg.dockerAccess)
