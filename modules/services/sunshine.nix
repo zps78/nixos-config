@@ -22,7 +22,7 @@
       description = ''
         Open Sunshine's ports only on these network interfaces (plus
         tailscale0, which the fleet already trusts). Empty = open them on
-        every interface, the upstream default (krieger).
+        every interface, the upstream default.
       '';
     };
   };

@@ -1,8 +1,9 @@
 # ../../home/users/steam.nix
 #
-# krieger's unprivileged desktop account: autologin, Sunshine streaming
-# and Steam. Admin work happens as bb over SSH; this user has no wheel,
-# no docker and no password (see hosts/krieger/configuration.nix).
+# kraken's unprivileged session account: Sunshine streaming and Steam
+# (in gamescope, started on demand). Admin work happens as zp over SSH;
+# this user has no wheel, no docker and no password (see
+# hosts/kraken/configuration.nix).
 # Kept deliberately lean - games and a few things you'd use from the
 # couch, not bb's workstation apps.
 { lib, osConfig, ... }:
@@ -13,7 +14,7 @@
   home.stateVersion                              = "25.11";          # release this home was first set up with - never bump on upgrades
 
   # No niri/Noctalia: this account's session is Steam in gamescope
-  # (myDesktop.steamGamescope on krieger). Noctalia's user service hangs
+  # (myDesktop.steamOnDemand on kraken). Noctalia's user service hangs
   # off graphical-session.target and would just crash-loop without a
   # compositor it can talk to.
   imports = [

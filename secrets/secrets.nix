@@ -28,9 +28,6 @@ let
   kimi-host =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQ3asT1lYai02B7wvOGaGUugjYU4dTDF4nAXzDN+XQe";
 
-  krieger-host =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMiY9PNYhJG9MeeoElGGTpqiX+4Y5CtHPSJJ3TRExTH";
-
   # The new NAS (hosts/kraken), generated on its first boot 2026-11-17
   # (then named karma-n5; same machine, same key). The Unraid karma never
   # had an agenix key.
@@ -43,7 +40,7 @@ in
   "krugerrand-fleet-key.age".publicKeys = [ zp-personal krugerrand-host ];
 
   # kepler/kimi previously had no outbound fleet SSH identity at all
-  # (leaf-only targets) - added so they can reach krieger as a
+  # (leaf-only targets) - added so they can reach kraken as a
   # distributed-build client (see modules/system/remote-builders.nix).
   "kepler-fleet-key.age".publicKeys = [ zp-personal kepler-host ];
   "kimi-fleet-key.age".publicKeys = [ zp-personal kimi-host ];
@@ -60,5 +57,5 @@ in
     [ zp-personal kuro-host krugerrand-host kimi-host kraken-host ];
 
   "home-gateway-mac.age".publicKeys =
-    [ zp-personal kuro-host krugerrand-host kepler-host kimi-host krieger-host kraken-host ];
+    [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }

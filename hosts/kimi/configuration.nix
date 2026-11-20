@@ -20,7 +20,7 @@
     eno2.wakeOnLan.enable                        = true;                       # kimi's only wired nic
   };
 
-  # Outbound key to reach krieger as a distributed-build client (nix-daemon
+  # Outbound key to reach kraken as a distributed-build client (nix-daemon
   # runs as root, so owned by root here rather than the zp-owned pattern
   # kuro/krugerrand use - there's no interactive admin use for this one).
   # See modules/system/remote-builders.nix and secrets/secrets.nix.

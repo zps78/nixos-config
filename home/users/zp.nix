@@ -138,10 +138,8 @@
   # is agenix-encrypted, decrypted only on its own host at activation
   # via age.secrets.<host>-fleet-key in that host's configuration.nix.
   # Public halves are plain-text, committed, and added to each target's
-  # authorized_keys. krieger used to be the second admin machine
-  # (krieger-fleet-key) but was demoted to a leaf once it got
-  # autologin enabled - a lower-trust boot state we didn't want holding
-  # fleet-wide SSH reach - and krugerrand took its place instead.
+  # authorized_keys. (krieger, retired 2026-11-20, was once the second
+  # admin machine; krugerrand took that role.)
   #
   programs.ssh = lib.mkIf
     (builtins.elem osConfig.networking.hostName [ "kuro" "krugerrand" ])
@@ -178,11 +176,6 @@
         };
         kimi = {
           User = "zp";
-          IdentityFile = identityFile;
-          IdentitiesOnly = true;
-        };
-        krieger = {
-          User = "bb";
           IdentityFile = identityFile;
           IdentitiesOnly = true;
         };

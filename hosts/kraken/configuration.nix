@@ -302,7 +302,7 @@ in
   #         (home/profiles/server.nix). Password from agenix
   #         (secrets/zp-password.age), the same one on every host.
   # steam - Sunshine/Steam/gamescope. Unprivileged: no wheel, no docker,
-  #         no password. Same role as on krieger.
+  #         no password.
   # media - UID 99 / GID 100 ("users"), matching Unraid's nobody:users.
   #         Every file on the array is owned 99:100 and the containers run
   #         with PUID=99 PGID=100, so nothing is re-owned in the move.

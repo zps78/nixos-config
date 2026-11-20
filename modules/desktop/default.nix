@@ -36,7 +36,7 @@
       The user whose graphical session runs on this host's screen (the
       autologin / Sunshine user). Defaults to primaryUser. Set it apart
       when the desktop should belong to an unprivileged account - e.g.
-      krieger's "steam" user, while primaryUser stays the admin account
+      kraken's "steam" user, while primaryUser stays the admin account
       that gets SSH keys, docker, libvirt and remote-builder access.
       Owns the session-side state: the greeter wallpaper hand-off and
       Sunshine's virtual input devices.

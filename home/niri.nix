@@ -177,8 +177,8 @@ in
       widget.pomodoro.type = "thepunkoff/pomodoro:widget";
       # Left click: start/stop recording (saved to ~/Videos/Recordings).
       widget.recorder.type = "noctalia/screen_recorder:recorder";
-      # HEVC: every niri host hw-encodes it (kuro Meteor Lake, krieger
-      # RTX 4060 Ti, kimi UHD 630, kepler 680M); AV1 isn't on kimi/kepler.
+      # HEVC: every niri host hw-encodes it (kuro Meteor Lake, kimi
+      # UHD 630, kepler 680M); AV1 isn't on kimi/kepler.
       # AAC over Opus so recordings play on phones/WhatsApp/editors.
       plugin_settings."noctalia/screen_recorder" = {
         video_codec = "hevc";
@@ -193,12 +193,9 @@ in
       };
       };
     in
-    # lib.recursiveUpdate (not //) so the per-host blocks below merge into
-    # nested keys like `bar.default` instead of clobbering them wholesale -
-    # `//` only merges top-level attrs, and both this settings set and the
-    # krieger block below set `bar`.
-      lib.recursiveUpdate
-        (lib.recursiveUpdate settingsBase
+    # lib.recursiveUpdate (not //) so optional blocks merge into nested keys
+    # instead of clobbering them wholesale - `//` only merges top-level attrs.
+      lib.recursiveUpdate settingsBase
           (lib.optionalAttrs osConfig.myDesktop.idle.enable {
             # Idle: lock, then blank, then suspend. (logind still handles lid
             # close; lockscreen.lock_before_suspend handles lock-on-suspend.)
@@ -210,24 +207,7 @@ in
                 suspend      = { timeout = 1800; action = "lock_and_suspend"; enabled = true; };
               };
             };
-          }))
-        (lib.optionalAttrs (osConfig.networking.hostName == "krieger") {
-      # Keep the bar off the HDMI dummy plug (Sunshine's always-on capture
-      # target, see hosts/krieger/niri/output.kdl) - it's never meant to be
-      # looked at directly, and the bar/clock/etc. showing up in the
-      # Moonlight stream looks broken. "enabled" isn't an overridable
-      # per-monitor field (confirmed against Noctalia's own bar docs), so
-      # this fakes invisibility instead: no widgets, transparent, and no
-      # reserved compositor space.
-      bar.default.monitor."HDMI-A-1" = {
-        match               = "HDMI-A-1";
-        background_opacity  = 0.0;
-        reserve_space       = false;
-        start               = [ ];
-        center              = [ ];
-        end                 = [ ];
-      };
-    });
+          });
   };
 
   # While >1 output is connected (docked / external displays), inhibit

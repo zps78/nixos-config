@@ -22,7 +22,7 @@
   };
 
   # Fleet SSH access - dedicated key for reaching the rest of the fleet
-  # (kepler/kimi/kuro/krieger/karma). See home/users/zp.nix for the SSH
+  # (kepler/kimi/kuro/kraken/karma). See home/users/zp.nix for the SSH
   # client config that uses this, and secrets/secrets.nix for
   # recipients.
   age.secrets.krugerrand-fleet-key = {
