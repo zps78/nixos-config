@@ -69,6 +69,11 @@ in
   #   nix run github:ryantm/agenix -- -e airvpn-wg.conf.age < ~/Downloads/<file>.conf
   "airvpn-wg.conf.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken Homepage's widget credentials, as an environment file
+  # (HOMEPAGE_VAR_<NAME>=value lines, referenced as {{HOMEPAGE_VAR_<NAME>}}
+  # in the Homepage config). Currently: QBIT_USER, QBIT_PASSWORD.
+  "homepage-env.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }
