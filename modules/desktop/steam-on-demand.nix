@@ -1,6 +1,6 @@
 # ../../modules/desktop/steam-on-demand.nix
 #
-# Headless game streaming (karma): no desktop, no greeter, no autologin.
+# Headless game streaming (kraken): no desktop, no greeter, no autologin.
 # Nothing graphical runs until Moonlight asks for it.
 #
 #   always on   the sessionUser ("steam") lingers, so its user manager runs
@@ -281,7 +281,7 @@ in
         # *planes that currently hold a framebuffer*, not connectors, and a
         # connector name like "HDMI-A-1" is translated to an index once, at
         # startup - while the console is still lit on every output (DP-2=0,
-        # HDMI-A-1=1 on karma). During a stream gamescope drives only
+        # HDMI-A-1=1 on kraken). During a stream gamescope drives only
         # cfg.output and switches the other outputs off, so the one plane
         # with a framebuffer - Steam on the dummy plug - is index 0; index
         # 1 is empty and the stream is black ("Couldn't get drm fb for

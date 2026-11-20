@@ -31,10 +31,10 @@ let
   krieger-host =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMiY9PNYhJG9MeeoElGGTpqiX+4Y5CtHPSJJ3TRExTH";
 
-  # The new NAS (hosts/karma), generated on its first boot 2026-11-17 while
-  # it still runs as karma-n5. Kept through the phase-6 rename to karma
-  # (same machine, same key) - the Unraid karma never had an agenix key.
-  karma-host =
+  # The new NAS (hosts/kraken), generated on its first boot 2026-11-17
+  # (then named karma-n5; same machine, same key). The Unraid karma never
+  # had an agenix key.
+  kraken-host =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBB72h4g0dyQd7htr5pKHO+0eYIS4ZFg4x9FjxDD0Ltk";
 
 in
@@ -57,8 +57,8 @@ in
   # Create/change it from secrets/:
   #   mkpasswd -m yescrypt | nix run github:ryantm/agenix -- -e zp-password.age
   "zp-password.age".publicKeys =
-    [ zp-personal kuro-host krugerrand-host kimi-host karma-host ];
+    [ zp-personal kuro-host krugerrand-host kimi-host kraken-host ];
 
   "home-gateway-mac.age".publicKeys =
-    [ zp-personal kuro-host krugerrand-host kepler-host kimi-host krieger-host karma-host ];
+    [ zp-personal kuro-host krugerrand-host kepler-host kimi-host krieger-host kraken-host ];
 }

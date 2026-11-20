@@ -88,7 +88,7 @@
     data-rescue.enable                           = false;
     kde-connect.enable                           = true;
     proxmark3.enable                             = true;                       # Proxmark3 RFID/NFC tooling (Iceman client, udev rule)
-    remoteBuilder.enable                         = true;                       # offload big builds to karma (always-on 5950X); local fallback
+    remoteBuilder.enable                         = true;                       # offload big builds to kraken (always-on 5950X); local fallback
     steam.enable                                 = false;
     wine.enable                                  = true;
   };

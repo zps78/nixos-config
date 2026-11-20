@@ -1,6 +1,6 @@
-# ../../hosts/karma/configuration.nix
+# ../../hosts/kraken/configuration.nix
 #
-# karma - the home NAS + game-streaming server, rebuilt on krieger's old
+# kraken - the home NAS + game-streaming server, rebuilt on krieger's old
 # internals (Crosshair VIII Formula, 5950X, RTX 4060 Ti + T1000) in a
 # Jonsbo N5. Replaces the Unraid karma; see the NAS plan for the phases.
 #
@@ -14,9 +14,10 @@
 { config, pkgs, ... }:
 
 let
-  # LAN addressing. TEMPORARY until the old Unraid karma is retired
-  # (NAS plan phase 6): then hostName -> "karma" and lanIp -> .5.
-  hostName = "karma-n5";
+  # LAN addressing. lanIp is TEMPORARY until the old Unraid karma is
+  # retired (NAS plan phase 6): then lanIp -> .5. (The name stays kraken;
+  # it was "karma-n5" until 2026-11-20.)
+  hostName = "kraken";
   lanIp = "192.168.1.6";         # Aquantia AQC111 (enp4s0): everything
   streamIp = "192.168.1.7";      # Intel I211 (enp5s0): Sunshine only
   gateway = "192.168.1.1";
@@ -357,9 +358,8 @@ in
   #     Homepage, Komodo.
   # 1+  ssd-home -> Steam library; Immich/personal NVMe mirror; services;
   #     the array (disk1..5 import, mergerfs /mnt/user, SnapRAID), sanoid.
-  # 6   Cutover: hostName "karma", lanIp .5, advertiseRoutes, agenix
-  #     karma-host, remote builder (modules/system/remote-builders.nix
-  #     still points at krieger).
+  # 6   Cutover: lanIp .5, advertiseRoutes (take over from the Unraid
+  #     karma), retire the Unraid karma.
 
   # System state version - the release this host is first installed with.
   system.stateVersion                            = "26.11";

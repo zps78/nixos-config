@@ -1,4 +1,8 @@
-# karma - install (phase 0)
+# kraken - install (phase 0)
+
+(Named `karma` and then `karma-n5` during the build; `kraken` since
+2026-11-20. The partition labels below keep `karma-*` - they're what
+the installed disk has, and `hardware-configuration.nix` matches them.)
 
 Fresh NixOS on the Samsung 990 Pro (M.2_1), still in krieger's case,
 with nothing from the Unraid karma attached. The layout matches
@@ -56,7 +60,7 @@ mount -o fmask=0077,dmask=0077 /dev/disk/by-partlabel/karma-esp /mnt/boot
 
 # Install straight from GitHub - no local clone on the target. The working
 # copy lives in the admin's home like on every other host (step 4).
-nixos-install --flake github:zps78/nixos-config#karma
+nixos-install --flake github:zps78/nixos-config#kraken
 #   ^ asks for a root password at the end: set one. Root can't log in over
 #     SSH (PermitRootLogin no); it's the emergency key for the console
 #     (monitor + keyboard on the box) when SSH/the network is broken.
@@ -75,7 +79,7 @@ umount -R /mnt && zpool export rpool && reboot
 ```
 
 **Don't skip the export.** An unexported pool is still marked as in use
-by the installer's hostid, and karma's initrd won't force-import it: the
+by the installer's hostid, and kraken's initrd won't force-import it: the
 first boot hangs at "A start job is running for Import ZFS pool rpool"
 and ends in an unusable emergency mode. Recovery: boot the installer,
 `zpool import -f -N rpool && zpool export rpool`, reboot.
@@ -86,15 +90,14 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
   emergency. SSH is closed on the LAN (fleet design: SSH over Tailscale
   only), so the first step happens at the console:
 - `sudo tailscale up --accept-dns --accept-routes --ssh --qr` -> scan,
-  approve; the machine name becomes `karma-n5` (until the phase-6
-  cutover). The flags must be typed here: the config's extraUpFlags are
-  only applied automatically with an authKeyFile, which karma doesn't use.
+  approve; the machine name becomes `kraken`. The flags must be typed here: the config's extraUpFlags are
+  only applied automatically with an authKeyFile, which kraken doesn't use.
   (On the pt console layout, mind the dashes - a typo gives "too many
-  non-flag arguments".) From then on: `ssh zp@karma-n5`.
+  non-flag arguments".) From then on: `ssh zp@kraken`.
 - Working copy of the config, as zp (same place as on the other hosts):
   `git clone https://github.com/zps78/nixos-config.git ~/nixos-config`
-  Rebuild: `cd ~/nixos-config && git pull && sudo nixos-rebuild switch --flake .#karma`
-- agenix: add the new host key to `secrets/secrets.nix` as `karma-host`
+  Rebuild: `cd ~/nixos-config && git pull && sudo nixos-rebuild switch --flake .#kraken`
+- agenix: add the new host key to `secrets/secrets.nix` as `kraken-host`
   (from `/etc/ssh/ssh_host_ed25519_key.pub`), add it to
   `home-gateway-mac.age`'s and `zp-password.age`'s recipients, `agenix -r`, rebuild.
 - Check: `zpool status rpool`, `nvidia-smi` (both GPUs listed),
@@ -103,7 +106,7 @@ and ends in an unusable emergency mode. Recovery: boot the installer,
 
 ## Later (not phase 0)
 
-- Phase 6 cutover: hostName `karma`, LAN IP `.5`, Tailscale node rename +
-  IP 100.101.102.5 + subnet route, optionally reuse the Unraid karma's
+- Phase 6 cutover: LAN IP `.5`, Tailscale IP 100.101.102.5 + subnet
+  route, optionally reuse the Unraid karma's
   SSH host keys (`/boot/config/ssh/` on the old box) so known_hosts and
   agenix keep working.

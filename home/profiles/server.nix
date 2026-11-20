@@ -2,7 +2,7 @@
 #
 # Lean profile for an admin account on a machine whose desktop (if any)
 # belongs to someone else: shell and CLI basics only, no desktop apps.
-# Used by zp on kimi (whose session is gt's) and on karma (headless).
+# Used by zp on kimi (whose session is gt's) and on kraken (headless).
 # Username/home come from makeUser in flake.nix.
 { pkgs, lib, ... }:
 

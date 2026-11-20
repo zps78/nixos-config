@@ -1,7 +1,7 @@
-# ../../hosts/karma/hardware-configuration.nix
+# ../../hosts/kraken/hardware-configuration.nix
 #
 # Hand-written, NOT from nixos-generate-config: the disk layout is fixed
-# in advance by hosts/karma/INSTALL.md, so nothing here depends on
+# in advance by hosts/kraken/INSTALL.md, so nothing here depends on
 # UUIDs that only exist after partitioning. After the install, diff this
 # against `nixos-generate-config --show-hardware-config` and take any
 # extra kernel modules it finds.
@@ -10,6 +10,8 @@
 # old internals, moving into the Jonsbo N5.
 #
 # OS disk: Samsung 990 Pro 1TB in M.2_1 (CPU lanes)
+#   (labels say "karma": written at install, before the name was
+#   kraken - they're on the disk, so they stay)
 #   p1  "karma-esp"  1 GiB  vfat  -> /boot
 #   p2  "karma-zfs"  rest   ZFS pool "rpool"
 #
