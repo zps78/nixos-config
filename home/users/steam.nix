@@ -42,6 +42,9 @@
   programs.zen-browser = lib.mkIf osConfig.myDesktop.steamOnDemand.zen.enable {
     policies.DNSOverHTTPS = { Enabled = false; Locked = true; };
     profiles.default.settings = {
+      # Always private ("permanent private browsing"): no history, cookies
+      # and site data dropped when Zen closes. Bookmarks are still kept.
+      "browser.privatebrowsing.autostart"              = true;
       "network.trr.mode"                               = 5;      # DoH off, explicitly
       "media.peerconnection.ice.default_address_only"  = true;   # WebRTC: no host/LAN candidates
       "media.peerconnection.ice.no_host"               = true;
