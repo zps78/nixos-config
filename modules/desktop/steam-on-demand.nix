@@ -20,8 +20,15 @@
 #               it was already stopped. Quitting the app in Moonlight
 #               (prep-cmd "undo") or Exit in Steam ends it at once.
 #
-# steam may start/stop/restart exactly these two units and nothing else
+# steam may start/stop/restart exactly these units and nothing else
 # (polkit rule below) - it stays an unprivileged account.
+#
+# Optional second app, zen.enable: "Zen (VPN)" - the Zen browser full-screen
+# in cage on the same dummy-plug output, inside a VPN-Confinement namespace
+# (only the tunnel; kill switch). Same Sunshine/NVENC stream as Steam, so
+# video plays at Moonlight quality. One app at a time (Sunshine refuses a
+# second launch; the units conflict). Unlike Steam, Zen stops right away
+# on disconnect - nobody else can resume into an open browser.
 
 { config, lib, pkgs, ... }:
 
@@ -32,15 +39,33 @@ let
 
   unit = "steam-gamescope.service";
   idleTimer = "steam-gamescope-idle-stop.timer";
+  zenUnit = "zen-vpn.service";
+  # Which app the current Sunshine session is (steam|zen) - lets the
+  # disconnect/reconnect watcher treat them differently.
+  stateFile = "/run/user/${uid}/sunshine-app";
 
-  # Called by Sunshine (as `user`) around each stream.
+  # cage runs this as its one client: switch the dummy plug to the stream
+  # mode, then Zen full-screen (cage maximises its only window).
+  zenLauncher = pkgs.writeShellScript "zen-vpn-launch" ''
+    ${pkgs.wlr-randr}/bin/wlr-randr --output ${cfg.output} \
+      --custom-mode ${toString cfg.width}x${toString cfg.height}@${toString cfg.refresh} || true
+    exec /etc/profiles/per-user/${user}/bin/zen-beta
+  '';
+
+  # Called by Sunshine (as `user`) around each stream, and by the watcher.
+  #   start steam|zen   prep-cmd "do" (app launch)
+  #   stop  steam|zen   prep-cmd "undo" (app quit in Moonlight)
+  #   resume            a client (re)connected
+  #   stop-later        the last client disconnected
   ctl = pkgs.writeShellScript "steam-session-ctl" ''
     export PATH=${lib.makeBinPath [ pkgs.systemd pkgs.procps pkgs.coreutils ]}
-    case "$1" in
-      start)
-        # App launch (Sunshine prep-cmd "do").
-        systemctl --no-ask-password stop ${idleTimer} || true
-        systemctl --no-ask-password start ${unit}
+    sc() { systemctl --no-ask-password "$@"; }
+    app=$(cat ${stateFile} 2>/dev/null || echo steam)
+    case "$1:''${2:-}" in
+      start:steam)
+        echo steam > ${stateFile}
+        sc stop ${idleTimer} || true
+        sc start ${unit}
         # Hold the stream back until Steam's UI is up, so Moonlight doesn't
         # open on the bare console. Give up waiting after 2 minutes (first
         # launch self-updates Steam; the stream then starts anyway).
@@ -52,24 +77,43 @@ let
           sleep 1
         done
         ;;
-      resume)
-        # A client (re)connected - Sunshine does NOT re-run prep-cmd "do"
-        # on resume, so make sure the session is (still/again) running.
-        systemctl --no-ask-password stop ${idleTimer} || true
-        systemctl --no-ask-password is-active -q ${unit} \
-          || systemctl --no-ask-password start ${unit}
+      start:zen)
+        echo zen > ${stateFile}
+        sc start ${zenUnit}
+        for _ in $(seq 60); do
+          if pgrep -u ${user} -f "zen-beta|/zen " >/dev/null; then
+            sleep 3
+            exit 0
+          fi
+          sleep 1
+        done
         ;;
-      stop-later)
-        # Last client disconnected: grace period before stopping.
-        systemctl --no-ask-password restart ${idleTimer}
+      resume:*)
+        # Sunshine does NOT re-run prep-cmd "do" on resume, so make sure the
+        # session is (still/again) running. A resumed Zen is a fresh one.
+        if [ "$app" = zen ]; then
+          sc is-active -q ${zenUnit} || sc start ${zenUnit}
+        else
+          sc stop ${idleTimer} || true
+          sc is-active -q ${unit} || sc start ${unit}
+        fi
         ;;
-      stop)
-        # App quit in Moonlight (prep-cmd "undo"): stop now.
-        systemctl --no-ask-password stop ${idleTimer} || true
-        systemctl --no-ask-password stop ${unit}
+      stop-later:*)
+        # Last client gone. Steam: grace period (quick reconnects keep the
+        # game). Zen: stop now - privacy, nobody resumes into it later.
+        if [ "$app" = zen ]; then sc stop ${zenUnit}; else sc restart ${idleTimer}; fi
+        ;;
+      stop:steam)
+        sc stop ${idleTimer} || true
+        sc stop ${unit}
+        rm -f ${stateFile}
+        ;;
+      stop:zen)
+        sc stop ${zenUnit}
+        rm -f ${stateFile}
         ;;
       *)
-        echo "usage: $0 start|resume|stop-later|stop" >&2
+        echo "usage: $0 start|stop steam|zen, or resume|stop-later" >&2
         exit 2
         ;;
     esac
@@ -120,6 +164,15 @@ in
       description = "How long after a Moonlight disconnect Steam/gamescope keep running (quick reconnects don't restart Steam).";
     };
 
+    zen = {
+      enable = lib.mkEnableOption "a second Sunshine app: the Zen browser in cage, inside a VPN namespace";
+      vpnNamespace = lib.mkOption {
+        type = lib.types.str;
+        default = "airvpn";
+        description = "VPN-Confinement namespace Zen runs in (only the tunnel; kill switch).";
+      };
+    };
+
     renderDevice = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -134,6 +187,8 @@ in
         message = "myDesktop.steamOnDemand needs myFeatures.steam.enable."; }
       { assertion = config.myServices.sunshine.enable;
         message = "myDesktop.steamOnDemand needs myServices.sunshine.enable."; }
+      { assertion = !cfg.zen.enable || (config.vpnNamespaces ? ${cfg.zen.vpnNamespace});
+        message = "myDesktop.steamOnDemand.zen: VPN namespace '${cfg.zen.vpnNamespace}' isn't defined (myServices.vpnTorrent)."; }
       { assertion = config.users.users.${user}.uid != null;
         message = "myDesktop.steamOnDemand: pin users.users.${user}.uid (used for unit ordering and routing rules)."; }
     ];
@@ -176,7 +231,7 @@ in
       description = "Steam Big Picture in gamescope (on demand, for Sunshine)";
       after = [ "systemd-user-sessions.service" "systemd-logind.service" "user@${uid}.service" ];
       wants = [ "user@${uid}.service" ];
-      conflicts = [ "getty@tty${toString cfg.vt}.service" ];
+      conflicts = [ "getty@tty${toString cfg.vt}.service" ] ++ lib.optional cfg.zen.enable zenUnit;
 
       # Services get a minimal PATH, but the steam-gamescope script (from
       # programs.steam.gamescopeSession) calls `gamescope` and `steam` by
@@ -211,6 +266,62 @@ in
       };
     };
 
+    ############################################################
+    # Zen (VPN) - optional second app
+    ############################################################
+
+    # Hardware video decode for Zen on the NVIDIA GPU (VA-API -> NVDEC).
+    hardware.graphics.extraPackages = lib.mkIf cfg.zen.enable [ pkgs.nvidia-vaapi-driver ];
+
+    security.pam.services.zen-vpn.startSession = lib.mkIf cfg.zen.enable true;
+
+    systemd.services.zen-vpn = lib.mkIf cfg.zen.enable {
+      description = "Zen browser in cage, inside the ${cfg.zen.vpnNamespace} VPN namespace (on demand, for Sunshine)";
+      after = [ "systemd-user-sessions.service" "systemd-logind.service" "user@${uid}.service" ];
+      wants = [ "user@${uid}.service" ];
+      conflicts = [ "getty@tty${toString cfg.vt}.service" unit ];
+
+      path = [ "/run/wrappers" "/etc/profiles/per-user/${user}" "/run/current-system/sw" ];
+      environment = {
+        XDG_SESSION_TYPE = "wayland";
+        XDG_SESSION_CLASS = "user";
+        XDG_RUNTIME_DIR = "/run/user/${uid}";                       # PipeWire (stream audio), session bus
+        DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${uid}/bus";
+        WLR_DRM_CONNECTORS = cfg.output;                            # dummy plug only - it's the plane Sunshine captures
+        WLR_NO_HARDWARE_CURSORS = "1";                              # cursor drawn into the frame, so it's in the stream
+        MOZ_ENABLE_WAYLAND = "1";
+        LIBVA_DRIVER_NAME = "nvidia";                               # VA-API video decode on the 4060 Ti
+        NVD_BACKEND = "direct";
+        MOZ_DISABLE_RDD_SANDBOX = "1";
+      };
+
+      serviceConfig = {
+        User = user;
+        PAMName = "zen-vpn";
+        WorkingDirectory = "~";
+        TTYPath = "/dev/tty${toString cfg.vt}";
+        TTYReset = true;
+        TTYVHangup = true;
+        TTYVTDisallocate = true;
+        StandardInput = "tty-fail";
+        StandardOutput = "journal";
+        StandardError = "journal";
+        UtmpIdentifier = "tty${toString cfg.vt}";
+        UtmpMode = "user";
+        ExecStartPre = "+${pkgs.kbd}/bin/chvt ${toString cfg.vt}";
+        ExecStart = "${pkgs.cage}/bin/cage -d -s -- ${zenLauncher}";
+        ExecStopPost = "+${pkgs.kbd}/bin/chvt 1";
+        Restart = "no";
+      };
+
+      # Only the tunnel: DNS via the namespace's resolv.conf, host DNS cache
+      # blocked, no route out if the tunnel is down.
+      vpnConfinement = {
+        enable = true;
+        vpnNamespace = cfg.zen.vpnNamespace;
+      };
+    };
+
     # Disconnect grace period: armed by `steam-session-ctl stop-later`.
     systemd.timers.steam-gamescope-idle-stop = {
       description = "Stop the Steam gamescope session after a Moonlight disconnect";
@@ -228,7 +339,7 @@ in
       };
     };
 
-    # steam may control exactly these two units - nothing else.
+    # steam may control exactly these units - nothing else.
     security.polkit.enable = true;
     security.polkit.extraConfig = ''
       polkit.addRule(function(action, subject) {
@@ -236,7 +347,7 @@ in
             subject.user == "${user}") {
           var unit = action.lookup("unit");
           var verb = action.lookup("verb");
-          if ((unit == "${unit}" || unit == "${idleTimer}") &&
+          if ((unit == "${unit}" || unit == "${idleTimer}" || unit == "${zenUnit}") &&
               (verb == "start" || verb == "stop" || verb == "restart")) {
             return polkit.Result.YES;
           }
@@ -312,10 +423,15 @@ in
           name = "Steam Big Picture";
           image-path = "steam.png";
           prep-cmd = [
-            { do = "${ctl} start"; undo = "${ctl} stop"; }
+            { do = "${ctl} start steam"; undo = "${ctl} stop steam"; }
           ];
         }
-      ];
+      ] ++ lib.optional cfg.zen.enable {
+        name = "Zen (VPN)";
+        prep-cmd = [
+          { do = "${ctl} start zen"; undo = "${ctl} stop zen"; }
+        ];
+      };
     };
   };
 }

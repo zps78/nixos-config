@@ -30,5 +30,24 @@
     # couch basics
     mpv.enable                                   = true;             # Media player
     brave.enable                                 = true;             # Browser (store logins, guides)
+
+    # The "Zen (VPN)" Sunshine app (myDesktop.steamOnDemand.zen) runs this
+    # profile, full-screen in cage, inside the AirVPN namespace.
+    zen-browser.enable                           = osConfig.myDesktop.steamOnDemand.zen.enable;
+  };
+
+  # Zen behind the VPN: only the tunnel's DNS (no DNS over HTTPS around it),
+  # no local addresses leaked through WebRTC, hardware video decode on.
+  # Added on top of the shared policies/prefs in modules/apps-user/zen-browser.nix.
+  programs.zen-browser = lib.mkIf osConfig.myDesktop.steamOnDemand.zen.enable {
+    policies.DNSOverHTTPS = { Enabled = false; Locked = true; };
+    profiles.default.settings = {
+      "network.trr.mode"                               = 5;      # DoH off, explicitly
+      "media.peerconnection.ice.default_address_only"  = true;   # WebRTC: no host/LAN candidates
+      "media.peerconnection.ice.no_host"               = true;
+      "media.ffmpeg.vaapi.enabled"                     = true;   # VA-API (nvidia-vaapi-driver)
+      "media.hardware-video-decoding.force-enabled"    = true;
+      "widget.dmabuf.force-enabled"                    = true;
+    };
   };
 }
