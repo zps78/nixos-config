@@ -27,8 +27,8 @@
 # in cage on the same dummy-plug output, inside a VPN-Confinement namespace
 # (only the tunnel; kill switch). Same Sunshine/NVENC stream as Steam, so
 # video plays at Moonlight quality. One app at a time (Sunshine refuses a
-# second launch; the units conflict). Unlike Steam, Zen stops right away
-# on disconnect - nobody else can resume into an open browser.
+# second launch; the units conflict). Zen's disconnect grace is short
+# (zen.idleStop, 30 s) - little time for anyone to resume into a browser.
 
 { config, lib, pkgs, ... }:
 
@@ -40,6 +40,27 @@ let
   unit = "steam-gamescope.service";
   idleTimer = "steam-gamescope-idle-stop.timer";
   zenUnit = "zen-vpn.service";
+  zenTimer = "zen-vpn-idle-stop.timer";
+
+  # Moonlight tile for "Zen (VPN)", 600x800 like Steam's: Zen's own vector
+  # logo + wordmark (from the steam user's Zen package, so it follows Zen's
+  # branding) on a dark gradient. omni.ja is a non-standard zip - unzip
+  # reads it but complains, hence the checks instead of its exit code.
+  zenPkg = config.home-manager.users.${user}.programs.zen-browser.package;
+  zenBoxart = pkgs.runCommand "zen-vpn-boxart.png" {
+    nativeBuildInputs = [ pkgs.unzip pkgs.librsvg pkgs.imagemagick ];
+  } ''
+    for f in about-logo about-wordmark; do
+      unzip -p ${zenPkg}/lib/zen-bin-*/browser/omni.ja chrome/browser/content/branding/$f.svg > $f.svg 2>/dev/null || true
+      [ -s $f.svg ] || { echo "$f.svg not found in Zen's omni.ja"; exit 1; }
+    done
+    rsvg-convert -w 480 about-logo.svg -o logo.png
+    rsvg-convert -w 320 about-wordmark.svg -o word.png
+    magick -size 600x800 gradient:'#2a2833'-'#121117' \
+      \( logo.png \) -gravity center -geometry +0-70 -composite \
+      \( word.png \) -gravity center -geometry +0+240 -composite \
+      -depth 8 $out
+  '';
   # Which app the current Sunshine session is (steam|zen) - lets the
   # disconnect/reconnect watcher treat them differently.
   stateFile = "/run/user/${uid}/sunshine-app";
@@ -90,6 +111,7 @@ let
         ;;
       start:zen)
         echo zen > ${stateFile}
+        sc stop ${zenTimer} || true
         sc start ${zenUnit}
         for _ in $(seq 60); do
           if pgrep -u ${user} -f "zen-beta|/zen " >/dev/null; then
@@ -103,6 +125,7 @@ let
         # Sunshine does NOT re-run prep-cmd "do" on resume, so make sure the
         # session is (still/again) running. A resumed Zen is a fresh one.
         if [ "$app" = zen ]; then
+          sc stop ${zenTimer} || true
           sc is-active -q ${zenUnit} || sc start ${zenUnit}
         else
           sc stop ${idleTimer} || true
@@ -110,9 +133,10 @@ let
         fi
         ;;
       stop-later:*)
-        # Last client gone. Steam: grace period (quick reconnects keep the
-        # game). Zen: stop now - privacy, nobody resumes into it later.
-        if [ "$app" = zen ]; then sc stop ${zenUnit}; else sc restart ${idleTimer}; fi
+        # Last client gone: grace period, then the session stops (and with
+        # it the Sunshine app - see appLife). Steam long (quick reconnects
+        # keep the game), Zen short (privacy: little time to resume into it).
+        if [ "$app" = zen ]; then sc restart ${zenTimer}; else sc restart ${idleTimer}; fi
         ;;
       stop:steam)
         sc stop ${idleTimer} || true
@@ -120,6 +144,7 @@ let
         rm -f ${stateFile}
         ;;
       stop:zen)
+        sc stop ${zenTimer} || true
         sc stop ${zenUnit}
         rm -f ${stateFile}
         ;;
@@ -128,6 +153,15 @@ let
         exit 2
         ;;
     esac
+  '';
+
+  # The Sunshine app's "cmd": runs as long as the app's unit is active.
+  # When it ends - Zen closed (Ctrl+Q), Steam exited, or the unit stopped
+  # after a disconnect - Sunshine sees the app exit, ends the stream and
+  # runs prep-cmd "undo". So closing the program is enough; no "Quit" in
+  # Moonlight needed. (prep-cmd "do" has already started the unit.)
+  appLife = pkgs.writeShellScript "sunshine-app-life" ''
+    while ${pkgs.systemd}/bin/systemctl is-active -q "$1"; do ${pkgs.coreutils}/bin/sleep 2; done
   '';
 
   # Sunshine has no disconnect hook - prep-cmd "undo" only runs when the
@@ -177,6 +211,11 @@ in
 
     zen = {
       enable = lib.mkEnableOption "a second Sunshine app: the Zen browser in cage, inside a VPN namespace";
+      idleStop = lib.mkOption {
+        type = lib.types.str;
+        default = "30s";
+        description = "How long after a Moonlight disconnect Zen keeps running (short: it's a browser session).";
+      };
       vpnNamespace = lib.mkOption {
         type = lib.types.str;
         default = "airvpn";
@@ -337,6 +376,22 @@ in
       };
     };
 
+    systemd.timers.zen-vpn-idle-stop = lib.mkIf cfg.zen.enable {
+      description = "Stop the Zen (VPN) session after a Moonlight disconnect";
+      timerConfig = {
+        OnActiveSec = cfg.zen.idleStop;
+        AccuracySec = "1s";
+        Unit = "zen-vpn-idle-stop.service";
+      };
+    };
+    systemd.services.zen-vpn-idle-stop = lib.mkIf cfg.zen.enable {
+      description = "Stop the Zen (VPN) session (idle after disconnect)";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.systemd}/bin/systemctl stop ${zenUnit}";
+      };
+    };
+
     # Disconnect grace period: armed by `steam-session-ctl stop-later`.
     systemd.timers.steam-gamescope-idle-stop = {
       description = "Stop the Steam gamescope session after a Moonlight disconnect";
@@ -362,7 +417,7 @@ in
             subject.user == "${user}") {
           var unit = action.lookup("unit");
           var verb = action.lookup("verb");
-          if ((unit == "${unit}" || unit == "${idleTimer}" || unit == "${zenUnit}") &&
+          if ((unit == "${unit}" || unit == "${idleTimer}" || unit == "${zenUnit}" || unit == "${zenTimer}") &&
               (verb == "start" || verb == "stop" || verb == "restart")) {
             return polkit.Result.YES;
           }
@@ -437,12 +492,17 @@ in
         {
           name = "Steam Big Picture";
           image-path = "steam.png";
+          cmd = "${appLife} ${unit}";
+          auto-detach = false;                     # a quickly ending cmd = app ended, not "detached"
           prep-cmd = [
             { do = "${ctl} start steam"; undo = "${ctl} stop steam"; }
           ];
         }
       ] ++ lib.optional cfg.zen.enable {
         name = "Zen (VPN)";
+        image-path = "${zenBoxart}";
+        cmd = "${appLife} ${zenUnit}";
+        auto-detach = false;
         prep-cmd = [
           { do = "${ctl} start zen"; undo = "${ctl} stop zen"; }
         ];

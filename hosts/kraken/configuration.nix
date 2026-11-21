@@ -208,7 +208,9 @@ in
     height                                       = 1080;
     refresh                                      = 60;
     renderDevice                                 = "/dev/dri/by-path/pci-0000:0b:00.0-render"; # 4060 Ti - stays put when the T1000 arrives
+    idleStop                                     = "10min";                    # Steam keeps running this long after a disconnect
     zen.enable                                   = true;                       # 2nd Moonlight app "Zen (VPN)": Zen in cage, inside the airvpn namespace
+    zen.idleStop                                 = "30s";                      # ...Zen only this long (privacy)
   };
 
   # Sunshine's web UI rejects requests from origins it doesn't know (CSRF
