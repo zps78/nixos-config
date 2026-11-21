@@ -78,9 +78,22 @@ in
   # reset it when it takes the device). Needs in BIOS: ErP Ready = Disabled,
   # Power On By PCI-E = Enabled. Wake from the LAN, e.g. from old karma:
   # magic packet to 50:eb:f6:ea:9b:3a (Aquantia) or :39 (Intel).
-  networking.interfaces = {
-    enp4s0.wakeOnLan.enable                      = true;                       # Aquantia
-    enp5s0.wakeOnLan.enable                      = true;                       # Intel
+  #
+  # The NIC names are pinned to the cards' permanent MACs (a .link file per
+  # NIC, which also sets Wake-on-LAN): the kernel derives enp4s0/enp5s0 from
+  # the PCI address, and moving cards between slots (the N5 move) would
+  # rename them - breaking the NM profiles, firewall and Sunshine NIC. These
+  # replace networking.interfaces.*.wakeOnLan, whose .link files matched the
+  # kernel name (and would silently stop matching after a rename).
+  systemd.network.links = {
+    "10-lan" = {
+      matchConfig.PermanentMACAddress            = "50:eb:f6:ea:9b:3a";       # Aquantia AQC111
+      linkConfig = { Name = "enp4s0"; WakeOnLan = "magic"; };
+    };
+    "10-stream" = {
+      matchConfig.PermanentMACAddress            = "50:eb:f6:ea:9b:39";       # Intel I211
+      linkConfig = { Name = "enp5s0"; WakeOnLan = "magic"; };
+    };
   };
 
   # SSH on the LAN as well - a fallback for when Tailscale itself is down
@@ -201,13 +214,21 @@ in
   # after the last disconnect. See modules/desktop/steam-on-demand.nix.
   # Sunshine web UI (first-time login/pairing): https://${streamIp}:47990
 
+  # Stable name for the 4060 Ti's render node, by PCI vendor:device ID
+  # (10de:2805) instead of its slot address - the by-path name changes when
+  # the card moves to another slot (N5 move). Only NVIDIA render nodes match
+  # (the boot-time simple-framebuffer has no render node).
+  services.udev.extraRules = ''
+    SUBSYSTEM=="drm", KERNEL=="renderD*", ATTRS{vendor}=="0x10de", ATTRS{device}=="0x2805", SYMLINK+="dri/by-gpu/rtx4060ti-render"
+  '';
+
   myDesktop.steamOnDemand = {
     enable                                       = true;
     output                                       = "HDMI-A-1";                 # dummy plug on the 4060 Ti (DP-2 = console monitor)
     width                                        = 1920;
     height                                       = 1080;
     refresh                                      = 60;
-    renderDevice                                 = "/dev/dri/by-path/pci-0000:0b:00.0-render"; # 4060 Ti - stays put when the T1000 arrives
+    renderDevice                                 = "/dev/dri/by-gpu/rtx4060ti-render"; # 4060 Ti by model ID (udev rule below) - survives slot moves
     idleStop                                     = "10min";                    # Steam keeps running this long after a disconnect
     zen.enable                                   = true;                       # 2nd Moonlight app "Zen (VPN)": Zen in cage, inside the airvpn namespace
     zen.idleStop                                 = "10s";                      # ...Zen only this long (privacy)
