@@ -44,11 +44,22 @@ let
   # disconnect/reconnect watcher treat them differently.
   stateFile = "/run/user/${uid}/sunshine-app";
 
-  # cage runs this as its one client: switch the dummy plug to the stream
-  # mode, then Zen full-screen (cage maximises its only window).
+  # cage runs this as its one client. Like gamescope: every output except
+  # the dummy plug off (Sunshine captures "monitor 0" = the first plane with
+  # a framebuffer, so a lit console monitor would be captured instead),
+  # the dummy plug in the stream mode - a mode from its EDID list (NVIDIA
+  # rejects a custom mode, "failed to apply configuration"). Logs the
+  # before/after state to the journal. Then Zen full-screen.
   zenLauncher = pkgs.writeShellScript "zen-vpn-launch" ''
-    ${pkgs.wlr-randr}/bin/wlr-randr --output ${cfg.output} \
-      --custom-mode ${toString cfg.width}x${toString cfg.height}@${toString cfg.refresh} || true
+    r=${pkgs.wlr-randr}/bin/wlr-randr
+    echo "== outputs at start"; $r
+    for o in $($r --json | ${pkgs.jq}/bin/jq -r '.[].name'); do
+      [ "$o" = ${cfg.output} ] || $r --output "$o" --off || echo "could not turn off $o"
+    done
+    $r --output ${cfg.output} --mode ${toString cfg.width}x${toString cfg.height}@${toString cfg.refresh} \
+      || $r --output ${cfg.output} --mode ${toString cfg.width}x${toString cfg.height} \
+      || echo "could not set ${toString cfg.width}x${toString cfg.height} on ${cfg.output}"
+    echo "== outputs after"; $r
     exec /etc/profiles/per-user/${user}/bin/zen-beta
   '';
 
@@ -287,7 +298,6 @@ in
         XDG_SESSION_CLASS = "user";
         XDG_RUNTIME_DIR = "/run/user/${uid}";                       # PipeWire (stream audio), session bus
         DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${uid}/bus";
-        WLR_DRM_CONNECTORS = cfg.output;                            # dummy plug only - it's the plane Sunshine captures
         WLR_NO_HARDWARE_CURSORS = "1";                              # cursor drawn into the frame, so it's in the stream
         MOZ_ENABLE_WAYLAND = "1";
         LIBVA_DRIVER_NAME = "nvidia";                               # VA-API video decode on the 4060 Ti
