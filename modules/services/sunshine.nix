@@ -25,6 +25,17 @@
         every interface, the upstream default.
       '';
     };
+
+    oneClient = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        One Moonlight client at a time (local patch sunshine-one-client.patch).
+        Upstream already refuses to launch a second app while one runs, but
+        lets ANY paired client "resume" - and so watch - a session another
+        client is streaming. The patch rejects that resume with 503.
+      '';
+    };
   };
 
   config = lib.mkIf config.myServices.sunshine.enable {
@@ -100,8 +111,17 @@
       # (known nixpkgs issue: NixOS/nixpkgs#272221, #305688).
       # "hybrid" (Intel+NVIDIA PRIME) hosts have a real NVIDIA GPU too -
       # same fix applies, not just plain "nvidia".
-      package = lib.mkIf (builtins.elem config.myHardware.gpuVendor [ "nvidia" "hybrid" ])
-        (pkgs.sunshine.override { cudaSupport = true; });
+      # oneClient: local patch, see the option. Sunshine is then built from
+      # source (kraken already does, for CUDA; kimi builds it on kraken).
+      package =
+        let
+          base = if builtins.elem config.myHardware.gpuVendor [ "nvidia" "hybrid" ]
+                 then pkgs.sunshine.override { cudaSupport = true; }
+                 else pkgs.sunshine;
+        in
+        if config.myServices.sunshine.oneClient
+        then base.overrideAttrs (o: { patches = (o.patches or [ ]) ++ [ ./sunshine-one-client.patch ]; })
+        else base;
     };
 
     # Upstream's capSysAdmin wrapper grants only cap_sys_admin. Sunshine

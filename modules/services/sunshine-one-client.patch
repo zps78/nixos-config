@@ -1,0 +1,21 @@
+--- a/src/nvhttp.cpp	2026-11-21 12:24:37.798192779 +0000
++++ b/src/nvhttp.cpp	2026-11-21 12:24:37.944891248 +0000
+@@ -1471,6 +1471,18 @@
+       return;
+     }
+ 
++    // Local patch (nixos-config, modules/services/sunshine.nix): one client
++    // at a time. Upstream lets any paired client resume - and so watch - a
++    // session another client is streaming; reject that instead.
++    if (rtsp_stream::session_count() > 0) {
++      BOOST_LOG(warning) << "Rejecting resume: another client is already streaming"sv;
++      tree.put("root.resume", 0);
++      tree.put("root.<xmlattr>.status_code", 503);
++      tree.put("root.<xmlattr>.status_message", "Another client is already streaming from this host");
++
++      return;
++    }
++
+     auto args = request->parse_query_string();
+     if (
+       args.find("rikey"s) == std::end(args) ||
