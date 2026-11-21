@@ -146,7 +146,7 @@ in
 
   myStorage.zfs = {
     enable                                       = true;
-    extraPools                                   = [ ];                        # phase 2: personal NVMe mirror; phase 6: disk1..disk5 (after a first manual import)
+    extraPools                                   = [ "games" ];                # + phase 2: personal NVMe mirror; phase 6: disk1..disk5 (after a first manual import)
   };
 
   # Undo net for the OS disk's real state: /home, /var, /srv/appdata

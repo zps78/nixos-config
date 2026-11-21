@@ -60,6 +60,16 @@
     fsType = "zfs";
   };
 
+  # Steam library: pool "games" on the WD Red SA500 1TB (serial
+  # 233902800851, ex karma ssd-home), created 2026-11-21. Single disk,
+  # lz4, atime off, NOT snapshotted (games re-download). nofail: kraken
+  # boots without it. Owned by the steam user.
+  fileSystems."/mnt/games" = {
+    device = "games/steam";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-games.service" "x-systemd.after=zfs-import-games.service" ];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-partlabel/kraken-esp";
     fsType = "vfat";
