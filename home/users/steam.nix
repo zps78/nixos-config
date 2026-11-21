@@ -45,6 +45,11 @@
       # Always private ("permanent private browsing"): no history, cookies
       # and site data dropped when Zen closes. Bookmarks are still kept.
       "browser.privatebrowsing.autostart"              = true;
+      # Natural ("reversed") scrolling, like kuro's touchpad. Moonlight sends
+      # scrolling as plain wheel steps, and Moonlight for Android (Shield) has
+      # no reverse option - so flip it in Zen, for every client. (Moonlight
+      # PC's "Reverse mouse scrolling direction" must then stay OFF.)
+      "mousewheel.default.delta_multiplier_y"          = -100;
       "network.trr.mode"                               = 5;      # DoH off, explicitly
       "media.peerconnection.ice.default_address_only"  = true;   # WebRTC: no host/LAN candidates
       "media.peerconnection.ice.no_host"               = true;
