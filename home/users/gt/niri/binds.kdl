@@ -310,4 +310,83 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
+
+    // --- Shield / Android Moonlight: Ctrl+Alt stands in for Super ---------
+    // Android (NVIDIA Shield, Android TV) swallows the Super/Windows key, so
+    // Mod+... binds never arrive through Moonlight there. Every Mod+X and
+    // Mod+Shift+X bind above is mirrored as Ctrl+Alt+X / Ctrl+Alt+Shift+X
+    // (hidden from the hotkey overlay). Not mirrored: Mod+Ctrl+... (moving
+    // windows/columns) and Mod+Alt+... - they'd collapse onto the same
+    // Ctrl+Alt combos. Generated 2026-11-21 from the binds above: when
+    // adding or changing a Mod / Mod+Shift bind, mirror it here too.
+    Ctrl+Alt+Shift+Return hotkey-overlay-title=null { show-hotkey-overlay; }
+    Ctrl+Alt+Return hotkey-overlay-title=null { spawn "ghostty"; }
+    Ctrl+Alt+E hotkey-overlay-title=null { spawn-sh "xdg-open ~"; }
+    Ctrl+Alt+D hotkey-overlay-title=null { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+    Ctrl+Alt+Shift+C hotkey-overlay-title=null { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
+    Ctrl+Alt+B hotkey-overlay-title=null { spawn-sh "xdg-open http://"; }
+    Ctrl+Alt+Z hotkey-overlay-title=null { spawn "zeditor"; }
+    Ctrl+Alt+Space repeat=false hotkey-overlay-title=null { toggle-overview; }
+    Ctrl+Alt+Q repeat=false hotkey-overlay-title=null { close-window; }
+    Ctrl+Alt+Left hotkey-overlay-title=null  { focus-column-left; }
+    Ctrl+Alt+Down hotkey-overlay-title=null  { focus-window-down; }
+    Ctrl+Alt+Up hotkey-overlay-title=null    { focus-window-up; }
+    Ctrl+Alt+Right hotkey-overlay-title=null { focus-column-right; }
+    Ctrl+Alt+H hotkey-overlay-title=null     { focus-column-left; }
+    Ctrl+Alt+J hotkey-overlay-title=null     { focus-window-down; }
+    Ctrl+Alt+K hotkey-overlay-title=null     { focus-window-up; }
+    Ctrl+Alt+L hotkey-overlay-title=null     { focus-column-right; }
+    Ctrl+Alt+Home hotkey-overlay-title=null { focus-column-first; }
+    Ctrl+Alt+End hotkey-overlay-title=null  { focus-column-last; }
+    Ctrl+Alt+Shift+Left hotkey-overlay-title=null  { focus-monitor-left; }
+    Ctrl+Alt+Shift+Down hotkey-overlay-title=null  { focus-monitor-down; }
+    Ctrl+Alt+Shift+Up hotkey-overlay-title=null    { focus-monitor-up; }
+    Ctrl+Alt+Shift+Right hotkey-overlay-title=null { focus-monitor-right; }
+    Ctrl+Alt+Shift+H hotkey-overlay-title=null     { focus-monitor-left; }
+    Ctrl+Alt+Shift+J hotkey-overlay-title=null     { focus-monitor-down; }
+    Ctrl+Alt+Shift+K hotkey-overlay-title=null     { focus-monitor-up; }
+    Ctrl+Alt+Shift+L hotkey-overlay-title=null     { focus-monitor-right; }
+    Ctrl+Alt+Page_Down hotkey-overlay-title=null      { focus-workspace-down; }
+    Ctrl+Alt+Page_Up hotkey-overlay-title=null        { focus-workspace-up; }
+    Ctrl+Alt+U hotkey-overlay-title=null              { focus-workspace-down; }
+    Ctrl+Alt+I hotkey-overlay-title=null              { focus-workspace-up; }
+    Ctrl+Alt+Shift+Page_Down hotkey-overlay-title=null { move-workspace-down; }
+    Ctrl+Alt+Shift+Page_Up hotkey-overlay-title=null   { move-workspace-up; }
+    Ctrl+Alt+Shift+U hotkey-overlay-title=null         { move-workspace-down; }
+    Ctrl+Alt+Shift+I hotkey-overlay-title=null         { move-workspace-up; }
+    Ctrl+Alt+WheelScrollDown      cooldown-ms=150 hotkey-overlay-title=null { focus-workspace-down; }
+    Ctrl+Alt+WheelScrollUp        cooldown-ms=150 hotkey-overlay-title=null { focus-workspace-up; }
+    Ctrl+Alt+WheelScrollRight hotkey-overlay-title=null      { focus-column-right; }
+    Ctrl+Alt+WheelScrollLeft hotkey-overlay-title=null       { focus-column-left; }
+    Ctrl+Alt+Shift+WheelScrollDown hotkey-overlay-title=null      { focus-column-right; }
+    Ctrl+Alt+Shift+WheelScrollUp hotkey-overlay-title=null        { focus-column-left; }
+    Ctrl+Alt+1 hotkey-overlay-title=null { focus-workspace 1; }
+    Ctrl+Alt+2 hotkey-overlay-title=null { focus-workspace 2; }
+    Ctrl+Alt+3 hotkey-overlay-title=null { focus-workspace 3; }
+    Ctrl+Alt+4 hotkey-overlay-title=null { focus-workspace 4; }
+    Ctrl+Alt+5 hotkey-overlay-title=null { focus-workspace 5; }
+    Ctrl+Alt+6 hotkey-overlay-title=null { focus-workspace 6; }
+    Ctrl+Alt+7 hotkey-overlay-title=null { focus-workspace 7; }
+    Ctrl+Alt+8 hotkey-overlay-title=null { focus-workspace 8; }
+    Ctrl+Alt+9 hotkey-overlay-title=null { focus-workspace 9; }
+    Ctrl+Alt+BracketLeft hotkey-overlay-title=null  { consume-or-expel-window-left; }
+    Ctrl+Alt+BracketRight hotkey-overlay-title=null { consume-or-expel-window-right; }
+    Ctrl+Alt+Comma hotkey-overlay-title=null  { consume-window-into-column; }
+    Ctrl+Alt+Period hotkey-overlay-title=null { expel-window-from-column; }
+    Ctrl+Alt+R hotkey-overlay-title=null { switch-preset-column-width; }
+    Ctrl+Alt+Shift+R hotkey-overlay-title=null { switch-preset-column-width-back; }
+    Ctrl+Alt+F hotkey-overlay-title=null { maximize-column; }
+    Ctrl+Alt+Shift+F hotkey-overlay-title=null { fullscreen-window; }
+    Ctrl+Alt+M hotkey-overlay-title=null { maximize-window-to-edges; }
+    Ctrl+Alt+C hotkey-overlay-title=null { center-column; }
+    Ctrl+Alt+Minus hotkey-overlay-title=null { set-column-width "-10%"; }
+    Ctrl+Alt+Equal hotkey-overlay-title=null { set-column-width "+10%"; }
+    Ctrl+Alt+Shift+Minus hotkey-overlay-title=null { set-window-height "-10%"; }
+    Ctrl+Alt+Shift+Equal hotkey-overlay-title=null { set-window-height "+10%"; }
+    Ctrl+Alt+V hotkey-overlay-title=null       { toggle-window-floating; }
+    Ctrl+Alt+Shift+V hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
+    Ctrl+Alt+W hotkey-overlay-title=null { toggle-column-tabbed-display; }
+    Ctrl+Alt+Escape allow-inhibiting=false hotkey-overlay-title=null { toggle-keyboard-shortcuts-inhibit; }
+    Ctrl+Alt+Shift+E hotkey-overlay-title=null { quit; }
+    Ctrl+Alt+Shift+P hotkey-overlay-title=null { power-off-monitors; }
 }
