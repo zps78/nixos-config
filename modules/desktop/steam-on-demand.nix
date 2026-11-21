@@ -299,6 +299,11 @@ in
         XDG_RUNTIME_DIR = "/run/user/${uid}";                       # PipeWire (stream audio), session bus
         DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${uid}/bus";
         WLR_NO_HARDWARE_CURSORS = "1";                              # cursor drawn into the frame, so it's in the stream
+        # Always composite into the primary plane - same reason as gamescope's
+        # --force-composition: a full-screen Zen is otherwise scanned out
+        # directly, the primary plane Sunshine's KMS capture reads stays empty
+        # ("Couldn't get drm fb for plane [0]") and the stream is black.
+        WLR_SCENE_DISABLE_DIRECT_SCANOUT = "1";
         MOZ_ENABLE_WAYLAND = "1";
         LIBVA_DRIVER_NAME = "nvidia";                               # VA-API video decode on the 4060 Ti
         NVD_BACKEND = "direct";
