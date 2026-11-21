@@ -383,12 +383,6 @@ in
       wants = lib.mkForce [ "pipewire.service" ];
       after = lib.mkForce [ "pipewire.service" "pipewire-pulse.service" ];
       unitConfig.ConditionUser = user;
-      # Sunshine runs through a capability wrapper (/run/wrappers/bin/sunshine,
-      # an unchanging path), so a new Sunshine build doesn't change this
-      # unit and the switch wouldn't restart it - the old binary kept
-      # running (2026-11-21: the one-client patch was installed but not
-      # live). Tie the unit to the package so a new build restarts it.
-      restartTriggers = [ config.services.sunshine.package ];
       # The lingering user manager starts Sunshine ~2 s before the NVIDIA
       # driver is up at boot (nvidia-drm, the GPU's render node and the
       # console framebuffer appear after it). Sunshine probes its encoder

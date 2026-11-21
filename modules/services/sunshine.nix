@@ -131,6 +131,13 @@
     # capture/encode context competes with the game at normal priority.
     # The NixOS wrapper raises its permitted caps into the ambient set, so
     # Sunshine ends up with both effective (same as cap_sys_admin today).
+    # Sunshine runs through this capability wrapper (/run/wrappers/bin/
+    # sunshine, an unchanging path), so a new Sunshine build doesn't change
+    # the user unit and a switch wouldn't restart it - the old binary kept
+    # running (2026-11-21: the one-client patch installed but not live).
+    # Tie the unit to the package so a new build restarts Sunshine.
+    systemd.user.services.sunshine.restartTriggers = [ config.services.sunshine.package ];
+
     security.wrappers.sunshine.capabilities =
       lib.mkIf config.services.sunshine.capSysAdmin
         (lib.mkForce "cap_sys_admin,cap_sys_nice+p");
