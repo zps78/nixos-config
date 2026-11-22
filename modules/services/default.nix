@@ -1,6 +1,7 @@
 # ../../modules/services/default.nix
 {
   imports = [
+    ./adguard.nix
     ./ai-stack.nix
     ./alerts.nix
     ./avahi.nix

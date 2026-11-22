@@ -21,6 +21,7 @@ let
   hostName = "kraken";
   lanIp = "192.168.1.10";        # Aquantia AQC111 (enp4s0): everything
   streamIp = "192.168.1.11";     # Intel I211 (enp5s0): Sunshine only
+  tailIp = "100.101.102.10";     # Tailscale (fixed in the admin console)
   gateway = "192.168.1.1";
   streamTable = "100";           # policy-routing table for streamIp
   steamUid = "1001";             # pinned below; used by the routing rule
@@ -254,6 +255,17 @@ in
   #   Beszel   http://<lanIp>:8090    (metrics; admin account on first visit)
   #   Homepage http://<lanIp>:8082    (start page)
   #   wol-web  http://<lanIp>:8089    (one-click wake: /wake/<name>)
+  #   AdGuard  http://<lanIp>:3000    (DNS filter; config in the repo only)
+
+  # DNS filter for LAN + tailnet, replacing karma's Pi-hole container
+  # (phase 1). Clients move over when the router's DHCP and the tailnet's
+  # DNS setting point here; until then only by hand.
+  myServices.adguard = {
+    enable                                       = true;
+    listenAddresses                              = [ lanIp tailIp ];
+    interfaces                                   = [ "enp4s0" ];
+    routerAddress                                = gateway;
+  };
 
   # Push alerts to the phone (ntfy.sh, random topic in agenix) - see
   # modules/services/alerts.nix. Beszel's thresholds use the same topic,
@@ -263,7 +275,7 @@ in
     failureUnits = [
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
-      "airvpn" "qbittorrent"
+      "airvpn" "qbittorrent" "adguardhome"
     ];
   };
 
@@ -336,6 +348,15 @@ in
           { Scrutiny = { href = "http://${lanIp}:8087";     icon = "scrutiny.png"; description = "Disk health (SMART)"; }; }
           { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
           { Sunshine = { href = "https://${streamIp}:47990"; icon = "sunshine.png"; description = "Game streaming (pairing)"; }; }
+        ];
+      }
+      {
+        Network = [
+          { AdGuard = {
+              href = "http://${lanIp}:3000"; icon = "adguard-home.png";
+              description = "DNS filter (LAN + tailnet)";
+              widget = { type = "adguard"; url = "http://127.0.0.1:3000"; };
+          }; }
         ];
       }
       {
