@@ -21,9 +21,9 @@
   };
 
   # Fixed LAN address, same last octet as the tailnet: 192.168.1.50 /
-  # 100.101.102.50 (kraken is .10). DNS as the router's DHCP hands out
-  # (Pi-hole on the Unraid karma, AdGuard as fallback) - revisit at the
-  # phase-6 cutover. no-auto-default: no stray DHCP "Wired connection N".
+  # 100.101.102.50 (kraken is .10). DNS as the router's DHCP hands out:
+  # AdGuard Home on kraken, public AdGuard DNS as fallback (2026-11-22).
+  # no-auto-default: no stray DHCP "Wired connection N".
   networking.networkmanager.settings.main.no-auto-default = "*";
   networking.networkmanager.ensureProfiles.profiles.lan = {
     connection = { id = "lan"; type = "ethernet"; interface-name = "eno2"; autoconnect = true; autoconnect-priority = 10; };
@@ -31,7 +31,7 @@
     ipv4 = {
       method                                     = "manual";
       address1                                   = "192.168.1.50/24,192.168.1.1";
-      dns                                        = "192.168.1.5;94.140.14.14;";
+      dns                                        = "192.168.1.10;94.140.14.14;";
     };
     ipv6.method                                  = "auto";
   };
