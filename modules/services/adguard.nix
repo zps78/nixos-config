@@ -98,14 +98,20 @@ in
           filtering_enabled = true;
         };
 
-        # Pi-hole's adlists (karma, 2026-11-22).
+        # Blocklists. The Pi-hole's Pyenb aggregate (4.5M rules, ~94% of
+        # its total) blocked binance.com, the Corsair support widget and
+        # hundreds of Google/Microsoft/Apple subdomains - replaced
+        # 2026-11-22 by HaGeZi (curated, low false positives): Pro for
+        # ads/tracking/telemetry, TIF for phishing/scam/malware.
+        # StevenBlack dropped - covered by HaGeZi Pro.
         filters = lib.imap1 (id: f: f // { inherit id; enabled = true; }) [
-          { name = "StevenBlack hosts"; url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"; }
-          { name = "AdGuard DNS filter"; url = "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt"; }
-          { name = "Pyenb blocklist";    url = "https://raw.githubusercontent.com/Pyenb/Pi-hole-blocklist/main/blocklist.txt"; }
+          { name = "AdGuard DNS filter";  url = "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt"; }
+          { name = "HaGeZi Multi Pro";    url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt"; }
+          { name = "HaGeZi Threat Intel"; url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"; }
         ];
 
-        # Pi-hole's allowlist. "@@||x^" = x and its subdomains.
+        # Pi-hole's allowlist (needed for Pyenb; kept as insurance).
+        # "@@||x^" = x and its subdomains.
         user_rules = [
           "@@||binance.com^"
           "! Corsair support button (Forethought widget + API), 2026-11-18"
