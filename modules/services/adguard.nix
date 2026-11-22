@@ -104,10 +104,14 @@ in
         # 2026-11-22 by HaGeZi (curated, low false positives): Pro for
         # ads/tracking/telemetry, TIF for phishing/scam/malware.
         # StevenBlack dropped - covered by HaGeZi Pro.
-        filters = lib.imap1 (id: f: f // { inherit id; enabled = true; }) [
-          { name = "AdGuard DNS filter";  url = "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt"; }
-          { name = "HaGeZi Multi Pro";    url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt"; }
-          { name = "HaGeZi Threat Intel"; url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"; }
+        # ids are fixed and never reused: AdGuard caches each list as
+        # data/filters/<id>.txt, so a new URL under an old id would keep the
+        # old list's contents until the next refresh. Retired: 2 StevenBlack,
+        # 3 Pyenb.
+        filters = map (f: f // { enabled = true; }) [
+          { id = 1; name = "AdGuard DNS filter";  url = "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt"; }
+          { id = 4; name = "HaGeZi Multi Pro";    url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt"; }
+          { id = 5; name = "HaGeZi Threat Intel"; url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"; }
         ];
 
         # Pi-hole's allowlist (needed for Pyenb; kept as insurance).
