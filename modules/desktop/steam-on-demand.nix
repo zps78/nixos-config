@@ -282,6 +282,14 @@ in
         # Sunshine 2026.906 (LizardByte/Sunshine#5839, bazzite#5828).
         # Costs one composite pass per frame - negligible on the 4060 Ti.
         "--force-composition"
+        # ...and no hardware planes at all (libliftoff off): even when
+        # composited, gamescope put the logged-in Steam's overlay layer
+        # (full-screen, mostly transparent) on its own overlay plane next to
+        # the primary one. Sunshine 2026.914 maps a connector to the *last*
+        # plane holding a framebuffer on its CRTC, so it captured that
+        # transparent layer: black stream (2026-11-23, both planes
+        # 1920x1080 AR24 from gamescope-xwm on crtc-0). One plane, one image.
+        "--disable-layers"
         "--prefer-output" cfg.output
         "-W" (toString cfg.width) "-H" (toString cfg.height)
         "-w" (toString cfg.width) "-h" (toString cfg.height)
