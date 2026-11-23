@@ -111,17 +111,25 @@
       # (known nixpkgs issue: NixOS/nixpkgs#272221, #305688).
       # "hybrid" (Intel+NVIDIA PRIME) hosts have a real NVIDIA GPU too -
       # same fix applies, not just plain "nvidia".
-      # oneClient: local patch, see the option. Sunshine is then built from
-      # source (kraken already does, for CUDA; kimi builds it on kraken).
+      # Local patches, so Sunshine is built from source (kraken already does,
+      # for CUDA; kimi builds it on kraken):
+      #   sunshine-primary-plane.patch  KMS capture maps a screen to its
+      #     FIRST plane with a framebuffer, not the last. gamescope on NVIDIA
+      #     adds a full-screen, mostly transparent overlay plane once Steam
+      #     is logged in; Sunshine 2026.914 grabbed that one - black stream
+      #     (2026-11-23; gamescope --disable-layers didn't stop it).
+      #   sunshine-one-client.patch     see the oneClient option.
       package =
         let
           base = if builtins.elem config.myHardware.gpuVendor [ "nvidia" "hybrid" ]
                  then pkgs.sunshine.override { cudaSupport = true; }
                  else pkgs.sunshine;
         in
-        if config.myServices.sunshine.oneClient
-        then base.overrideAttrs (o: { patches = (o.patches or [ ]) ++ [ ./sunshine-one-client.patch ]; })
-        else base;
+        base.overrideAttrs (o: {
+          patches = (o.patches or [ ])
+            ++ [ ./sunshine-primary-plane.patch ]
+            ++ lib.optional config.myServices.sunshine.oneClient ./sunshine-one-client.patch;
+        });
     };
 
     # Upstream's capSysAdmin wrapper grants only cap_sys_admin. Sunshine
