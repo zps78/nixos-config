@@ -61,6 +61,31 @@ let
       \( word.png \) -gravity center -geometry +0+240 -composite \
       -depth 8 $out
   '';
+  # Matching Moonlight tile for Steam (2026-11-23, the user liked Zen's
+  # better than Sunshine's stock steam.png): same canvas, gradient, symbol
+  # box (280x280 at +160+190, measured from zenBoxart) and label baseline.
+  # Label in Inter ~650 / 52 px = the size of Zen's wordmark; logo from
+  # Simple Icons, in Steam blue.
+  steamBoxart = pkgs.runCommand "steam-boxart.png" {
+    nativeBuildInputs = [ pkgs.librsvg pkgs.imagemagick ];
+    logo = pkgs.fetchurl {
+      url = "https://cdn.jsdelivr.net/npm/simple-icons@11.0.0/icons/steam.svg";
+      hash = "sha256-Xu+PMRBrgZVu2QhJC8+Mc6vkdqpYu5BBrN9wsNQuvK4=";
+    };
+    FONTCONFIG_FILE = pkgs.makeFontsConf { fontDirectories = [ pkgs.inter ]; };
+  } ''
+    export HOME=$TMPDIR
+    sed 's|<svg |<svg fill="#1A9FFF" |' $logo > logo.svg
+    rsvg-convert -w 280 -h 280 logo.svg -o logo.png
+    cat > label.svg <<'EOF'
+    <svg xmlns="http://www.w3.org/2000/svg" width="600" height="800"><text x="300" y="659" text-anchor="middle" font-family="Inter" font-weight="650" font-size="52" fill="#ffffff">Steam</text></svg>
+    EOF
+    rsvg-convert label.svg -o label.png
+    magick -size 600x800 gradient:'#2a2833'-'#121117' \
+      logo.png -geometry +160+190 -composite \
+      label.png -composite \
+      -depth 8 $out
+  '';
   # Which app the current Sunshine session is (steam|zen) - lets the
   # disconnect/reconnect watcher treat them differently.
   stateFile = "/run/user/${uid}/sunshine-app";
@@ -515,7 +540,7 @@ in
       applications.apps = [
         {
           name = "Steam Big Picture";
-          image-path = "steam.png";
+          image-path = "${steamBoxart}";
           cmd = "${appLife} ${unit}";
           auto-detach = false;                     # a quickly ending cmd = app ended, not "detached"
           prep-cmd = [
