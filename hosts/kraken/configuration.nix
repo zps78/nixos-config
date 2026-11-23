@@ -160,8 +160,14 @@ in
 
   myStorage.zfs = {
     enable                                       = true;
-    extraPools                                   = [ "games" ];                # + phase 2: personal NVMe mirror; phase 6: disk1..disk5 (after a first manual import)
+    extraPools                                   = [ "games" "vault" ];        # + phase 2: personal NVMe mirror; phase 6: disk1..disk5 (after a first manual import)
   };
+
+  # vault: 4x 4TB WD Red (WD40EFRX, on the ASM1166 card) as two mirrors,
+  # ~7.2 TiB, created 2026-11-23. Everything non-media: home, trading,
+  # backup, setup, Immich originals, and the replicas of the NVMe mirror's
+  # snapshots. Media stays on the HDD array (phase 6). Datasets (legacy
+  # mounts, like games/steam) get added as each piece of data moves over.
 
   # Undo net for the OS disk's real state: /home, /var, /srv/appdata
   # (rpool/safe and children). rpool/local (/, /nix, docker) is rebuildable
