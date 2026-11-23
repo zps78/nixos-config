@@ -1,0 +1,31 @@
+--- a/src/platform/linux/kmsgrab.cpp	2026-11-23 20:48:21.619906407 +0000
++++ b/src/platform/linux/kmsgrab.cpp	2026-11-23 20:48:28.308128890 +0000
+@@ -8,6 +8,7 @@
+ #include <filesystem>
+ #include <future>
+ #include <ranges>
++#include <set>
+ #include <stdexcept>
+ #include <thread>
+ #include <unistd.h>
+@@ -2198,6 +2199,7 @@
+       }
+ 
+       auto crtc_to_monitor = kms::map_crtc_to_monitor(card.monitors(conn_type_count));
++      std::set<std::uint32_t> mapped_crtcs;  // local patch: first plane per CRTC wins
+ 
+       auto end = std::end(card);
+       for (auto plane = std::begin(card); plane != end; ++plane) {
+@@ -2233,7 +2235,11 @@
+         }
+ 
+         auto it = crtc_to_monitor.find(plane->crtc_id);
+-        if (it != std::end(crtc_to_monitor)) {
++        // Map each CRTC to its FIRST plane with a framebuffer (the primary,
++        // full picture), not the last: gamescope may add a full-screen,
++        // mostly transparent overlay plane on the same CRTC (logged-in Steam
++        // on NVIDIA), and capturing that one streams black. (local patch)
++        if (it != std::end(crtc_to_monitor) && mapped_crtcs.insert(plane->crtc_id).second) {
+           it->second.viewport = platf::touch_port_t {
+             .offset_x = (int) crtc->x,
+             .offset_y = (int) crtc->y,
