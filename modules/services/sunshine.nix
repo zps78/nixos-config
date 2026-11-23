@@ -143,8 +143,29 @@
     # sunshine, an unchanging path), so a new Sunshine build doesn't change
     # the user unit and a switch wouldn't restart it - the old binary kept
     # running (2026-11-21: the one-client patch installed but not live).
-    # Tie the unit to the package so a new build restarts Sunshine.
-    systemd.user.services.sunshine.restartTriggers = [ config.services.sunshine.package ];
+    # A user-unit restartTriggers isn't enough: switch-to-configuration
+    # restarts user units BEFORE suid-sgid-wrappers.service installs the new
+    # wrapper, so Sunshine came back 1 s too early on the old binary
+    # (2026-11-23 21:00:14 vs 21:00:15 - the primary-plane patch looked
+    # ineffective). A system oneshot ordered after the wrappers does the
+    # restart instead; try-restart = only if Sunshine is running. Skipped in
+    # the first 5 minutes after boot (the user manager starts Sunshine
+    # itself then; restarting it would only repeat its GPU wait).
+    systemd.services.sunshine-restart-on-update = {
+      description = "Restart Sunshine after its capability wrapper is updated";
+      after = [ "suid-sgid-wrappers.service" ];
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.services.sunshine.package ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        up=$(cut -d. -f1 /proc/uptime)
+        [ "$up" -lt 300 ] && exit 0
+        ${config.systemd.package}/bin/systemctl --user -M ${config.myDesktop.sessionUser}@ try-restart sunshine.service || true
+      '';
+    };
 
     security.wrappers.sunshine.capabilities =
       lib.mkIf config.services.sunshine.capSysAdmin
