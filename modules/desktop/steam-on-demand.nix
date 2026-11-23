@@ -92,6 +92,24 @@ let
   ctl = pkgs.writeShellScript "steam-session-ctl" ''
     export PATH=${lib.makeBinPath [ pkgs.systemd pkgs.procps pkgs.coreutils ]}
     sc() { systemctl --no-ask-password "$@"; }
+    # Sunshine maps output_name to a plane index when the client connects,
+    # counting the planes that hold a framebuffer at that moment. If the
+    # console is still lit on another output (kraken: DP-2) the stream's
+    # output gets index 1, the console then goes dark, and the stream stays
+    # black ("Couldn't get drm fb for plane [0]") - seen 2026-11-23 on a
+    # fresh Steam start. So hold the stream back until every other output
+    # is off. Give up after 20 s (the stream starts anyway).
+    others_off() {
+      for c in /sys/class/drm/card*-*; do
+        case "$c" in *-${cfg.output}) continue ;; esac
+        [ "$(cat "$c/enabled" 2>/dev/null)" = enabled ] && return 1
+      done
+      return 0
+    }
+    wait_others_off() {
+      for _ in $(seq 40); do others_off && return 0; sleep 0.5; done
+      echo "other outputs still on after 20 s - starting anyway" >&2
+    }
     app=$(cat ${stateFile} 2>/dev/null || echo steam)
     case "$1:''${2:-}" in
       start:steam)
@@ -104,6 +122,7 @@ let
         for _ in $(seq 120); do
           if pgrep -u ${user} -x steamwebhelper >/dev/null; then
             sleep 3
+            wait_others_off
             exit 0
           fi
           sleep 1
@@ -116,6 +135,7 @@ let
         for _ in $(seq 60); do
           if pgrep -u ${user} -f "zen-beta|/zen " >/dev/null; then
             sleep 3
+            wait_others_off
             exit 0
           fi
           sleep 1
