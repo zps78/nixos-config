@@ -75,4 +75,9 @@
   # rofi isn't used; Stylix's rofi target still sets the renamed
   # programs.rofi.font and triggers a rename warning on every eval.
   stylix.targets.rofi.enable = false;
+
+  # home-manager (2026-11-22) removed programs.wayprompt; Stylix (2026-11-18)
+  # still themes it and the leftover definition fails evaluation. wayprompt
+  # isn't used - drop this once Stylix catches up.
+  stylix.targets.wayprompt.enable = false;
 }
