@@ -14,6 +14,7 @@
     ./gvfs.nix
     ./homepage.nix
     ./libvirt.nix
+    ./paperless.nix
     ./scrutiny.nix
     ./ssh.nix
     ./sunshine.nix

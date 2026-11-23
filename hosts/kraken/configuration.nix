@@ -262,6 +262,15 @@ in
   #   Homepage http://<lanIp>:8082    (start page)
   #   wol-web  http://<lanIp>:8089    (one-click wake: /wake/<name>)
   #   AdGuard  http://<lanIp>:3000    (DNS filter; config in the repo only)
+  #   Paperless http://<lanIp>:28981  (documents; Paperless's own logins)
+
+  # Paperless-ngx, moved from karma's container (phase 3). Data in
+  # /var/lib/paperless (rpool/safe/var - snapshotted); moves to the NVMe
+  # mirror once that exists. Scanner drop folder over SMB: not yet.
+  myServices.paperless = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+  };
 
   # DNS filter for LAN + tailnet, replacing karma's Pi-hole container
   # (phase 1). Clients move over when the router's DHCP and the tailnet's
@@ -282,6 +291,7 @@ in
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
       "airvpn" "qbittorrent" "adguardhome"
+      "paperless-scheduler" "paperless-consumer" "paperless-web" "paperless-task-queue" "paperless-exporter"
     ];
   };
 
@@ -354,6 +364,15 @@ in
           { Scrutiny = { href = "http://${lanIp}:8087";     icon = "scrutiny.png"; description = "Disk health (SMART)"; }; }
           { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
           { Sunshine = { href = "https://${streamIp}:47990"; icon = "sunshine.png"; description = "Game streaming (pairing)"; }; }
+        ];
+      }
+      {
+        Documents = [
+          { Paperless = {
+              href = "http://${lanIp}:28981"; icon = "paperless-ngx.png";
+              description = "Document archive";
+              siteMonitor = "http://127.0.0.1:28981";
+          }; }
         ];
       }
       {
