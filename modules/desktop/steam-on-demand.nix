@@ -41,6 +41,11 @@ let
   idleTimer = "steam-gamescope-idle-stop.timer";
   zenUnit = "zen-vpn.service";
   zenTimer = "zen-vpn-idle-stop.timer";
+  # Steam's "Suspend": the session is frozen (systemctl freeze) and kept
+  # without a disconnect countdown until the next reconnect thaws it; this
+  # timer ends a forgotten one (cfg.suspendCap). The flag file marks it.
+  capTimer = "steam-gamescope-suspend-cap.timer";
+  suspendFlag = "/run/user/${uid}/steam-suspended";
 
   # Moonlight tile for "Zen (VPN)", 600x800 like Steam's: Zen's own vector
   # logo + wordmark (from the steam user's Zen package, so it follows Zen's
@@ -131,6 +136,13 @@ let
       done
       return 0
     }
+    # Undo Steam's "Suspend" (steam-power-intercept froze the session).
+    unsuspend() {
+      [ -e ${suspendFlag} ] || return 0
+      sc thaw ${unit} || true
+      sc stop ${capTimer} || true
+      rm -f ${suspendFlag}
+    }
     wait_others_off() {
       for _ in $(seq 40); do others_off && return 0; sleep 0.5; done
       echo "other outputs still on after 20 s - starting anyway" >&2
@@ -140,6 +152,7 @@ let
       start:steam)
         echo steam > ${stateFile}
         sc stop ${idleTimer} || true
+        unsuspend
         sc start ${unit}
         # Hold the stream back until Steam's UI is up, so Moonlight doesn't
         # open on the bare console. Give up waiting after 2 minutes (first
@@ -174,6 +187,7 @@ let
           sc is-active -q ${zenUnit} || sc start ${zenUnit}
         else
           sc stop ${idleTimer} || true
+          unsuspend                                # Steam "Suspend": thaw, game continues
           sc is-active -q ${unit} || sc start ${unit}
         fi
         ;;
@@ -181,10 +195,14 @@ let
         # Last client gone: grace period, then the session stops (and with
         # it the Sunshine app - see appLife). Steam long (quick reconnects
         # keep the game), Zen short (privacy: little time to resume into it).
-        if [ "$app" = zen ]; then sc restart ${zenTimer}; else sc restart ${idleTimer}; fi
+        # A suspended Steam session gets no countdown (only the cap timer).
+        if [ "$app" = zen ]; then sc restart ${zenTimer}
+        elif [ -e ${suspendFlag} ]; then :
+        else sc restart ${idleTimer}; fi
         ;;
       stop:steam)
         sc stop ${idleTimer} || true
+        unsuspend                                  # thaw first, so the stop can run
         sc stop ${unit}
         rm -f ${stateFile}
         ;;
@@ -236,8 +254,9 @@ let
       esac
       member=''${line##*member=}
       case "$member" in
-        PowerOff|PowerOffWithFlags|Halt|HaltWithFlags|Suspend|SuspendWithFlags|Hibernate|HibernateWithFlags|HybridSleep*|SuspendThenHibernate*) verb=stop ;;
+        PowerOff|PowerOffWithFlags|Halt|HaltWithFlags) verb=stop ;;
         Reboot|RebootWithFlags|SoftReboot*) verb=restart ;;
+        Suspend|SuspendWithFlags|Hibernate|HibernateWithFlags|HybridSleep*|SuspendThenHibernate*) verb=suspend ;;
         *) continue ;;
       esac
       sender=$(echo "$line" | grep -oE 'sender=[^ ]+' | cut -d= -f2)
@@ -245,7 +264,22 @@ let
                org.freedesktop.DBus GetConnectionUnixUser s "$sender" 2>/dev/null | cut -d' ' -f2)
       [ "$suid" = "$uid" ] || continue
       echo "steam asked logind for $member -> $verb ${unit}"
-      systemctl "$verb" --no-block ${unit}
+      case "$verb" in
+        suspend)
+          # Freeze the whole session (Steam, gamescope, the game) and keep
+          # it: no disconnect countdown (steam-session-ctl checks the flag),
+          # only the cap timer. The next reconnect thaws it.
+          systemctl is-active -q ${unit} || continue
+          systemctl stop ${idleTimer} || true
+          touch ${suspendFlag} && chown ${user}: ${suspendFlag}
+          systemctl freeze ${unit} && systemctl start ${capTimer} \
+            || { echo "freeze failed - leaving the session running"; rm -f ${suspendFlag}; }
+          ;;
+        *)
+          rm -f ${suspendFlag}; systemctl stop ${capTimer} || true
+          systemctl "$verb" --no-block ${unit}
+          ;;
+      esac
     done
   '';
 
@@ -292,6 +326,16 @@ in
       type = lib.types.str;
       default = "3min";
       description = "How long after a Moonlight disconnect Steam/gamescope keep running (quick reconnects don't restart Steam).";
+    };
+
+    suspendCap = lib.mkOption {
+      type = lib.types.str;
+      default = "8h";
+      description = ''
+        Steam's "Suspend" freezes the session and keeps it (no disconnect
+        countdown) until the next Moonlight reconnect thaws it. After this
+        long suspended, the session is ended anyway.
+      '';
     };
 
     zen = {
@@ -403,6 +447,26 @@ in
         ExecStopPost = "+${pkgs.kbd}/bin/chvt 1";
         Restart = "no";
       };
+
+      # A rebuild doesn't restart a running session (it may be a game in
+      # progress, or frozen by Steam's "Suspend" - systemd can't stop a
+      # frozen unit). The new config applies at the next session start.
+      restartIfChanged = false;
+    };
+
+    # Shutdown of kraken with a suspended (frozen) Steam session: systemd
+    # can't stop a frozen unit. This helper is ordered after the session, so
+    # it's stopped before it and thaws it on the way down.
+    systemd.services.steam-gamescope-thaw-guard = {
+      description = "Thaw a suspended Steam session before it is stopped at shutdown";
+      wantedBy = [ "multi-user.target" ];
+      after = [ unit ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.coreutils}/bin/true";
+        ExecStop = "-${pkgs.systemd}/bin/systemctl thaw ${unit}";
+      };
     };
 
     ############################################################
@@ -481,6 +545,27 @@ in
       };
     };
 
+    # Cap for a suspended (frozen) Steam session: started by
+    # steam-power-intercept on "Suspend", stopped by the reconnect that
+    # thaws it. Ends a forgotten one after cfg.suspendCap.
+    systemd.timers.steam-gamescope-suspend-cap = {
+      description = "End a suspended Steam session after ${cfg.suspendCap}";
+      timerConfig = {
+        OnActiveSec = cfg.suspendCap;
+        AccuracySec = "1min";
+        Unit = "steam-gamescope-suspend-cap.service";
+      };
+    };
+    systemd.services.steam-gamescope-suspend-cap = {
+      description = "End the suspended Steam session (cap reached)";
+      serviceConfig.Type = "oneshot";
+      script = ''
+        ${pkgs.systemd}/bin/systemctl thaw ${unit} || true
+        ${pkgs.systemd}/bin/systemctl stop ${unit}
+        rm -f ${suspendFlag}
+      '';
+    };
+
     # Disconnect grace period: armed by `steam-session-ctl stop-later`.
     systemd.timers.steam-gamescope-idle-stop = {
       description = "Stop the Steam gamescope session after a Moonlight disconnect";
@@ -494,7 +579,11 @@ in
       description = "Stop the Steam gamescope session (idle after disconnect)";
       serviceConfig = {
         Type = "oneshot";
+        # systemd refuses to stop a frozen unit ("Cannot perform operation
+        # on frozen unit") - thaw first, in case a suspended one ends here.
+        ExecStartPre = "-${pkgs.systemd}/bin/systemctl thaw ${unit}";
         ExecStart = "${pkgs.systemd}/bin/systemctl stop ${unit}";
+        ExecStartPost = "${pkgs.coreutils}/bin/rm -f ${suspendFlag}";
       };
     };
 
@@ -508,6 +597,11 @@ in
           var verb = action.lookup("verb");
           if ((unit == "${unit}" || unit == "${idleTimer}" || unit == "${zenUnit}" || unit == "${zenTimer}") &&
               (verb == "start" || verb == "stop" || verb == "restart")) {
+            return polkit.Result.YES;
+          }
+          // resume from Steam's "Suspend": thaw the session, drop the cap
+          if ((unit == "${unit}" && verb == "thaw") ||
+              (unit == "${capTimer}" && verb == "stop")) {
             return polkit.Result.YES;
           }
         }
