@@ -205,8 +205,48 @@ let
   # after a disconnect - Sunshine sees the app exit, ends the stream and
   # runs prep-cmd "undo". So closing the program is enough; no "Quit" in
   # Moonlight needed. (prep-cmd "do" has already started the unit.)
+  # A unit that is restarting (Steam's "Restart" - see steamPowerIntercept)
+  # passes through deactivating/inactive/activating; only "gone" for two
+  # checks in a row (~4 s) counts as the app having ended.
   appLife = pkgs.writeShellScript "sunshine-app-life" ''
-    while ${pkgs.systemd}/bin/systemctl is-active -q "$1"; do ${pkgs.coreutils}/bin/sleep 2; done
+    gone=0
+    while [ "$gone" -lt 2 ]; do
+      case "$(${pkgs.systemd}/bin/systemctl is-active "$1")" in
+        active|activating|deactivating|reloading|refreshing) gone=0 ;;
+        *) gone=$((gone + 1)) ;;
+      esac
+      ${pkgs.coreutils}/bin/sleep 2
+    done
+  '';
+
+  # Steam's power menu acts on the Steam session only, like a VM: "Turn
+  # off" stops it (stream ends), "Restart" restarts it. Steam asks logind
+  # to power off/reboot the whole machine (2026-11-24: it did shut kraken
+  # down). polkit (below) refuses those requests for the steam user; this
+  # root watcher sees them on the system bus and does the session version.
+  steamPowerIntercept = pkgs.writeShellScript "steam-power-intercept" ''
+    export PATH=${lib.makeBinPath [ pkgs.dbus pkgs.systemd pkgs.coreutils pkgs.gnugrep ]}
+    uid=$(id -u ${user})
+    dbus-monitor --system \
+      "type='method_call',destination='org.freedesktop.login1',interface='org.freedesktop.login1.Manager'" |
+    while read -r line; do
+      case "$line" in
+        "method call"*) ;;
+        *) continue ;;
+      esac
+      member=''${line##*member=}
+      case "$member" in
+        PowerOff|PowerOffWithFlags|Halt|HaltWithFlags|Suspend|SuspendWithFlags|Hibernate|HibernateWithFlags|HybridSleep*|SuspendThenHibernate*) verb=stop ;;
+        Reboot|RebootWithFlags|SoftReboot*) verb=restart ;;
+        *) continue ;;
+      esac
+      sender=$(echo "$line" | grep -oE 'sender=[^ ]+' | cut -d= -f2)
+      suid=$(busctl --system call org.freedesktop.DBus /org/freedesktop/DBus \
+               org.freedesktop.DBus GetConnectionUnixUser s "$sender" 2>/dev/null | cut -d' ' -f2)
+      [ "$suid" = "$uid" ] || continue
+      echo "steam asked logind for $member -> $verb ${unit}"
+      systemctl "$verb" --no-block ${unit}
+    done
   '';
 
   # Sunshine has no disconnect hook - prep-cmd "undo" only runs when the
@@ -472,7 +512,29 @@ in
           }
         }
       });
+      // No machine power for steam (Steam's power menu would turn off or
+      // reboot the whole NAS). AUTH_ADMIN, not NO: logind's CanPowerOff then
+      // says "challenge", so Steam still offers the menu entries; there's no
+      // auth agent in the session, so the request fails and
+      // steam-power-intercept turns it into a session stop/restart.
+      polkit.addRule(function(action, subject) {
+        if (subject.user == "${user}" &&
+            /^org\.freedesktop\.login1\.(power-off|reboot|halt|suspend|hibernate|soft-reboot)/.test(action.id)) {
+          return polkit.Result.AUTH_ADMIN;
+        }
+      });
     '';
+
+    systemd.services.steam-power-intercept = {
+      description = "Turn Steam's power-off/reboot into a Steam session stop/restart";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "dbus.service" ];
+      serviceConfig = {
+        ExecStart = steamPowerIntercept;
+        Restart = "always";
+        RestartSec = "2s";
+      };
+    };
 
     ############################################################
     # Sunshine, headless
