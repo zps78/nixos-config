@@ -70,6 +70,15 @@
     options = [ "nofail" "x-systemd.requires=zfs-import-games.service" "x-systemd.after=zfs-import-games.service" ];
   };
 
+  # Game saves backup (myStorage.gameSaves): dataset vault/gamesaves on the
+  # 4x 4TB mirrors (the job snapshots it after each backup). Created 2026-11-24 with
+  # `zfs create -o mountpoint=legacy vault/gamesaves`. nofail like games.
+  fileSystems."/srv/gamesaves" = {
+    device = "vault/gamesaves";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-partlabel/kraken-esp";
     fsType = "vfat";

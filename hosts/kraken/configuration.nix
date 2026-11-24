@@ -177,6 +177,17 @@ in
     datasets."rpool/safe".tier                   = "important";                # 24 hourly, 30 daily, 3 monthly
   };
 
+  # Game saves off the games SSD (single disk, not snapshotted) into
+  # vault/gamesaves (mirrored). Checked every 6 h, but vault is only touched
+  # after playing; each such backup gets its own snapshot (newest 100 kept)
+  # - no sanoid hourly snapshots here, those would wake the HDDs. See
+  # modules/storage/game-saves.nix.
+  myStorage.gameSaves = {
+    enable                                       = true;
+    target                                       = "/srv/gamesaves";
+    dataset                                      = "vault/gamesaves";
+  };
+
   ############################################################
   # Network services
   ############################################################
@@ -296,6 +307,7 @@ in
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
       "airvpn" "qbittorrent" "adguardhome"
       "paperless-scheduler" "paperless-consumer" "paperless-web" "paperless-task-queue" "paperless-exporter"
+      "game-saves-backup"
     ];
   };
 
