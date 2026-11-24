@@ -7,7 +7,7 @@
     ./gnome.nix
     ./kde.nix
     ./niri.nix
-    ./steam-on-demand.nix
+    ./stream-apps
   ];
 
   options.myDesktop.stack = lib.mkOption {

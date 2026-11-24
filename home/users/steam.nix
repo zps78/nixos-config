@@ -14,7 +14,7 @@
   home.stateVersion                              = "25.11";          # release this home was first set up with - never bump on upgrades
 
   # No niri/Noctalia: this account's session is Steam in gamescope
-  # (myDesktop.steamOnDemand on kraken). Noctalia's user service hangs
+  # (myDesktop.streamApps on kraken). Noctalia's user service hangs
   # off graphical-session.target and would just crash-loop without a
   # compositor it can talk to.
   imports = [
@@ -31,15 +31,15 @@
     mpv.enable                                   = true;             # Media player
     brave.enable                                 = true;             # Browser (store logins, guides)
 
-    # The "Zen (VPN)" Sunshine app (myDesktop.steamOnDemand.zen) runs this
+    # The "Zen (VPN)" Sunshine app (myDesktop.streamApps.zen) runs this
     # profile, full-screen in cage, inside the AirVPN namespace.
-    zen-browser.enable                           = osConfig.myDesktop.steamOnDemand.zen.enable;
+    zen-browser.enable                           = osConfig.myDesktop.streamApps.zen.enable;
   };
 
   # Zen behind the VPN: only the tunnel's DNS (no DNS over HTTPS around it),
   # no local addresses leaked through WebRTC, hardware video decode on.
   # Added on top of the shared policies/prefs in modules/apps-user/zen-browser.nix.
-  programs.zen-browser = lib.mkIf osConfig.myDesktop.steamOnDemand.zen.enable {
+  programs.zen-browser = lib.mkIf osConfig.myDesktop.streamApps.zen.enable {
     policies.DNSOverHTTPS = { Enabled = false; Locked = true; };
     profiles.default.settings = {
       # Always private ("permanent private browsing"): no history, cookies

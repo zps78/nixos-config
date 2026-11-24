@@ -218,7 +218,7 @@ in
   # Moonlight: add the host by streamIp (.7), not by discovery - Sunshine's
   # ports are only open on the Intel NIC. Pick "Steam Big Picture": Steam
   # starts in gamescope on the dummy plug (a few seconds), and stops 3 min
-  # after the last disconnect. See modules/desktop/steam-on-demand.nix.
+  # after the last disconnect. See modules/desktop/stream-apps/.
   # Sunshine web UI (first-time login/pairing): https://${streamIp}:47990
 
   # Stable name for the 4060 Ti's render node, by PCI vendor:device ID
@@ -229,17 +229,20 @@ in
     SUBSYSTEM=="drm", KERNEL=="renderD*", ATTRS{vendor}=="0x10de", ATTRS{device}=="0x2805", SYMLINK+="dri/by-gpu/rtx4060ti-render"
   '';
 
-  myDesktop.steamOnDemand = {
+  # Moonlight apps (modules/desktop/stream-apps/): one at a time on the
+  # dummy plug, each in its own session, stopped after a disconnect grace.
+  myDesktop.streamApps = {
     enable                                       = true;
     output                                       = "HDMI-A-1";                 # dummy plug on the 4060 Ti (DP-2 = console monitor)
     width                                        = 1920;
     height                                       = 1080;
     refresh                                      = 60;
     renderDevice                                 = "/dev/dri/by-gpu/rtx4060ti-render"; # 4060 Ti by model ID (udev rule below) - survives slot moves
-    idleStop                                     = "10min";                    # Steam keeps running this long after a disconnect
-    zen.enable                                   = true;                       # 2nd Moonlight app "Zen (VPN)": Zen in cage, inside the airvpn namespace
+    steam.enable                                 = true;                       # "Steam Big Picture": Steam in gamescope; power menu acts on the session only
+    steam.idleStop                               = "10min";                    # Steam keeps running this long after a disconnect
+    zen.enable                                   = true;                       # "Zen (VPN)": Zen in cage, inside the airvpn namespace
     zen.idleStop                                 = "10s";                      # ...Zen only this long (privacy)
-    lutris.enable                                = true;                       # 3rd Moonlight app "Lutris": installers with a GUI (cage); stays 2 h after a disconnect, longer while Wine runs
+    lutris.enable                                = true;                       # "Lutris": installers with a GUI (labwc); stays 2 h after a disconnect, longer while Wine runs
   };
 
   # Sunshine's web UI rejects requests from origins it doesn't know (CSRF
