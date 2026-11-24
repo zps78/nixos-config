@@ -118,12 +118,28 @@ let
   zenLauncher = kioskLauncher "zen-vpn-launch" "/etc/profiles/per-user/${user}/bin/zen-beta";
 
   # Lutris: a 3rd Moonlight app for installing games from installers
-  # (DODI/FitGirl Setup.exe etc.) with a real GUI - cage like Zen, but on
+  # (DODI/FitGirl Setup.exe etc.) with a real GUI - its own session like Zen (labwc), but on
   # the normal network. Games installed there can be added to Steam as
   # non-Steam games, or played from Lutris itself.
   lutrisUnit = "lutris-session.service";
   lutrisTimer = "lutris-session-idle-stop.timer";
   lutrisLauncher = kioskLauncher "lutris-launch" "${pkgs.lutris}/bin/lutris";
+  # Lutris runs in labwc, not cage: cage is a kiosk (one full-screen app)
+  # and hid Lutris's Preferences dialog behind the main window (2026-11-24);
+  # Wine installers open extra windows too. labwc stacks them normally,
+  # with title bars to move them. Main window maximized (first window
+  # titled "Lutris" only), no panel or desktop. -S ends labwc with Lutris.
+  lutrisLabwcConfig = pkgs.writeTextDir "rc.xml" ''
+    <?xml version="1.0"?>
+    <labwc_config>
+      <core><decoration>server</decoration></core>
+      <windowRules>
+        <windowRule identifier="net.lutris.Lutris" title="Lutris" matchOnce="true">
+          <action name="Maximize"/>
+        </windowRule>
+      </windowRules>
+    </labwc_config>
+  '';
   # Tile in the Steam/Zen style: Lutris's own logo (from the package,
   # follows its branding; the SVG has a 5/280 margin, so 290 px -> 280 px
   # visible, placed 5 px up-left) + Inter label on the same baseline.
@@ -404,7 +420,7 @@ in
     };
 
     lutris = {
-      enable = lib.mkEnableOption "a Sunshine app: Lutris in cage, to install games from installers with a GUI";
+      enable = lib.mkEnableOption "a Sunshine app: Lutris in labwc, to install games from installers with a GUI";
       idleStop = lib.mkOption {
         type = lib.types.str;
         default = "2h";
@@ -612,12 +628,12 @@ in
       };
     };
 
-    # Lutris in cage (same pattern as Zen, normal network): installers with
+    # Lutris in labwc (session pattern as Zen, normal network): installers with
     # a GUI. Runners/prefixes in steam's home; install games to
     # /mnt/games/nonsteam/<Game> (Z:\mnt\games\nonsteam\... in Wine).
     security.pam.services.lutris-session.startSession = lib.mkIf cfg.lutris.enable true;
     systemd.services.lutris-session = lib.mkIf cfg.lutris.enable {
-      description = "Lutris in cage (on demand, for Sunshine)";
+      description = "Lutris in labwc (on demand, for Sunshine)";
       after = [ "systemd-user-sessions.service" "systemd-logind.service" "user@${uid}.service" ];
       wants = [ "user@${uid}.service" ];
       conflicts = [ "getty@tty${toString cfg.vt}.service" unit ] ++ lib.optional cfg.zen.enable zenUnit;
@@ -646,16 +662,16 @@ in
         UtmpIdentifier = "tty${toString cfg.vt}";
         UtmpMode = "user";
         ExecStartPre = "+${pkgs.kbd}/bin/chvt ${toString cfg.vt}";
-        # -d: no client-side decorations; no -s here: Wine installers open
-        # extra windows (dialogs), cage shows the newest on top.
-        ExecStart = "${pkgs.cage}/bin/cage -d -- ${lutrisLauncher}";
+        # labwc, not cage (see lutrisLabwcConfig): dialogs and installer
+        # windows stack on top instead of hiding behind Lutris.
+        ExecStart = "${pkgs.labwc}/bin/labwc -C ${lutrisLabwcConfig} -S ${lutrisLauncher}";
         ExecStopPost = "+${pkgs.kbd}/bin/chvt 1";
         Restart = "no";
         # No capabilities at all in this session: Lutris is a bubblewrap
         # FHS env, and bwrap dies with "Unexpected capabilities but not
         # setuid" if its process holds any (the steam user's sessions
         # inherit CAP_WAKE_ALARM from its user manager; seen 2026-11-24,
-        # Lutris closed 2 s after start). cage/Lutris/Wine need none.
+        # Lutris closed 2 s after start). labwc/Lutris/Wine need none.
         CapabilityBoundingSet = "";
         AmbientCapabilities = "";
       };
