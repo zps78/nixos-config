@@ -112,6 +112,7 @@ let
       || $r --output ${cfg.output} --mode ${toString cfg.width}x${toString cfg.height} \
       || echo "could not set ${toString cfg.width}x${toString cfg.height} on ${cfg.output}"
     echo "== outputs after"; $r
+    grep -E '^Cap(Inh|Prm|Eff|Amb)' /proc/self/status | tr '\n' ' '; echo
     exec ${program}
   '';
   zenLauncher = kioskLauncher "zen-vpn-launch" "/etc/profiles/per-user/${user}/bin/zen-beta";
@@ -650,6 +651,13 @@ in
         ExecStart = "${pkgs.cage}/bin/cage -d -- ${lutrisLauncher}";
         ExecStopPost = "+${pkgs.kbd}/bin/chvt 1";
         Restart = "no";
+        # No capabilities at all in this session: Lutris is a bubblewrap
+        # FHS env, and bwrap dies with "Unexpected capabilities but not
+        # setuid" if its process holds any (the steam user's sessions
+        # inherit CAP_WAKE_ALARM from its user manager; seen 2026-11-24,
+        # Lutris closed 2 s after start). cage/Lutris/Wine need none.
+        CapabilityBoundingSet = "";
+        AmbientCapabilities = "";
       };
       # Never cut off a running install with a rebuild.
       restartIfChanged = false;
