@@ -74,6 +74,11 @@ in
   # in the Homepage config). Currently: QBIT_USER, QBIT_PASSWORD.
   "homepage-env.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's SMB password for the scanner account (myServices.samba user
+  # "scanner" - the Brother ADS-4300N scans into Paperless's consume
+  # folder). One line, the password only.
+  "samba-scanner-password.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }

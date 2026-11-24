@@ -289,6 +289,28 @@ in
     interfaces                                   = [ "enp4s0" ];
   };
 
+  # SMB share for the scanner (Brother ADS-4300N, 192.168.1.101): it scans
+  # straight into Paperless's consume folder as user "scanner"; Samba
+  # writes the files as the paperless user, so Paperless can consume and
+  # remove them. Scanner profiles: host 192.168.1.10, share "paperless",
+  # no subfolder (a subfolder would become a tag). Password: agenix.
+  age.secrets.samba-scanner.file                 = ../../secrets/samba-scanner-password.age;
+  myServices.samba = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+    users.scanner.passwordFile                   = config.age.secrets.samba-scanner.path;
+    shares.paperless = {
+      path                                       = config.services.paperless.consumptionDir;
+      comment                                    = "Paperless consume (scanner drop)";
+      "valid users"                              = "scanner";
+      "read only"                                = "no";
+      "force user"                               = "paperless";
+      "force group"                              = "paperless";
+      "create mask"                              = "0640";
+      "directory mask"                           = "0750";
+    };
+  };
+
   # DNS filter for LAN + tailnet, replacing karma's Pi-hole container
   # (phase 1). Clients move over when the router's DHCP and the tailnet's
   # DNS setting point here; until then only by hand.
@@ -309,7 +331,7 @@ in
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
       "airvpn" "qbittorrent" "adguardhome"
       "paperless-scheduler" "paperless-consumer" "paperless-web" "paperless-task-queue" "paperless-exporter"
-      "game-saves-backup"
+      "game-saves-backup" "samba-smbd" "samba-users"
     ];
   };
 
