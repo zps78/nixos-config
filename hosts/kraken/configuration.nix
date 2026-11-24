@@ -389,13 +389,15 @@ in
     settings = {
       title                                      = hostName;
       headerStyle                                = "clean";
-      layout.System = { style = "row"; columns = 4; };
+      layout.System = { style = "row"; columns = 3; };
+      layout.Network = { style = "row"; columns = 3; };
       layout.Downloads = { style = "row"; columns = 2; };
     };
     widgets = [
-      # Disk "/" only: every rpool dataset shares the pool's free space, and
-      # Homepage's sandbox (ProtectHome) can't see /home anyway.
-      { resources = { cpu = true; memory = true; disk = [ "/" ]; cputemp = true; uptime = true; }; }
+      # One disk per pool: "/" (rpool - every rpool dataset shares its free
+      # space; Homepage's sandbox (ProtectHome) can't see /home anyway),
+      # /mnt/games (games SSD), /srv/gamesaves (vault, the 4x 4TB mirrors).
+      { resources = { cpu = true; memory = true; disk = [ "/" "/mnt/games" "/srv/gamesaves" ]; cputemp = true; uptime = true; }; }
     ];
     services = [
       {
@@ -403,15 +405,30 @@ in
           { Cockpit  = { href = "https://${lanIp}:9090";    icon = "cockpit.png";  description = "System, logs, services, ZFS, files"; }; }
           { Scrutiny = { href = "http://${lanIp}:8087";     icon = "scrutiny.png"; description = "Disk health (SMART)"; }; }
           { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
-          { Sunshine = { href = "https://${streamIp}:47990"; icon = "sunshine.png"; description = "Game streaming (pairing)"; }; }
+        ];
+      }
+      {
+        # Moonlight apps (modules/desktop/stream-apps/) have no web UIs of
+        # their own - Sunshine's is for pairing and its log.
+        Streaming = [
+          { Sunshine = {
+              href = "https://${streamIp}:47990"; icon = "sunshine.png";
+              description = "Moonlight: Steam Big Picture, Zen (VPN), Lutris";
+              ping = streamIp;                              # (its web UI answers 401 without login - a site monitor would show "down")
+          }; }
         ];
       }
       {
         Documents = [
           { Paperless = {
               href = "http://${lanIp}:28981"; icon = "paperless-ngx.png";
-              description = "Document archive";
+              description = "Document archive - the scanner drops into it (SMB)";
               siteMonitor = "http://127.0.0.1:28981";
+              widget = {
+                type = "paperlessngx";
+                url = "http://127.0.0.1:28981";
+                key = "{{HOMEPAGE_VAR_PAPERLESS_KEY}}";          # API token, from secrets/homepage-env.age
+              };
           }; }
         ];
       }
@@ -422,6 +439,8 @@ in
               description = "DNS filter (LAN + tailnet)";
               widget = { type = "adguard"; url = "http://127.0.0.1:3000"; };
           }; }
+          { Router    = { href = "http://${gateway}";                    icon = "router.png";    description = "DIGI ZTE F8748 - DHCP, LAN DNS"; ping = gateway; }; }
+          { Tailscale = { href = "https://login.tailscale.com/admin/machines"; icon = "tailscale.png"; description = "Tailnet admin (DNS, routes, keys)"; }; }
         ];
       }
       {
