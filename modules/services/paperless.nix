@@ -42,6 +42,11 @@ in
         PAPERLESS_FILENAME_FORMAT = "{created}-{correspondent}-{title}";
         PAPERLESS_TIME_ZONE = "Europe/Lisbon";
         PAPERLESS_CONSUMER_POLLING = 0;    # inotify; set when the drop folder is on SMB
+        # Subfolders of the consume folder are consumed too, and their names
+        # become tags: consume/sent/x.pdf -> tag "sent" (documents already
+        # emailed - the karma -> kraken move used this, 2026-11-24).
+        PAPERLESS_CONSUMER_RECURSIVE = true;
+        PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = true;
       };
       # Nightly full export to <dataDir>/export: a second, plain-file copy of
       # everything (documents + metadata), inside the snapshotted dataset.
