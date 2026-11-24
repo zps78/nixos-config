@@ -100,8 +100,9 @@ let
   # a framebuffer, so a lit console monitor would be captured instead),
   # the dummy plug in the stream mode - a mode from its EDID list (NVIDIA
   # rejects a custom mode, "failed to apply configuration"). Logs the
-  # before/after state to the journal. Then Zen full-screen.
-  zenLauncher = pkgs.writeShellScript "zen-vpn-launch" ''
+  # before/after state to the journal. Then the program full-screen (Zen,
+  # Lutris - one kiosk launcher per cage app).
+  kioskLauncher = name: program: pkgs.writeShellScript name ''
     r=${pkgs.wlr-randr}/bin/wlr-randr
     echo "== outputs at start"; $r
     for o in $($r --json | ${pkgs.jq}/bin/jq -r '.[].name'); do
@@ -111,7 +112,34 @@ let
       || $r --output ${cfg.output} --mode ${toString cfg.width}x${toString cfg.height} \
       || echo "could not set ${toString cfg.width}x${toString cfg.height} on ${cfg.output}"
     echo "== outputs after"; $r
-    exec /etc/profiles/per-user/${user}/bin/zen-beta
+    exec ${program}
+  '';
+  zenLauncher = kioskLauncher "zen-vpn-launch" "/etc/profiles/per-user/${user}/bin/zen-beta";
+
+  # Lutris: a 3rd Moonlight app for installing games from installers
+  # (DODI/FitGirl Setup.exe etc.) with a real GUI - cage like Zen, but on
+  # the normal network. Games installed there can be added to Steam as
+  # non-Steam games, or played from Lutris itself.
+  lutrisUnit = "lutris-session.service";
+  lutrisTimer = "lutris-session-idle-stop.timer";
+  lutrisLauncher = kioskLauncher "lutris-launch" "${pkgs.lutris}/bin/lutris";
+  # Tile in the Steam/Zen style: Lutris's own logo (from the package,
+  # follows its branding; the SVG has a 5/280 margin, so 290 px -> 280 px
+  # visible, placed 5 px up-left) + Inter label on the same baseline.
+  lutrisBoxart = pkgs.runCommand "lutris-boxart.png" {
+    nativeBuildInputs = [ pkgs.librsvg pkgs.imagemagick ];
+    FONTCONFIG_FILE = pkgs.makeFontsConf { fontDirectories = [ pkgs.inter ]; };
+  } ''
+    export HOME=$TMPDIR
+    rsvg-convert -w 290 -h 290 ${pkgs.lutris}/share/icons/hicolor/scalable/apps/net.lutris.Lutris.svg -o logo.png
+    cat > label.svg <<'EOF'
+    <svg xmlns="http://www.w3.org/2000/svg" width="600" height="800"><text x="300" y="659" text-anchor="middle" font-family="Inter" font-weight="650" font-size="52" fill="#ffffff">Lutris</text></svg>
+    EOF
+    rsvg-convert label.svg -o label.png
+    magick -size 600x800 gradient:'#2a2833'-'#121117' \
+      logo.png -geometry +155+185 -composite \
+      label.png -composite \
+      -depth 8 $out
   '';
 
   # Called by Sunshine (as `user`) around each stream, and by the watcher.
@@ -185,6 +213,9 @@ let
         if [ "$app" = zen ]; then
           sc stop ${zenTimer} || true
           sc is-active -q ${zenUnit} || sc start ${zenUnit}
+        elif [ "$app" = lutris ]; then
+          sc stop ${lutrisTimer} || true
+          sc is-active -q ${lutrisUnit} || sc start ${lutrisUnit}
         else
           sc stop ${idleTimer} || true
           unsuspend                                # Steam "Suspend": thaw, game continues
@@ -197,6 +228,7 @@ let
         # keep the game), Zen short (privacy: little time to resume into it).
         # A suspended Steam session gets no countdown (only the cap timer).
         if [ "$app" = zen ]; then sc restart ${zenTimer}
+        elif [ "$app" = lutris ]; then sc restart ${lutrisTimer}
         elif [ -e ${suspendFlag} ]; then :
         else sc restart ${idleTimer}; fi
         ;;
@@ -211,8 +243,26 @@ let
         sc stop ${zenUnit}
         rm -f ${stateFile}
         ;;
+      start:lutris)
+        echo lutris > ${stateFile}
+        sc stop ${lutrisTimer} || true
+        sc start ${lutrisUnit}
+        for _ in $(seq 60); do
+          if pgrep -u ${user} -f "lutris" >/dev/null; then
+            sleep 3
+            wait_others_off
+            exit 0
+          fi
+          sleep 1
+        done
+        ;;
+      stop:lutris)
+        sc stop ${lutrisTimer} || true
+        sc stop ${lutrisUnit}
+        rm -f ${stateFile}
+        ;;
       *)
-        echo "usage: $0 start|stop steam|zen, or resume|stop-later" >&2
+        echo "usage: $0 start|stop steam|zen|lutris, or resume|stop-later" >&2
         exit 2
         ;;
     esac
@@ -352,6 +402,20 @@ in
       };
     };
 
+    lutris = {
+      enable = lib.mkEnableOption "a Sunshine app: Lutris in cage, to install games from installers with a GUI";
+      idleStop = lib.mkOption {
+        type = lib.types.str;
+        default = "2h";
+        description = ''
+          How long after a Moonlight disconnect Lutris keeps running (long:
+          repacks can take an hour to install). Even then it's only stopped
+          when no Wine process (an installer) is running - otherwise it
+          waits another round.
+        '';
+      };
+    };
+
     renderDevice = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -414,7 +478,9 @@ in
       description = "Steam Big Picture in gamescope (on demand, for Sunshine)";
       after = [ "systemd-user-sessions.service" "systemd-logind.service" "user@${uid}.service" ];
       wants = [ "user@${uid}.service" ];
-      conflicts = [ "getty@tty${toString cfg.vt}.service" ] ++ lib.optional cfg.zen.enable zenUnit;
+      conflicts = [ "getty@tty${toString cfg.vt}.service" ]
+        ++ lib.optional cfg.zen.enable zenUnit
+        ++ lib.optional cfg.lutris.enable lutrisUnit;
 
       # Services get a minimal PATH, but the steam-gamescope script (from
       # programs.steam.gamescopeSession) calls `gamescope` and `steam` by
@@ -482,7 +548,7 @@ in
       description = "Zen browser in cage, inside the ${cfg.zen.vpnNamespace} VPN namespace (on demand, for Sunshine)";
       after = [ "systemd-user-sessions.service" "systemd-logind.service" "user@${uid}.service" ];
       wants = [ "user@${uid}.service" ];
-      conflicts = [ "getty@tty${toString cfg.vt}.service" unit ];
+      conflicts = [ "getty@tty${toString cfg.vt}.service" unit ] ++ lib.optional cfg.lutris.enable lutrisUnit;
 
       path = [ "/run/wrappers" "/etc/profiles/per-user/${user}" "/run/current-system/sw" ];
       environment = {
@@ -545,6 +611,73 @@ in
       };
     };
 
+    # Lutris in cage (same pattern as Zen, normal network): installers with
+    # a GUI. Runners/prefixes in steam's home; install games to
+    # /mnt/games/nonsteam/<Game> (Z:\mnt\games\nonsteam\... in Wine).
+    security.pam.services.lutris-session.startSession = lib.mkIf cfg.lutris.enable true;
+    systemd.services.lutris-session = lib.mkIf cfg.lutris.enable {
+      description = "Lutris in cage (on demand, for Sunshine)";
+      after = [ "systemd-user-sessions.service" "systemd-logind.service" "user@${uid}.service" ];
+      wants = [ "user@${uid}.service" ];
+      conflicts = [ "getty@tty${toString cfg.vt}.service" unit ] ++ lib.optional cfg.zen.enable zenUnit;
+
+      path = [ "/run/wrappers" "/etc/profiles/per-user/${user}" "/run/current-system/sw" ];
+      environment = {
+        XDG_SESSION_TYPE = "wayland";
+        XDG_SESSION_CLASS = "user";
+        XDG_RUNTIME_DIR = "/run/user/${uid}";                       # PipeWire (stream audio), session bus
+        DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${uid}/bus";
+        WLR_NO_HARDWARE_CURSORS = "1";                              # cursor drawn into the frame, so it's in the stream
+        WLR_SCENE_DISABLE_DIRECT_SCANOUT = "1";                     # same reason as Zen: keep the primary plane filled
+      };
+
+      serviceConfig = {
+        User = user;
+        PAMName = "lutris-session";
+        WorkingDirectory = "~";
+        TTYPath = "/dev/tty${toString cfg.vt}";
+        TTYReset = true;
+        TTYVHangup = true;
+        TTYVTDisallocate = true;
+        StandardInput = "tty-fail";
+        StandardOutput = "journal";
+        StandardError = "journal";
+        UtmpIdentifier = "tty${toString cfg.vt}";
+        UtmpMode = "user";
+        ExecStartPre = "+${pkgs.kbd}/bin/chvt ${toString cfg.vt}";
+        # -d: no client-side decorations; no -s here: Wine installers open
+        # extra windows (dialogs), cage shows the newest on top.
+        ExecStart = "${pkgs.cage}/bin/cage -d -- ${lutrisLauncher}";
+        ExecStopPost = "+${pkgs.kbd}/bin/chvt 1";
+        Restart = "no";
+      };
+      # Never cut off a running install with a rebuild.
+      restartIfChanged = false;
+    };
+
+    systemd.timers.lutris-session-idle-stop = lib.mkIf cfg.lutris.enable {
+      description = "Stop the Lutris session after a Moonlight disconnect";
+      timerConfig = {
+        OnActiveSec = cfg.lutris.idleStop;
+        AccuracySec = "10s";
+        Unit = "lutris-session-idle-stop.service";
+      };
+    };
+    systemd.services.lutris-session-idle-stop = lib.mkIf cfg.lutris.enable {
+      description = "Stop the Lutris session (idle after disconnect), unless an installer still runs";
+      serviceConfig.Type = "oneshot";
+      script = ''
+        # wineserver lives as long as anything runs in a Wine prefix - an
+        # installer still unpacking: don't cut it off, check again later.
+        if ${pkgs.procps}/bin/pgrep -u ${user} -x wineserver >/dev/null; then
+          echo "Wine still busy (installer?) - Lutris stays, next check in ${cfg.lutris.idleStop}"
+          ${pkgs.systemd}/bin/systemctl restart ${lutrisTimer}
+          exit 0
+        fi
+        ${pkgs.systemd}/bin/systemctl stop ${lutrisUnit}
+      '';
+    };
+
     # Cap for a suspended (frozen) Steam session: started by
     # steam-power-intercept on "Suspend", stopped by the reconnect that
     # thaws it. Ends a forgotten one after cfg.suspendCap.
@@ -595,7 +728,8 @@ in
             subject.user == "${user}") {
           var unit = action.lookup("unit");
           var verb = action.lookup("verb");
-          if ((unit == "${unit}" || unit == "${idleTimer}" || unit == "${zenUnit}" || unit == "${zenTimer}") &&
+          if ((unit == "${unit}" || unit == "${idleTimer}" || unit == "${zenUnit}" || unit == "${zenTimer}" ||
+               unit == "${lutrisUnit}" || unit == "${lutrisTimer}") &&
               (verb == "start" || verb == "stop" || verb == "restart")) {
             return polkit.Result.YES;
           }
@@ -710,6 +844,14 @@ in
         auto-detach = false;
         prep-cmd = [
           { do = "${ctl} start zen"; undo = "${ctl} stop zen"; }
+        ];
+      } ++ lib.optional cfg.lutris.enable {
+        name = "Lutris";
+        image-path = "${lutrisBoxart}";
+        cmd = "${appLife} ${lutrisUnit}";
+        auto-detach = false;
+        prep-cmd = [
+          { do = "${ctl} start lutris"; undo = "${ctl} stop lutris"; }
         ];
       };
     };

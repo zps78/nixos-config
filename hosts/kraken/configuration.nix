@@ -239,6 +239,7 @@ in
     idleStop                                     = "10min";                    # Steam keeps running this long after a disconnect
     zen.enable                                   = true;                       # 2nd Moonlight app "Zen (VPN)": Zen in cage, inside the airvpn namespace
     zen.idleStop                                 = "10s";                      # ...Zen only this long (privacy)
+    lutris.enable                                = true;                       # 3rd Moonlight app "Lutris": installers with a GUI (cage); stays 2 h after a disconnect, longer while Wine runs
   };
 
   # Sunshine's web UI rejects requests from origins it doesn't know (CSRF
