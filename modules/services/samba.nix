@@ -91,7 +91,10 @@ in
       after = [ "samba-smbd.service" ];
       wants = [ "samba-smbd.service" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = lib.mapAttrsToList (_: u: u.passwordFile) cfg.users;
+      # (No restartTriggers on passwordFile: it's the /run/agenix path, which
+      # never changes. Hosts tie this unit to the .age file instead:
+      # systemd.services.samba-users.restartTriggers =
+      #   [ (builtins.hashFile "sha256" config.age.secrets.<name>.file) ];)
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

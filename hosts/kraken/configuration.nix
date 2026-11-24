@@ -295,6 +295,7 @@ in
   # remove them. Scanner profiles: host 192.168.1.10, share "paperless",
   # no subfolder (a subfolder would become a tag). Password: agenix.
   age.secrets.samba-scanner.file                 = ../../secrets/samba-scanner-password.age;
+  systemd.services.samba-users.restartTriggers   = [ (builtins.hashFile "sha256" config.age.secrets.samba-scanner.file) ]; # new password -> set at the next rebuild
   myServices.samba = {
     enable                                       = true;
     interfaces                                   = [ "enp4s0" ];
@@ -383,6 +384,11 @@ in
   # Widget credentials (HOMEPAGE_VAR_* lines), loaded by systemd before
   # Homepage drops to its DynamicUser - root 0400 is enough.
   age.secrets.homepage-env.file                  = ../../secrets/homepage-env.age;
+  # A changed secret doesn't change the unit (same /run/agenix path), so a
+  # rebuild wouldn't restart Homepage - it kept running without the new
+  # Paperless token ("Invalid token", 2026-11-24). Tie it to the .age
+  # file's content hash (its store path changes with every repo commit).
+  systemd.services.homepage-dashboard.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.homepage-env.file) ];
 
   services.homepage-dashboard = {
     environmentFiles                             = [ config.age.secrets.homepage-env.path ];
