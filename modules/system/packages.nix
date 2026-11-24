@@ -25,6 +25,8 @@
     ipcalc         # IPv4/IPv6 address calculator
     iperf3         # Network bandwidth measurement tool
     mtr            # Network diagnostic and traceroute tool
+    nethogs        # Per-process network bandwidth
+    bmon           # Per-interface bandwidth monitor
     nmap           # Network discovery and security auditing
     socat          # Multipurpose relay for bidirectional data transfer
     tcpdump        # Command-line packet analyzer

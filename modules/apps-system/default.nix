@@ -11,6 +11,7 @@
     ./citizen-card.nix
     ./claude-desktop.nix
     ./data-rescue.nix
+    ./media-tools.nix
     ./kde-connect.nix
     ./proxmark3.nix
     ./steam.nix

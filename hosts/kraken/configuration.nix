@@ -220,6 +220,8 @@ in
 
   myFeatures = {
     steam.enable                                 = true;                       # Steam itself; launched in gamescope on demand (below)
+    media-tools.enable                           = true;                       # HandBrakeCLI (NVENC) + presets, MKVToolNix CLI, mediainfo, HDR tools
+    data-rescue.enable                           = true;                       # ddrescue, testdisk/photorec, ntfs3g, btrfs, gdisk, lsscsi, ...
   };
 
   ############################################################

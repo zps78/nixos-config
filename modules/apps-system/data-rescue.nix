@@ -18,12 +18,14 @@
       ddrescue      # recover data from failing drives
       ddrescueview  # GUI for ddrescue mapfiles
       ddrutility    # analyse disk damage / recovery cases
-      testdisk      # partition recovery + file undelete
+      testdisk      # partition recovery + file undelete (+ photorec)
 
       # Filesystem tools not in the base set
       ntfs3g        # NTFS read/write + ntfsfix / ntfsclone
       btrfs-progs   # Btrfs recovery + inspection
       exfatprogs    # exFAT tools
+      gptfdisk      # gdisk/sgdisk - GPT repair and inspection
+      lsscsi        # list SCSI/SATA devices with their host:bus:target
 
       # Media diagnostics
       f3            # fight flash fraud (fake capacity SD/USB)
