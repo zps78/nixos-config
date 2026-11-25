@@ -402,12 +402,12 @@ in
       title                                      = hostName;
       headerStyle                                = "clean";
       # GitKraken wallpaper, logo only (lettering removed, re-centred on the
-      # same flat navy). Homepage serves images only from its read-only store
+      # same flat navy, darkened to 50%). Homepage serves images only from its read-only store
       # folder, so it's embedded as a data URL. After changing the .webp:
       #   base64 -w0 dotfiles/homepage/kraken-bg.webp > dotfiles/homepage/kraken-bg.webp.b64
       background = {
         image      = "data:image/webp;base64,${builtins.readFile ../../dotfiles/homepage/kraken-bg.webp.b64}";
-        brightness = 50;                         # dimmed so the tiles stay readable
+        brightness = 50;                         # + image itself at 50% (Tailwind has no step below 50) = ~25%
       };
       layout.System = { style = "row"; columns = 4; };
       layout.Network = { style = "row"; columns = 3; };
