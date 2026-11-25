@@ -402,8 +402,8 @@ in
       title                                      = hostName;
       headerStyle                                = "clean";
       # GitKraken wallpaper, logo only (lettering removed, re-centred on the
-      # original flat navy; only the squid is blended 25% into it, so the
-      # navy and the tiles keep their colours - no Homepage brightness).
+      # flat navy; the squid blended 25% into it, then the whole image at 50%;
+      # no Homepage brightness, so the tiles keep their colours).
       # Homepage serves images only from its read-only store folder, so it's
       # embedded as a data URL. After changing the .webp:
       #   base64 -w0 dotfiles/homepage/kraken-bg.webp > dotfiles/homepage/kraken-bg.webp.b64
