@@ -71,7 +71,9 @@ in
 
   # kraken Homepage's widget credentials, as an environment file
   # (HOMEPAGE_VAR_<NAME>=value lines, referenced as {{HOMEPAGE_VAR_<NAME>}}
-  # in the Homepage config). Currently: QBIT_USER, QBIT_PASSWORD.
+  # in the Homepage config). Currently: QBIT_USER, QBIT_PASSWORD,
+  # PAPERLESS_KEY, HC_PROJECT (healthchecks.io project id), HC_KEY (its
+  # read-only API key).
   "homepage-env.age".publicKeys = [ zp-personal kraken-host ];
 
   # kraken's SMB password for the scanner account (myServices.samba user

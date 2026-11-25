@@ -113,12 +113,13 @@ in
     environment.systemPackages = [ ntfySend ];
 
     # ZED sources zed.rc as a shell script, so the topic is read from the
-    # secret when ZED runs. VERBOSE: also report clean scrubs - a monthly
-    # sign of life that alerts work.
+    # secret when ZED runs. Not VERBOSE: ZED only reports problems (faults,
+    # a scrub with errors), immediately and per pool. Clean scrubs get one
+    # summary for all pools instead (zfs-scrub-report below).
     services.zfs.zed.settings = {
       ZED_NTFY_TOPIC = "$(cat ${topicFile})";
       ZED_NTFY_URL = cfg.server;
-      ZED_NOTIFY_VERBOSE = lib.mkForce 1;
+      ZED_NOTIFY_VERBOSE = lib.mkForce 0;
       ZED_NOTIFY_INTERVAL_SECS = 3600;   # same event class at most hourly
     };
 
@@ -182,6 +183,33 @@ in
           key=$(head -n1 ${cfg.healthchecks.pingKeyFile})
           [ -n "$key" ] || { echo "hc-ping: empty ping key - not pinging" >&2; exit 0; }
           curl -fsS -m 10 --retry 3 --retry-delay 5 -o /dev/null "https://hc-ping.com/$key/$1?create=1"
+        '';
+      };
+    })
+    # One ntfy summary when the monthly scrub job is done (zpool scrub -w:
+    # after ALL pools finished) - health, repaired, duration, errors per
+    # pool. High priority if any pool isn't ONLINE or had errors.
+    (lib.optionalAttrs config.services.zfs.autoScrub.enable {
+      zfs-scrub.onSuccess = [ "zfs-scrub-report.service" ];
+      zfs-scrub-report = {
+        description = "ntfy summary of the finished ZFS scrub";
+        serviceConfig.Type = "oneshot";
+        path = [ config.boot.zfs.package ntfySend pkgs.gnused pkgs.coreutils ];
+        script = ''
+          body=""; bad=0
+          for p in $(zpool list -H -o name); do
+            health=$(zpool list -H -o health "$p")
+            scan=$(zpool status "$p" | sed -n 's/^ *scan: //p')
+            errors=$(echo "$scan" | sed -nE 's/^scrub repaired .* with ([0-9]+) errors.*/\1/p')
+            line=$(echo "$scan" | sed -E 's/^scrub repaired ([^ ]+) in ([^ ]+) with ([0-9]+) errors.*/\3 errors, repaired \1, took \2/')
+            if [ "$health" != ONLINE ] || [ "''${errors:-x}" != 0 ]; then bad=1; fi
+            body="$body$p: $health, $line"$'\n'
+          done
+          if [ "$bad" = 0 ]; then
+            printf '%s' "$body" | ntfy-send "scrub done: all pools clean" default white_check_mark,floppy_disk
+          else
+            printf '%s' "$body" | ntfy-send "scrub done: PROBLEMS" high warning,floppy_disk
+          fi
         '';
       };
     })

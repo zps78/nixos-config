@@ -419,7 +419,7 @@ in
       #   base64 -w0 dotfiles/homepage/kraken-bg.webp > dotfiles/homepage/kraken-bg.webp.b64
       background = "data:image/webp;base64,${builtins.readFile ../../dotfiles/homepage/kraken-bg.webp.b64}";
       layout.System = { style = "row"; columns = 4; };
-      layout.Network = { style = "row"; columns = 3; };
+      layout.Network = { style = "row"; columns = 4; };
       layout.Downloads = { style = "row"; columns = 2; };
     };
     widgets = [
@@ -487,6 +487,14 @@ in
           }; }
           { Router    = { href = "http://${gateway}";                    icon = "router.png";    description = "DIGI ZTE F8748 - DHCP, LAN DNS"; ping = gateway; }; }
           { Tailscale = { href = "https://login.tailscale.com/admin/machines"; icon = "tailscale.png"; description = "Tailnet admin (DNS, routes, keys)"; }; }
+          # External down-check + job pings (myServices.alerts). Project id
+          # and read-only API key come from homepage-env (agenix).
+          { Healthchecks = {
+              href = "https://healthchecks.io/projects/{{HOMEPAGE_VAR_HC_PROJECT}}/checks/";
+              icon = "healthchecks.png";
+              description = "kraken down-check, snapshots, scrub, game saves";
+              widget = { type = "healthchecks"; url = "https://healthchecks.io"; key = "{{HOMEPAGE_VAR_HC_KEY}}"; };
+          }; }
         ];
       }
       {
