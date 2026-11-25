@@ -328,8 +328,10 @@ in
   # Push alerts to the phone (ntfy.sh, random topic in agenix) - see
   # modules/services/alerts.nix. Beszel's thresholds use the same topic,
   # set in its UI (Settings > Notifications).
+  age.secrets.heartbeat-url.file                 = ../../secrets/heartbeat-url.age;
   myServices.alerts = {
     enable                                       = true;
+    heartbeatUrlFile                             = config.age.secrets.heartbeat-url.path; # external down-check (healthchecks.io)
     failureUnits = [
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
       "homepage-dashboard" "wol-web" "tailscaled" "docker"

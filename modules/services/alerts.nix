@@ -64,6 +64,25 @@ in
       example = [ "zfs-zed" "smartd" ];
       description = "System services (names without .service) that send an alert when they fail.";
     };
+
+    heartbeatUrlFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "config.age.secrets.heartbeat-url.path";
+      description = ''
+        File with a dead-man's-switch ping URL (healthchecks.io), one line.
+        The host GETs it every heartbeatInterval; when the pings stop (host
+        down, no power, no internet) the external service alerts - the one
+        failure the host can't report itself. The URL is the only protection
+        (whoever has it can ping), so it lives in agenix.
+      '';
+    };
+
+    heartbeatInterval = lib.mkOption {
+      type = lib.types.str;
+      default = "5min";
+      description = "How often to ping (match the check's period on healthchecks.io).";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -109,8 +128,32 @@ in
             | ntfy-send "test" default white_check_mark
         '';
       };
+    } // lib.optionalAttrs (cfg.heartbeatUrlFile != null) {
+      # Dead-man's switch: "I'm alive" to healthchecks.io (timer below).
+      # curl retries a few times so a brief network hiccup doesn't cost a
+      # ping; a missing or malformed secret just logs and skips.
+      heartbeat = {
+        description = "Ping the external down-check (healthchecks.io)";
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        serviceConfig.Type = "oneshot";
+        path = [ pkgs.curl pkgs.coreutils ];
+        script = ''
+          url=$(head -n1 ${cfg.heartbeatUrlFile})
+          case "$url" in
+            https://*) ;;
+            *) echo "heartbeat: secret is not an https:// URL - not pinging" >&2; exit 0 ;;
+          esac
+          curl -fsS -m 10 --retry 3 --retry-delay 5 -o /dev/null "$url"
+        '';
+      };
     } // lib.genAttrs cfg.failureUnits (_: {
       onFailure = [ "ntfy-failure@%n.service" ];
     });
+
+    systemd.timers.heartbeat = lib.mkIf (cfg.heartbeatUrlFile != null) {
+      wantedBy = [ "timers.target" ];
+      timerConfig = { OnBootSec = "2min"; OnUnitActiveSec = cfg.heartbeatInterval; AccuracySec = "30s"; };
+    };
   };
 }

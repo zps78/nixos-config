@@ -83,6 +83,10 @@ in
   # line: @ByteArray(<base64 salt>:<base64 hash>) (myServices.vpnTorrent).
   "qbittorrent-webui.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's healthchecks.io ping URL (myServices.alerts.heartbeatUrlFile):
+  # the external down-check. One line, https://hc-ping.com/<uuid>.
+  "heartbeat-url.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }
