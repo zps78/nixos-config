@@ -182,6 +182,9 @@ in
   # after playing; each such backup gets its own snapshot (newest 100 kept)
   # - no sanoid hourly snapshots here, those would wake the HDDs. See
   # modules/storage/game-saves.nix.
+  # Pool health/fill/last scrub as JSON for Homepage (127.0.0.1:8189).
+  myStorage.statusApi.enable                     = true;
+
   myStorage.gameSaves = {
     enable                                       = true;
     target                                       = "/srv/gamesaves";
@@ -398,7 +401,7 @@ in
     settings = {
       title                                      = hostName;
       headerStyle                                = "clean";
-      layout.System = { style = "row"; columns = 3; };
+      layout.System = { style = "row"; columns = 4; };
       layout.Network = { style = "row"; columns = 3; };
       layout.Downloads = { style = "row"; columns = 2; };
     };
@@ -414,6 +417,23 @@ in
           { Cockpit  = { href = "https://${lanIp}:9090";    icon = "cockpit.png";  description = "System, logs, services, ZFS, files"; }; }
           { Scrutiny = { href = "http://${lanIp}:8087";     icon = "scrutiny.png"; description = "Disk health (SMART)"; }; }
           { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
+          { Storage = {
+              href = "https://${lanIp}:9090/zfs"; icon = "truenas.png";
+              description = "ZFS pools (myStorage.statusApi)";
+              widget = {
+                type = "customapi";
+                url = "http://127.0.0.1:8189/status.json";
+                refreshInterval = 60000;
+                display = "list";
+                mappings = [
+                  { field = "status";     label = "Pools"; }
+                  { field = "rpool";      label = "rpool (system)"; }
+                  { field = "games";      label = "games (SSD)"; }
+                  { field = "vault";      label = "vault (4x 4TB)"; }
+                  { field = "last_scrub"; label = "Oldest scrub"; }
+                ];
+              };
+          }; }
         ];
       }
       {
