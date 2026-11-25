@@ -405,7 +405,10 @@ in
       # same flat navy). Homepage serves images only from its read-only store
       # folder, so it's embedded as a data URL. After changing the .webp:
       #   base64 -w0 dotfiles/homepage/kraken-bg.webp > dotfiles/homepage/kraken-bg.webp.b64
-      background = "data:image/webp;base64,${builtins.readFile ../../dotfiles/homepage/kraken-bg.webp.b64}";
+      background = {
+        image      = "data:image/webp;base64,${builtins.readFile ../../dotfiles/homepage/kraken-bg.webp.b64}";
+        brightness = 50;                         # dimmed so the tiles stay readable
+      };
       layout.System = { style = "row"; columns = 4; };
       layout.Network = { style = "row"; columns = 3; };
       layout.Downloads = { style = "row"; columns = 2; };
