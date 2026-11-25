@@ -50,6 +50,20 @@ in
       '';
     };
 
+    webuiPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "config.age.secrets.qbittorrent-webui.path";
+      description = ''
+        File with the WebUI password as qBittorrent's PBKDF2 value, one line:
+        @ByteArray(<base64 salt>:<base64 hash>). The NixOS module rewrites
+        qBittorrent.conf from serverConfig at every start, so without this
+        there is no stored password and qBittorrent makes up a temporary one
+        per start (logged) - logins and Homepage's widget break after every
+        restart. Kept out of the repo (agenix).
+      '';
+    };
+
     allowedIngress = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ "192.168.1.0/24" "100.64.0.0/10" ];
@@ -91,6 +105,27 @@ in
       enable = true;
       vpnNamespace = ns;
     };
+
+    # After the module has installed the generated qBittorrent.conf (its own
+    # ExecStartPre), put the WebUI password hash into [Preferences]. Root
+    # ("+"): only root can read the agenix secret.
+    systemd.services.qbittorrent.serviceConfig.ExecStartPre = lib.mkIf (cfg.webuiPasswordFile != null) (lib.mkAfter [
+      "+${pkgs.writeShellScript "qbittorrent-webui-password" ''
+        set -eu
+        conf=${config.services.qbittorrent.profileDir}/qBittorrent/config/qBittorrent.conf
+        hash=$(${pkgs.coreutils}/bin/head -n1 ${cfg.webuiPasswordFile})
+        case "$hash" in
+          "@ByteArray("*")") ;;
+          *) echo "qbittorrent-webui-password: secret is not an @ByteArray(...) PBKDF2 value - not applied" >&2; exit 0 ;;
+        esac
+        ${pkgs.gnused}/bin/sed -i '/^WebUI\\Password_PBKDF2=/d' "$conf"
+        if ${pkgs.gnugrep}/bin/grep -q '^\[Preferences\]' "$conf"; then
+          ${pkgs.gnused}/bin/sed -i "/^\[Preferences\]/a WebUI\\\\Password_PBKDF2=\"$hash\"" "$conf"
+        else
+          printf '\n[Preferences]\nWebUI\\Password_PBKDF2="%s"\n' "$hash" >> "$conf"
+        fi
+      ''}"
+    ]);
 
     # Tunnel status for Homepage (customapi widget). A root timer reads the
     # tunnel every minute - latest handshake and traffic from `wg`, exit

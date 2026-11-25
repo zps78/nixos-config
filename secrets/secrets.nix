@@ -79,6 +79,10 @@ in
   # folder). One line, the password only.
   "samba-scanner-password.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's qBittorrent WebUI password as qBittorrent's PBKDF2 value, one
+  # line: @ByteArray(<base64 salt>:<base64 hash>) (myServices.vpnTorrent).
+  "qbittorrent-webui.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }

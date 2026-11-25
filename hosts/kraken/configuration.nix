@@ -340,9 +340,12 @@ in
   # TEST - not the live download client yet; karma's stays in charge).
   # Own AirVPN device "kraken" (config in secrets/airvpn-wg.conf.age).
   # Web UI: http://<lanIp>:8180 (LAN + Tailscale only).
+  age.secrets.qbittorrent-webui = { file = ../../secrets/qbittorrent-webui.age; };
+  systemd.services.qbittorrent.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.qbittorrent-webui.file) ];
   myServices.vpnTorrent = {
     enable                                       = true;
     forwardedPort                                = 11557;                      # AirVPN port assigned to device "kraken"
+    webuiPasswordFile                            = config.age.secrets.qbittorrent-webui.path; # PBKDF2 hash, survives restarts
   };
 
   myServices.cockpit = {
