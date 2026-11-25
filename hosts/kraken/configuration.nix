@@ -329,10 +329,17 @@ in
   # modules/services/alerts.nix. Beszel's thresholds use the same topic,
   # set in its UI (Settings > Notifications).
   age.secrets.heartbeat-url.file                 = ../../secrets/heartbeat-url.age;
+  age.secrets.healthchecks-ping-key.file         = ../../secrets/healthchecks-ping-key.age;
   myServices.alerts = {
     enable                                       = true;
     heartbeatUrlFile                             = config.age.secrets.heartbeat-url.path; # external down-check (healthchecks.io)
     heartbeatInterval                            = "4min";                     # = the check's period there (grace 8 min)
+    healthchecks.pingKeyFile                     = config.age.secrets.healthchecks-ping-key.path;
+    healthchecks.checks = {                                                    # unit -> check (set schedules on healthchecks.io)
+      sanoid                                     = "kraken-snapshots";         # hourly
+      zfs-scrub                                  = "kraken-scrub";             # monthly, pinged when the scrub has finished
+      game-saves-backup                          = "kraken-game-saves";        # every 6 h
+    };
     failureUnits = [
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
       "homepage-dashboard" "wol-web" "tailscaled" "docker"

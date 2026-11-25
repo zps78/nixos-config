@@ -87,6 +87,10 @@ in
   # the external down-check. One line, https://hc-ping.com/<uuid>.
   "heartbeat-url.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's healthchecks.io project ping key (myServices.alerts.
+  # healthchecks.pingKeyFile): "job finished" pings per check slug. One line.
+  "healthchecks-ping-key.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }

@@ -83,6 +83,28 @@ in
       default = "5min";
       description = "How often to ping (match the check's period on healthchecks.io).";
     };
+
+    healthchecks = {
+      pingKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "config.age.secrets.healthchecks-ping-key.path";
+        description = ''
+          File with the healthchecks.io project's ping key, one line. Each
+          job in `checks` then pings https://hc-ping.com/<key>/<slug> when it
+          finishes successfully; ?create=1 creates the check on its first
+          ping (set its schedule on healthchecks.io afterwards). Catches jobs
+          that silently stop running, which OnFailure can't. In agenix:
+          whoever has the key can ping (and create checks).
+        '';
+      };
+      checks = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
+        example = { sanoid = "kraken-snapshots"; };
+        description = "System service (name without .service) -> check slug, pinged on success.";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -108,7 +130,7 @@ in
     };
 
     # "unit failed": an OnFailure hook on each listed unit.
-    systemd.services = {
+    systemd.services = lib.mkMerge [ ({
       "ntfy-failure@" = {
         description = "ntfy alert: %i failed";
         serviceConfig.Type = "oneshot";
@@ -147,9 +169,31 @@ in
           curl -fsS -m 10 --retry 3 --retry-delay 5 -o /dev/null "$url"
         '';
       };
-    } // lib.genAttrs cfg.failureUnits (_: {
+    } // lib.optionalAttrs (cfg.healthchecks.pingKeyFile != null && cfg.healthchecks.checks != { }) {
+      # "job finished" ping, %i = check slug (see healthchecks.checks).
+      "hc-ping@" = {
+        description = "healthchecks.io: %i finished";
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        serviceConfig.Type = "oneshot";
+        scriptArgs = "%i";
+        path = [ pkgs.curl pkgs.coreutils ];
+        script = ''
+          key=$(head -n1 ${cfg.healthchecks.pingKeyFile})
+          [ -n "$key" ] || { echo "hc-ping: empty ping key - not pinging" >&2; exit 0; }
+          curl -fsS -m 10 --retry 3 --retry-delay 5 -o /dev/null "https://hc-ping.com/$key/$1?create=1"
+        '';
+      };
+    })
+    # Per-unit hooks, merged (not //): a unit can be in both lists -
+    # zfs-scrub alerts on failure AND pings on success.
+    (lib.genAttrs cfg.failureUnits (_: {
       onFailure = [ "ntfy-failure@%n.service" ];
-    });
+    }))
+    (lib.mapAttrs (_: slug: {
+      onSuccess = [ "hc-ping@${slug}.service" ];
+    }) (lib.optionalAttrs (cfg.healthchecks.pingKeyFile != null) cfg.healthchecks.checks))
+    ];
 
     systemd.timers.heartbeat = lib.mkIf (cfg.heartbeatUrlFile != null) {
       wantedBy = [ "timers.target" ];
