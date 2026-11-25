@@ -312,6 +312,7 @@ in
     accountsFile                                 = config.age.secrets.copyparty-accounts.path;
     publicUrl                                    = "https://files.jpc.onl/";
     volumes."/files" = { path = "/srv/files"; access = { rwmda = [ "zp" ]; }; };
+    css                                          = builtins.readFile ../../dotfiles/homepage/copyparty-theme.css; # Homepage navy + squid teal
   };
 
   # Cloudflare tunnel (dashboard-managed): files.jpc.onl -> copyparty, only

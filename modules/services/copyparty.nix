@@ -29,6 +29,9 @@ let
     ${lib.concatStrings (lib.mapAttrsToList (perm: users: "    ${perm}: ${lib.concatStringsSep ", " users}\n") v.access)}
   '';
 
+  # extra CSS for every page (browser, login, share pages), via html-head
+  headFile = pkgs.writeText "copyparty-head.html" "<style>\n${cfg.css}</style>\n";
+
   configFile = pkgs.writeText "copyparty.conf" ''
     [global]
       p: ${toString cfg.port}
@@ -45,6 +48,7 @@ let
       # 3 wrong passwords in 60 min = banned for a day
       ban-pw: 3,60,1440
       e2d
+      ${lib.optionalString (cfg.css != "") "html-head: @${headFile}"}
       ${cfg.extraGlobal}
 
     % ${cfg.accountsFile}
@@ -102,6 +106,15 @@ in
       });
       default = { };
       description = "URL path (\"/files\") -> volume.";
+    };
+
+    css = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        CSS added to every page (html-head) - e.g. overriding the theme's
+        colour variables (--bg, --fg, --a, ... in copyparty's browser.css).
+      '';
     };
 
     extraGlobal = lib.mkOption {
