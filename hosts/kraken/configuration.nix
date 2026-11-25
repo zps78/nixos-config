@@ -332,6 +332,7 @@ in
   myServices.alerts = {
     enable                                       = true;
     heartbeatUrlFile                             = config.age.secrets.heartbeat-url.path; # external down-check (healthchecks.io)
+    heartbeatInterval                            = "4min";                     # = the check's period there (grace 8 min)
     failureUnits = [
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
