@@ -10,6 +10,7 @@
 #   important  24 hourly, 30 daily, 3 monthly   (home, appdata, var, photos, docs)
 #   library    48 hourly, 14 daily              (media - big churn, short memory)
 #   vm         7 daily                          (VM disks)
+#   cold       30 daily, 6 monthly              (HDD pools that sleep - no hourly wake-ups)
 #
 # Restore: copy from /<mountpoint>/.zfs/snapshot/autosnap_<date>_<tier>/
 # (hidden dir - type the path), or `zfs rollback` a whole dataset.
@@ -27,7 +28,7 @@ in
       type = lib.types.attrsOf (lib.types.submodule {
         options = {
           tier = lib.mkOption {
-            type = lib.types.enum [ "important" "library" "vm" ];
+            type = lib.types.enum [ "important" "library" "vm" "cold" ];
             description = "Retention tier (see the header of modules/storage/snapshots.nix).";
           };
           recursive = lib.mkOption {
@@ -57,6 +58,8 @@ in
         important = { hourly = 24; daily = 30; monthly = 3; autosnap = true; autoprune = true; };
         library   = { hourly = 48; daily = 14; monthly = 0; autosnap = true; autoprune = true; };
         vm        = { hourly = 0;  daily = 7;  monthly = 0; autosnap = true; autoprune = true; };
+        # HDD pools that sleep: no hourly snapshots (each one wakes the disks)
+        cold      = { hourly = 0;  daily = 30; monthly = 6; autosnap = true; autoprune = true; };
       };
 
       datasets = lib.mapAttrs (_: d: {

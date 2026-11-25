@@ -79,6 +79,14 @@
     options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
   };
 
+  # copyparty's files area (myServices.copyparty): dataset vault/files on
+  # the 4x 4TB mirrors. Create once: `zfs create -o mountpoint=legacy vault/files`.
+  fileSystems."/srv/files" = {
+    device = "vault/files";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-partlabel/kraken-esp";
     fsType = "vfat";

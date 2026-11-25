@@ -9,7 +9,9 @@
     ./beszel.nix
     ./brother-ads-4300n.nix
     ./brother-hl-l8230cdw.nix
+    ./cloudflare-tunnel.nix
     ./cockpit.nix
+    ./copyparty.nix
     ./docker.nix
     ./gvfs.nix
     ./homepage.nix

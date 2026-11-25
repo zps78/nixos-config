@@ -175,6 +175,7 @@ in
   myStorage.snapshots = {
     enable                                       = true;
     datasets."rpool/safe".tier                   = "important";                # 24 hourly, 30 daily, 3 monthly
+    datasets."vault/files".tier                  = "cold";                     # copyparty files: 30 daily, 6 monthly (no hourly HDD wake-ups)
   };
 
   # Game saves off the games SSD (single disk, not snapshotted) into
@@ -299,6 +300,29 @@ in
   # no subfolder (a subfolder would become a tag). Password: agenix.
   age.secrets.samba-scanner.file                 = ../../secrets/samba-scanner-password.age;
   systemd.services.samba-users.restartTriggers   = [ (builtins.hashFile "sha256" config.age.secrets.samba-scanner.file) ]; # new password -> set at the next rebuild
+  # copyparty: web file browser, WebDAV and share links (LAN + tailnet;
+  # share links only also public via the tunnel as files.jpc.onl). Files on
+  # vault/files; more volumes (media, karma's data) join at the big switch.
+  age.secrets.copyparty-accounts                 = { file = ../../secrets/copyparty-accounts.age; owner = "copyparty"; };
+  systemd.services.copyparty.restartTriggers     = [ (builtins.hashFile "sha256" config.age.secrets.copyparty-accounts.file) ];
+  systemd.tmpfiles.rules                         = [ "d /srv/files 2775 copyparty users -" ];
+  myServices.copyparty = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+    accountsFile                                 = config.age.secrets.copyparty-accounts.path;
+    publicUrl                                    = "https://files.jpc.onl/";
+    volumes."/files" = { path = "/srv/files"; access = { rwmda = [ "zp" ]; }; };
+  };
+
+  # Cloudflare tunnel (dashboard-managed): files.jpc.onl -> copyparty, only
+  # the paths ^/(shr|\.cpr)/ - set under Public Hostnames in the dashboard.
+  age.secrets.cloudflare-tunnel.file             = ../../secrets/cloudflare-tunnel.age;
+  systemd.services.cloudflare-tunnel.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.cloudflare-tunnel.file) ];
+  myServices.cloudflareTunnel = {
+    enable                                       = true;
+    tokenEnvFile                                 = config.age.secrets.cloudflare-tunnel.path;
+  };
+
   myServices.samba = {
     enable                                       = true;
     interfaces                                   = [ "enp4s0" ];
@@ -345,7 +369,7 @@ in
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
       "airvpn" "qbittorrent" "adguardhome"
       "paperless-scheduler" "paperless-consumer" "paperless-web" "paperless-task-queue" "paperless-exporter"
-      "game-saves-backup" "samba-smbd" "samba-users"
+      "game-saves-backup" "samba-smbd" "samba-users" "copyparty" "cloudflare-tunnel"
     ];
   };
 
@@ -466,6 +490,11 @@ in
       }
       {
         Documents = [
+          { Files = {
+              href = "http://${lanIp}:3923"; icon = "copyparty.png";
+              description = "copyparty - files, uploads, share links (files.jpc.onl)";
+              siteMonitor = "http://127.0.0.1:3923";
+          }; }
           { Paperless = {
               href = "http://${lanIp}:28981"; icon = "paperless-ngx.png";
               description = "Document archive - the scanner drops into it (SMB)";
