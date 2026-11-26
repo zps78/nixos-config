@@ -2,7 +2,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Home LAN, advertised to the tailnet as a subnet route by karma.
+  # Home LAN, advertised to the tailnet as a subnet route by kraken (karma until 2026-11).
   homeSubnet = "192.168.1.0/24";
   # Home router's MAC - how "am I at home?" is decided. Read at runtime
   # from an agenix secret (secrets/home-gateway-mac.age) so it stays out
@@ -11,12 +11,12 @@ let
   homeGatewayMacFile = config.age.secrets.home-gateway-mac.path;
   rulePriority = "5200";  # ahead of tailscale's own rules (5210+)
 
-  # With --accept-routes, tailscale puts karma's 192.168.1.0/24 route in
+  # With --accept-routes, tailscale puts the subnet router's 192.168.1.0/24 route in
   # table 52, whose ip rule (5270) is checked before the main table. So
   # even when a host sits ON the home LAN, LAN traffic goes into
   # tailscale0 instead of out the NIC: inbound LAN connections to it die
   # (replies leave via the tunnel - krieger was unreachable on its LAN IP),
-  # local transfers detour through karma, and a tailscale hiccup takes the
+  # local transfers detour through the router host, and a tailscale hiccup takes the
   # LAN down with it.
   #
   # Fix: while the default gateway is the home router, prefer the main
@@ -24,7 +24,7 @@ let
   # default route, so this only matches the directly connected /24.
   # Elsewhere the rule is removed, keeping today's behaviour away from
   # home - including on foreign networks that also use 192.168.1.0/24,
-  # where the home subnet stays reachable via karma.
+  # where the home subnet stays reachable via the subnet router.
   # Re-evaluated on every NetworkManager event (up/down/dhcp/roam).
   homeLanRule = pkgs.writeShellScript "tailscale-home-lan-rule" ''
     export PATH=${lib.makeBinPath [ pkgs.coreutils pkgs.iproute2 pkgs.iputils pkgs.gawk pkgs.gnugrep pkgs.util-linux ]}
@@ -56,8 +56,17 @@ in
       example = [ "192.168.1.0/24" ];
       description = ''
         Subnets this host advertises to the tailnet (subnet router - the
-        home LAN from karma). Non-empty also turns on IP forwarding. The
+        home LAN from kraken). Non-empty also turns on IP forwarding. The
         route still has to be approved once in the Tailscale admin console.
+      '';
+    };
+
+    advertiseExitNode = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Offer this host as an exit node (all traffic of a device that picks
+        it). Turns on IP forwarding; approve once in the admin console.
       '';
     };
   };
@@ -69,17 +78,20 @@ in
       # "client" is needed for --accept-routes to behave properly (subnet
       # routes); a subnet router additionally needs forwarding ("both").
       useRoutingFeatures =
-        if config.myNetwork.tailscale.advertiseRoutes == [ ] then "client" else "both";
+        if config.myNetwork.tailscale.advertiseRoutes == [ ] && !config.myNetwork.tailscale.advertiseExitNode
+        then "client" else "both";
 
-      # Only applied automatically when authKeyFile is set; otherwise run
-      # `tailscale up` with these flags once, by hand.
+      # Only applied automatically when authKeyFile is set; otherwise apply
+      # them once by hand (`tailscale set` keeps the other settings, e.g.
+      # `sudo tailscale set --advertise-routes=... --advertise-exit-node`).
       extraUpFlags = [
         "--accept-dns"
         "--accept-routes"
         "--ssh"
       ]
       ++ lib.optional (config.myNetwork.tailscale.advertiseRoutes != [ ])
-        "--advertise-routes=${lib.concatStringsSep "," config.myNetwork.tailscale.advertiseRoutes}";
+        "--advertise-routes=${lib.concatStringsSep "," config.myNetwork.tailscale.advertiseRoutes}"
+      ++ lib.optional config.myNetwork.tailscale.advertiseExitNode "--advertise-exit-node";
 
       # Opens the WireGuard listen port (UDP 41641) for the daemon.
       openFirewall = true;

@@ -205,7 +205,8 @@ in
 
   myNetwork = {
     tailscale.enable                             = true;
-    tailscale.advertiseRoutes                    = [ ];                        # phase 6: [ "192.168.1.0/24" ] - old karma advertises it until then
+    tailscale.advertiseRoutes                    = [ "192.168.1.0/24" ];       # subnet router for the home LAN (took over from karma, 2026-11-26)
+    tailscale.advertiseExitNode                  = true;                       # exit node (took over from karma)
     wifi.enable                                  = false;
   };
 
