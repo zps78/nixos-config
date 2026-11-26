@@ -74,6 +74,9 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
 - [ ] qBittorrent's torrents (92 on karma): stop qbittorrent, then
       `/srv/appdata/karma/qbittorrent/qBittorrent/BT_backup/*` → `/var/lib/qBittorrent/qBittorrent/data/BT_backup/`,
       `categories.json` → `.../config/`; `chown -R media:users`; start; recheck a few
+- [ ] Plex: karma's Plex must be stopped first (same machine ID - never both running);
+      name becomes "kraken" by itself (no FriendlyName set); Settings → Transcoder →
+      hardware device "Auto" / RTX 4060 Ti (karma pinned the T1000)
 - [ ] check: Plex libraries play (GPU transcode), Sonarr/Radarr/Lidarr see their
       root folders + qBittorrent/SABnzbd (Settings → Download Clients → Test),
       Prowlarr → Apps → Test, SABnzbd web UI from the LAN (host_whitelist?)

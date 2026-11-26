@@ -101,6 +101,10 @@ in
   # environment file: TUNNEL_TOKEN=<token>
   "cloudflare-tunnel.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's Plex token for plex-auto-languages (hosts/kraken/karma-services.nix),
+  # as an environment file: PLEX_TOKEN=<token>
+  "plex-auto-languages.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }

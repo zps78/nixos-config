@@ -41,7 +41,7 @@ let
     extraOptions = [ "--network=ns:/run/netns/airvpn" "--dns=10.128.0.1" ];
   };
 
-  containerNames = [ "plex" ] ++ lib.attrNames vpnPorts;
+  containerNames = [ "plex" "plex-auto-languages" ] ++ lib.attrNames vpnPorts;
 
   displayNames = {
     sabnzbd = "SABnzbd"; sonarr = "Sonarr"; radarr = "Radarr"; lidarr = "Lidarr";
@@ -51,6 +51,8 @@ let
 in
 {
   # ── storage (move day) ──────────────────────────────────────────────
+  age.secrets.plex-auto-languages.file = ../../secrets/plex-auto-languages.age;
+
   boot.zfs.extraPools = lib.mkIf arrayInstalled disks;   # each mounts at /mnt/diskN (its own mountpoint)
   system.fsPackages = [ pkgs.mergerfs ];
   environment.systemPackages = [ pkgs.mergerfs pkgs.mergerfs-tools ];
@@ -96,6 +98,24 @@ in
         "${media}/media/volleyball:/volleyball"
       ];
       extraOptions = [ "--network=host" "--device=nvidia.com/gpu=all" "--tmpfs=/transcode:size=16g" ];
+    };
+
+    # sets each show's audio/subtitle language from what you watch; no
+    # config file - all env, the Plex token from agenix
+    # (PLEX_TOKEN=<token>, secrets/plex-auto-languages.age)
+    plex-auto-languages = {
+      image = "docker.io/journeyover/plex-auto-languages@sha256:51224217f7a036e93ba0153d1c03d54b174d0fd9099f3e8873ee702b28bac23f";
+      autoStart = arrayInstalled;
+      environment = {
+        PLEX_URL = "http://127.0.0.1:32400";             # host network, same box as Plex
+        TRIGGER_ON_PLAY = "true"; TRIGGER_ON_SCAN = "true"; TRIGGER_ON_ACTIVITY = "false";
+        REFRESH_LIBRARY_ON_SCAN = "true";
+        SCHEDULER_ENABLE = "true"; SCHEDULER_SCHEDULE_TIME = "02:00";
+        IGNORE_LABELS = "PAL_IGNORE"; DEBUG = "false"; TZ = config.time.timeZone;
+      };
+      environmentFiles = [ config.age.secrets.plex-auto-languages.path ];
+      volumes = [ "${appdata}/plex-auto-languages:/config" ];
+      extraOptions = [ "--network=host" ];
     };
 
     sabnzbd = inVpn {
@@ -182,6 +202,9 @@ in
     (lib.genAttrs (map (n: "podman-${n}") containerNames) (_: {
       unitConfig.RequiresMountsFor = [ appdata ] ++ lib.optional arrayInstalled media;
     }))
+    # new token -> restart
+    { podman-plex-auto-languages.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.plex-auto-languages.file) ];
+      podman-plex-auto-languages.after = [ "podman-plex.service" ]; }
     # the VPN ones: only with the namespace up
     (lib.genAttrs (map (n: "podman-${n}") (lib.attrNames vpnPorts)) (_: {
       after = [ "airvpn.service" ];
