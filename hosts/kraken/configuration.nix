@@ -409,6 +409,7 @@ in
   myServices.vpnTorrent = {
     enable                                       = true;
     forwardedPort                                = 11557;                      # AirVPN port assigned to device "kraken"
+    seedDays                                     = 7;                          # seed 7 days, then stop; the arrs remove after import
     webuiPasswordFile                            = config.age.secrets.qbittorrent-webui.path; # PBKDF2 hash, survives restarts
   };
 

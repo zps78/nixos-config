@@ -36,7 +36,16 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
 - [ ] media array: import disk1–5 read-only first, mergerfs at the old paths
 - [ ] Plex (native, GPU), its database from appdata; Tautulli, Kometa, plex-auto-languages
 - [ ] arrs + downloaders: Prowlarr, Sonarr, Radarr, Lidarr, Bazarr, SABnzbd,
-      qBittorrent (already on kraken), byparr; one dataset layout so hardlinks work
+      qBittorrent (already on kraken), byparr
+- [ ] downloads on scratch (T500 500G): qBittorrent incomplete + complete there,
+      seeds 7 days then STOPS (seedDays = 7, already in the config); SABnzbd
+      temp + unpack there. Sonarr/Radarr/Lidarr download client:
+      **"Remove Completed" ON** - they delete a torrent (with files) only
+      after importing it, so failed imports stay for a manual import
+- [ ] target layout (later, after move day 1:1): one dataset per disk with
+      downloads/ and library/ (flat: movies, tvshows, music, ebooks, audiobooks…),
+      mergerfs at /mnt/user; arrs + clients mount /mnt/user as /data,
+      Plex/ABS keep per-folder mounts
 - [ ] Immich (originals on vault, thumbs/DB on the T500 mirror)
 - [ ] Audiobookshelf (+ its OIDC login), Seerr, Calibre-Web, LazyLibrarian, ytdl,
       Threadfin/EPG, fr24feed (DVB-T stick), squid home-proxy, Krusader → FileBrowser

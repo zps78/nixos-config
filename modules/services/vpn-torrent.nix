@@ -64,6 +64,19 @@ in
       '';
     };
 
+    seedDays = lib.mkOption {
+      type = lib.types.nullOr lib.types.ints.positive;
+      default = null;
+      example = 7;
+      description = ''
+        Seed each torrent this many days, then STOP it (qBittorrent share
+        limit, action Stop) - files stay. Deleting is left to the arrs
+        ("Remove Completed" in their download client settings): they
+        remove a torrent with its files only after importing it, so a
+        failed import never loses the download. null = seed forever.
+      '';
+    };
+
     allowedIngress = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ "192.168.1.0/24" "100.64.0.0/10" ];
@@ -97,6 +110,9 @@ in
         BitTorrent.Session = {
           Port = cfg.forwardedPort;
           DisableAutoTMMByDefault = true;
+        } // lib.optionalAttrs (cfg.seedDays != null) {
+          GlobalMaxSeedingMinutes = cfg.seedDays * 24 * 60;
+          ShareLimitAction = "Stop";            # the arrs delete after import
         };
       };
     };
