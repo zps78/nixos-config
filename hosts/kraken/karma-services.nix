@@ -89,6 +89,10 @@ let
     for f in $A/threadfin/config/settings.json $A/threadfin/config/data/threadfin.xml $A/threadfin/config/data/threadfin.m3u; do
       [ -f "$f" ] && edit "$f" sed 's|192\.168\.1\.5:80\([56]0\)|192.168.1.10:80\1|g'
     done
+    # Plex's "custom server access URL" (the tunnel fallback): zulupapa.org -> jpc.onl
+    P="$A/plex/Library/Application Support/Plex Media Server/Preferences.xml"
+    edit "$P" sed 's|customConnections="https://plex\.zulupapa\.org:443"|customConnections="https://plex.jpc.onl:443"|'
+    grep -o 'customConnections="[^"]*"' "$P"
     echo "left over (should be empty except history/backups):"
     grep -rIl --exclude-dir={cache,logs,log,Logs,backups,temp,db} -e '192\.168\.1\.5[:" ]' \
       $A/tautulli $A/kometa $A/seerr $A/libreseerr $A/threadfin 2>/dev/null || true

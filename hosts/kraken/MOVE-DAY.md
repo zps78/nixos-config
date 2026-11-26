@@ -20,13 +20,29 @@ karma is also the **Tailscale subnet router (192.168.1.0/24) and exit node**,
 the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
 **NFS/SMB server** for kuro.
 
+Drives by serial (label them when they come out):
+
+| karma pool | drive | serial | in kraken |
+|---|---|---|---|
+| disk1 | Exos 16TB | ZL2N1V8Y | data |
+| disk2 | Exos 16TB | ZL2JBYRR | data |
+| disk3 | Exos 16TB | ZL2MVWY6 | data (+ photos-array) |
+| disk4 | Exos 16TB | ZL256V1X | data |
+| disk5 | Exos 16TB | ZL2D1N7G | data (emptiest) |
+| parity | Exos 16TB | ZL2MZHEP | SnapRAID parity later - can wait |
+| nvme-appdata | T500 500GB | 233643AA4C32 | scratch (M.2_2) |
+| nvme-immich | T500 1TB | 2335458EF62C | PA52L, Immich mirror |
+| ssd-downloads | SA500 1TB | 23151H447302 | 2nd Steam library / scratch - can wait |
+
+Plus the RTL-SDR stick + antenna; the Unraid USB stick stays as the way back.
+
 ## 1. Copy the data (remote, karma keeps running)
 
 - [ ] datasets: `sudo zfs create -o mountpoint=legacy vault/{home,trading,backup,setup,photos}`
 - [ ] rebuild kraken (karma-import.nix: NFS mounts + karma-copy)
 - [ ] first copy: `sudo systemctl start karma-copy`, watch `journalctl -fu karma-copy`
       (home, trading, backup, setup, photos → vault; appdata → /srv/appdata/karma; ~2.4 TB)
-- [ ] domains (Office VM, not exported): copy separately
+- [x] domains (Office VM, not exported): copied separately 2026-11-26 to kraken ~/office-vm
 - [ ] compare sizes and file counts per share
 
 ## 2. Prepare kraken (repo, services off until the disks are in)
@@ -57,14 +73,24 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
 
 ## 3. Hardware check (next visit, before move day)
 
-- [ ] BIOS: all 8 onboard SATA ports visible (Linux shows 3 today)
+- [ ] **SATA first**: Linux sees only 2 onboard ports ("ahci 0000:09:00.0 / 0a:00.0:
+      1/1 ports implemented"; one is the SA500). The BIOS has no port enable switches,
+      only hot-plug per port. Test: hot-plug ENABLED on all onboard ports, boot,
+      `journalctl -k -b | grep "ports implemented"` - or plug the (empty) 2TB spares
+      into onboard ports and check `lsblk`. If still 2: ASM1166 full (6), so drop the
+      2TB spares, USB dock for the rest temporarily, or a second SATA card first
+      (an M.2 one takes the scratch slot - SA500 #2 becomes scratch then)
 - [ ] ports: 7 more SATA drives (6 Exos + SA500 #2) vs. free ports; if short,
       the 2x WD Red 2 TB (role undecided) come out first
 - [ ] N5: bays and SATA power for 6 more 3.5" drives
 
 ## 4. Move day
 
-- [ ] final sync: stop karma's containers, `sudo systemctl start --no-block karma-copy`
+- [ ] karma: stop ALL containers (Docker → Stop All)
+- [ ] karma: run the mover by hand (Main → Move / `mover start`) until
+      /mnt/ssd-downloads/media-server is empty - 14 GB of recent media live only on that
+      cache SSD (2026-11-26), and media-server is NOT in karma-copy (it comes on the disks)
+- [ ] final sync: `sudo systemctl start --no-block karma-copy`
       (changes only; databases consistent); wait until done
 - [ ] karma: shut down cleanly; label the drives with their pool names
 - [ ] drives into kraken; boot; check every disk by serial (`lsblk -d -o NAME,SIZE,SERIAL`)
@@ -92,8 +118,21 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
       T-LPPR184, not TV - IPTV is Threadfin/EPG) moved to kraken, `ls -l /dev/rtl_sdr`;
       status :8754 (feed_status connected, aircraft tracked)
 - [ ] Byparr via squid (home IP): Prowlarr → 1337x test search
-- [ ] Homepage (karma's) → gone; Plex remote access (router port forward, not the tunnel)
+- [ ] public names move to jpc.onl (prepared 2026-11-26 on the kraken tunnel):
+      plex.jpc.onl -> localhost:32400 (no Access - Plex logs in itself; DIGI = CGNAT, so
+      Tailscale first, tunnel as fallback; karma-fixup sets Plex's custom URL to it),
+      seerr.jpc.onl -> localhost:5055 (Access app got the jpc.onl domain first).
+      Move day: delete plex/seerr.zulupapa.org routes + DNS on karma's tunnel, drop the
+      zulupapa domains from the Access apps. audiobookshelf.jpc.onl when ABS moves
 - [ ] after: Immich + Audiobookshelf (separately); Phockup + Calibre (kept, set up later)
+- [ ] Office VM (copied 2026-11-26, checksums match): kraken ~/office-vm = vdisk1.img
+      (100G sparse, 19G used), Office.xml, NVRAM (UEFI vars). Set up with libvirt
+      (myServices.libvirt), adapt OVMF paths/emulator/bridge; Windows may want reactivation
+- [ ] port karma's User Scripts as systemd timers (keys in agenix): limited-backlog-search
+      (every minute, alternating one Radarr/Sonarr missing-item search; karma used ports
+      1070/1060 -> kraken 7878/8989) and fix-empty-year-folders (every 20 min, Sonarr "()"
+      folders). vm.max_map_count was for Seafile - drop. (Their Radarr/Sonarr API keys
+      showed up in a session log 2026-11-26 - rotate when convenient.)
 - [ ] tunnel routes, kuro's mounts, PS5 to .5 later (LAN plan)
 
 ## 5. After
