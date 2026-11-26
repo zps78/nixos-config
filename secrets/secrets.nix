@@ -93,10 +93,9 @@ in
   # healthchecks.pingKeyFile): "job finished" pings per check slug. One line.
   "healthchecks-ping-key.age".publicKeys = [ zp-personal kraken-host ];
 
-  # kraken's copyparty accounts, included into its config verbatim:
-  #   [accounts]
-  #     zp: <password>
-  "copyparty-accounts.age".publicKeys = [ zp-personal kraken-host ];
+  # kraken's FileBrowser Quantum admin password (myServices.
+  # filebrowserQuantum, user zp), one line, at least 12 characters.
+  "filebrowser-admin.age".publicKeys = [ zp-personal kraken-host ];
 
   # kraken's Cloudflare tunnel token (myServices.cloudflareTunnel), as an
   # environment file: TUNNEL_TOKEN=<token>

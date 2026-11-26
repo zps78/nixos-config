@@ -175,7 +175,7 @@ in
   myStorage.snapshots = {
     enable                                       = true;
     datasets."rpool/safe".tier                   = "important";                # 24 hourly, 30 daily, 3 monthly
-    datasets."vault/files".tier                  = "cold";                     # copyparty files: 30 daily, 6 monthly (no hourly HDD wake-ups)
+    datasets."vault/files".tier                  = "cold";                     # FileBrowser files: 30 daily, 6 monthly (no hourly HDD wake-ups)
   };
 
   # Game saves off the games SSD (single disk, not snapshotted) into
@@ -300,23 +300,29 @@ in
   # no subfolder (a subfolder would become a tag). Password: agenix.
   age.secrets.samba-scanner.file                 = ../../secrets/samba-scanner-password.age;
   systemd.services.samba-users.restartTriggers   = [ (builtins.hashFile "sha256" config.age.secrets.samba-scanner.file) ]; # new password -> set at the next rebuild
-  # copyparty: web file browser, WebDAV and share links (LAN + tailnet;
-  # share links only also public via the tunnel as files.jpc.onl). Files on
-  # vault/files; more volumes (media, karma's data) join at the big switch.
-  age.secrets.copyparty-accounts                 = { file = ../../secrets/copyparty-accounts.age; owner = "copyparty"; };
-  systemd.services.copyparty.restartTriggers     = [ (builtins.hashFile "sha256" config.age.secrets.copyparty-accounts.file) ];
-  systemd.tmpfiles.rules                         = [ "d /srv/files 2775 copyparty users -" ];
-  myServices.copyparty = {
+  # FileBrowser Quantum: web file manager, WebDAV and share links (LAN +
+  # tailnet; share links only also public via the tunnel as files.jpc.onl).
+  # Files on vault/files; more sources (media, karma's data) join at the
+  # big switch. Admin user zp, password from agenix.
+  age.secrets.filebrowser-admin.file             = ../../secrets/filebrowser-admin.age;
+  systemd.services.filebrowser-quantum.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.filebrowser-admin.file) ];
+  systemd.tmpfiles.rules                         = [ "d /srv/files 2775 filebrowser users -" ];
+  myServices.filebrowserQuantum = {
     enable                                       = true;
     interfaces                                   = [ "enp4s0" ];
-    accountsFile                                 = config.age.secrets.copyparty-accounts.path;
-    publicUrl                                    = "https://files.jpc.onl/";
-    volumes."/files" = { path = "/srv/files"; access = { rwmda = [ "zp" ]; }; };
-    css                                          = builtins.readFile ../../dotfiles/homepage/copyparty-theme.css; # Homepage navy + squid teal
+    adminUser                                    = "zp";
+    adminPasswordFile                            = config.age.secrets.filebrowser-admin.path;
+    publicUrl                                    = "https://files.jpc.onl";   # no trailing slash (Quantum adds it)
+    sources                                      = [ { name = "files"; path = "/srv/files"; } ];
+    # kraken look: Homepage navy + the squid's teal
+    darkBackground                               = "#0e1420";
+    themeColor                                   = "#20968c";
+    customCss                                    = builtins.readFile ../../dotfiles/homepage/filebrowser-theme.css;
   };
 
-  # Cloudflare tunnel (dashboard-managed): files.jpc.onl -> copyparty, only
-  # the paths ^/(shr|\.cpr)/ - set under Public Hostnames in the dashboard.
+  # Cloudflare tunnel (dashboard-managed): files.jpc.onl -> FileBrowser
+  # Quantum (localhost:8095), only the path ^/public/ (share pages, their
+  # API and static files) - set as the route in the dashboard.
   age.secrets.cloudflare-tunnel.file             = ../../secrets/cloudflare-tunnel.age;
   systemd.services.cloudflare-tunnel.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.cloudflare-tunnel.file) ];
   myServices.cloudflareTunnel = {
@@ -370,7 +376,7 @@ in
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
       "airvpn" "qbittorrent" "adguardhome"
       "paperless-scheduler" "paperless-consumer" "paperless-web" "paperless-task-queue" "paperless-exporter"
-      "game-saves-backup" "samba-smbd" "samba-users" "copyparty" "cloudflare-tunnel"
+      "game-saves-backup" "samba-smbd" "samba-users" "filebrowser-quantum" "cloudflare-tunnel"
     ];
   };
 
@@ -492,9 +498,9 @@ in
       {
         Documents = [
           { Files = {
-              href = "http://${lanIp}:3923"; icon = "copyparty.png";
-              description = "copyparty - files, uploads, share links (files.jpc.onl)";
-              siteMonitor = "http://127.0.0.1:3923";
+              href = "http://${lanIp}:8095"; icon = "filebrowser-quantum.png";
+              description = "FileBrowser Quantum - files, uploads, share links (files.jpc.onl)";
+              siteMonitor = "http://127.0.0.1:8095/api/health";
           }; }
           { Paperless = {
               href = "http://${lanIp}:28981"; icon = "paperless-ngx.png";

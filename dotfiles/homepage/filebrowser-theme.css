@@ -1,0 +1,15 @@
+/* kraken look for FileBrowser Quantum: Homepage's navy + the squid's teal.
+   The background itself comes from frontend.styling.darkBackground; these
+   are the surfaces on top of it (index.html's .dark-mode block - this
+   style block comes later, so it wins). The accent is set per user by
+   the app's JS (inline), hence !important. */
+.dark-mode {
+  --alt-background: #151c2c;
+  --surfacePrimary: #151c2c;
+  --surfaceSecondary: #20293d;
+  --iconBackground: #0b1019;
+  --divider: rgba(255, 255, 255, 0.08);
+}
+:root {
+  --primaryColor: #20968c !important;
+}

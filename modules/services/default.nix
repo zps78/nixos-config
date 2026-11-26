@@ -11,8 +11,8 @@
     ./brother-hl-l8230cdw.nix
     ./cloudflare-tunnel.nix
     ./cockpit.nix
-    ./copyparty.nix
     ./docker.nix
+    ./filebrowser-quantum.nix
     ./gvfs.nix
     ./homepage.nix
     ./libvirt.nix
