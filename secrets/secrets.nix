@@ -105,6 +105,10 @@ in
   # as an environment file: PLEX_TOKEN=<token>
   "plex-auto-languages.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken (karma-services.nix): the FR24 sharing key for fr24feed, as an
+  # environment file (FR24FEED_FR24KEY=...)
+  "fr24feed.age".publicKeys = [ zp-personal kraken-host ];
+
   "home-gateway-mac.age".publicKeys =
     [ zp-personal kuro-host krugerrand-host kepler-host kimi-host kraken-host ];
 }

@@ -69,6 +69,8 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
 - [ ] read-only check: `sudo zpool import` (lists them), then per disk
       `sudo zpool import -f -o readonly=on diskN`, look at /mnt/diskN, then
       `sudo zpool export diskN` (all five)
+- [ ] `sudo karma-fixup` (after the LAST karma-copy): rewrites .5 / gluetun ports in
+      Tautulli, Kometa, Seerr, LibreSeerr, Threadfin (prints anything left over)
 - [ ] karma-services.nix: `arrayInstalled = true;` commit, rebuild → imports disk1–5
       read-write, mergerfs at /mnt/user, Plex + download group start
 - [ ] qBittorrent's torrents (92 on karma): stop qbittorrent, then
@@ -83,8 +85,13 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
 - [ ] web UIs now on kraken: qBittorrent :8181, SABnzbd :8080, Sonarr :8989,
       Radarr :7878, Lidarr :8686, Prowlarr :9696, Bazarr :6767, LazyLibrarian :5299,
       ytdl :17442, Plex :32400
-- [ ] follow-ups: Byparr's proxy (karma's squid) → kraken; Seerr/Tautulli/
-      plex-auto-languages/Kometa pointing at 192.168.1.5 → kraken; Plex remote access
+- [ ] Plex → Settings → Live TV & DVR: tuner (Threadfin) to 192.168.1.10:8050
+- [ ] fr24feed: the RTL-SDR stick (+ antenna; ADS-B receiver for the FR24 feed
+      T-LPPR184, not TV - IPTV is Threadfin/EPG) moved to kraken, `ls -l /dev/rtl_sdr`;
+      status :8754 (feed_status connected, aircraft tracked)
+- [ ] Byparr via squid (home IP): Prowlarr → 1337x test search
+- [ ] Homepage (karma's) → gone; Plex remote access (router port forward, not the tunnel)
+- [ ] after: Immich + Audiobookshelf (separately); Phockup + Calibre (kept, set up later)
 - [ ] tunnel routes, kuro's mounts, PS5 to .5 later (LAN plan)
 
 ## 5. After

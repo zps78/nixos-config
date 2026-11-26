@@ -41,7 +41,58 @@ let
     extraOptions = [ "--network=ns:/run/netns/airvpn" "--dns=10.128.0.1" ];
   };
 
-  containerNames = [ "plex" "plex-auto-languages" ] ++ lib.attrNames vpnPorts;
+  # the rest of karma's apps, on Podman's default network, published on
+  # the same host ports as on karma (so their mutual references only change
+  # .5 -> .10, see karmaFixup)
+  bridgeApps = [ "tautulli" "kometa" "seerr" "calibre-web-automated" "libreseerr"
+                 "threadfin" "epg" "fr24feed" "home-proxy" ];
+
+  containerNames = [ "plex" "plex-auto-languages" ] ++ lib.attrNames vpnPorts ++ bridgeApps;
+
+  # karma's squid (home-IP proxy for Byparr/1337x), with the VPN namespace
+  # (Byparr's new origin) instead of Docker's bridge as the allowed source
+  squidConf = pkgs.writeText "squid.conf" ''
+    http_port 3128
+    acl vpn_ns        src 192.168.15.0/24
+    acl safe_ports    port 80 443
+    acl ssl_ports     port 443
+    acl connect_m     method CONNECT
+    acl private_dst   dst 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 100.64.0.0/10 127.0.0.0/8 0.0.0.0/8 fc00::/7 fe80::/10 ::1
+    http_access deny !safe_ports
+    http_access deny connect_m !ssl_ports
+    http_access deny private_dst
+    http_access allow vpn_ns
+    http_access deny all
+    cache deny all
+    dns_nameservers 94.140.14.14 94.140.15.15
+    via off
+    forwarded_for delete
+    access_log none
+    cache_log stdio:/dev/stderr
+    coredump_dir /var/spool/squid
+  '';
+
+  # Move day, AFTER the final karma-copy and BEFORE flipping arrayInstalled:
+  # rewrite karma's address (and its gluetun ports) in the copied configs.
+  # Idempotent; a later karma-copy run would undo it (run this again then).
+  karmaFixup = pkgs.writeShellScriptBin "karma-fixup" ''
+    set -eu
+    A=${appdata}
+    # rewrite in place, keeping owner and mode
+    edit() { f=$1; shift; t=$(mktemp); "$@" < "$f" > "$t" && cat "$t" > "$f"; rm -f "$t"; }
+    edit $A/tautulli/config.ini sed -E 's|^pms_ip = .*|pms_ip = 192.168.1.10|; s|^pms_url = .*|pms_url = http://192.168.1.10:32400|'
+    edit $A/kometa/config.yml sed -E 's|http://192\.168\.1\.5:1060|http://192.168.1.10:8989|g; s|http://192\.168\.1\.5:1070|http://192.168.1.10:7878|g; s#http://192\.168\.1\.5:(32400|8030)#http://192.168.1.10:\1#g'
+    edit $A/seerr/settings.json ${pkgs.jq}/bin/jq '.plex.ip = "192.168.1.10"
+      | .sonarr |= map(.hostname = "192.168.1.10" | if .port == 1060 then .port = 8989 else . end)
+      | .radarr |= map(.hostname = "192.168.1.10" | if .port == 1070 then .port = 7878 else . end)'
+    edit $A/libreseerr/config.json ${pkgs.jq}/bin/jq '(.ebook.url, .audiobook.url) |= sub("192\\.168\\.1\\.5:1090"; "192.168.1.10:5299")'
+    for f in $A/threadfin/config/settings.json $A/threadfin/config/data/threadfin.xml $A/threadfin/config/data/threadfin.m3u; do
+      [ -f "$f" ] && edit "$f" sed 's|192\.168\.1\.5:80\([56]0\)|192.168.1.10:80\1|g'
+    done
+    echo "left over (should be empty except history/backups):"
+    grep -rIl --exclude-dir={cache,logs,log,Logs,backups,temp,db} -e '192\.168\.1\.5[:" ]' \
+      $A/tautulli $A/kometa $A/seerr $A/libreseerr $A/threadfin 2>/dev/null || true
+  '';
 
   displayNames = {
     sabnzbd = "SABnzbd"; sonarr = "Sonarr"; radarr = "Radarr"; lidarr = "Lidarr";
@@ -52,10 +103,22 @@ in
 {
   # ── storage (move day) ──────────────────────────────────────────────
   age.secrets.plex-auto-languages.file = ../../secrets/plex-auto-languages.age;
+  age.secrets.fr24feed.file = ../../secrets/fr24feed.age;   # FR24FEED_FR24KEY=<key>
+
+  # the RTL-SDR stick (ADS-B receiver for the FR24 feed - sold as a DVB-T
+  # stick, not used for TV): kernel DVB drivers off, /dev/rtl_sdr as on karma
+  hardware.rtl-sdr.enable = true;
+  services.udev.extraRules = ''
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", SYMLINK+="rtl_sdr", MODE="0660", GROUP="plugdev"
+  '';
+
+  # Seerr, Kometa, LibreSeerr (Podman's default network 10.88.0.0/16)
+  # reach the arrs inside the VPN namespace through its port mappings
+  myServices.vpnTorrent.allowedIngress = [ "192.168.1.0/24" "100.64.0.0/10" "10.88.0.0/16" ];
 
   boot.zfs.extraPools = lib.mkIf arrayInstalled disks;   # each mounts at /mnt/diskN (its own mountpoint)
   system.fsPackages = [ pkgs.mergerfs ];
-  environment.systemPackages = [ pkgs.mergerfs pkgs.mergerfs-tools ];
+  environment.systemPackages = [ pkgs.mergerfs pkgs.mergerfs-tools karmaFixup ];   # move day: sudo karma-fixup
   fileSystems."/mnt/user" = lib.mkIf arrayInstalled {
     device = lib.concatMapStringsSep ":" (d: "/mnt/${d}") disks;
     fsType = "fuse.mergerfs";
@@ -118,6 +181,87 @@ in
       extraOptions = [ "--network=host" ];
     };
 
+    # ── the rest, on Podman's default network (same host ports as karma) ──
+    tautulli = {
+      image = "lscr.io/linuxserver/tautulli@sha256:5e8f80cc18f03c606a3567c8a9b37d80812ed8017d2e2f8ff2e2a91b54a3aef1";
+      autoStart = arrayInstalled;
+      environment = lsio;
+      volumes = [ "${appdata}/tautulli:/config" ];
+      ports = [ "8030:8181" ];
+    };
+    kometa = {
+      image = "docker.io/kometateam/kometa@sha256:4e45d12ca8cb21b5a47a25917542dbb305fc0c76a366bc692ae9490da35d168d";
+      autoStart = arrayInstalled;
+      environment = { KOMETA_TIME = "03:00"; LOW_PRIORITY = "True"; TZ = config.time.timeZone; };
+      # (its Plex token is in its own config.yml, copied with the appdata)
+      volumes = [ "${appdata}/kometa:/config" ];
+    };
+    seerr = {
+      image = "ghcr.io/seerr-team/seerr@sha256:aadee014b40e28cf9aa4928bc9d1183a6eb08f8c44d543cddc9efdcb16549be2";
+      autoStart = arrayInstalled;
+      environment = { TZ = config.time.timeZone; };
+      volumes = [ "${appdata}/seerr:/app/config" ];
+      ports = [ "5055:5055" ];                                          # tunnel route seerr.* -> localhost:5055 later
+    };
+    calibre-web-automated = {
+      image = "docker.io/crocodilestick/calibre-web-automated@sha256:5e00373854247750cc3e4479b492ae09293ff5e06ed10177f226634d97888679";
+      autoStart = arrayInstalled;
+      environment = lsio;
+      volumes = [ "${appdata}/calibre-web-automated:/config" "${media}/media/books:/calibre-library"
+                  "${media}/media/books-ingest:/cwa-book-ingest" ];
+      ports = [ "12020:8083" ];
+    };
+    libreseerr = {
+      image = "ghcr.io/zamnzim/libreseerr@sha256:820134e44279c964ddf54090ab45b444a28e7f562256baaadf20fffaf36911f3";
+      autoStart = arrayInstalled;
+      environment = lsio;
+      volumes = [ "${appdata}/libreseerr:/app/data" ];
+      ports = [ "12030:5000" ];
+    };
+    threadfin = {
+      image = "docker.io/fyb3roptik/threadfin@sha256:5b370c9b7f5fc89d32ea0a4286e3fb07de630f63a7b11f2c5a7be07dc7b900a5";
+      autoStart = arrayInstalled;
+      environment = { PUID = "1001"; TZ = "Europe/London"; };          # as on karma
+      volumes = [ "${appdata}/threadfin/config:/home/threadfin/conf" "${appdata}/threadfin/temp:/tmp/threadfin" ];
+      ports = [ "8050:34400" ];
+      extraOptions = [ "--device=nvidia.com/gpu=all" ];
+    };
+    epg = {
+      image = "ghcr.io/iptv-org/epg@sha256:f03b79e0e6e27d94e5234bd38a33fe4fc53234b12c73ad8bfd304a6f1eef8492";
+      autoStart = arrayInstalled;
+      environment = { RUN_AT_STARTUP = "true"; TZ = config.time.timeZone; };
+      volumes = [ "${appdata}/epg:/epg/public" ];
+      ports = [ "8060:3000" ];
+    };
+    fr24feed = {
+      image = "docker.io/thomx/fr24feed-piaware@sha256:49c1f06aa1a6b7c49b400810259b894e63ca34d79717aaa4d8aa31269aa4d022";
+      autoStart = arrayInstalled;
+      environment = {
+        SERVICE_ENABLE_FR24FEED = "true"; SERVICE_ENABLE_DUMP1090 = "true"; SERVICE_ENABLE_HTTP = "true";
+        SERVICE_ENABLE_PIAWARE = "false"; SERVICE_ENABLE_ADSBEXCHANGE = "false"; SERVICE_ENABLE_OPENSKY = "false";
+        SERVICE_ENABLE_ADSBHUB = "false"; SERVICE_ENABLE_ADSBFI = "false"; SERVICE_ENABLE_PLANEFINDER = "false";
+        FR24FEED_RECEIVER = "avr-tcp"; FR24FEED_HOST = "127.0.0.1:30002"; FR24FEED_BS = "no"; FR24FEED_RAW = "no";
+        FR24FEED_MLAT = "no"; FR24FEED_MLAT_DASH_WITHOUT_DASH_GPS = "no"; FR24FEED_LOGMODE = "1";
+        TZ = config.time.timeZone;
+      };
+      environmentFiles = [ config.age.secrets.fr24feed.path ];         # FR24FEED_FR24KEY
+      volumes = [
+        "${appdata}/fr24feed-piaware/fr24feed.ini:/etc/fr24feed.ini"
+        "${appdata}/fr24feed-piaware/piaware.conf:/etc/piaware.conf"
+        "${appdata}/fr24feed-piaware/config.js:/usr/lib/fr24/public_html/config.js"
+      ];
+      ports = [ "11010:8080" "8754:8754" ];
+      extraOptions = [ "--device=/dev/rtl_sdr" ];                       # the RTL-SDR stick (udev symlink above)
+    };
+    home-proxy = {
+      image = "docker.io/ubuntu/squid@sha256:6a097f68bae708cedbabd6188d68c7e2e7a38cedd05a176e1cc0ba29e3bbe029";
+      autoStart = arrayInstalled;
+      environment = { TZ = config.time.timeZone; };
+      volumes = [ "${squidConf}:/etc/squid/squid.conf:ro" ];
+      ports = [ "192.168.15.5:3128:3128" ];                             # only the VPN bridge's host side - not the LAN
+      extraOptions = [ "--tmpfs=/var/log/squid" "--tmpfs=/var/spool/squid" ];
+    };
+
     sabnzbd = inVpn {
       image = "lscr.io/linuxserver/sabnzbd@sha256:d225bbab93f54784c115a3b1d89711e469b1969c9f32aa6ebb11fb03b5804431";
       environment = lsio;
@@ -130,9 +274,10 @@ in
     };
     byparr = inVpn {
       image = "ghcr.io/thephaseless/byparr@sha256:c66fa161187b8fa527bfad7eefa2647ea1c553f77df68cbffd6fe83366d1787b";
-      # karma used PROXY_SERVER=http://192.168.1.5:3128 (squid home-proxy
-      # for 1337x) - set again once the proxy has moved to kraken
-      environment = { PORT = "8191"; HOST = "0.0.0.0"; BROWSER_LOCALE = "en-US"; TZ = config.time.timeZone; };
+      # squid home-proxy (1337x via the home IP), now home-proxy below,
+      # reached on the VPN bridge's host side
+      environment = { PORT = "8191"; HOST = "0.0.0.0"; BROWSER_LOCALE = "en-US"; TZ = config.time.timeZone;
+                      PROXY_SERVER = "http://192.168.15.5:3128"; };
     };
     sonarr = inVpn {
       image = "lscr.io/linuxserver/sonarr@sha256:339814bbf50599ac3b59077c252f29833d0138b59a062d0e82ce37bdc7f04f86";
@@ -204,6 +349,7 @@ in
     }))
     # new token -> restart
     { podman-plex-auto-languages.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.plex-auto-languages.file) ];
+      podman-fr24feed.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.fr24feed.file) ];
       podman-plex-auto-languages.after = [ "podman-plex.service" ]; }
     # the VPN ones: only with the namespace up
     (lib.genAttrs (map (n: "podman-${n}") (lib.attrNames vpnPorts)) (_: {
