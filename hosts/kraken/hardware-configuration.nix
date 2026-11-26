@@ -38,15 +38,9 @@
     fsType = "zfs";
   };
 
-  # Docker's image/container layers: rebuildable, so not under safe/.
-  fileSystems."/var/lib/docker" = {
-    device = "rpool/local/docker";
-    fsType = "zfs";
-  };
-
-  # Podman's images/containers (StemDeck; Docker is off since 2026-11-26):
-  # rebuildable as well. Created with
-  # `zfs create -o mountpoint=legacy rpool/local/containers`.
+  # Podman's images/containers (StemDeck): rebuildable, so not under safe/.
+  # Created with `zfs create -o mountpoint=legacy rpool/local/containers`.
+  # (Replaced Docker and its rpool/local/docker on 2026-11-26.)
   fileSystems."/var/lib/containers" = {
     device = "rpool/local/containers";
     fsType = "zfs";

@@ -46,7 +46,7 @@ in
   networking.hostId                              = "7d2b4492";                 # ZFS: random, fixed for this host's lifetime
 
   myDesktop.stack                                = "none";                     # headless
-  myDesktop.primaryUser                          = "zp";                       # admin: SSH, wheel, docker
+  myDesktop.primaryUser                          = "zp";                       # admin: SSH, wheel
   myDesktop.sessionUser                          = "steam";                    # Sunshine/Steam session owner (unprivileged)
 
   ############################################################
@@ -170,7 +170,7 @@ in
   # mounts, like games/steam) get added as each piece of data moves over.
 
   # Undo net for the OS disk's real state: /home, /var, /srv/appdata
-  # (rpool/safe and children). rpool/local (/, /nix, docker) is rebuildable
+  # (rpool/safe and children). rpool/local (/, /nix, containers) is rebuildable
   # and deliberately not snapshotted. More datasets join as drives arrive.
   myStorage.snapshots = {
     enable                                       = true;
@@ -474,7 +474,7 @@ in
     services = [
       {
         System = [
-          { Cockpit  = { href = "https://${lanIp}:9090";    icon = "cockpit.png";  description = "System, logs, services, ZFS, files"; }; }
+          { Cockpit  = { href = "https://${lanIp}:9090";    icon = "cockpit.png";  description = "System, logs, services, ZFS, files, containers (Podman)"; }; }
           { Scrutiny = { href = "http://${lanIp}:8087";     icon = "scrutiny.png"; description = "Disk health (SMART)"; }; }
           { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
           { Storage = {
@@ -600,10 +600,10 @@ in
   # Users
   ############################################################
   #
-  # zp    - admin: SSH (fleet keys), wheel, docker. Lean home profile
+  # zp    - admin: SSH (fleet keys), wheel. Lean home profile
   #         (home/profiles/server.nix). Password from agenix
   #         (secrets/zp-password.age), the same one on every host.
-  # steam - Sunshine/Steam/gamescope. Unprivileged: no wheel, no docker,
+  # steam - Sunshine/Steam/gamescope. Unprivileged: no wheel,
   #         no password.
   # media - UID 99 / GID 100 ("users"), matching Unraid's nobody:users.
   #         Every file on the array is owned 99:100 and the containers run
