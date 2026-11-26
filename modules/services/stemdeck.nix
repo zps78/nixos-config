@@ -2,12 +2,17 @@
 #
 # StemDeck: splits songs into stems (vocals, drums, bass, ...) with Demucs
 # on the NVIDIA GPU, web UI. No nixpkgs package - the upstream container,
-# run by Docker through virtualisation.oci-containers (unit
-# docker-stemdeck.service), GPU via CDI (hardware.nvidia-container-toolkit).
+# run through virtualisation.oci-containers by the host's backend (kraken:
+# Podman, unit podman-stemdeck.service, visible in Cockpit), GPU via CDI
+# (hardware.nvidia-container-toolkit).
 #
-#   http://<listen>:<port>   web UI (published only on the given addresses -
-#                            Docker's port rules bypass the NixOS firewall,
-#                            so never publish on 0.0.0.0)
+#   http://127.0.0.1:<port>  for the tunnel only: outside localhost StemDeck
+#                            insists on HTTPS (browsers allow its audio
+#                            engine only in a secure context) and accepts a
+#                            proxy's X-Forwarded-Proto - so it's used through
+#                            the tunnel (https), never on a plain LAN port.
+#                            (Container port rules bypass the NixOS firewall
+#                            anyway: never publish on 0.0.0.0.)
 #
 # Data under dataDir: cache/ (model weights, re-downloadable), jobs/ (the
 # library: registry.json, audio, stems), settings.json. The image's
@@ -49,12 +54,9 @@ in
 
   config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = config.virtualisation.docker.enable && config.hardware.nvidia-container-toolkit.enable;
-        message = "myServices.stemdeck needs Docker and hardware.nvidia-container-toolkit."; }
+      { assertion = (config.virtualisation.podman.enable || config.virtualisation.docker.enable) && config.hardware.nvidia-container-toolkit.enable;
+        message = "myServices.stemdeck needs Podman (or Docker) and hardware.nvidia-container-toolkit."; }
     ];
-
-    # oci-containers defaults to podman; this host runs Docker
-    virtualisation.oci-containers.backend = lib.mkDefault "docker";
 
     virtualisation.oci-containers.containers.stemdeck = {
       image = cfg.image;
@@ -84,6 +86,6 @@ in
     ];
 
     # don't start on an unmounted /srv/appdata
-    systemd.services.docker-stemdeck.unitConfig.RequiresMountsFor = [ cfg.dataDir ];
+    systemd.services."${config.virtualisation.oci-containers.backend}-stemdeck".unitConfig.RequiresMountsFor = [ cfg.dataDir ];
   };
 }

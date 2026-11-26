@@ -44,6 +44,14 @@
     fsType = "zfs";
   };
 
+  # Podman's images/containers (StemDeck; Docker is off since 2026-11-26):
+  # rebuildable as well. Created with
+  # `zfs create -o mountpoint=legacy rpool/local/containers`.
+  fileSystems."/var/lib/containers" = {
+    device = "rpool/local/containers";
+    fsType = "zfs";
+  };
+
   fileSystems."/var" = {
     device = "rpool/safe/var";
     fsType = "zfs";

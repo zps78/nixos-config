@@ -46,7 +46,8 @@ in
       plugins = with pkgs; [
         cockpit-zfs
         cockpit-files
-      ] ++ lib.optional config.virtualisation.libvirtd.enable pkgs.cockpit-machines;
+      ] ++ lib.optional config.virtualisation.libvirtd.enable pkgs.cockpit-machines
+        ++ lib.optional config.virtualisation.podman.enable pkgs.cockpit-podman;
     };
 
     networking.firewall.interfaces = lib.genAttrs cfg.interfaces (_: {

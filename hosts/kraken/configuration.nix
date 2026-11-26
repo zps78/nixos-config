@@ -206,7 +206,7 @@ in
     battery.enable                               = false;
     brother-ads-4300n.enable                     = false;
     brother-hl-l8230cdw.enable                   = false;
-    docker.enable                                = true;                       # group membership auto-follows via modules/services/docker.nix
+    docker.enable                                = false;                      # containers run on Podman (virtualisation.podman, with StemDeck)
     aiStack.enable                               = false;
     libvirt.enable                               = false;                      # later: the Office VM (karma's domains share)
     ssh.enable                                   = true;
@@ -322,11 +322,15 @@ in
 
   # StemDeck (moved from karma 2026-11-26): stem separation on the GPU.
   # Public as stemdeck.jpc.onl through the tunnel (route -> localhost:8010),
-  # behind Cloudflare Access - StemDeck has no login of its own. LAN: :8010.
-  myServices.stemdeck = {
-    enable                                       = true;
-    listenAddresses                              = [ "127.0.0.1" lanIp ];    # not 0.0.0.0: Docker bypasses the firewall
-  };
+  # behind Cloudflare Access - StemDeck has no login of its own. Only via
+  # the tunnel: it refuses plain http from other devices (needs HTTPS).
+  myServices.stemdeck.enable                     = true;
+
+  # Containers: Podman (rootful, via oci-containers), shown in Cockpit
+  # (cockpit-podman). Images in /var/lib/containers = rpool/local/containers,
+  # outside the snapshotted rpool/safe.
+  virtualisation.podman.enable                   = true;
+  virtualisation.oci-containers.backend          = "podman";
 
   # Cloudflare tunnel (dashboard-managed): files.jpc.onl -> FileBrowser
   # Quantum (localhost:8095), only the path ^/public/ (share pages, their
@@ -381,10 +385,10 @@ in
     };
     failureUnits = [
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
-      "homepage-dashboard" "wol-web" "tailscaled" "docker"
+      "homepage-dashboard" "wol-web" "tailscaled"
       "airvpn" "qbittorrent" "adguardhome"
       "paperless-scheduler" "paperless-consumer" "paperless-web" "paperless-task-queue" "paperless-exporter"
-      "game-saves-backup" "samba-smbd" "samba-users" "filebrowser-quantum" "cloudflare-tunnel" "docker-stemdeck"
+      "game-saves-backup" "samba-smbd" "samba-users" "filebrowser-quantum" "cloudflare-tunnel" "podman-stemdeck"
     ];
   };
 
@@ -506,9 +510,9 @@ in
       {
         Media = [
           { StemDeck = {
-              href = "http://${lanIp}:8010"; icon = "mdi-waveform";
-              description = "Stem separation on the GPU (stemdeck.jpc.onl, behind Cloudflare Access)";
-              siteMonitor = "http://127.0.0.1:8010";
+              href = "https://stemdeck.jpc.onl"; icon = "mdi-waveform";
+              description = "Stem separation on the GPU (Cloudflare Access login)";
+              siteMonitor = "https://stemdeck.jpc.onl";      # 302 to the login = up (StemDeck refuses plain http)
           }; }
         ];
       }
