@@ -25,7 +25,18 @@
   # and a gruvbox "palette" block - swap colours there, not in the
   # segments. Plus user@host in the session segment, so an SSH prompt
   # shows which machine it's on.
+  #
+  # On the text console (TERM=linux: bitmap font, no Nerd Font glyphs, 16
+  # colours) the same information in plain characters instead:
+  # dotfiles/oh-my-posh/console.json - and a fastfetch overview at each
+  # console login (dotfiles/fastfetch/console.jsonc).
   programs.bash.initExtra = ''
-    eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config ${../../dotfiles/oh-my-posh/server.json})"
+    if [ "$TERM" = linux ]; then
+      # a status overview once per console login (not on SSH)
+      shopt -q login_shell && ${pkgs.fastfetch}/bin/fastfetch --config ${../../dotfiles/fastfetch/console.jsonc}
+      eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config ${../../dotfiles/oh-my-posh/console.json})"
+    else
+      eval "$(${pkgs.oh-my-posh}/bin/oh-my-posh init bash --config ${../../dotfiles/oh-my-posh/server.json})"
+    fi
   '';
 }

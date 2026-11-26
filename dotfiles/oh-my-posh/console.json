@@ -1,0 +1,107 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "yellow",
+          "style": "plain",
+          "template": "┌─ ",
+          "type": "text"
+        },
+        {
+          "foreground": "yellow",
+          "style": "plain",
+          "template": "{{ .UserName }}@{{ .HostName }} ",
+          "type": "session"
+        },
+        {
+          "foreground": "lightBlue",
+          "options": {
+            "style": "agnoster_short",
+            "max_depth": 3,
+            "folder_icon": "...",
+            "folder_separator_icon": "/",
+            "home_icon": "~"
+          },
+          "style": "plain",
+          "template": "{{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "foreground": "green",
+          "foreground_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}red{{ end }}",
+            "{{ if or (gt .Ahead 0) (gt .Behind 0) }}yellow{{ end }}"
+          ],
+          "options": {
+            "branch_template": "{{ trunc 25 .Branch }}",
+            "fetch_status": true,
+            "branch_icon": "",
+            "branch_identical_icon": "",
+            "branch_ahead_icon": "+",
+            "branch_behind_icon": "-",
+            "branch_gone_icon": "x",
+            "commit_icon": "@",
+            "tag_icon": "#",
+            "rebase_icon": "rebase ",
+            "cherry_pick_icon": "pick ",
+            "merge_icon": "merge "
+          },
+          "style": "plain",
+          "template": "({{ .HEAD }}{{ if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} w:{{ .Working.String }}{{ end }}{{ if .Staging.Changed }} s:{{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} stash:{{ .StashCount }}{{ end }}) ",
+          "type": "git"
+        },
+        {
+          "foreground": "red",
+          "style": "plain",
+          "template": "{{ if gt .Code 0 }}[exit {{ .Code }}]{{ end }}",
+          "type": "status"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "right",
+      "segments": [
+        {
+          "foreground": "lightBlack",
+          "options": {
+            "style": "austin",
+            "always_enabled": true
+          },
+          "style": "plain",
+          "template": "{{ .FormattedMs }} ",
+          "type": "executiontime"
+        },
+        {
+          "foreground": "yellow",
+          "options": {
+            "time_format": "15:04:05"
+          },
+          "style": "plain",
+          "template": "{{ .CurrentDate | date .Format }}",
+          "type": "time"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "yellow",
+          "style": "plain",
+          "template": "└─ {{ if .Root }}#{{ else }}${{ end }}",
+          "type": "text"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "final_space": true,
+  "version": 4
+}
