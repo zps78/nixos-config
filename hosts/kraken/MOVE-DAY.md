@@ -51,7 +51,9 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
       Threadfin/EPG, fr24feed (DVB-T stick), squid home-proxy, Krusader → FileBrowser
 - [ ] tunnel routes for plex/audiobookshelf/seerr move to kraken's tunnel per app
       (Plex: prefer Plex's own remote access - Cloudflare's terms forbid video)
-- [ ] kuro: NFS mounts point at kraken
+- [ ] NFS clients: modules/shares/nfs `server = "kraken";` (after kraken runs with
+      arrayInstalled = true and its NFS server is up), commit, rebuild kuro, krugerrand,
+      kimi, kepler; /mnt/paperless becomes Paperless's originals, read-only
 
 ## 3. Hardware check (next visit, before move day)
 

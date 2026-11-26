@@ -126,9 +126,31 @@ in
       "allow_other" "use_ino" "cache.files=off" "dropcacheonclose=true"
       "category.create=epmfs"     # new files where their folder exists (keeps hardlinks possible)
       "moveonenospc=true" "minfreespace=100G" "fsname=mergerfs"
+      "noforget" "inodecalc=path-hash"   # stable inodes for NFS clients (no "stale file handle")
       "x-systemd.requires=zfs-mount.service" "x-systemd.after=zfs-mount.service" "nofail"
     ];
   };
+
+  # ── NFS for kuro, krugerrand, kimi, kepler (modules/shares/nfs, its
+  # `server` flips to "kraken" on move day). Same options as karma's
+  # Unraid exports; Paperless's originals read-only, read as its user.
+  # fsid on the mergerfs paths (a FUSE filesystem has no stable one).
+  services.nfs.server = lib.mkIf arrayInstalled {
+    enable = true;
+    exports = let
+      nets = [ "192.168.1.0/24" "100.64.0.0/10" ];
+      rw = id: lib.concatMapStringsSep " " (n: "${n}(rw,async,no_subtree_check,no_root_squash,insecure${lib.optionalString (id != null) ",fsid=${toString id}"})") nets;
+      ro-as = uid: lib.concatMapStringsSep " " (n: "${n}(ro,async,no_subtree_check,all_squash,anonuid=${toString uid},anongid=${toString uid},insecure)") nets;
+    in ''
+      /srv/backup                                  ${rw null}
+      /srv/home                                    ${rw null}
+      /srv/trading                                 ${rw null}
+      ${media}/media                    ${rw 101}
+      ${media}/torrents/complete        ${rw 102}
+      /var/lib/paperless/media/documents/originals ${ro-as config.users.users.paperless.uid}
+    '';
+  };
+  networking.firewall.interfaces.enp4s0.allowedTCPPorts = lib.mkIf arrayInstalled [ 2049 ];   # NFSv4 (tailscale0 is trusted)
 
   # ── qBittorrent (native, already in the namespace): karma's port + paths
   myServices.vpnTorrent.webuiPort = 8181;                # the arrs expect localhost:8181
@@ -358,6 +380,7 @@ in
     }))
     # qBittorrent: karma's container paths, as media:users
     (lib.mkIf arrayInstalled {
+      nfs-server.unitConfig.RequiresMountsFor = [ "/mnt/user" "/srv/home" "/srv/backup" "/srv/trading" ];
       qbittorrent = {
         unitConfig.RequiresMountsFor = [ media ];
         serviceConfig.BindPaths = [

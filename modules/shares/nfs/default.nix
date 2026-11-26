@@ -15,17 +15,36 @@
 { config, lib, ... }:
 
 let
-  nasHost = "192.168.1.5";   # the Unraid karma; becomes kraken (192.168.1.10) at the phase-6 cutover
+  # MOVE DAY: flip to "kraken" (then rebuild kuro, krugerrand, kimi, kepler)
+  server = "karma";
 
-  # share name -> export path on the NAS
-  exports = {
-    nfs-backup    = "/mnt/user/backup";
-    nfs-home      = "/mnt/user/home";
-    nfs-media     = "/mnt/user/media-server/media";
-    nfs-paperless = "/mnt/user/paperless";
-    nfs-torrents  = "/mnt/user/media-server/torrents/complete";
-    nfs-trading   = "/mnt/user/trading";
+  # share name -> export path, per NAS
+  servers = {
+    karma = {                       # the Unraid karma (retiring)
+      host = "192.168.1.5";
+      exports = {
+        nfs-backup    = "/mnt/user/backup";
+        nfs-home      = "/mnt/user/home";
+        nfs-media     = "/mnt/user/media-server/media";
+        nfs-paperless = "/mnt/user/paperless";
+        nfs-torrents  = "/mnt/user/media-server/torrents/complete";
+        nfs-trading   = "/mnt/user/trading";
+      };
+    };
+    kraken = {                      # exported by hosts/kraken/karma-services.nix
+      host = "192.168.1.10";
+      exports = {
+        nfs-backup    = "/srv/backup";
+        nfs-home      = "/srv/home";
+        nfs-media     = "/mnt/user/media-server/media";
+        nfs-paperless = "/var/lib/paperless/media/documents/originals";   # read-only: the scans, even with Paperless down
+        nfs-torrents  = "/mnt/user/media-server/torrents/complete";
+        nfs-trading   = "/srv/trading";
+      };
+    };
   };
+  nasHost = servers.${server}.host;
+  exports = servers.${server}.exports;
 
   mountPoint = name: "/mnt/" + lib.removePrefix "nfs-" name;
 
