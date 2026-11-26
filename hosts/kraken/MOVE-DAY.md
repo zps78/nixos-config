@@ -118,12 +118,13 @@ Plus the RTL-SDR stick + antenna; the Unraid USB stick stays as the way back.
       T-LPPR184, not TV - IPTV is Threadfin/EPG) moved to kraken, `ls -l /dev/rtl_sdr`;
       status :8754 (feed_status connected, aircraft tracked)
 - [ ] Byparr via squid (home IP): Prowlarr → 1337x test search
-- [ ] public names move to jpc.onl (prepared 2026-11-26 on the kraken tunnel):
+- [x] public names on jpc.onl, routes on the kraken tunnel (done 2026-11-26):
       plex.jpc.onl -> localhost:32400 (no Access - Plex logs in itself; DIGI = CGNAT, so
-      Tailscale first, tunnel as fallback; karma-fixup sets Plex's custom URL to it),
-      seerr.jpc.onl -> localhost:5055 (Access app got the jpc.onl domain first).
-      Move day: delete plex/seerr.zulupapa.org routes + DNS on karma's tunnel, drop the
-      zulupapa domains from the Access apps. audiobookshelf.jpc.onl when ABS moves
+      Tailscale first, tunnel as fallback; karma-fixup sets Plex's custom URL to it);
+      seerr.jpc.onl -> localhost:5055 behind Access (the app's domain moved to jpc.onl).
+      Seerr on karma stopped 2026-11-26; seerr.zulupapa.org route + DNS deleted.
+- [ ] move day: delete plex.zulupapa.org (route + DNS) on karma's tunnel.
+      Later: audiobookshelf.jpc.onl when ABS moves (Access domain + its OIDC redirect URLs)
 - [ ] after: Immich + Audiobookshelf (separately); Phockup + Calibre (kept, set up later)
 - [ ] Office VM (copied 2026-11-26, checksums match): kraken ~/office-vm = vdisk1.img
       (100G sparse, 19G used), Office.xml, NVRAM (UEFI vars). Set up with libvirt
