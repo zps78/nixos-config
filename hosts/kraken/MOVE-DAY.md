@@ -62,12 +62,26 @@ the **Cloudflare tunnel** for plex/audiobookshelf/seerr.zulupapa.org, and an
 
 ## 4. Move day
 
-- [ ] final sync: stop karma's containers, `sudo systemctl start karma-copy` again
-      (changes only; databases consistent)
+- [ ] final sync: stop karma's containers, `sudo systemctl start --no-block karma-copy`
+      (changes only; databases consistent); wait until done
 - [ ] karma: shut down cleanly; label the drives with their pool names
-- [ ] drives into kraken; boot; check every disk by serial
-- [ ] import disk1–5 read-only, check, then read-write; NVMes into their new roles
-- [ ] start the services, test each (Plex libraries, arrs see the media, Immich photos)
+- [ ] drives into kraken; boot; check every disk by serial (`lsblk -d -o NAME,SIZE,SERIAL`)
+- [ ] read-only check: `sudo zpool import` (lists them), then per disk
+      `sudo zpool import -f -o readonly=on diskN`, look at /mnt/diskN, then
+      `sudo zpool export diskN` (all five)
+- [ ] karma-services.nix: `arrayInstalled = true;` commit, rebuild → imports disk1–5
+      read-write, mergerfs at /mnt/user, Plex + download group start
+- [ ] qBittorrent's torrents (92 on karma): stop qbittorrent, then
+      `/srv/appdata/karma/qbittorrent/qBittorrent/BT_backup/*` → `/var/lib/qBittorrent/qBittorrent/data/BT_backup/`,
+      `categories.json` → `.../config/`; `chown -R media:users`; start; recheck a few
+- [ ] check: Plex libraries play (GPU transcode), Sonarr/Radarr/Lidarr see their
+      root folders + qBittorrent/SABnzbd (Settings → Download Clients → Test),
+      Prowlarr → Apps → Test, SABnzbd web UI from the LAN (host_whitelist?)
+- [ ] web UIs now on kraken: qBittorrent :8181, SABnzbd :8080, Sonarr :8989,
+      Radarr :7878, Lidarr :8686, Prowlarr :9696, Bazarr :6767, LazyLibrarian :5299,
+      ytdl :17442, Plex :32400
+- [ ] follow-ups: Byparr's proxy (karma's squid) → kraken; Seerr/Tautulli/
+      plex-auto-languages/Kometa pointing at 192.168.1.5 → kraken; Plex remote access
 - [ ] tunnel routes, kuro's mounts, PS5 to .5 later (LAN plan)
 
 ## 5. After

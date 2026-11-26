@@ -30,6 +30,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./karma-import.nix             # TEMPORARY: karma -> kraken migration (delete after the move)
+    ./karma-services.nix           # TEMPORARY: karma's Plex + download group 1:1 (move day)
     ../../modules/desktop          # options only here: myDesktop.stack = "none"
     ../../modules/apps-system
     ../../modules/hardware
@@ -403,7 +404,7 @@ in
   # qBittorrent behind AirVPN in a WireGuard namespace (phase-4 groundwork,
   # TEST - not the live download client yet; karma's stays in charge).
   # Own AirVPN device "kraken" (config in secrets/airvpn-wg.conf.age).
-  # Web UI: http://<lanIp>:8180 (LAN + Tailscale only).
+  # Web UI: http://<lanIp>:8181 (LAN + Tailscale only; karma's port, see karma-services.nix).
   age.secrets.qbittorrent-webui = { file = ../../secrets/qbittorrent-webui.age; };
   systemd.services.qbittorrent.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.qbittorrent-webui.file) ];
   myServices.vpnTorrent = {
@@ -575,12 +576,12 @@ in
         # namespace's own address (192.168.15.1), not through the LAN mapping.
         Downloads = [
           { qBittorrent = {
-              href = "http://${lanIp}:8180"; icon = "qbittorrent.png";
+              href = "http://${lanIp}:8181"; icon = "qbittorrent.png";
               description = "Behind AirVPN (test)";
-              siteMonitor = "http://192.168.15.1:8180";
+              siteMonitor = "http://192.168.15.1:8181";
               widget = {
                 type = "qbittorrent";
-                url = "http://192.168.15.1:8180";
+                url = "http://192.168.15.1:8181";
                 username = "{{HOMEPAGE_VAR_QBIT_USER}}";        # from secrets/homepage-env.age
                 password = "{{HOMEPAGE_VAR_QBIT_PASSWORD}}";
               };
