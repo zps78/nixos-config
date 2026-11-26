@@ -11,7 +11,7 @@ after kraken has run the replacement for a while.
 | disk1–disk5 (5x Exos 16 TB, single-disk ZFS) | media array, imported as-is | media-server 32 T, most of home/backup, trading, photos-array |
 | parity (Exos 16 TB) | SnapRAID parity | Unraid parity - untouched until SnapRAID is set up |
 | nvme-appdata (T500 500 GB) | scratch | appdata 187 G, backup (part) 71 G, domains 21 G |
-| nvme-immich (T500 1 TB) | mirror partner of krieger's T500 | photos 394 G |
+| nvme-immich (T500 1 TB) | mirror partner of krieger's T500 (wiped 2026-11-26, partition "spare-t500") | photos 394 G |
 | ssd-downloads (SA500 1 TB) | 2nd Steam library / downloads | setup 105 G, system 26 G (docker.img), media cache |
 | USB: RTL2838 DVB-T stick | moves along | fr24feed-piaware |
 | Unraid USB stick | keep as the way back | |
@@ -35,6 +35,10 @@ Drives by serial (label them when they come out):
 | ssd-downloads | SA500 1TB | 23151H447302 | 2nd Steam library / scratch - can wait |
 
 Plus the RTL-SDR stick + antenna; the Unraid USB stick stays as the way back.
+Already in kraken and empty (wiped 2026-11-26, named partitions, nothing on them):
+WD Red 2TB WD-WMC300115937 "spare-2tb-a", WD-WMC300112859 "spare-2tb-b" (role
+undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D9
+"spare-t500" (Immich mirror; zpool create replaces the label).
 
 ## 1. Copy the data (remote, karma keeps running)
 
