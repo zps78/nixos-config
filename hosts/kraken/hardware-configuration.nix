@@ -89,6 +89,35 @@
     options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
   };
 
+  # Data moved from karma (karma-import.nix): one dataset per former Unraid
+  # share on vault. Created 2026-11-26 with
+  # `zfs create -o mountpoint=legacy vault/{home,trading,backup,setup,photos}`.
+  fileSystems."/srv/home" = {
+    device = "vault/home";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
+  fileSystems."/srv/trading" = {
+    device = "vault/trading";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
+  fileSystems."/srv/backup" = {
+    device = "vault/backup";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
+  fileSystems."/srv/setup" = {
+    device = "vault/setup";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
+  fileSystems."/srv/photos" = {
+    device = "vault/photos";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-partlabel/kraken-esp";
     fsType = "vfat";

@@ -29,6 +29,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ./karma-import.nix             # TEMPORARY: karma -> kraken migration (delete after the move)
     ../../modules/desktop          # options only here: myDesktop.stack = "none"
     ../../modules/apps-system
     ../../modules/hardware
@@ -176,6 +177,12 @@ in
     enable                                       = true;
     datasets."rpool/safe".tier                   = "important";                # 24 hourly, 30 daily, 3 monthly
     datasets."vault/files".tier                  = "cold";                     # FileBrowser files: 30 daily, 6 monthly (no hourly HDD wake-ups)
+    # data moved from karma: daily + monthly, no hourly HDD wake-ups
+    datasets."vault/home".tier                   = "cold";
+    datasets."vault/trading".tier                = "cold";
+    datasets."vault/backup".tier                 = "cold";
+    datasets."vault/setup".tier                  = "cold";
+    datasets."vault/photos".tier                 = "cold";
   };
 
   # Game saves off the games SSD (single disk, not snapshotted) into
