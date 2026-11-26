@@ -320,6 +320,14 @@ in
     customCss                                    = builtins.readFile ../../dotfiles/homepage/filebrowser-theme.css;
   };
 
+  # StemDeck (moved from karma 2026-11-26): stem separation on the GPU.
+  # Public as stemdeck.jpc.onl through the tunnel (route -> localhost:8010),
+  # behind Cloudflare Access - StemDeck has no login of its own. LAN: :8010.
+  myServices.stemdeck = {
+    enable                                       = true;
+    listenAddresses                              = [ "127.0.0.1" lanIp ];    # not 0.0.0.0: Docker bypasses the firewall
+  };
+
   # Cloudflare tunnel (dashboard-managed): files.jpc.onl -> FileBrowser
   # Quantum (localhost:8095), only the path ^/public/ (share pages, their
   # API and static files) - set as the route in the dashboard.
@@ -376,7 +384,7 @@ in
       "homepage-dashboard" "wol-web" "tailscaled" "docker"
       "airvpn" "qbittorrent" "adguardhome"
       "paperless-scheduler" "paperless-consumer" "paperless-web" "paperless-task-queue" "paperless-exporter"
-      "game-saves-backup" "samba-smbd" "samba-users" "filebrowser-quantum" "cloudflare-tunnel"
+      "game-saves-backup" "samba-smbd" "samba-users" "filebrowser-quantum" "cloudflare-tunnel" "docker-stemdeck"
     ];
   };
 
@@ -492,6 +500,15 @@ in
               href = "https://${streamIp}:47990"; icon = "sunshine.png";
               description = "Moonlight: Steam Big Picture, Zen (VPN), Lutris";
               ping = streamIp;                              # (its web UI answers 401 without login - a site monitor would show "down")
+          }; }
+        ];
+      }
+      {
+        Media = [
+          { StemDeck = {
+              href = "http://${lanIp}:8010"; icon = "mdi-waveform";
+              description = "Stem separation on the GPU (stemdeck.jpc.onl, behind Cloudflare Access)";
+              siteMonitor = "http://127.0.0.1:8010";
           }; }
         ];
       }

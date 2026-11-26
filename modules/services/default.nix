@@ -20,6 +20,7 @@
     ./samba.nix
     ./scrutiny.nix
     ./ssh.nix
+    ./stemdeck.nix
     ./sunshine.nix
     ./vpn-torrent.nix
     ./waydroid.nix
