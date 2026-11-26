@@ -42,6 +42,12 @@ let
   };
 
   containerNames = [ "plex" ] ++ lib.attrNames vpnPorts;
+
+  displayNames = {
+    sabnzbd = "SABnzbd"; sonarr = "Sonarr"; radarr = "Radarr"; lidarr = "Lidarr";
+    prowlarr = "Prowlarr"; bazarr = "Bazarr"; lazylibrarian = "LazyLibrarian";
+    byparr = "Byparr"; ytdl = "YouTube-DL";
+  };
 in
 {
   # ── storage (move day) ──────────────────────────────────────────────
@@ -144,6 +150,31 @@ in
       volumes = [ "${appdata}/youtubedl-material:/app/appdata" "${media}/youtube-dl/audio:/app/audio"
                   "${media}/youtube-dl/subscriptions:/app/subscriptions" "${media}/youtube-dl/video:/app/video" ];
     };
+  };
+
+  # Homepage tiles - only with the array in, so nothing shows red before
+  # move day. (The VPN UIs are monitored on the namespace address; kraken
+  # can't reach its own port mappings via its LAN IP.)
+  services.homepage-dashboard = lib.mkIf arrayInstalled {
+    services = lib.mkAfter [
+      { Library = [
+          { Plex = {
+              href = "http://192.168.1.10:32400/web"; icon = "plex.png";
+              description = "Movies, TV, music (GPU transcoding)";
+              siteMonitor = "http://127.0.0.1:32400/identity";
+          }; }
+        ];
+      }
+      { Arrs = lib.mapAttrsToList (name: port: {
+          ${displayNames.${name}} = {
+            href = "http://192.168.1.10:${toString port}";
+            icon = if name == "ytdl" then "ytdl-material.png" else "${name}.png";
+            siteMonitor = "http://192.168.15.1:${toString port}";
+          };
+        }) (removeAttrs vpnPorts [ "byparr" ]);
+      }
+    ];
+    settings.layout.Arrs = { style = "row"; columns = 4; };
   };
 
   systemd.services = lib.mkMerge [
