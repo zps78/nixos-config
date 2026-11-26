@@ -63,7 +63,11 @@ in
       mkdir -p ${dest}
       # -aHAX: owners, perms, hardlinks, ACLs, xattrs; --numeric-ids keeps
       # karma's 99:100 etc. as numbers
-      rsync -aHAX --numeric-ids --delete --info=stats1 /mnt/karma/${share}/ ${dest}/
+      # exit 24 = some source files vanished during the run - normal while
+      # karma's containers are live (temp files, logs); anything else fails
+      rc=0; rsync -aHAX --numeric-ids --delete --info=stats1 /mnt/karma/${share}/ ${dest}/ || rc=$?
+      if [ "$rc" = 24 ]; then echo "(${share}: some files vanished during the copy - fine on a live copy)";
+      elif [ "$rc" != 0 ]; then echo "rsync failed on ${share} (exit $rc)" >&2; exit "$rc"; fi
       echo "== ${share} done ($(date '+%F %T')), $(du -sh ${dest} | cut -f1) on kraken"
     '') copies);
   };
