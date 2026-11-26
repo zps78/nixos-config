@@ -50,6 +50,11 @@ in
     wants = [ "network-online.target" ];
     # every destination must be its real (mounted) dataset, never a bare dir
     unitConfig.RequiresMountsFor = lib.attrValues copies;
+    # a rebuild must never restart (or stop) a running copy - and a
+    # restarted oneshot makes nixos-rebuild wait until it has finished,
+    # i.e. hours (2026-11-26). Script changes apply at the next manual start.
+    restartIfChanged = false;
+    stopIfChanged = false;
     path = [ pkgs.rsync pkgs.coreutils pkgs.util-linux ];
     serviceConfig = {
       Type = "oneshot";
