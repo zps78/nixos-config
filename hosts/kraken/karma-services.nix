@@ -139,7 +139,7 @@ in
                   "${media}/usenet:/data/usenet" ];
     };
     ytdl = inVpn {
-      image = "voc0der/ytdl-material@sha256:539537413dce9279a5b9ee030320eb22792a2f20673d1f566a6521b9becf124b";
+      image = "docker.io/voc0der/ytdl-material@sha256:539537413dce9279a5b9ee030320eb22792a2f20673d1f566a6521b9becf124b";
       environment = { ytdl_use_local_db = "true"; write_ytdl_config = "true"; UID = "1000"; GID = "1000"; TZ = config.time.timeZone; };
       volumes = [ "${appdata}/youtubedl-material:/app/appdata" "${media}/youtube-dl/audio:/app/audio"
                   "${media}/youtube-dl/subscriptions:/app/subscriptions" "${media}/youtube-dl/video:/app/video" ];
