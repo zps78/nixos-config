@@ -142,6 +142,11 @@ undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D
 
 ## 5. After
 
+- [ ] originals on the array disks (home ~970G, backup ~327G, trading 374G) come along
+      as a FALLBACK only - stale from move day (kuro's NFS uses the vault copies).
+      After 1-2 weeks on kraken + a verification (sizes/file counts vs vault): delete
+      them from disk1-5 -> ~1.7 TB free, the array media-only. Never write to them.
+      (nvme-appdata, nvme-immich, ssd-downloads get wiped when they take their new roles.)
 - [ ] SnapRAID with the old parity disk (no parity protection until the first sync)
 - [ ] quarterly scrub for the media pool + its healthchecks check
 - [ ] delete karma-import.nix; retire karma's Tailscale node and tunnel
