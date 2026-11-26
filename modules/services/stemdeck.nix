@@ -15,8 +15,8 @@
 #                            anyway: never publish on 0.0.0.0.)
 #
 # Data under dataDir: cache/ (model weights, re-downloadable), jobs/ (the
-# library: registry.json, audio, stems), settings.json. The image's
-# entrypoint chowns them to PUID:PGID at every start (kraken: 99:100 =
+# library: registry.json, audio, stems), data/ (STEMDECK_DATA_DIR:
+# settings.json, downloads, logs). Owned by PUID:PGID (kraken: 99:100 =
 # media:users).
 { config, lib, pkgs, ... }:
 
@@ -64,7 +64,7 @@ in
       volumes = [
         "${cfg.dataDir}/cache:/cache"
         "${cfg.dataDir}/jobs:/app/jobs"
-        "${cfg.dataDir}/settings.json:/app/settings.json"
+        "${cfg.dataDir}/data:/data"
       ];
       environment = {
         PUID = toString cfg.uid;
@@ -72,20 +72,36 @@ in
         STEMDECK_MAX_DURATION_SEC = toString cfg.maxDurationSec;
         STEMDECK_MAX_PENDING_JOBS = toString cfg.maxPendingJobs;
         STEMDECK_PERSIST_LIBRARY = "1";
+        # settings.json, downloads, logs: a mounted FOLDER - StemDeck saves
+        # settings atomically (temp file + rename), which fails on a
+        # single bind-mounted file. Jobs and cache stay pinned where they are.
+        STEMDECK_DATA_DIR = "/data";
+        STEMDECK_JOBS_DIR = "/app/jobs";
+        STEMDECK_CACHE_DIR = "/cache";
         TZ = config.time.timeZone;
       };
       extraOptions = [ "--device=nvidia.com/gpu=all" ];
     };
 
-    # settings.json must exist as a file, or Docker creates a directory there
+    # (the entrypoint chowns jobs/ and cache/ itself; data/ is ours)
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir} 0755 ${toString cfg.uid} ${toString cfg.gid} -"
       "d ${cfg.dataDir}/cache 0755 ${toString cfg.uid} ${toString cfg.gid} -"
       "d ${cfg.dataDir}/jobs 0755 ${toString cfg.uid} ${toString cfg.gid} -"
-      "f ${cfg.dataDir}/settings.json 0644 ${toString cfg.uid} ${toString cfg.gid} -"
+      "d ${cfg.dataDir}/data 0755 ${toString cfg.uid} ${toString cfg.gid} -"
+      "r ${cfg.dataDir}/settings.json"                      # the old single-file mount
     ];
 
-    # don't start on an unmounted /srv/appdata
-    systemd.services."${config.virtualisation.oci-containers.backend}-stemdeck".unitConfig.RequiresMountsFor = [ cfg.dataDir ];
+    systemd.services."${config.virtualisation.oci-containers.backend}-stemdeck" = {
+      # don't start on an unmounted /srv/appdata
+      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
+      # the bind-mount sources must exist before the container starts (on a
+      # rebuild, tmpfiles may run after the unit restarts)
+      preStart = lib.mkBefore ''
+        for d in cache jobs data; do
+          ${pkgs.coreutils}/bin/install -d -o ${toString cfg.uid} -g ${toString cfg.gid} -m 0755 ${cfg.dataDir}/$d
+        done
+      '';
+    };
   };
 }
