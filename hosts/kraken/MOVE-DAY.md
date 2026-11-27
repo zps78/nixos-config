@@ -90,18 +90,19 @@ undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D
 
 ## 4. Move day
 
-- [ ] karma: stop ALL containers (Docker → Stop All)
-- [ ] karma: run the mover by hand (Main → Move / `mover start`) until
+- [x] karma: stop ALL containers (Docker → Stop All) - 2026-11-26 23:3x
+- [x] karma: run the mover by hand (done, cache empty) (Main → Move / `mover start`) until
       /mnt/ssd-downloads/media-server is empty - 14 GB of recent media live only on that
       cache SSD (2026-11-26), and media-server is NOT in karma-copy (it comes on the disks)
-- [ ] final sync: `sudo systemctl start --no-block karma-copy`
+- [x] final sync: `sudo systemctl start --no-block karma-copy` (23:45-00:18; rsync dry run: 0 differences in all six shares)
       (changes only; databases consistent); wait until done
-- [ ] karma: shut down cleanly; label the drives with their pool names
+- [x] karma: shut down cleanly (powerdown 02:58, off 03:00) - Unraid stick config backed up to kraken ~/karma-flash-config-20261127.tgz (private: keys inside)
+- [ ] label the drives with their pool names (table above)
 - [ ] drives into kraken; boot; check every disk by serial (`lsblk -d -o NAME,SIZE,SERIAL`)
 - [ ] read-only check: `sudo zpool import` (lists them), then per disk
       `sudo zpool import -f -o readonly=on diskN`, look at /mnt/diskN, then
       `sudo zpool export diskN` (all five)
-- [ ] `sudo karma-fixup` (after the LAST karma-copy): rewrites .5 / gluetun ports in
+- [x] `sudo karma-fixup` (after the LAST karma-copy; done 02:38, only seerr/settings.old.json left = harmless): rewrites .5 / gluetun ports in
       Tautulli, Kometa, Seerr, LibreSeerr, Threadfin (prints anything left over)
 - [ ] karma-services.nix: `arrayInstalled = true;` commit, rebuild → imports disk1–5
       read-write, mergerfs at /mnt/user, Plex + download group start
