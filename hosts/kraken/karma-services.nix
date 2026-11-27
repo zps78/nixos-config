@@ -170,6 +170,10 @@ in
     allowedTCPPorts = [ 2049 32400 ];          # NFSv4; Plex (host network - on karma Docker opened it)
     allowedUDPPorts = [ 32410 32412 32413 32414 ];   # Plex GDM: LAN clients find the server by themselves
   };                                           # (tailscale0 is trusted anyway)
+  # The apps on Podman's network (Tautulli, Seerr, Kometa) reach Plex at
+  # 192.168.1.10:32400, but their traffic arrives over podman0, not enp4s0 -
+  # without this it timed out (2026-11-27). Plex only, nothing else.
+  networking.firewall.interfaces."podman*".allowedTCPPorts = lib.mkIf arrayInstalled [ 32400 ];
 
   # ── qBittorrent (native, already in the namespace): karma's port + paths
   myServices.vpnTorrent.webuiPort = 8181;                # the arrs expect localhost:8181
