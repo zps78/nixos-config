@@ -18,7 +18,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  arrayInstalled = false;
+  arrayInstalled = true;   # 2026-11-27: disks in kraken, read-only import checked clean
 
   appdata = "/srv/appdata/karma";
   media = "/mnt/user/media-server";

@@ -122,6 +122,20 @@ in
       vpnNamespace = ns;
     };
 
+    # At boot the tunnel has to resolve its endpoint (nl3.vpn.airdns.org),
+    # and a host that uses its own AdGuard (via the router) has no DNS for
+    # the first seconds - the namespace unit gave up after 5 tries and
+    # qBittorrent stayed down (2026-11-27). So: start after AdGuard when
+    # it's on this host, retry every 30 s on failure, and pull qBittorrent
+    # back up whenever the namespace (re)starts.
+    systemd.services.${ns} = {
+      after = lib.optional config.services.adguardhome.enable "adguardhome.service";
+      wants = lib.optional config.services.adguardhome.enable "adguardhome.service";
+      serviceConfig = { Restart = "on-failure"; RestartSec = 30; };
+      unitConfig = { StartLimitIntervalSec = 0; };
+    };
+    systemd.services.qbittorrent.wantedBy = [ "${ns}.service" ];
+
     # After the module has installed the generated qBittorrent.conf (its own
     # ExecStartPre), put the WebUI password hash into [Preferences]. Root
     # ("+"): only root can read the agenix secret.
