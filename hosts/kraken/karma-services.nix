@@ -453,6 +453,37 @@ in
               description = "Audiobooks, podcasts, Blinkist (via the tunnel)";
               siteMonitor = "http://127.0.0.1:13378/healthcheck";
           }; }
+          { Tautulli = {
+              href = "http://192.168.1.10:8030"; icon = "tautulli.svg";
+              description = "Plex stats"; siteMonitor = "http://127.0.0.1:8030";
+          }; }
+          { Seerr = {
+              href = "https://seerr.jpc.onl"; icon = "seerr.svg";
+              description = "Plex media requests (behind Cloudflare Access)"; siteMonitor = "http://127.0.0.1:5055";
+          }; }
+          { LibreSeerr = {
+              href = "http://192.168.1.10:12030"; icon = "https://raw.githubusercontent.com/zamnzim/Libreseerr/main/branding/LibreseerrLogo.png";
+              description = "Book/audiobook requests (for LazyLibrarian)"; siteMonitor = "http://127.0.0.1:12030";
+          }; }
+          { "Calibre-Web" = {
+              href = "http://192.168.1.10:12020"; icon = "calibre-web.svg";
+              description = "E-books (Calibre-Web-Automated)"; siteMonitor = "http://127.0.0.1:12020";
+          }; }
+        ];
+      }
+      { Extras = [
+          { Threadfin = {
+              href = "http://192.168.1.10:8050/web/"; icon = "threadfin.svg";
+              description = "IPTV/EPG proxy for Plex DVR"; siteMonitor = "http://127.0.0.1:8050/web/";
+          }; }
+          { EPG = {
+              href = "http://192.168.1.10:8060/guide.xml"; icon = "threadfin.svg";
+              description = "MEO Portugal EPG grabber, feeds Threadfin"; siteMonitor = "http://127.0.0.1:8060/";
+          }; }
+          { FR24 = {
+              href = "http://192.168.1.10:11010"; icon = "flightradar24.svg";
+              description = "ADS-B feeder (SkyAware map; status :8754)"; siteMonitor = "http://127.0.0.1:11010";
+          }; }
         ];
       }
       { Arrs = lib.mapAttrsToList (name: port: {
@@ -473,6 +504,8 @@ in
       }
     ];
     settings.layout.Arrs = { style = "row"; columns = 4; };
+    settings.layout.Library = { style = "row"; columns = 3; };
+    settings.layout.Extras = { style = "row"; columns = 3; };
   };
 
   systemd.services = lib.mkMerge [

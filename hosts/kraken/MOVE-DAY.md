@@ -145,6 +145,10 @@ undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D
       folders). vm.max_map_count was for Seafile - drop. (Their Radarr/Sonarr API keys
       showed up in a session log 2026-11-26 - rotate when convenient.)
 - [ ] PS5 to .5 (LAN plan) - tunnel routes and kuro's mounts are done
+- [ ] Homepage "work" group from karma's services.yaml (later, user's call): AIP (ais.nav.pt
+      eAIP), NAV mail (OWA), navclock, Word / Excel / PowerPoint / OneDrive links. Source:
+      /srv/appdata/karma/homepage/services.yaml, group "work". (3D apps OrcaSlicer / Bambu
+      Studio were containers on karma - not moved.)
 
 ## 5. After
 

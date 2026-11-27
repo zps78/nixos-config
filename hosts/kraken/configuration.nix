@@ -473,6 +473,7 @@ in
       background = "data:image/webp;base64,${builtins.readFile ../../dotfiles/homepage/kraken-bg.webp.b64}";
       layout.System = { style = "row"; columns = 4; };
       layout.Network = { style = "row"; columns = 4; };
+      layout.Devices = { style = "row"; columns = 2; };
       layout.Downloads = { style = "row"; columns = 2; };
     };
     widgets = [
@@ -562,6 +563,13 @@ in
               description = "kraken down-check, snapshots, scrub, game saves";
               widget = { type = "healthchecks"; url = "https://healthchecks.io"; key = "{{HOMEPAGE_VAR_HC_KEY}}"; };
           }; }
+        ];
+      }
+      {
+        # Printer + scanner web UIs (as on karma's Homepage)
+        Devices = [
+          { Printer = { href = "http://192.168.1.100"; icon = "brother.svg"; description = "Brother HL-L8230CDW"; siteMonitor = "http://192.168.1.100"; }; }
+          { Scanner = { href = "http://192.168.1.101"; icon = "brother.svg"; description = "Brother ADS-4300N";  siteMonitor = "http://192.168.1.101"; }; }
         ];
       }
       {
