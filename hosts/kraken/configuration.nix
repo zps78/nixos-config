@@ -490,7 +490,7 @@ in
           { Beszel   = { href = "http://${lanIp}:8090";     icon = "beszel.png";   description = "Metrics and alerts"; }; }
           { Storage = {
               href = "https://${lanIp}:9090/zfs"; icon = "truenas.png";
-              description = "ZFS pools (myStorage.statusApi)";
+              description = "ZFS pools, media array, SnapRAID (myStorage.statusApi)";
               widget = {
                 type = "customapi";
                 url = "http://127.0.0.1:8189/status.json";
@@ -501,7 +501,11 @@ in
                   { field = "rpool";      label = "rpool (system)"; }
                   { field = "games";      label = "games (SSD)"; }
                   { field = "vault";      label = "vault (4x 4TB)"; }
+                  { field = "scratch";    label = "scratch (downloads)"; }
+                  { field = "array";      label = "Media array (disk1-5)"; }
+                  { field = "snapraid";   label = "SnapRAID parity"; }
                   { field = "last_scrub"; label = "Oldest scrub"; }
+                  { field = "array_scrub"; label = "Media scrub (quarterly)"; }
                 ];
               };
           }; }

@@ -21,6 +21,17 @@ in
       default = 8189;
       description = "Local-only (127.0.0.1) port of the status JSON.";
     };
+    arrayPools = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "disk1" "disk2" ];
+      description = ''
+        Pools that form one media array (single-disk pools under mergerfs).
+        They get one combined line ("array": health, fill of all of them)
+        and their own oldest scrub ("array_scrub"), and are left out of
+        "last_scrub" - their scrub schedule differs (quarterly).
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -29,7 +40,7 @@ in
     systemd.services.storage-status = {
       description = "Write the ZFS pool status for Homepage";
       serviceConfig.Type = "oneshot";
-      path = [ config.boot.zfs.package pkgs.jq pkgs.coreutils pkgs.gnused pkgs.gawk ];
+      path = [ config.boot.zfs.package pkgs.jq pkgs.coreutils pkgs.gnused pkgs.gawk config.systemd.package ];
       script = ''
         out=/run/storage-status/status.json
         pools=$(zpool list -H -o name,health,cap,size)
@@ -47,8 +58,35 @@ in
           jq -n --arg n "$name" --arg v "$health · $cap of $size" --arg s "$scrub" '{($n): $v, ("scrub_" + $n): $s}'
         done | jq -s 'add')
 
-        oldest=$(echo "$json" | jq -r '[to_entries[] | select(.key|startswith("scrub_")) | .value] | if any(. == "never") then "never (some pools)" else (sort | first) end')
-        echo "$json" | jq --arg status "$status" --arg scrub "$oldest" '. + {status: $status, last_scrub: $scrub}' > "$out.new"
+        # oldest scrub, "never" wins; array pools separately
+        arr='${builtins.toJSON cfg.arrayPools}'
+        oldestOf() { echo "$json" | jq -r --argjson arr "$arr" --argjson inArr "$1" '
+          [to_entries[] | select(.key|startswith("scrub_")) | select(((((.key|ltrimstr("scrub_")) as $p | $arr | index($p)) != null)) == $inArr) | .value]
+          | if length == 0 then "-" elif any(. == "never") then "never (some pools)" else (sort | first) end'; }
+        oldest=$(oldestOf false)
+        extra='{}'
+        if [ "$arr" != "[]" ]; then
+          # combined line: "5 ONLINE · 45% of 72.5T" (or the pools that aren't)
+          line=$(zpool list -Hp -o name,health,alloc,size | jq -R -s -r --argjson arr "$arr" '
+            [split("\n")[] | select(length > 0) | split("\t") | select(.[0] as $p | $arr | index($p))]
+            | (map(select(.[1] != "ONLINE") | "\(.[0]) \(.[1])") | join(" ")) as $bad
+            | (map(.[2]|tonumber) | add) as $a | (map(.[3]|tonumber) | add) as $s
+            | (if $bad == "" then "\(length) ONLINE" else $bad end)
+              + " · \(($a * 100 / $s) | floor)% of \(($s / 1099511627776 * 10 | round) / 10)T"')
+          extra=$(jq -n --arg l "$line" --arg s "$(oldestOf true)" '{array: $l, array_scrub: $s}')
+        fi
+        ${lib.optionalString config.services.snapraid.enable ''
+        # SnapRAID: the last sync from systemd (snapraid status would read all disks)
+        st=$(systemctl show snapraid-sync -p ActiveState --value)
+        res=$(systemctl show snapraid-sync -p Result --value)
+        ts=$(systemctl show snapraid-sync -p ExecMainExitTimestamp --value)
+        if [ "$st" = activating ] || [ "$(systemctl show snapraid-first-sync -p ActiveState --value 2>/dev/null)" = active ]; then snap="sync running"
+        elif [ -z "$ts" ] || [ "$ts" = n/a ]; then snap="never synced"
+        elif [ "$res" = success ]; then snap="synced $(date -d "$ts" "+%F %H:%M")"
+        else snap="FAILED $(date -d "$ts" "+%F %H:%M")"; fi
+        extra=$(echo "$extra" | jq --arg s "$snap" '. + {snapraid: $s}')
+        ''}
+        echo "$json" | jq --arg status "$status" --arg scrub "$oldest" --argjson extra "$extra" '. + {status: $status, last_scrub: $scrub} + $extra' > "$out.new"
         chmod 0644 "$out.new"; mv "$out.new" "$out"
       '';
     };

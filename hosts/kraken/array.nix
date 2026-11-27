@@ -75,6 +75,9 @@ in
     timerConfig = { OnCalendar = "*-01,04,07,10-15 03:30:00"; Persistent = true; RandomizedDelaySec = "1h"; };
   };
 
+  # Storage tile on Homepage: one "Media array" line + its own scrub date
+  myStorage.statusApi.arrayPools = disks;
+
   myServices.alerts.failureUnits = [ "snapraid-sync" "snapraid-scrub" "zfs-scrub-media" ];
   myServices.alerts.healthchecks.checks = {
     snapraid-sync = "kraken-snapraid-sync";      # daily
