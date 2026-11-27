@@ -179,7 +179,14 @@ in
     plex = {
       image = "lscr.io/linuxserver/plex@sha256:31e4c2de666cd130bc389133b6c63af08912559d992370e52822f8f229185aef";
       autoStart = arrayInstalled;
-      environment = lsio // { VERSION = "docker"; };
+      environment = lsio // {
+        VERSION = "docker";
+        # CDI mounts the NVIDIA libraries under their Nix path and registers
+        # them in the container's ld cache - Plex's transcoder has its own
+        # loader that ignores that cache ("Cannot load libcuda.so.1", CPU
+        # transcoding, 2026-11-27). Point it at the driver's lib dir.
+        LD_LIBRARY_PATH = "${config.hardware.nvidia.package}/lib";
+      };
       volumes = [
         "${appdata}/plex:/config"
         "${media}/media/movies:/movies"
