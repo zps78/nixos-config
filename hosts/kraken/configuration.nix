@@ -29,7 +29,6 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ./karma-import.nix             # TEMPORARY: karma -> kraken migration (delete after the move)
     ./karma-services.nix           # TEMPORARY: karma's Plex + download group 1:1 (move day)
     ../../modules/desktop          # options only here: myDesktop.stack = "none"
     ../../modules/apps-system
@@ -446,7 +445,6 @@ in
     sourceAddress                                = lanIp;
     machines = {
       kimi                                       = "98:fa:9b:01:58:9b";   # eno2
-      karma-unraid                               = "6c:1f:f7:29:b5:4d";   # old karma eth0 (WoL g)
     };
   };
 
@@ -567,7 +565,6 @@ in
       {
         Wake = [
           { kimi           = { href = "http://${lanIp}:8089/wake/kimi";         icon = "nixos.png";  description = "Wake-on-LAN";  ping = "kimi"; }; }
-          { "karma-unraid" = { href = "http://${lanIp}:8089/wake/karma-unraid"; icon = "unraid.png"; description = "Wake-on-LAN (old karma)"; ping = "192.168.1.5"; }; }
         ];
       }
       {

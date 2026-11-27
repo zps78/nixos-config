@@ -43,7 +43,7 @@ undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D
 ## 1. Copy the data (remote, karma keeps running)
 
 - [ ] datasets: `sudo zfs create -o mountpoint=legacy vault/{home,trading,backup,setup,photos}`
-- [ ] rebuild kraken (karma-import.nix: NFS mounts + karma-copy)
+- [x] rebuild kraken (karma-import.nix: NFS mounts + karma-copy)
 - [ ] first copy: `sudo systemctl start karma-copy`, watch `journalctl -fu karma-copy`
       (home, trading, backup, setup, photos → vault; appdata → /srv/appdata/karma; ~2.4 TB)
 - [x] domains (Office VM, not exported): copied separately 2026-11-26 to kraken ~/office-vm
@@ -71,7 +71,7 @@ undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D
       Threadfin/EPG, fr24feed (DVB-T stick), squid home-proxy, Krusader → FileBrowser
 - [ ] tunnel routes for plex/audiobookshelf/seerr move to kraken's tunnel per app
       (Plex: prefer Plex's own remote access - Cloudflare's terms forbid video)
-- [ ] NFS clients: modules/shares/nfs `server = "kraken";` (after kraken runs with
+- [x] NFS clients: modules/shares/nfs `server = "kraken";` (2026-11-27; karma entry removed) (after kraken runs with
       arrayInstalled = true and its NFS server is up), commit, rebuild kuro, krugerrand,
       kimi, kepler; /mnt/paperless becomes Paperless's originals, read-only
 
@@ -128,7 +128,7 @@ undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D
       Tailscale first, tunnel as fallback; karma-fixup sets Plex's custom URL to it);
       seerr.jpc.onl -> localhost:5055 behind Access (the app's domain moved to jpc.onl).
       Seerr on karma stopped 2026-11-26; seerr.zulupapa.org route + DNS deleted.
-- [ ] move day: delete plex.zulupapa.org (route + DNS) on karma's tunnel.
+- [x] move day: delete plex.zulupapa.org (route + DNS) on karma's tunnel (2026-11-27).
       Later: audiobookshelf.jpc.onl when ABS moves (Access domain + its OIDC redirect URLs)
 - [ ] after: Immich + Audiobookshelf (separately); Phockup + Calibre (kept, set up later)
 - [ ] Office VM (copied 2026-11-26, checksums match): kraken ~/office-vm = vdisk1.img
@@ -150,5 +150,6 @@ undecided; can come out if SATA ports run short), krieger's T500 1TB 2409474EC4D
       (nvme-appdata, nvme-immich, ssd-downloads get wiped when they take their new roles.)
 - [ ] SnapRAID with the old parity disk (no parity protection until the first sync)
 - [ ] quarterly scrub for the media pool + its healthchecks check
-- [ ] delete karma-import.nix; retire karma's Tailscale node and tunnel
+- [x] delete karma-import.nix (2026-11-27)
+- [ ] retire karma's Tailscale node; delete karma's Cloudflare tunnel (no routes left)
 - [ ] keep the Unraid stick until kraken has run a few weeks

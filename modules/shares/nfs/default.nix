@@ -15,22 +15,12 @@
 { config, lib, ... }:
 
 let
-  # MOVE DAY: flip to "kraken" (then rebuild kuro, krugerrand, kimi, kepler)
-  server = "karma";
+  # The NAS: kraken (since 2026-11-27; the Unraid karma, 192.168.1.5 with
+  # /mnt/user/* exports, is retired).
+  server = "kraken";
 
   # share name -> export path, per NAS
   servers = {
-    karma = {                       # the Unraid karma (retiring)
-      host = "192.168.1.5";
-      exports = {
-        nfs-backup    = "/mnt/user/backup";
-        nfs-home      = "/mnt/user/home";
-        nfs-media     = "/mnt/user/media-server/media";
-        nfs-paperless = "/mnt/user/paperless";
-        nfs-torrents  = "/mnt/user/media-server/torrents/complete";
-        nfs-trading   = "/mnt/user/trading";
-      };
-    };
     kraken = {                      # exported by hosts/kraken/karma-services.nix
       host = "192.168.1.10";
       exports = {

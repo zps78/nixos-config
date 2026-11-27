@@ -89,7 +89,7 @@
     options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
   };
 
-  # Data moved from karma (karma-import.nix): one dataset per former Unraid
+  # Data moved from karma (by the former karma-import.nix): one dataset per former Unraid
   # share on vault. Created 2026-11-26 with
   # `zfs create -o mountpoint=legacy vault/{home,trading,backup,setup,photos}`.
   fileSystems."/srv/home" = {
