@@ -37,6 +37,7 @@
     btop           # Resource monitor with process management
     dmidecode      # SMBIOS/DMI hardware information tool
     fastfetch      # Fast system information tool
+    ghostty.terminfo  # lets SSH sessions from Ghostty (TERM=xterm-ghostty) run tmux, htop, ...
     lm_sensors     # Hardware monitoring utilities
     nvme-cli       # NVMe management and monitoring utility
     pciutils       # PCI device inspection tools (lspci)

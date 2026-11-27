@@ -165,8 +165,10 @@ in
     user = "media";
     group = "users";
     serverConfig.BitTorrent.Session = {
-      DefaultSavePath = "/torrents/complete";
-      TempPath = "/torrents/incomplete";
+      # new downloads on the scratch SSD (hosts/kraken/array.nix); torrents
+      # added on karma keep their /torrents/... paths on the HDDs
+      DefaultSavePath = "/scratch/torrents/complete";
+      TempPath = "/scratch/torrents/incomplete";
       TempPathEnabled = true;
     };
   };
@@ -300,7 +302,7 @@ in
     sabnzbd = inVpn {
       image = "lscr.io/linuxserver/sabnzbd@sha256:d225bbab93f54784c115a3b1d89711e469b1969c9f32aa6ebb11fb03b5804431";
       environment = lsio;
-      volumes = [ "${appdata}/sabnzbd:/config" "${media}/usenet:/data/usenet" ];
+      volumes = [ "${appdata}/sabnzbd:/config" "/mnt/scratch/usenet:/data/usenet" ];   # usenet on the scratch SSD
     };
     prowlarr = inVpn {
       image = "lscr.io/linuxserver/prowlarr@sha256:2806c9b763810589c42157730d547c293639e55c7610e9f5069314854639ec48";
@@ -318,19 +320,19 @@ in
       image = "lscr.io/linuxserver/sonarr@sha256:339814bbf50599ac3b59077c252f29833d0138b59a062d0e82ce37bdc7f04f86";
       environment = lsio;
       volumes = [ "${appdata}/sonarr:/config" "${media}/torrents/complete:/downloads"
-                  "${media}/media/tvshows:/tvshows" "${media}/usenet:/data/usenet" ];
+                  "${media}/media/tvshows:/tvshows" "/mnt/scratch/usenet:/data/usenet" "/mnt/scratch:/scratch" ];
     };
     radarr = inVpn {
       image = "lscr.io/linuxserver/radarr@sha256:044788f5508b7f67a3e0368cdd142c77c4d4cd5aec2efaba53e1a68b6b6231e7";
       environment = lsio;
       volumes = [ "${appdata}/radarr:/config" "${media}/torrents/complete:/downloads"
-                  "${media}/media/movies:/movies" "${media}/usenet:/data/usenet" ];
+                  "${media}/media/movies:/movies" "/mnt/scratch/usenet:/data/usenet" "/mnt/scratch:/scratch" ];
     };
     lidarr = inVpn {
       image = "lscr.io/linuxserver/lidarr@sha256:c4285344c994b34e1ae7db8d57c1702dcfe88b8e10c98a0cdf0f74aba8b58b9c";
       environment = lsio;
       volumes = [ "${appdata}/lidarr:/config" "${media}/torrents/complete:/downloads"
-                  "${media}/media/music:/music" "${media}/usenet:/data/usenet" ];
+                  "${media}/media/music:/music" "/mnt/scratch/usenet:/data/usenet" "/mnt/scratch:/scratch" ];
     };
     bazarr = inVpn {
       image = "lscr.io/linuxserver/bazarr@sha256:b3db4247d3afa0c68bc5aa311bedd67b1caf4b3eabc3a85577682970435d5013";
@@ -342,7 +344,7 @@ in
       environment = lsio;
       volumes = [ "${appdata}/lazylibrarian:/config" "${media}/media/audiobooks:/audiobooks"
                   "${media}/torrents/complete:/downloads" "${media}/media/books-ingest:/ebook-ingest"
-                  "${media}/usenet:/data/usenet" ];
+                  "/mnt/scratch/usenet:/data/usenet" "/mnt/scratch:/scratch" ];
     };
     ytdl = inVpn {
       image = "docker.io/voc0der/ytdl-material@sha256:539537413dce9279a5b9ee030320eb22792a2f20673d1f566a6521b9becf124b";
@@ -380,7 +382,7 @@ in
   systemd.services = lib.mkMerge [
     # every container: never start on a missing appdata / array mount
     (lib.genAttrs (map (n: "podman-${n}") containerNames) (_: {
-      unitConfig.RequiresMountsFor = [ appdata ] ++ lib.optional arrayInstalled media;
+      unitConfig.RequiresMountsFor = [ appdata ] ++ lib.optionals arrayInstalled [ media "/mnt/scratch" ];
     }))
     # new token -> restart
     { podman-plex-auto-languages.restartTriggers = [ (builtins.hashFile "sha256" config.age.secrets.plex-auto-languages.file) ];
@@ -395,9 +397,10 @@ in
     (lib.mkIf arrayInstalled {
       nfs-server.unitConfig.RequiresMountsFor = [ "/mnt/user" "/srv/home" "/srv/backup" "/srv/trading" ];
       qbittorrent = {
-        unitConfig.RequiresMountsFor = [ media ];
+        unitConfig.RequiresMountsFor = [ media "/mnt/scratch" ];
         serviceConfig.BindPaths = [
           "${media}/torrents:/torrents"                  # the arrs' path mapping (localhost:/torrents/complete/) stays valid
+          "/mnt/scratch:/scratch"                        # new downloads (same path in the arrs - no mapping needed)
           "${media}/media/books-ingest:/ebook-ingest"
         ];
         serviceConfig.UMask = lib.mkForce "0022";

@@ -30,6 +30,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./karma-services.nix           # TEMPORARY: karma's Plex + download group 1:1 (move day)
+    ./array.nix                    # scratch SSD, SnapRAID parity, media scrubs
     ../../modules/desktop          # options only here: myDesktop.stack = "none"
     ../../modules/apps-system
     ../../modules/hardware
