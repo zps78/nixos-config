@@ -47,6 +47,11 @@ in
         # emailed - the karma -> kraken move used this, 2026-11-24).
         PAPERLESS_CONSUMER_RECURSIVE = true;
         PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = true;
+        # own cookie names: browsers keep cookies per host, not per port, so
+        # another app on the same address (kraken runs many) could overwrite
+        # a plain "csrftoken" -> "CSRF token from POST incorrect" at login
+        # (seen 2026-11-27)
+        PAPERLESS_COOKIE_PREFIX = "paperless";
       };
       # Nightly full export to <dataDir>/export: a second, plain-file copy of
       # everything (documents + metadata), inside the snapshotted dataset.
