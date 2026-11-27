@@ -103,6 +103,18 @@ let
     prowlarr = "Prowlarr"; bazarr = "Bazarr"; lazylibrarian = "LazyLibrarian";
     byparr = "Byparr"; ytdl = "YouTube-DL";
   };
+
+  # qBittorrent AutoRun (karma's /config/scripts/route-epub.sh): $1 =
+  # category, $2 = content path, as qBittorrent sees them
+  routeEpub = pkgs.writeShellScript "route-epub" ''
+    PATH=${lib.makeBinPath [ pkgs.findutils pkgs.coreutils ]}
+    [ "$1" = lazylibrarian ] || exit 0
+    has_audio=$(find "$2" -type f \( -iname '*.mp3' -o -iname '*.m4b' -o -iname '*.m4a' \) 2>/dev/null | head -1)
+    has_ebook=$(find "$2" -type f \( -iname '*.epub' -o -iname '*.mobi' \) 2>/dev/null | head -1)
+    if [ -n "$has_audio" ] && [ -n "$has_ebook" ]; then
+      find "$2" -type f \( -iname '*.epub' -o -iname '*.mobi' \) -exec cp -n {} /ebook-ingest/ \;
+    fi
+  '';
 in
 {
   # ── storage (move day) ──────────────────────────────────────────────
@@ -161,15 +173,62 @@ in
 
   # ── qBittorrent (native, already in the namespace): karma's port + paths
   myServices.vpnTorrent.webuiPort = 8181;                # the arrs expect localhost:8181
+  # The NixOS module rewrites qBittorrent.conf from serverConfig at every
+  # start, so settings changed in the web UI don't survive a restart - they
+  # live here. Taken from karma's qBittorrent.conf (2026-11-27), seeding per
+  # myServices.vpnTorrent.seedDays (7 days, then stop; the arrs delete).
   services.qbittorrent = lib.mkIf arrayInstalled {
     user = "media";
     group = "users";
-    serverConfig.BitTorrent.Session = {
-      # new downloads on the scratch SSD (hosts/kraken/array.nix); torrents
-      # added on karma keep their /torrents/... paths on the HDDs
-      DefaultSavePath = "/scratch/torrents/complete";
-      TempPath = "/scratch/torrents/incomplete";
-      TempPathEnabled = true;
+    serverConfig = {
+      BitTorrent = {
+        MergeTrackersEnabled = true;               # same torrent added twice -> trackers merged
+        Session = {
+          # downloads on the scratch SSD (hosts/kraken/array.nix)
+          DefaultSavePath = "/scratch/torrents/complete";
+          TempPath = "/scratch/torrents/incomplete";
+          TempPathEnabled = true;
+          # automatic torrent management, as on karma: a category ("radarr",
+          # "sonarr", ...) saves to <DefaultSavePath>/<category>
+          DisableAutoTMMByDefault = lib.mkForce false;
+          # queue and connections (karma's values)
+          QueueingSystemEnabled = true;
+          MaxActiveDownloads = 10;
+          MaxActiveUploads = 4;
+          MaxActiveTorrents = 40;
+          IgnoreSlowTorrentsForQueueing = true;    # stalled torrents don't block the queue
+          SlowTorrentsDownloadRate = 20;           # KiB/s
+          SlowTorrentsUploadRate = 20;
+          MaxConnections = 400;
+          MaxConnectionsPerTorrent = 100;
+          MaxUploads = 10;
+          # never download files that are malware in fake releases
+          ExcludedFileNamesEnabled = true;
+          ExcludedFileNames = "*.exe, *.lnk, *.scr, *.bat, *.cmd, *.com, *.pif, *.vbs, *.msi, *.zipx";
+        };
+      };
+      Application.MemoryWorkingSetLimit = 1024;    # MiB (default 512)
+      Network.PortForwardingEnabled = false;       # no UPnP/NAT-PMP: the port is forwarded at AirVPN
+      Preferences = {
+        General.Locale = "en";
+        Connection.ResolvePeerCountries = true;
+        # No login for the arrs: they all reach qBittorrent as localhost
+        # inside the namespace. Without this, one app with a wrong/empty
+        # password (Lidarr) got localhost banned for everyone (403 in
+        # Sonarr, 2026-11-27). Also LAN + tailnet without login, like karma.
+        WebUI = {
+          LocalHostAuth = false;
+          AuthSubnetWhitelistEnabled = true;
+          AuthSubnetWhitelist = "192.168.1.0/24, 100.64.0.0/10";
+        };
+      };
+      # karma's AutoRun: LazyLibrarian downloads with an audiobook AND an
+      # e-book -> copy the e-books to Calibre-Web-Automated's ingest folder
+      # (/ebook-ingest, a BindPath below). Quotes escaped like karma's conf.
+      AutoRun = {
+        enabled = true;
+        program = ''${routeEpub} \"%L\" \"%F\"'';
+      };
     };
   };
 
