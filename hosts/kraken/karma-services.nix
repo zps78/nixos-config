@@ -52,7 +52,7 @@ let
   # karma's squid (home-IP proxy for Byparr/1337x), with the VPN namespace
   # (Byparr's new origin) instead of Docker's bridge as the allowed source
   squidConf = pkgs.writeText "squid.conf" ''
-    http_port 192.168.1.10:3128
+    http_port 192.168.15.5:3128
     acl vpn_ns        src 192.168.15.0/24
     acl safe_ports    port 80 443
     acl ssl_ports     port 443
@@ -173,9 +173,11 @@ in
     };
   };
 
-  # squid (home-proxy, host network, 192.168.1.10:3128) for Byparr in the
-  # namespace: its traffic arrives over the bridge - open there only,
-  # never on the LAN NIC
+  # squid (home-proxy, host network, 192.168.15.5:3128) for Byparr: the
+  # namespace's kill switch drops every new connection over the bridge
+  # that isn't in allowedEgress - so exactly squid's address, nothing
+  # else on the host or LAN (2026-11-27). The port is open on the bridge only.
+  vpnNamespaces.airvpn.allowedEgress = [ "192.168.15.5" ];
   networking.firewall.interfaces.airvpn-br.allowedTCPPorts = [ 3128 ];
 
   # LAN access to the namespace's web UIs
@@ -300,12 +302,10 @@ in
       autoStart = arrayInstalled;
       environment = { TZ = config.time.timeZone; };
       volumes = [ "${squidConf}:/etc/squid/squid.conf:ro" ];
-      # host network on kraken's LAN address, like karma (192.168.1.5:3128):
-      # the namespace only lets traffic out through the tunnel or to its
-      # allowed nets (the LAN is one), not to the bridge address itself -
-      # Byparr couldn't connect to 192.168.15.5 (2026-11-27). It still
-      # arrives over airvpn-br; the LAN NIC keeps 3128 closed, and squid
-      # only accepts the namespace (acl vpn_ns).
+      # host network, listening only on the VPN bridge's host side - not
+      # reachable from the LAN. The namespace may connect to it thanks to
+      # allowedEgress (namespace settings above; its kill switch drops every other new
+      # connection that doesn't go through the tunnel).
       extraOptions = [ "--network=host" "--tmpfs=/var/log/squid" "--tmpfs=/var/spool/squid" ];
     };
 
@@ -324,7 +324,7 @@ in
       # squid home-proxy (1337x via the home IP), now home-proxy below,
       # reached on the VPN bridge's host side
       environment = { PORT = "8191"; HOST = "0.0.0.0"; BROWSER_LOCALE = "en-US"; TZ = config.time.timeZone;
-                      PROXY_SERVER = "http://192.168.1.10:3128"; };
+                      PROXY_SERVER = "http://192.168.15.5:3128"; };
     };
     sonarr = inVpn {
       image = "lscr.io/linuxserver/sonarr@sha256:339814bbf50599ac3b59077c252f29833d0138b59a062d0e82ce37bdc7f04f86";
