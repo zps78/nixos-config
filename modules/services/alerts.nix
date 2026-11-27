@@ -167,7 +167,11 @@ in
             https://*) ;;
             *) echo "heartbeat: secret is not an https:// URL - not pinging" >&2; exit 0 ;;
           esac
-          curl -fsS -m 10 --retry 3 --retry-delay 5 -o /dev/null "$url"
+          # every error retried (not only timeouts), then once more over IPv4:
+          # a flaky IPv6 path failed in milliseconds and raised false "down"
+          # alerts (2026-11-27)
+          curl -fsS -m 10 --retry 3 --retry-delay 5 --retry-all-errors -o /dev/null "$url" \
+            || curl -4 -fsS -m 10 --retry 2 --retry-delay 5 --retry-all-errors -o /dev/null "$url"
         '';
       };
     } // lib.optionalAttrs (cfg.healthchecks.pingKeyFile != null && cfg.healthchecks.checks != { }) {
@@ -182,7 +186,9 @@ in
         script = ''
           key=$(head -n1 ${cfg.healthchecks.pingKeyFile})
           [ -n "$key" ] || { echo "hc-ping: empty ping key - not pinging" >&2; exit 0; }
-          curl -fsS -m 10 --retry 3 --retry-delay 5 -o /dev/null "https://hc-ping.com/$key/$1?create=1"
+          u="https://hc-ping.com/$key/$1?create=1"
+          curl -fsS -m 10 --retry 3 --retry-delay 5 --retry-all-errors -o /dev/null "$u" \
+            || curl -4 -fsS -m 10 --retry 2 --retry-delay 5 --retry-all-errors -o /dev/null "$u"
         '';
       };
     })

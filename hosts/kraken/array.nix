@@ -49,7 +49,10 @@ in
     dataDisks = lib.listToAttrs (lib.imap1 (i: d: lib.nameValuePair "d${toString i}" "/mnt/${d}/media-server") disks);
     # content files: the system SSD + two data disks (outside the data paths)
     contentFiles = [ "/var/lib/snapraid/snapraid.content" "/mnt/disk1/snapraid.content" "/mnt/disk2/snapraid.content" ];
-    exclude = [ "*.unrecoverable" "/lost+found/" ".Trash-*/" "*.!qB" "*.part" "/.zfs/" ];
+    # downloads and work folders change all the time and are re-downloadable
+    # (they also made the first sync warn about files changing under it)
+    exclude = [ "*.unrecoverable" "/lost+found/" ".Trash-*/" "*.!qB" "*.part" "/.zfs/"
+                "/torrents/" "/usenet/" "/downloads/" "/handbrake/" "/unmanic/" "/youtube-dl/" ];
     sync.interval = "01:00";                                     # daily
     scrub = { interval = "Mon *-*-* 02:00:00"; plan = 8; olderThan = 10; };   # weekly, 8% of the oldest
   };
