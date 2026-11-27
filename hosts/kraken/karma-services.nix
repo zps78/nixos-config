@@ -460,7 +460,7 @@ in
             href = "http://192.168.1.10:${toString port}";
             icon = if name == "ytdl" then "ytdl-material.png" else "${name}.png";
             siteMonitor = "http://192.168.15.1:${toString port}";
-          } // lib.optionalAttrs (name != "ytdl") {
+          } // lib.optionalAttrs (!lib.elem name [ "ytdl" "lazylibrarian" ]) {   # no Homepage widget for these
             # API key from secrets/homepage-env.age (HOMEPAGE_VAR_<APP>_KEY);
             # on the namespace address like siteMonitor
             widget = {
