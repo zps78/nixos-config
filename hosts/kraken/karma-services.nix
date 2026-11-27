@@ -52,7 +52,7 @@ let
   # karma's squid (home-IP proxy for Byparr/1337x), with the VPN namespace
   # (Byparr's new origin) instead of Docker's bridge as the allowed source
   squidConf = pkgs.writeText "squid.conf" ''
-    http_port 3128
+    http_port 192.168.15.5:3128
     acl vpn_ns        src 192.168.15.0/24
     acl safe_ports    port 80 443
     acl ssl_ports     port 443
@@ -172,6 +172,10 @@ in
       TempPathEnabled = true;
     };
   };
+
+  # squid (home-proxy, host network) for Byparr in the namespace: only on
+  # the bridge, never the LAN
+  networking.firewall.interfaces.airvpn-br.allowedTCPPorts = [ 3128 ];
 
   # LAN access to the namespace's web UIs
   vpnNamespaces.airvpn.portMappings = lib.mapAttrsToList (_: p: { from = p; to = p; protocol = "tcp"; }) vpnPorts;
@@ -295,8 +299,10 @@ in
       autoStart = arrayInstalled;
       environment = { TZ = config.time.timeZone; };
       volumes = [ "${squidConf}:/etc/squid/squid.conf:ro" ];
-      ports = [ "192.168.15.5:3128:3128" ];                             # only the VPN bridge's host side - not the LAN
-      extraOptions = [ "--tmpfs=/var/log/squid" "--tmpfs=/var/spool/squid" ];
+      # host network, listening only on the VPN bridge's host side: Byparr
+      # (in the namespace) couldn't get through a Podman port mapping
+      # ("nothing accepted a connection at the proxy host:port", 2026-11-27)
+      extraOptions = [ "--network=host" "--tmpfs=/var/log/squid" "--tmpfs=/var/spool/squid" ];
     };
 
     sabnzbd = inVpn {
