@@ -154,7 +154,10 @@ in
       /var/lib/paperless/media/documents/originals ${ro-as config.users.users.paperless.uid}
     '';
   };
-  networking.firewall.interfaces.enp4s0.allowedTCPPorts = lib.mkIf arrayInstalled [ 2049 ];   # NFSv4 (tailscale0 is trusted)
+  networking.firewall.interfaces.enp4s0 = lib.mkIf arrayInstalled {
+    allowedTCPPorts = [ 2049 32400 ];          # NFSv4; Plex (host network - on karma Docker opened it)
+    allowedUDPPorts = [ 32410 32412 32413 32414 ];   # Plex GDM: LAN clients find the server by themselves
+  };                                           # (tailscale0 is trusted anyway)
 
   # ── qBittorrent (native, already in the namespace): karma's port + paths
   myServices.vpnTorrent.webuiPort = 8181;                # the arrs expect localhost:8181
@@ -274,7 +277,6 @@ in
       volumes = [
         "${appdata}/fr24feed-piaware/fr24feed.ini:/etc/fr24feed.ini"
         "${appdata}/fr24feed-piaware/piaware.conf:/etc/piaware.conf"
-        "${appdata}/fr24feed-piaware/config.js:/usr/lib/fr24/public_html/config.js"
       ];
       ports = [ "11010:8080" "8754:8754" ];
       extraOptions = [ "--device=/dev/rtl_sdr" ];                       # the RTL-SDR stick (udev symlink above)
