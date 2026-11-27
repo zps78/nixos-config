@@ -45,7 +45,7 @@ let
   # the same host ports as on karma (so their mutual references only change
   # .5 -> .10, see karmaFixup)
   bridgeApps = [ "tautulli" "kometa" "seerr" "calibre-web-automated" "libreseerr"
-                 "threadfin" "epg" "fr24feed" "home-proxy" ];
+                 "threadfin" "epg" "fr24feed" "home-proxy" "audiobookshelf" ];
 
   containerNames = [ "plex" "plex-auto-languages" ] ++ lib.attrNames vpnPorts ++ bridgeApps;
 
@@ -315,6 +315,20 @@ in
                   "${media}/media/books-ingest:/cwa-book-ingest" ];
       ports = [ "12020:8083" ];
     };
+    # Audiobookshelf, 1:1 from karma (same version and paths, the database
+    # is unchanged). Like karma: no LAN port - only the tunnel reaches it
+    # (audiobooks.jpc.onl -> localhost:13378), behind Cloudflare Access,
+    # login by password or OIDC (Access SaaS app). Runs as root like on
+    # karma (absdatabase.sqlite is root-owned).
+    audiobookshelf = {
+      image = "ghcr.io/advplyr/audiobookshelf@sha256:60064c23f32fd9099fd39e82c5132c51701d1221135bbca04cd099b589e1edc3";   # 2.38.0
+      autoStart = arrayInstalled;
+      environment = { TZ = config.time.timeZone; };
+      volumes = [ "${appdata}/audiobookshelf:/config" "${appdata}/audiobookshelf/metadata:/metadata"
+                  "${media}/media/audiobooks:/audiobooks" "${media}/media/podcasts:/podcasts"
+                  "${media}/media/blinkist:/blinkist" ];
+      ports = [ "127.0.0.1:13378:80" ];
+    };
     libreseerr = {
       image = "ghcr.io/zamnzim/libreseerr@sha256:820134e44279c964ddf54090ab45b444a28e7f562256baaadf20fffaf36911f3";
       autoStart = arrayInstalled;
@@ -433,6 +447,11 @@ in
               href = "http://192.168.1.10:32400/web"; icon = "plex.png";
               description = "Movies, TV, music (GPU transcoding)";
               siteMonitor = "http://127.0.0.1:32400/identity";
+          }; }
+          { Audiobookshelf = {
+              href = "https://audiobooks.jpc.onl"; icon = "audiobookshelf.png";
+              description = "Audiobooks, podcasts, Blinkist (via the tunnel)";
+              siteMonitor = "http://127.0.0.1:13378/healthcheck";
           }; }
         ];
       }
