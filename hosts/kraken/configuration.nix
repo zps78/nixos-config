@@ -391,6 +391,7 @@ in
       sanoid                                     = "kraken-snapshots";         # hourly
       zfs-scrub                                  = "kraken-scrub";             # monthly, pinged when the scrub has finished
       game-saves-backup                          = "kraken-game-saves";        # every 6 h
+      paperless-exporter                         = "kraken-paperless-export";  # daily 01:30 (document export = Paperless backup)
     };
     failureUnits = [
       "zfs-zed" "zfs-scrub" "smartd" "scrutiny" "influxdb2" "beszel-hub" "beszel-agent"
