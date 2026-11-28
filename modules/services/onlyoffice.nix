@@ -53,6 +53,21 @@ in
     services.nginx.virtualHosts.onlyoffice = {
       default = true;
       listen = [ { addr = "0.0.0.0"; port = cfg.port; } ];
+      # The module's server block, but with $host:$server_port instead of $host: on a
+      # non-default port $host drops the port, so the Document Server built
+      # links like http://<host>/cache/... (port 80) -> "Download failed".
+      extraConfig = lib.mkForce ''
+        rewrite ^/$ /welcome/ redirect;
+        rewrite ^\/OfficeWeb(\/apps\/.*)$ /${config.services.onlyoffice.package.version}/web-apps$1 redirect;
+        rewrite ^(\/web-apps\/apps\/(?!api\/).*)$ /${config.services.onlyoffice.package.version}$1 redirect;
+
+        proxy_set_header Host $host:$server_port;
+        proxy_set_header X-Forwarded-Host $host:$server_port;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+      '';
     };
 
     services.rabbitmq.listenAddress = "127.0.0.1";
