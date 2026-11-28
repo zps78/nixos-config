@@ -92,20 +92,31 @@ in
 
       # nixpkgs installs without an admin (--disable-admin-user): create ours
       # once, from agenix. Never touches an existing account (password changes
-      # happen in Nextcloud).
+      # happen in Nextcloud). Runs AS nextcloud, so the occ wrapper calls occ
+      # directly - via root it would go through sudo, which logs OC_PASS
+      # (the password) to the journal. The password arrives as a credential.
+      # Nextcloud's minimum is 10 characters.
       nextcloud-admin-user = {
         description = "Create the Nextcloud admin account";
         after = [ "nextcloud-setup.service" ];
         requires = [ "nextcloud-setup.service" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig = { Type = "oneshot"; RemainAfterExit = true; };
+        restartTriggers = [ (builtins.hashFile "sha256" cfg.adminPassAgeFile) ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "nextcloud";
+          Group = "nextcloud";
+          LoadCredential = [ "adminpass:${config.age.secrets.nextcloud-admin.path}" ];
+        };
         script = ''
           occ=${nc.occ}/bin/nextcloud-occ
           if $occ user:info ${cfg.adminUser} >/dev/null 2>&1; then
             echo "${cfg.adminUser} exists - nothing to do"; exit 0
           fi
-          OC_PASS="$(head -n1 ${config.age.secrets.nextcloud-admin.path})" \
-            $occ user:add --password-from-env --group admin ${cfg.adminUser}
+          OC_PASS="$(head -n1 "$CREDENTIALS_DIRECTORY/adminpass")"
+          export OC_PASS
+          $occ user:add --password-from-env --group admin ${cfg.adminUser}
         '';
       };
 
