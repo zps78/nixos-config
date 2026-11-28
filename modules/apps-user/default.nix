@@ -29,6 +29,7 @@
     ./losslesscut.nix
     ./lutris.nix
     ./minecraft.nix
+    ./nextcloud-client.nix
     ./mkvtoolnix.nix
     ./moonlight.nix
     ./mpv.nix

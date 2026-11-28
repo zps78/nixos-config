@@ -50,6 +50,7 @@
 
     # office and productivity
     office.enable                                = true;             # Office suite that combines text, spreadsheet and presentation editors
+  # nextcloud-client                             > off by default; on per host (hosts/kuro: home-manager.users.zp.myApps)
     xournalpp.enable                             = true;             # Xournal++ is a handwriting Notetaking software with PDF annotation support
   # pdfarranger                                  > on by default (modules/apps-user/pdfarranger.nix)
     proton-pass.enable                           = true;             # Desktop application for Proton Pass

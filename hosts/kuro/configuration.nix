@@ -93,6 +93,11 @@
     wine.enable                                  = true;
   };
 
+  # Per-host app toggles for zp (the shared list lives in home/users/zp.nix)
+  home-manager.users.zp.myApps = {
+    nextcloud-client.enable                      = true;                       # sync with kraken's cloud.jpc.onl
+  };
+
   # Users
   users.users.zp = {
     isNormalUser                                 = true;
