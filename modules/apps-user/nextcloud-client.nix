@@ -20,5 +20,7 @@
       enable = true;
       startInBackground = true;
     };
+    # the service only runs the binary; this adds the launcher entry + icon
+    home.packages = [ config.services.nextcloud-client.package ];
   };
 }
