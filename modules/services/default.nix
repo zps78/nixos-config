@@ -17,6 +17,7 @@
     ./homepage.nix
     ./onlyoffice.nix
     ./libvirt.nix
+    ./nextcloud.nix
     ./paperless.nix
     ./print-mail.nix
     ./samba.nix

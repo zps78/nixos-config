@@ -103,6 +103,14 @@ in
   "onlyoffice-jwt.age".publicKeys = [ zp-personal kraken-host ];
   "onlyoffice-nonce.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's Let's Encrypt DNS-01 credentials (security.acme): an env file,
+  # one line CLOUDFLARE_DNS_API_TOKEN=<token> (Zone > DNS > Edit, jpc.onl).
+  "acme-cloudflare.age".publicKeys = [ zp-personal kraken-host ];
+
+  # kraken's Nextcloud initial admin password (myServices.nextcloud, user zp),
+  # one line. Only used at the first install.
+  "nextcloud-admin.age".publicKeys = [ zp-personal kraken-host ];
+
   # kraken's FileBrowser Quantum admin password (myServices.
   # filebrowserQuantum, user zp), one line, at least 12 characters.
   "filebrowser-admin.age".publicKeys = [ zp-personal kraken-host ];

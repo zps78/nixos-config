@@ -184,6 +184,7 @@ in
     datasets."vault/backup".tier                 = "cold";
     datasets."vault/setup".tier                  = "cold";
     datasets."vault/photos".tier                 = "cold";
+    datasets."vault/nextcloud".tier              = "important";                # live sync data: hourly too (vault doesn't spin down)
   };
 
   # Game saves off the games SSD (single disk, not snapshotted) into
@@ -333,13 +334,42 @@ in
     customCss                                    = builtins.readFile ../../dotfiles/homepage/filebrowser-theme.css;
   };
 
-  # ONLYOFFICE Document Server (native) - Quantum's editor for Word/Excel/
-  # PowerPoint/OpenDocument files. http://<lanIp>:8097, LAN + tailnet only.
+  # ONLYOFFICE Document Server (native) - the editor for Word/Excel/
+  # PowerPoint/OpenDocument files in Quantum (http://<lanIp>:8097) and
+  # Nextcloud (https://office.jpc.onl). LAN + tailnet only.
   myServices.onlyoffice = {
     enable                                       = true;
     interfaces                                   = [ "enp4s0" ];
     jwtAgeFile                                   = ../../secrets/onlyoffice-jwt.age;
     nonceAgeFile                                 = ../../secrets/onlyoffice-nonce.age;
+    publicHost                                   = "office.jpc.onl";
+  };
+
+  # TLS for the LAN/tailnet web apps: Let's Encrypt via Cloudflare DNS-01
+  # (no inbound port needed). cloud.jpc.onl / office.jpc.onl are public
+  # A records -> the LAN IP, "DNS only" (reachable at home + over Tailscale).
+  # The token file is an env file: CLOUDFLARE_DNS_API_TOKEN=<token>
+  # (Zone > DNS > Edit, jpc.onl only).
+  age.secrets.acme-cloudflare.file               = ../../secrets/acme-cloudflare.age;
+  security.acme = {
+    acceptTerms                                  = true;
+    defaults = {
+      dnsProvider                                = "cloudflare";
+      environmentFile                            = config.age.secrets.acme-cloudflare.path;
+      dnsResolver                                = "1.1.1.1:53";
+    };
+  };
+
+  # Nextcloud (phase 1, 2026-11-28): next to Quantum, tailnet-only, test
+  # data only. Later: home/trading/setup move in, then Quantum goes and
+  # cloud.jpc.onl gets a tunnel route. Photos stay in Immich.
+  myServices.nextcloud = {
+    enable                                       = true;
+    hostName                                     = "cloud.jpc.onl";
+    dataDir                                      = "/srv/nextcloud";           # dataset vault/nextcloud (-> T500 mirror once it exists)
+    adminUser                                    = "zp";
+    adminPassAgeFile                             = ../../secrets/nextcloud-admin.age;
+    interfaces                                   = [ "enp4s0" ];
   };
 
   # StemDeck (moved from karma 2026-11-26): stem separation on the GPU.

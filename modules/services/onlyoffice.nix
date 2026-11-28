@@ -36,6 +36,17 @@ in
 
     jwtAgeFile = lib.mkOption { type = lib.types.path; };
     nonceAgeFile = lib.mkOption { type = lib.types.path; };
+
+    publicHost = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "office.example.com";
+      description = ''
+        Also serve the Document Server over https on 443 under this name
+        (Let's Encrypt via security.acme). Needed by https apps such as
+        Nextcloud - a browser won't load the http editor into an https page.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -52,7 +63,11 @@ in
 
     services.nginx.virtualHosts.onlyoffice = {
       default = true;
-      listen = [ { addr = "0.0.0.0"; port = cfg.port; } ];
+      listen = [ { addr = "0.0.0.0"; port = cfg.port; } ]
+        ++ lib.optional (cfg.publicHost != null) { addr = "0.0.0.0"; port = 443; ssl = true; };
+      serverName = lib.mkIf (cfg.publicHost != null) cfg.publicHost;
+      addSSL = cfg.publicHost != null;
+      useACMEHost = lib.mkIf (cfg.publicHost != null) cfg.publicHost;
       # The module's server block, but with $host:$server_port instead of $host: on a
       # non-default port $host drops the port, so the Document Server built
       # links like http://<host>/cache/... (port 80) -> "Download failed".
@@ -78,8 +93,10 @@ in
     ];
     systemd.services.nginx.restartTriggers = [ (builtins.hashFile "sha256" cfg.nonceAgeFile) ];
 
+    security.acme.certs = lib.mkIf (cfg.publicHost != null) { ${cfg.publicHost}.group = "nginx"; };
+
     networking.firewall.interfaces = lib.genAttrs cfg.interfaces (_: {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [ cfg.port ] ++ lib.optional (cfg.publicHost != null) 443;
     });
 
     myServices.alerts.failureUnits = lib.mkIf config.myServices.alerts.enable

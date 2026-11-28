@@ -112,6 +112,13 @@
     fsType = "zfs";
     options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
   };
+  # Nextcloud's data dir (myServices.nextcloud), created 2026-11-28 with
+  # `zfs create -o mountpoint=legacy vault/nextcloud`.
+  fileSystems."/srv/nextcloud" = {
+    device = "vault/nextcloud";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-vault.service" "x-systemd.after=zfs-import-vault.service" ];
+  };
   fileSystems."/srv/photos" = {
     device = "vault/photos";
     fsType = "zfs";
