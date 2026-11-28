@@ -127,7 +127,9 @@ in
     # logged-in terminals). Short self-test daily 02:00, long Sundays 04:00.
     services.smartd = {
       notifications.wall.enable = false;
-      defaults.monitored = "-a -s (S/../.././02|L/../../7/04) -m <nomailer> -M exec ${smartdNotify}";
+      # -n standby,24,q: don't wake sleeping disks for the 30-min poll, but
+      # check anyway after 24 skips (~12 h); self-tests still run on schedule
+      defaults.monitored = "-a -n standby,24,q -s (S/../.././02|L/../../7/04) -m <nomailer> -M exec ${smartdNotify}";
     };
 
     # "unit failed": an OnFailure hook on each listed unit.

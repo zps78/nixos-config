@@ -75,6 +75,17 @@ in
     timerConfig = { OnCalendar = "*-01,04,07,10-15 03:30:00"; Persistent = true; RandomizedDelaySec = "1h"; };
   };
 
+  # ── spin-down ───────────────────────────────────────────────────────
+  # The media disks + parity (Exos 16TB) and the unused 2TB pair sleep
+  # after 30 min idle (-S 241). vault's 4TB WD40EFRX mirrors stay spinning:
+  # they hold the live /srv data. Anything polling SMART must skip drives in
+  # standby (smartd -n standby in modules/services/alerts.nix, scrutiny's
+  # metrics_smart_args) or it wakes them again.
+  services.udev.extraRules = ''
+    ACTION=="add|change", SUBSYSTEM=="block", KERNEL=="sd[a-z]*", ENV{DEVTYPE}=="disk", ENV{ID_MODEL}=="ST16000NM001G*|WDC_WD20EFRX*", RUN+="${pkgs.hdparm}/bin/hdparm -S 241 /dev/%k"
+  '';
+  services.scrutiny.collector.settings.commands.metrics_smart_args = "--xall --json -n standby";
+
   # Storage tile on Homepage: one "Media array" line + its own scrub date
   myStorage.statusApi.arrayPools = disks;
 
