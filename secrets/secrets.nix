@@ -93,6 +93,10 @@ in
   # healthchecks.pingKeyFile): "job finished" pings per check slug. One line.
   "healthchecks-ping-key.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's email-to-print shared secret (myServices.printMail): one line,
+  # the same value as the print-mail Worker's HOOK_SECRET.
+  "print-mail-secret.age".publicKeys = [ zp-personal kraken-host ];
+
   # kraken's FileBrowser Quantum admin password (myServices.
   # filebrowserQuantum, user zp), one line, at least 12 characters.
   "filebrowser-admin.age".publicKeys = [ zp-personal kraken-host ];

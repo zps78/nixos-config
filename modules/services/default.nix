@@ -17,6 +17,7 @@
     ./homepage.nix
     ./libvirt.nix
     ./paperless.nix
+    ./print-mail.nix
     ./samba.nix
     ./scrutiny.nix
     ./ssh.nix

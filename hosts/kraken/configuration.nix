@@ -214,7 +214,7 @@ in
   myServices = {
     battery.enable                               = false;
     brother-ads-4300n.enable                     = false;
-    brother-hl-l8230cdw.enable                   = false;
+    brother-hl-l8230cdw.enable                   = true;                       # CUPS queue for print-mail (email-to-print)
     docker.enable                                = false;                      # containers run on Podman (virtualisation.podman, with StemDeck)
     aiStack.enable                               = false;
     libvirt.enable                               = false;                      # later: the Office VM (karma's domains share)
@@ -349,6 +349,14 @@ in
   myServices.cloudflareTunnel = {
     enable                                       = true;
     tokenEnvFile                                 = config.age.secrets.cloudflare-tunnel.path;
+  };
+
+  # Email-to-print: print@printer.jpc.onl -> Email Worker -> tunnel
+  # (print-hook.jpc.onl -> localhost:8196) -> CUPS. See modules/services/print-mail.nix.
+  myServices.printMail = {
+    enable                                       = true;
+    allowedSenders                               = [ "j.pedro.correia@pm.me" "mail@jpc.onl" "jose.correia2@nav.pt" ];
+    secretAgeFile                                = ../../secrets/print-mail-secret.age;
   };
 
   myServices.samba = {
