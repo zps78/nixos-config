@@ -97,6 +97,12 @@ in
   # the same value as the print-mail Worker's HOOK_SECRET.
   "print-mail-secret.age".publicKeys = [ zp-personal kraken-host ];
 
+  # kraken's ONLYOFFICE Document Server (myServices.onlyoffice):
+  # - the JWT secret shared with FileBrowser Quantum, one line
+  # - the nginx secure-link nonce, ONE nginx line: set $secure_link_secret "<random>";
+  "onlyoffice-jwt.age".publicKeys = [ zp-personal kraken-host ];
+  "onlyoffice-nonce.age".publicKeys = [ zp-personal kraken-host ];
+
   # kraken's FileBrowser Quantum admin password (myServices.
   # filebrowserQuantum, user zp), one line, at least 12 characters.
   "filebrowser-admin.age".publicKeys = [ zp-personal kraken-host ];

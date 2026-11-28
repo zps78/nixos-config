@@ -23,13 +23,14 @@ let
   stateDir = "/var/lib/filebrowser-quantum";
   runDir = "/run/filebrowser-quantum";
 
-  settings = lib.recursiveUpdate {
+  settings = lib.recursiveUpdate ({
     http = {
       port = cfg.port;
       # the tunnel connects from localhost and sends the visitor's address
       # (rate limits then hit the visitor, not the tunnel)
       trustProxyHeaders = true;
-    } // lib.optionalAttrs (cfg.publicUrl != null) { externalUrl = cfg.publicUrl; };
+    } // lib.optionalAttrs (cfg.publicUrl != null) { externalUrl = cfg.publicUrl; }
+      // lib.optionalAttrs (cfg.office.url != null && cfg.office.selfUrl != null) { internalUrl = cfg.office.selfUrl; };
     server = {
       cacheDir = "/var/cache/filebrowser-quantum";
       disableUpdateCheck = true;
@@ -49,7 +50,12 @@ let
         // lib.optionalAttrs (cfg.customCss != null) { customCSS = "${pkgs.writeText "filebrowser-quantum.css" cfg.customCss}"; };
     };
     userDefaults.ui = { darkMode = true; } // lib.optionalAttrs (cfg.themeColor != null) { themeColor = cfg.themeColor; };
-  } cfg.extraSettings;
+  } // lib.optionalAttrs (cfg.office.url != null) {
+    integrations.office = {
+      inherit (cfg.office) url;
+      secret = "@OFFICE_SECRET@";
+    } // lib.optionalAttrs (cfg.office.internalUrl != null) { inherit (cfg.office) internalUrl; };
+  }) cfg.extraSettings;
 
   # JSON is valid YAML, so the template is plain JSON.
   template = pkgs.writeText "filebrowser-quantum.template.json" (builtins.toJSON settings);
@@ -97,6 +103,30 @@ in
     darkBackground = lib.mkOption { type = lib.types.nullOr lib.types.str; default = null; };
     customCss = lib.mkOption { type = lib.types.nullOr lib.types.lines; default = null; description = "CSS added to every page (share pages too)."; };
 
+    office = {
+      url = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "http://192.168.1.10:8097";
+        description = "ONLYOFFICE Document Server as the browser reaches it (null = no office editor).";
+      };
+      internalUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Document Server as Quantum reaches it (e.g. via localhost).";
+      };
+      selfUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = "http://127.0.0.1:${toString cfg.port}";
+        description = "Quantum as the Document Server reaches it (http.internalUrl: file downloads and save callbacks).";
+      };
+      secretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "File with the Document Server's JWT secret, one line (read as root at start).";
+      };
+    };
+
     extraSettings = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -136,7 +166,14 @@ in
           pw=$(${pkgs.coreutils}/bin/head -n1 ${cfg.adminPasswordFile})
           [ -n "$pw" ] || { echo "admin password file is empty" >&2; exit 1; }
           q=$(printf '%s' "$pw" | ${pkgs.jq}/bin/jq -Rs .)
-          ${pkgs.jq}/bin/jq --argjson pw "$q" '.auth.adminPassword = $pw' ${template} > ${runDir}/config.yaml
+          ${if cfg.office.url != null then ''
+            os=$(${pkgs.coreutils}/bin/head -n1 ${cfg.office.secretFile})
+            [ -n "$os" ] || { echo "office secret file is empty" >&2; exit 1; }
+            oq=$(printf '%s' "$os" | ${pkgs.jq}/bin/jq -Rs .)
+            ${pkgs.jq}/bin/jq --argjson pw "$q" --argjson os "$oq" '.auth.adminPassword = $pw | .integrations.office.secret = $os' ${template} > ${runDir}/config.yaml
+          '' else ''
+            ${pkgs.jq}/bin/jq --argjson pw "$q" '.auth.adminPassword = $pw' ${template} > ${runDir}/config.yaml
+          ''}
           ${pkgs.coreutils}/bin/chown filebrowser ${runDir}/config.yaml
           ${pkgs.coreutils}/bin/chmod 0400 ${runDir}/config.yaml
         ''}";

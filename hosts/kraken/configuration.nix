@@ -323,10 +323,23 @@ in
     adminPasswordFile                            = config.age.secrets.filebrowser-admin.path;
     publicUrl                                    = "https://files.jpc.onl";   # no trailing slash (Quantum adds it)
     sources                                      = [ { name = "files"; path = "/srv/files"; } ];
+    # ONLYOFFICE editor for Office files (myServices.onlyoffice below); LAN/tailnet only
+    office.url                                   = "http://${lanIp}:${toString config.myServices.onlyoffice.port}";
+    office.internalUrl                           = "http://127.0.0.1:${toString config.myServices.onlyoffice.port}";
+    office.secretFile                            = config.age.secrets.onlyoffice-jwt.path;
     # kraken look: Homepage navy + the squid's teal
     darkBackground                               = "#0e1420";
     themeColor                                   = "#20968c";
     customCss                                    = builtins.readFile ../../dotfiles/homepage/filebrowser-theme.css;
+  };
+
+  # ONLYOFFICE Document Server (native) - Quantum's editor for Word/Excel/
+  # PowerPoint/OpenDocument files. http://<lanIp>:8097, LAN + tailnet only.
+  myServices.onlyoffice = {
+    enable                                       = true;
+    interfaces                                   = [ "enp4s0" ];
+    jwtAgeFile                                   = ../../secrets/onlyoffice-jwt.age;
+    nonceAgeFile                                 = ../../secrets/onlyoffice-nonce.age;
   };
 
   # StemDeck (moved from karma 2026-11-26): stem separation on the GPU.
@@ -354,7 +367,7 @@ in
   # Email-to-print: print@printer.jpc.onl -> Email Worker -> tunnel
   # (print-hook.jpc.onl -> localhost:8196) -> CUPS. See modules/services/print-mail.nix.
   myServices.printMail = {
-    enable                                       = true;
+    enable                                       = false;                      # parked until the Cloudflare side + secrets/print-mail-secret.age exist
     allowedSenders                               = [ "j.pedro.correia@pm.me" "mail@jpc.onl" "jose.correia2@nav.pt" ];
     secretAgeFile                                = ../../secrets/print-mail-secret.age;
   };

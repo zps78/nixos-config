@@ -15,6 +15,7 @@
     ./filebrowser-quantum.nix
     ./gvfs.nix
     ./homepage.nix
+    ./onlyoffice.nix
     ./libvirt.nix
     ./paperless.nix
     ./print-mail.nix
