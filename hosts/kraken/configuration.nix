@@ -573,7 +573,7 @@ in
         # Printer + scanner web UIs (as on karma's Homepage)
         Devices = [
           { Printer = { href = "http://192.168.1.100"; icon = "brother.svg"; description = "Brother HL-L8230CDW"; siteMonitor = "http://192.168.1.100"; }; }
-          { Scanner = { href = "http://192.168.1.101"; icon = "brother.svg"; description = "Brother ADS-4300N";  siteMonitor = "http://192.168.1.101"; }; }
+          { Scanner = { href = "http://192.168.1.101"; icon = "brother.svg"; description = "Brother ADS-4300N";  ping = "192.168.1.101"; }; }   # not siteMonitor: its web server sends a body on HEAD, Homepage's check chokes on it
         ];
       }
       {
